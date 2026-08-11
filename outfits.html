@@ -15,6 +15,7 @@
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
+  <!-- HUD / TOP BAR -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
     <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -25,6 +26,7 @@
         </div>
       </div>
 
+      <!-- XP & Level Tracker -->
       <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
         <div class="text-right">
           <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
@@ -37,47 +39,51 @@
     </div>
   </header>
 
+  <!-- NAVIGATION TABS -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-      <a href="index.html" class="bg-slate-400 hover:bg-slate-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
-        🏠 Hub
-      </a>
-      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🍱 Food Quest
       </a>
-      <a href="build.html" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🛠️ Wishlist Labs
       </a>
-      <a href="sewing.html" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🪡 Stitch Guild
       </a>
-      <a href="outfits.html" class="bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center ring-4 ring-black">
+      <a href="outfits.html" class="nav-btn bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
         👗 Style Closet
       </a>
     </div>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <main class="max-w-5xl mx-auto px-4">
-    <section class="bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+
+    <!-- OUTFITS PAGE -->
+    <section id="page-outfits" class="tab-page bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-fuchsia-900">👗 Virtual Outfit Picker</h2>
+        <h2 class="text-2xl font-bold text-fuchsia-900">👗 Virtual Closet & Outfit Maker</h2>
         <span class="bg-fuchsia-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Dress-Up Mode</span>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center">
+      <!-- Outfit Randomizer Doll -->
+      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center mb-6">
         <h3 class="font-bold text-fuchsia-800 mb-4">✨ Outfit Slot Machine</h3>
-        <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
           <div id="slot-top" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">🧥 Top</div>
           <div id="slot-bottom" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👖 Bottom</div>
           <div id="slot-shoes" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👟 Shoes</div>
         </div>
-        <button onclick="randomizeOutfit()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow">
-          🎲 Roll Fits
+        <button onclick="randomizeOutfit()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          🎲 Roll Fits (+10 XP)
         </button>
       </div>
     </section>
+
   </main>
 
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
@@ -100,9 +106,11 @@
       updateHUD();
     }
 
+    // Outfit Slot Machine Logic
     const tops = ["Baby Tee + Cardigan", "Oversized Sweater", "Vintage Graphic Tee", "Crocheted Vest"];
     const bottoms = ["Baggy Cargo Pants", "Pleated Mini Skirt", "Wide-Leg Jeans", "Parachute Pants"];
     const shoes = ["Chunky Platform Boots", "Retro Sneakers", "Loafers + White Socks", "Mary Janes"];
+
     function randomizeOutfit() {
       document.getElementById('slot-top').innerText = tops[Math.floor(Math.random() * tops.length)];
       document.getElementById('slot-bottom').innerText = bottoms[Math.floor(Math.random() * bottoms.length)];
