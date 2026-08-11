@@ -101,11 +101,17 @@
         <div id="food-detail-card" class="bg-white p-5 rounded-2xl border-2 border-black pixel-shadow flex flex-col justify-between">
           <div>
             <div class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-1" id="detail-category">Select an Item</div>
+            
+            <!-- Detail Image Slot with Hover Zoom -->
+            <div id="detail-img-container" class="w-full h-36 rounded-xl border-2 border-black overflow-hidden mb-3 bg-pink-50 flex items-center justify-center">
+              <span class="text-slate-400 text-xs italic">No item selected</span>
+            </div>
+
             <h3 class="text-xl font-bold mb-3 flex items-center gap-2" id="detail-title">
               <span>🎒 Inventory Empty</span>
             </h3>
             <p class="text-xs font-bold text-slate-500 mb-2">Required Ingredients:</p>
-            <ul id="detail-ingredients" class="space-y-1 text-sm list-disc list-inside text-slate-700 bg-pink-50 p-3 rounded-xl border border-pink-200 min-h-[100px]">
+            <ul id="detail-ingredients" class="space-y-1 text-sm list-disc list-inside text-slate-700 bg-pink-50 p-3 rounded-xl border border-pink-200 min-h-[80px]">
               <li class="list-none text-slate-400 italic">Click any food item on the left to inspect its stats & ingredients.</li>
             </ul>
           </div>
@@ -207,43 +213,43 @@
       updateHUD();
     }
 
-    // --- FOOD VAULT DATA STRUCTURE ---
+    // --- FOOD VAULT DATA STRUCTURE WITH IMAGES ---
     const foodDatabase = {
       breakfast: {
         sandwiches: [
-          { id: 'b1', name: 'Avocado Egg Toast', icon: '🥑', ingredients: ['Bread', 'Avocado', 'Eggs', 'Chili Flakes'] },
-          { id: 'b2', name: 'Breakfast Burrito', icon: '🌯', ingredients: ['Tortilla', 'Eggs', 'Cheese', 'Salsa', 'Hashbrowns'] }
+          { id: 'b1', name: 'Avocado Egg Toast', icon: '🥑', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&auto=format&fit=crop&q=80', ingredients: ['Bread', 'Avocado', 'Eggs', 'Chili Flakes'] },
+          { id: 'b2', name: 'Breakfast Burrito', icon: '🌯', img: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=300&auto=format&fit=crop&q=80', ingredients: ['Tortilla', 'Eggs', 'Cheese', 'Salsa', 'Hashbrowns'] }
         ],
         bowls: [
-          { id: 'b3', name: 'Acai Smoothie Bowl', icon: '🫐', ingredients: ['Acai Puree', 'Banana', 'Granola', 'Chia Seeds'] },
-          { id: 'b4', name: 'Savory Oatmeal', icon: '🥣', ingredients: ['Oats', 'Soft Boiled Egg', 'Soy Sauce', 'Green Onion'] }
+          { id: 'b3', name: 'Acai Smoothie Bowl', icon: '🫐', img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=300&auto=format&fit=crop&q=80', ingredients: ['Acai Puree', 'Banana', 'Granola', 'Chia Seeds'] },
+          { id: 'b4', name: 'Savory Oatmeal', icon: '🥣', img: 'https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=300&auto=format&fit=crop&q=80', ingredients: ['Oats', 'Soft Boiled Egg', 'Soy Sauce', 'Green Onion'] }
         ],
         drinks: [
-          { id: 'b5', name: 'Matcha Boba Latte', icon: '🧋', ingredients: ['Matcha Powder', 'Oat Milk', 'Boba Pearls', 'Honey'] },
-          { id: 'b6', name: 'Iced Vanilla Cold Brew', icon: '☕', ingredients: ['Cold Brew', 'Vanilla Syrup', 'Splash of Milk'] }
+          { id: 'b5', name: 'Matcha Boba Latte', icon: '🧋', img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=300&auto=format&fit=crop&q=80', ingredients: ['Matcha Powder', 'Oat Milk', 'Boba Pearls', 'Honey'] },
+          { id: 'b6', name: 'Iced Cold Brew', icon: '☕', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=300&auto=format&fit=crop&q=80', ingredients: ['Cold Brew', 'Vanilla Syrup', 'Splash of Milk'] }
         ]
       },
       lunch: {
         sandwiches: [
-          { id: 'l1', name: 'Caprese Focaccia', icon: '🥪', ingredients: ['Focaccia', 'Mozzarella', 'Tomato', 'Pesto'] }
+          { id: 'l1', name: 'Caprese Focaccia', icon: '🥪', img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=300&auto=format&fit=crop&q=80', ingredients: ['Focaccia', 'Mozzarella', 'Tomato', 'Pesto'] }
         ],
         bowls: [
-          { id: 'l2', name: 'Spicy Garlic Ramen', icon: '🍜', ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Soft Egg', 'Broth'] },
-          { id: 'l3', name: 'Salmon Poke Bowl', icon: '🥗', ingredients: ['Sushi Rice', 'Salmon', 'Edamame', 'Spicy Mayo'] }
+          { id: 'l2', name: 'Spicy Garlic Ramen', icon: '🍜', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&auto=format&fit=crop&q=80', ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Soft Egg', 'Broth'] },
+          { id: 'l3', name: 'Salmon Poke Bowl', icon: '🥗', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80', ingredients: ['Sushi Rice', 'Salmon', 'Edamame', 'Spicy Mayo'] }
         ],
         drinks: [
-          { id: 'l4', name: 'Sparkling Yuzu Lemonade', icon: '🍋', ingredients: ['Yuzu Juice', 'Sparkling Water', 'Sugar', 'Mint'] }
+          { id: 'l4', name: 'Yuzu Lemonade', icon: '🍋', img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=300&auto=format&fit=crop&q=80', ingredients: ['Yuzu Juice', 'Sparkling Water', 'Sugar', 'Mint'] }
         ]
       },
       dinner: {
         sandwiches: [
-          { id: 'd1', name: 'Crispy Rice Tacos', icon: '🌮', ingredients: ['Nori Shell', 'Crispy Rice', 'Spicy Tuna', 'Avocado'] }
+          { id: 'd1', name: 'Crispy Rice Tacos', icon: '🌮', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=300&auto=format&fit=crop&q=80', ingredients: ['Nori Shell', 'Crispy Rice', 'Spicy Tuna', 'Avocado'] }
         ],
         bowls: [
-          { id: 'd2', name: 'Garlic Butter Noodles', icon: '🍝', ingredients: ['Noodles', 'Garlic', 'Butter', 'Parmesan Cheese'] }
+          { id: 'd2', name: 'Garlic Butter Noodles', icon: '🍝', img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=300&auto=format&fit=crop&q=80', ingredients: ['Noodles', 'Garlic', 'Butter', 'Parmesan Cheese'] }
         ],
         drinks: [
-          { id: 'd3', name: 'Strawberry Tanghulu Drink', icon: '🍓', ingredients: ['Strawberries', 'Sugar Crackle', 'Club Soda'] }
+          { id: 'd3', name: 'Strawberry Drink', icon: '🍓', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300&auto=format&fit=crop&q=80', ingredients: ['Strawberries', 'Sugar Crackle', 'Club Soda'] }
         ]
       }
     };
@@ -252,12 +258,10 @@
     let currentSubcategory = 'all';
     let activeSelectedItem = null;
 
-    // Switch top-level meal unit
     function selectMealUnit(unit) {
       currentMealUnit = unit;
       currentSubcategory = 'all';
       
-      // Update Tab Styles
       document.querySelectorAll('.meal-unit-btn').forEach(btn => {
         btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
       });
@@ -268,7 +272,6 @@
       renderFoodGrid();
     }
 
-    // Render Subcategory Filter Buttons
     function renderSubcategories() {
       const subcatBar = document.getElementById('subcategory-bar');
       const categories = Object.keys(foodDatabase[currentMealUnit]);
@@ -289,7 +292,6 @@
       renderFoodGrid();
     }
 
-    // Render Food Inventory Grid
     function renderFoodGrid() {
       const grid = document.getElementById('food-inventory-grid');
       let itemsToDisplay = [];
@@ -305,22 +307,34 @@
         const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
         return `
           <div onclick='selectFoodItem(${JSON.stringify(item)})' 
-               class="cursor-pointer bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm hover:scale-105 transition-all flex flex-col items-center justify-center text-center ${isSelected ? 'ring-4 ring-pink-500 bg-pink-50' : ''}">
-            <div class="text-3xl mb-1">${item.icon}</div>
-            <div class="text-xs font-bold text-slate-800">${item.name}</div>
+               class="group cursor-pointer bg-white p-2.5 rounded-2xl border-2 border-black pixel-shadow-sm hover:scale-105 transition-all flex flex-col items-center justify-between text-center overflow-hidden ${isSelected ? 'ring-4 ring-pink-500 bg-pink-50' : ''}">
+            
+            <!-- Fitted Image Container with Zoom Effect -->
+            <div class="w-full h-24 rounded-xl border border-black overflow-hidden mb-2 bg-pink-100 relative">
+              <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+            </div>
+
+            <div class="text-xs font-bold text-slate-800 flex items-center justify-center gap-1">
+              <span>${item.icon}</span>
+              <span>${item.name}</span>
+            </div>
           </div>
         `;
       }).join('');
     }
 
-    // Select Item and View Details
     function selectFoodItem(item) {
       activeSelectedItem = item;
-      renderFoodGrid(); // Refresh grid highlighting
+      renderFoodGrid();
 
       document.getElementById('detail-category').innerText = currentMealUnit.toUpperCase();
       document.getElementById('detail-title').innerHTML = `<span>${item.icon}</span> <span>${item.name}</span>`;
       
+      // Update Detail Card Image
+      document.getElementById('detail-img-container').innerHTML = `
+        <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+      `;
+
       const ingredientsList = document.getElementById('detail-ingredients');
       ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
 
@@ -332,10 +346,9 @@
     function consumeSelectedFood() {
       if (!activeSelectedItem) return;
       gainXP(15);
-      alert(` Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
+      alert(`Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
     }
 
-    // Spin Random Meal Generator
     function spinRandomMeal() {
       const units = ['breakfast', 'lunch', 'dinner'];
       const randomUnit = units[Math.floor(Math.random() * units.length)];
@@ -363,7 +376,6 @@
       return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
     }
 
-    // Match recipes from personal vault
     function matchCustomRecipe() {
       const selected = getSelectedPantryItems();
       const output = document.getElementById('custom-recipe-output');
@@ -389,7 +401,6 @@
       }
     }
 
-    // Search external recipes via Google search query link
     function searchWebRecipes() {
       const selected = getSelectedPantryItems();
       const output = document.getElementById('web-recipe-output');
@@ -413,7 +424,6 @@
       `;
     }
 
-    // Initialize View
     selectMealUnit('breakfast');
     updateHUD();
   </script>
