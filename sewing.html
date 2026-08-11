@@ -15,6 +15,7 @@
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
+  <!-- HUD / TOP BAR -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
     <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -25,6 +26,7 @@
         </div>
       </div>
 
+      <!-- XP & Level Tracker -->
       <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
         <div class="text-right">
           <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
@@ -37,47 +39,70 @@
     </div>
   </header>
 
+  <!-- NAVIGATION TABS -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-      <a href="index.html" class="bg-slate-400 hover:bg-slate-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
-        🏠 Hub
-      </a>
-      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🍱 Food Quest
       </a>
-      <a href="build.html" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🛠️ Wishlist Labs
       </a>
-      <a href="sewing.html" class="bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center ring-4 ring-black">
+      <a href="sewing.html" class="nav-btn bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
         🪡 Stitch Guild
       </a>
-      <a href="outfits.html" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         👗 Style Closet
       </a>
     </div>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <main class="max-w-5xl mx-auto px-4">
-    <section class="bg-emerald-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+
+    <!-- SEWING PAGE -->
+    <section id="page-sewing" class="tab-page bg-emerald-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-bold text-emerald-900">🪡 Thread & Fabric Guild</h2>
         <span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Stitch Master</span>
       </div>
 
+      <!-- Pattern Combo Randomizer Mini-Game -->
       <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
-        <h3 class="font-bold text-emerald-800 mb-2">🎲 Sewing Idea Generator</h3>
-        <div class="flex gap-2 text-center text-sm font-bold my-3">
+        <h3 class="font-bold text-emerald-800 mb-2">🎲 Quick Sewing Idea Generator</h3>
+        <div class="flex flex-wrap gap-2 text-center text-sm font-bold my-3">
           <div id="sew-garment" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Garment</div>
           <span class="self-center">+</span>
           <div id="sew-fabric" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Fabric</div>
         </div>
         <button onclick="generateSewingIdea()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow">
-          Roll Fabric Combo
+          Generate Fabric Combo (+10 XP)
         </button>
       </div>
+
+      <!-- Fabric Inventory -->
+      <div class="bg-white p-4 rounded-2xl border-2 border-black">
+        <h3 class="font-bold text-emerald-800 mb-3">🧵 Stash Inventory</h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+          <div class="p-3 bg-pink-100 rounded-xl border border-pink-300">
+            <span class="font-bold block text-sm">Gingham Linen</span>
+            <span class="text-slate-500">2.5 Yards • Dusty Rose</span>
+          </div>
+          <div class="p-3 bg-blue-100 rounded-xl border border-blue-300">
+            <span class="font-bold block text-sm">Heavy Denim</span>
+            <span class="text-slate-500">3.0 Yards • Vintage Wash</span>
+          </div>
+          <div class="p-3 bg-purple-100 rounded-xl border border-purple-300">
+            <span class="font-bold block text-sm">Velvet Ribbed</span>
+            <span class="text-slate-500">1.5 Yards • Lavender</span>
+          </div>
+        </div>
+      </div>
     </section>
+
   </main>
 
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
@@ -100,8 +125,10 @@
       updateHUD();
     }
 
+    // Sewing Generator Logic
     const garments = ["Bucket Hat", "Corset Top", "Cargo Trousers", "Tote Bag", "Oversized Jacket"];
     const fabrics = ["Pastel Corduroy", "Upcycled Quilt", "Floral Tapestry", "Raw Denim", "Satin Silk"];
+    
     function generateSewingIdea() {
       document.getElementById('sew-garment').innerText = garments[Math.floor(Math.random() * garments.length)];
       document.getElementById('sew-fabric').innerText = fabrics[Math.floor(Math.random() * fabrics.length)];
