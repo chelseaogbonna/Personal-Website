@@ -3,230 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Secret Lair 🎮 (Single Page)</title>
+  <title>Arcade Hub - Home 🎮</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Fredoka', cursive, sans-serif; }
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
-    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
   </style>
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
-  <!-- HUD HEADER -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+    <div class="max-w-5xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
         <span class="text-3xl animate-bounce">⚡</span>
         <div>
-          <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
-          <p class="text-xs text-purple-200">Player 1: Ready</p>
-        </div>
-      </div>
-
-      <!-- XP & Level System -->
-      <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
-        <div class="text-right">
-          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
-          <div class="text-[10px] text-purple-200"><span id="player-xp">0</span> / 100 XP</div>
-        </div>
-        <div class="w-24 bg-purple-950 h-4 rounded-full border border-black overflow-hidden">
-          <div id="xp-bar" class="bg-yellow-400 h-full w-0 transition-all duration-300"></div>
+          <h1 class="text-2xl font-bold">MY SECRET LAIR</h1>
+          <p class="text-xs text-purple-200">Select Level / Page</p>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- NAVIGATION TABS -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <button onclick="switchTab('food')" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
-        🍱 Food Quest
-      </button>
-      <button onclick="switchTab('build')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
-        🛠️ Wishlist Labs
-      </button>
-      <button onclick="switchTab('sewing')" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
-        🪡 Stitch Guild
-      </button>
-      <button onclick="switchTab('outfits')" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
-        👗 Style Closet
-      </button>
+      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">🍱 Food Page</a>
+      <a href="build.html" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">🛠️ Build Page</a>
+      <a href="sewing.html" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">🪡 Sewing Page</a>
+      <a href="outfits.html" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">👗 Outfits Page</a>
     </div>
   </nav>
 
-  <!-- CONTENT PANELS -->
-  <main class="max-w-5xl mx-auto px-4">
-
-    <!-- FOOD TAB -->
-    <section id="page-food" class="tab-page bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-pink-900">🍜 Food Vault & Meal Spinner</h2>
-        <span class="bg-pink-400 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+15 XP per snack logged</span>
-      </div>
-
-      <div class="bg-white rounded-2xl p-6 border-2 border-black text-center mb-6">
-        <h3 class="font-bold text-lg mb-2">Can't decide what to eat?</h3>
-        <div id="snack-display" class="text-3xl my-4 font-black text-pink-600 animate-pulse">???</div>
-        <button onclick="spinSnack()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-xl border-2 border-black pixel-shadow">
-          🎲 Spin Meal Wheel
-        </button>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="bg-white p-4 rounded-2xl border-2 border-black">
-          <h4 class="font-bold text-pink-700 border-b-2 border-pink-100 pb-1 mb-2">🔥 Craving Tier List</h4>
-          <ul class="space-y-2 text-sm">
-            <li class="flex justify-between items-center bg-pink-50 p-2 rounded-xl border border-pink-200">
-              <span>Matcha Boba Tea</span>
-              <button onclick="gainXP(15)" class="text-xs bg-pink-400 text-white px-2 py-1 rounded-lg border border-black hover:bg-pink-500">Log (+15 XP)</button>
-            </li>
-            <li class="flex justify-between items-center bg-pink-50 p-2 rounded-xl border border-pink-200">
-              <span>Spicy Garlic Ramen</span>
-              <button onclick="gainXP(15)" class="text-xs bg-pink-400 text-white px-2 py-1 rounded-lg border border-black hover:bg-pink-500">Log (+15 XP)</button>
-            </li>
-          </ul>
-        </div>
-        <div class="bg-white p-4 rounded-2xl border-2 border-black">
-          <h4 class="font-bold text-pink-700 border-b-2 border-pink-100 pb-1 mb-2">🧪 Kitchen Experiments</h4>
-          <div class="space-y-2 text-sm">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" onchange="gainXP(20)" class="w-4 h-4 accent-pink-500">
-              <span>Homemade Sourdough Focaccia</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" onchange="gainXP(20)" class="w-4 h-4 accent-pink-500">
-              <span>Strawberry Tanghulu</span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BUILD TAB -->
-    <section id="page-build" class="tab-page hidden bg-cyan-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-cyan-900">🚀 Build Quest Log</h2>
-        <span class="bg-cyan-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+25 XP per build</span>
-      </div>
-
-      <div class="space-y-4">
-        <div class="bg-white p-4 rounded-2xl border-2 border-black flex items-center justify-between">
-          <div>
-            <span class="bg-yellow-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">HARD</span>
-            <h3 class="font-bold text-lg inline ml-2">Custom Mechanical Keyboard</h3>
-            <p class="text-xs text-slate-600">Solder switches, hand-lube stabilizers, custom keycaps.</p>
-          </div>
-          <button onclick="gainXP(25); this.disabled=true; this.innerText='Done! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
-            Complete (+25 XP)
-          </button>
-        </div>
-        <div class="bg-white p-4 rounded-2xl border-2 border-black flex items-center justify-between">
-          <div>
-            <span class="bg-green-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">EASY</span>
-            <h3 class="font-bold text-lg inline ml-2">Interactive Desk LED Display</h3>
-            <p class="text-xs text-slate-600">Program WS2812B matrix for pixel graphics & clock.</p>
-          </div>
-          <button onclick="gainXP(25); this.disabled=true; this.innerText='Done! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
-            Complete (+25 XP)
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- SEWING TAB -->
-    <section id="page-sewing" class="tab-page hidden bg-emerald-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-emerald-900">🪡 Thread & Fabric Guild</h2>
-        <span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Stitch Master</span>
-      </div>
-
-      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
-        <h3 class="font-bold text-emerald-800 mb-2">🎲 Sewing Idea Generator</h3>
-        <div class="flex gap-2 text-center text-sm font-bold my-3">
-          <div id="sew-garment" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Garment</div>
-          <span class="self-center">+</span>
-          <div id="sew-fabric" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Fabric</div>
-        </div>
-        <button onclick="generateSewingIdea()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow">
-          Roll Fabric Combo
-        </button>
-      </div>
-    </section>
-
-    <!-- OUTFITS TAB -->
-    <section id="page-outfits" class="tab-page hidden bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-fuchsia-900">👗 Virtual Outfit Picker</h2>
-        <span class="bg-fuchsia-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Dress-Up Mode</span>
-      </div>
-
-      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center">
-        <h3 class="font-bold text-fuchsia-800 mb-4">✨ Outfit Slot Machine</h3>
-        <div class="grid grid-cols-3 gap-4 mb-4">
-          <div id="slot-top" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">🧥 Top</div>
-          <div id="slot-bottom" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👖 Bottom</div>
-          <div id="slot-shoes" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👟 Shoes</div>
-        </div>
-        <button onclick="randomizeOutfit()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow">
-          🎲 Roll Fits
-        </button>
-      </div>
-    </section>
-
+  <main class="max-w-5xl mx-auto px-4 text-center mt-12">
+    <div class="bg-white border-4 border-black p-8 rounded-3xl pixel-shadow-lg max-w-xl mx-auto">
+      <h2 class="text-3xl font-black mb-2">Welcome to Player 1 Lair!</h2>
+      <p class="text-slate-600 mb-6 text-sm">Choose a room above to explore your food logs, hardware build projects, custom sewing experiments, and daily outfits!</p>
+      <div class="text-6xl animate-pulse">👾</div>
+    </div>
   </main>
-
-  <script>
-    let xp = 0;
-    let level = 1;
-
-    function gainXP(amount) {
-      xp += amount;
-      if (xp >= 100) {
-        level += Math.floor(xp / 100);
-        xp = xp % 100;
-        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
-      }
-      document.getElementById('player-xp').innerText = xp;
-      document.getElementById('player-lvl').innerText = level;
-      document.getElementById('xp-bar').style.width = `${xp}%`;
-    }
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
-      document.getElementById(`page-${tabId}`).classList.remove('hidden');
-    }
-
-    const snacks = ["Matcha Boba 🧋", "Garlic Noodles 🍜", "Crispy Rice Tacos 🌮", "Mango Sticky Rice 🥭", "Loaded Fries 🍟"];
-    function spinSnack() {
-      const display = document.getElementById('snack-display');
-      let count = 0;
-      const interval = setInterval(() => {
-        display.innerText = snacks[Math.floor(Math.random() * snacks.length)];
-        count++;
-        if (count > 10) { clearInterval(interval); gainXP(10); }
-      }, 100);
-    }
-
-    const garments = ["Bucket Hat", "Corset Top", "Cargo Trousers", "Tote Bag", "Oversized Jacket"];
-    const fabrics = ["Pastel Corduroy", "Upcycled Quilt", "Floral Tapestry", "Raw Denim", "Satin Silk"];
-    function generateSewingIdea() {
-      document.getElementById('sew-garment').innerText = garments[Math.floor(Math.random() * garments.length)];
-      document.getElementById('sew-fabric').innerText = fabrics[Math.floor(Math.random() * fabrics.length)];
-      gainXP(10);
-    }
-
-    const tops = ["Baby Tee + Cardigan", "Oversized Sweater", "Vintage Graphic Tee", "Crocheted Vest"];
-    const bottoms = ["Baggy Cargo Pants", "Pleated Mini Skirt", "Wide-Leg Jeans", "Parachute Pants"];
-    const shoes = ["Chunky Platform Boots", "Retro Sneakers", "Loafers + White Socks", "Mary Janes"];
-    function randomizeOutfit() {
-      document.getElementById('slot-top').innerText = tops[Math.floor(Math.random() * tops.length)];
-      document.getElementById('slot-bottom').innerText = bottoms[Math.floor(Math.random() * bottoms.length)];
-      document.getElementById('slot-shoes').innerText = shoes[Math.floor(Math.random() * shoes.length)];
-      gainXP(10);
-    }
-  </script>
 </body>
 </html>
