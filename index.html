@@ -1,723 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About | Chelsea Ogbonna</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Secret Lair 🎮 (Single Page)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #edf2fb;
-      --card: #d7e3fc;
-      --accent: #abc4ff;
-      --text: #1f2937;
-      --border: #c1d3fe;
-      --card-hover: #ccdbfd;
-      --shadow: 0 12px 30px rgba(0, 0, 0, .08);
-    }
-    
-    .icon{
-      width:28px;
-      height:28px;
-      object-fit:contain;
-      vertical-align:middle;
-      margin-right:10px;
-    }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: Inter, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-   
-    /* =========================
-NEXT PAGE CTA BUTTON
-========================= */
-    .next-page-container {
-      text-align: center;
-      margin: 80px 0 20px 0;
-      padding: 20px;
-    }
-
-    .next-page-container p {
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #6b7280;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-
-    .next-page-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--card);
-      color: var(--text);
-      text-decoration: none;
-      padding: 18px 36px;
-      border-radius: 999px;
-      font-size: 18px;
-      font-weight: 700;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(193, 211, 254, 0.6);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .next-page-btn .arrow {
-      transition: transform 0.3s ease;
-    }
-
-    /* Hover Engine Effects */
-    .next-page-btn:hover {
-      background: var(--accent);
-      transform: translateY(-4px);
-      box-shadow: 0 15px 35px rgba(171, 196, 255, 0.4);
-    }
-
-    .next-page-btn:hover .arrow {
-      transform: translateX(6px);
-    }
-    /* =========================
-    NAV (MATCHES PORTFOLIO SYSTEM)
-    ========================= */
-    nav {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: min(1100px, 92%);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .logo {
-      font-weight: 800;
-      font-size: 18px;
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 10px;
-      padding: 8px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .78);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(193, 211, 254, .45);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, .10);
-    }
-
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 10px;
-      transition: .25s;
-      font-weight: 500;
-    }
-
-    .nav-links a:hover {
-      background: var(--accent);
-      transform: translateY(-2px);
-    }
-
-    /* =========================
-    LAYOUT WRAPPER
-    ========================= */
-    .content {
-      width: min(1200px, 90%);
-      margin: auto;
-      padding: 140px 0 100px;
-    }
-
-    /* HERO */
-    .hero {
-      text-align: center;
-      margin-bottom: 80px;
-    }
-
-    .profile {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 50%;
-      border: 6px solid white;
-      box-shadow: var(--shadow);
-      margin-bottom: 25px;
-    }
-
-    .hero h1 {
-      font-size: 52px;
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-
-    .subtitle {
-      font-size: 20px;
-      color: #4b5563;
-      font-weight: 500;
-      margin-bottom: 15px;
-    }
-
-    .hero-description {
-      max-width: 750px;
-      margin: auto;
-      color: #4b5563;
-      font-size: 17px;
-    }
-
-    /* GRID CORES */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-      gap: 30px;
-      margin-bottom: 60px;
-    }
-
-    /* CARDS */
-    .about-box {
-      background: var(--card);
-      border-radius: 22px;
-      padding: 35px;
-      box-shadow: var(--shadow);
-      transition: .35s;
-    }
-
-    .about-box:hover {
-      background: var(--card-hover);
-      transform: translateY(-8px);
-    }
-
-    .about-box h2 {
-      margin-bottom: 20px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .about-box p {
-      font-size: 16px;
-      color: #4b5563;
-    }
-
-    /* PILLS / TAGS */
-    .pill {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 30px;
-      padding: 10px 18px;
-      margin: 6px;
-      font-weight: 500;
-      font-size: 14px;
-      border: 1px solid rgba(193, 211, 254, 0.5);
-    }
-
-    /* TIMELINE STRUCT */
-    .timeline {
-      margin: 100px 0;
-    }
-
-    .timeline h2 {
-      text-align: center;
-      margin-bottom: 60px;
-      color: var(--text);
-      font-size: 36px;
-      font-weight: 800;
-    }
-
-    .timeline-line {
-      position: relative;
-      max-width: 900px;
-      margin: auto;
-      padding-left: 45px;
-      border-left: 4px solid var(--accent);
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: 55px;
-    }
-
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .timeline-dot {
-      position: absolute;
-      left: -57px;
-      top: 8px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: 5px solid var(--bg);
-      box-shadow: var(--shadow);
-    }
-
-    .timeline-content {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: var(--shadow);
-      transition: .3s;
-    }
-
-    .timeline-content:hover {
-      background: var(--card-hover);
-      transform: translateX(8px);
-    }
-
-    .timeline-content h3 {
-      margin-bottom: 10px;
-      color: var(--text);
-      font-weight: 700;
-    }
-
-    .timeline-content p {
-      color: #4b5563;
-    }
-
-    /* COUNTER STATS */
-    .stats-section {
-      margin: 100px 0;
-      text-align: center;
-    }
-
-    .stats-section h2 {
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      margin-top: 40px;
-    }
-
-    .stat {
-      background: var(--card);
-      padding: 35px;
-      border-radius: 25px;
-      box-shadow: var(--shadow);
-      transition: .3s;
-    }
-
-    .stat:hover {
-      background: var(--card-hover);
-      transform: translateY(-5px);
-    }
-
-    .stat h1 {
-      font-size: 60px;
-      font-weight: 800;
-      color: var(--text);
-    }
-
-    .stat p {
-      font-size: 16px;
-      font-weight: 500;
-      color: #4b5563;
-    }
-
-    /* ENGINEERING DNA */
-    .engineering-dna {
-      margin: 100px 0;
-      text-align: center;
-    }
-
-    .engineering-dna h2 {
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 10px;
-    }
-
-    .dna-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 25px;
-      margin-top: 40px;
-    }
-
-    .dna-card {
-      background: var(--card);
-      padding: 35px;
-      border-radius: 25px;
-      box-shadow: var(--shadow);
-      transition: .3s;
-    }
-
-    .dna-card:hover {
-      transform: translateY(-10px);
-      background: var(--card-hover);
-    }
-
-    .dna-card h1 {
-      font-size: 50px;
-      margin-bottom: 15px;
-    }
-
-    .dna-card h3 {
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-
-    .dna-card p {
-      font-size: 14px;
-      color: #4b5563;
-    }
-
-    /* WHAT I LOVE BUILDING */
-    .skills-section {
-      margin: 100px 0;
-    }
-
-    .skills-section h2 {
-      text-align: center;
-      font-size: 36px;
-      font-weight: 800;
-      color: var(--text);
-      margin-bottom: 40px;
-    }
-
-    .skills {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-    }
-
-    .skills span {
-      background: rgba(255, 255, 255, 0.6);
-      padding: 12px 22px;
-      border-radius: 999px;
-      font-weight: 500;
-      font-size: 15px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(193, 211, 254, 0.4);
-      transition: .3s;
-      cursor: default;
-    }
-
-    .skills span:hover {
-      transform: translateY(-6px);
-      background: rgba(255, 255, 255, 0.95);
-      border-color: var(--accent);
-    }
-
-    /* SCROLL REVEAL STRUCT CORE */
-    .hidden {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all .7s ease-out;
-    }
-
-    .show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    body { font-family: 'Fredoka', cursive, sans-serif; }
+    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
   </style>
 </head>
+<body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
-<body>
+  <!-- HUD HEADER -->
+  <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl animate-bounce">⚡</span>
+        <div>
+          <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
+          <p class="text-xs text-purple-200">Player 1: Ready</p>
+        </div>
+      </div>
 
-  <nav>
-    <a href="chelsea.html" class="logo">Chelsea Ogbonna</a>
+      <!-- XP & Level System -->
+      <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
+        <div class="text-right">
+          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
+          <div class="text-[10px] text-purple-200"><span id="player-xp">0</span> / 100 XP</div>
+        </div>
+        <div class="w-24 bg-purple-950 h-4 rounded-full border border-black overflow-hidden">
+          <div id="xp-bar" class="bg-yellow-400 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="projects.html">Projects</a>
-      <a href="experiences.html">Experiences</a>
-      <a href="leadership.html">Leadership</a>
-      <a href="contact.html">Contact</a>
+  <!-- NAVIGATION TABS -->
+  <nav class="max-w-5xl mx-auto my-6 px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <button onclick="switchTab('food')" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+        🍱 Food Quest
+      </button>
+      <button onclick="switchTab('build')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+        🛠️ Wishlist Labs
+      </button>
+      <button onclick="switchTab('sewing')" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+        🪡 Stitch Guild
+      </button>
+      <button onclick="switchTab('outfits')" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+        👗 Style Closet
+      </button>
     </div>
   </nav>
 
-  <div class="content">
+  <!-- CONTENT PANELS -->
+  <main class="max-w-5xl mx-auto px-4">
 
-    <div class="hero">
-      <h1>Hi, I'm Chelsea 👋</h1>
-      <p class="subtitle">
-        Biomedical Engineer • Mechanical Engineer • Medical Device Researcher
-      </p>
-      <p class="hero-description">
-        I design engineering solutions that bridge medicine, technology, and human-centered design. My goal is to create devices that improve lives and make healthcare more accessible around the world.
-      </p>
-    </div>
-
-    <section class="stats-section">
-      <h2>Engineering at a Glance</h2>
-      <div class="stats">
-        <div class="stat">
-          <h1 class="counter" data-target="3">0</h1>
-          <p>Research Labs</p>
-        </div>
-        <div class="stat">
-          <h1 class="counter" data-target="10">0</h1>
-          <p>Engineering Projects</p>
-        </div>
-        <div class="stat">
-          <h1 class="counter" data-target="150">0</h1>
-          <p>Participants</p>
-        </div>
-        <div class="stat">
-          <h1 class="counter" data-target="2">0</h1>
-          <p>Engineering Degrees</p>
-        </div>
-      </div>
-    </section>
-
-    <div class="grid">
-      <div class="about-box">
-        <h2>❤️ My Why</h2>
-        <p>
-          Growing up in Nigeria, I witnessed firsthand how limited access to healthcare could dramatically affect people's lives. Seeing preventable illnesses go untreated due to a lack of medical tools inspired me to pursue engineering because to create solutions that improve healthcare accessibility and patient outcomes.
-        </p>
+    <!-- FOOD TAB -->
+    <section id="page-food" class="tab-page bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-pink-900">🍜 Food Vault & Meal Spinner</h2>
+        <span class="bg-pink-400 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+15 XP per snack logged</span>
       </div>
 
-      <div class="about-box">
-        <h2>⚙️ My Engineering Philosophy</h2>
-        <p>
-          I believe engineering is most impactful when it starts with understanding people. Every project should solve a real problem through thoughtful design, careful experimentation, collaboration, and continuous improvement.
-        </p>
-        <div style="margin-top: 20px;">
-          <div class="pill">🧠 Human-Centered Design</div>
-          <div class="pill">🔬 Research-Driven</div>
-          <div class="pill">⚙️ Build → Test → Improve</div>
-          <div class="pill">🤝 Collaboration</div>
-          <div class="pill">💡 Creative Problem Solving</div>
-          <div class="pill">📈 Continuous Learning</div>
-        </div>
+      <div class="bg-white rounded-2xl p-6 border-2 border-black text-center mb-6">
+        <h3 class="font-bold text-lg mb-2">Can't decide what to eat?</h3>
+        <div id="snack-display" class="text-3xl my-4 font-black text-pink-600 animate-pulse">???</div>
+        <button onclick="spinSnack()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-xl border-2 border-black pixel-shadow">
+          🎲 Spin Meal Wheel
+        </button>
       </div>
-    </div>
 
-    <section class="engineering-dna">
-      <h2>My Engineering DNA</h2>
-      <div class="dna-grid">
-        <div class="dna-card">
-          <h1>🎨</h1>
-          <h3>Design</h3>
-          <p>Human-centered solutions.</p>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-pink-700 border-b-2 border-pink-100 pb-1 mb-2">🔥 Craving Tier List</h4>
+          <ul class="space-y-2 text-sm">
+            <li class="flex justify-between items-center bg-pink-50 p-2 rounded-xl border border-pink-200">
+              <span>Matcha Boba Tea</span>
+              <button onclick="gainXP(15)" class="text-xs bg-pink-400 text-white px-2 py-1 rounded-lg border border-black hover:bg-pink-500">Log (+15 XP)</button>
+            </li>
+            <li class="flex justify-between items-center bg-pink-50 p-2 rounded-xl border border-pink-200">
+              <span>Spicy Garlic Ramen</span>
+              <button onclick="gainXP(15)" class="text-xs bg-pink-400 text-white px-2 py-1 rounded-lg border border-black hover:bg-pink-500">Log (+15 XP)</button>
+            </li>
+          </ul>
         </div>
-        <div class="dna-card">
-          <h1>🔬</h1>
-          <h3>Research</h3>
-          <p>Evidence before assumptions.</p>
-        </div>
-        <div class="dna-card">
-          <h1>⚙️</h1>
-          <h3>Build</h3>
-          <p>Prototype rapidly.</p>
-        </div>
-        <div class="dna-card">
-          <h1>🧪</h1>
-          <h3>Test</h3>
-          <p>Validate every idea.</p>
-        </div>
-        <div class="dna-card">
-          <h1>📈</h1>
-          <h3>Improve</h3>
-          <p>Continuous iteration.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="timeline">
-      <h2>🚀 My Journey</h2>
-      <div class="timeline-line">
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h3>🇳🇬 Growing Up in Nigeria</h3>
-            <p>
-              Living in Nigeria gave me firsthand exposure to the realities of healthcare disparities. Watching friends, classmates, and family members struggle to access quality medical care shaped my desire to create engineering solutions that make healthcare more accessible.
-            </p>
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-pink-700 border-b-2 border-pink-100 pb-1 mb-2">🧪 Kitchen Experiments</h4>
+          <div class="space-y-2 text-sm">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" onchange="gainXP(20)" class="w-4 h-4 accent-pink-500">
+              <span>Homemade Sourdough Focaccia</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" onchange="gainXP(20)" class="w-4 h-4 accent-pink-500">
+              <span>Strawberry Tanghulu</span>
+            </label>
           </div>
         </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h3>🧬 Discovering Science</h3>
-            <p>
-              In high school I developed a love for biology and mathematics. I became fascinated by how the human body works and how engineering principles could be used to solve medical challenges.
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h3>
-              <img src="northwestern.png" class="icon">
-              Northwestern University
-            </h3>
-            <p>
-              At Northwestern University, I pursued a Bachelor's degree in Biomedical Engineering while simultaneously earning a Master's degree in Mechanical Engineering. This combination allowed me to connect medicine, mechanics, manufacturing, and product design into one multidisciplinary engineering approach.
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h3>🔬 Research & Innovation</h3>
-            <p>
-              Throughout college, I immersed myself in research spanning implantable pacemakers, microfluidic devices, biomechanics, wearable sensing, robotics, CAD design, manufacturing, and biomedical experimentation. Every project strengthened my belief that engineering has the power to improve patient outcomes.
-            </p>
-          </div>
-        </div>
-
-        <div class="timeline-item">
-          <div class="timeline-dot"></div>
-          <div class="timeline-content">
-            <h3>🚀 Today</h3>
-            <p>
-              Today, I continue developing engineering solutions that bridge research and real-world impact. My goal is to design technologies that improve healthcare accessibility while advancing innovation in medical devices.
-            </p>
-          </div>
-        </div>
-
       </div>
     </section>
 
-    <section class="skills-section">
-      <h2>💡 What I Love Building</h2>
-      <div class="skills">
-        <span>Medical Devices</span>
-        <span>Microfluidics</span>
-        <span>Biomechanics</span>
-        <span>Mechanical Design</span>
-        <span>Robotics</span>
-        <span>Biomedical Research</span>
-        <span>CAD & Prototyping</span>
-        <span>Manufacturing</span>
-        <span>Python</span>
-        <span>Data Analysis</span>
-        <span>Electronics</span>
-        <span>Product Development</span>
-        <span>Rapid Prototyping</span>
-        <span>Experimental Design</span>
-        <span>Healthcare Innovation</span>
+    <!-- BUILD TAB -->
+    <section id="page-build" class="tab-page hidden bg-cyan-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-cyan-900">🚀 Build Quest Log</h2>
+        <span class="bg-cyan-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+25 XP per build</span>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-2xl border-2 border-black flex items-center justify-between">
+          <div>
+            <span class="bg-yellow-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">HARD</span>
+            <h3 class="font-bold text-lg inline ml-2">Custom Mechanical Keyboard</h3>
+            <p class="text-xs text-slate-600">Solder switches, hand-lube stabilizers, custom keycaps.</p>
+          </div>
+          <button onclick="gainXP(25); this.disabled=true; this.innerText='Done! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            Complete (+25 XP)
+          </button>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border-2 border-black flex items-center justify-between">
+          <div>
+            <span class="bg-green-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">EASY</span>
+            <h3 class="font-bold text-lg inline ml-2">Interactive Desk LED Display</h3>
+            <p class="text-xs text-slate-600">Program WS2812B matrix for pixel graphics & clock.</p>
+          </div>
+          <button onclick="gainXP(25); this.disabled=true; this.innerText='Done! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            Complete (+25 XP)
+          </button>
+        </div>
       </div>
     </section>
 
-    <div class="grid">
-      <div class="about-box">
-        <h2>🌍 Beyond Engineering</h2>
-        <p>
-          Outside of engineering, I enjoy mentoring students, leading multidisciplinary teams, and creating opportunities that help others grow. Whether through research, leadership, or outreach, I value collaboration and believe that innovation is strongest when people from different backgrounds work together.
-        </p>
-        <p style="margin-top: 15px;">
-          I'm also passionate about giving back to my community and hope to inspire future engineers—especially those who may not have always seen themselves represented in STEM.
-        </p>
+    <!-- SEWING TAB -->
+    <section id="page-sewing" class="tab-page hidden bg-emerald-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-emerald-900">🪡 Thread & Fabric Guild</h2>
+        <span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Stitch Master</span>
       </div>
 
-      <div class="about-box">
-        <h2>🎯 What's Next</h2>
-        <p>
-          My long-term goal is to develop medical technologies that improve patient care around the world, particularly in underserved communities. I hope to work at the intersection of research, engineering, and product development, bringing ideas from concept to real-world clinical impact.
-        </p>
-        <p style="margin-top: 15px;">
-          As I continue growing as an engineer, I'm excited to contribute to multidisciplinary teams tackling some of healthcare's most meaningful challenges.
-        </p>
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
+        <h3 class="font-bold text-emerald-800 mb-2">🎲 Sewing Idea Generator</h3>
+        <div class="flex gap-2 text-center text-sm font-bold my-3">
+          <div id="sew-garment" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Garment</div>
+          <span class="self-center">+</span>
+          <div id="sew-fabric" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Fabric</div>
+        </div>
+        <button onclick="generateSewingIdea()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow">
+          Roll Fabric Combo
+        </button>
       </div>
-    </div>
-
-    <section style="margin-top:90px; text-align:center;">
-      <h2 style="font-size:32px; color:var(--text); margin-bottom:25px; font-weight: 800;">
-        A Personal Motto
-      </h2>
-      <p style="max-width:750px; margin:auto; font-size:20px; font-style:italic; color:#4b5563; line-height:1.8;">
-        "Engineering is more than building devices—it's about creating solutions that improve lives and expand what's possible."
-      </p>
     </section>
 
-    <section class="next-page-container">
-      <p>Finished reading?</p>
-      <a href="projects.html" class="next-page-btn">View My Projects <span class="arrow">→</span></a>
-      </a>
-    </section>
- 
-  </div>
+    <!-- OUTFITS TAB -->
+    <section id="page-outfits" class="tab-page hidden bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-fuchsia-900">👗 Virtual Outfit Picker</h2>
+        <span class="bg-fuchsia-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Dress-Up Mode</span>
+      </div>
 
-  <footer style="margin-top:100px; padding:45px; text-align:center; border-top: 1px solid var(--border); color:#4b5563;">
-    <p style="font-size:18px; font-weight:600;">© 2026 Chelsea Ogbonna</p>
-    <p style="margin-top:10px; font-size:14px;">Designed & Built with HTML, CSS, and ❤️</p>
-  </footer>
+      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center">
+        <h3 class="font-bold text-fuchsia-800 mb-4">✨ Outfit Slot Machine</h3>
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <div id="slot-top" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">🧥 Top</div>
+          <div id="slot-bottom" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👖 Bottom</div>
+          <div id="slot-shoes" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👟 Shoes</div>
+        </div>
+        <button onclick="randomizeOutfit()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow">
+          🎲 Roll Fits
+        </button>
+      </div>
+    </section>
+
+  </main>
 
   <script>
-    // Intersection Observer for Smooth Scroll Fade-In Reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-        }
-      });
-    }, { threshold: 0.05 });
+    let xp = 0;
+    let level = 1;
 
-    document.querySelectorAll(".about-box, .timeline-item, .skills-section, .stats-section, .engineering-dna, .hero").forEach(el => {
-      el.classList.add("hidden");
-      observer.observe(el);
-    });
-
-    // Numerical Counter Metrics Engine
-    const counters = document.querySelectorAll(".counter");
-    counters.forEach(counter => {
-      counter.innerText = "0";
-      
-      const update = () => {
-        const target = +counter.dataset.target;
-        const current = parseInt(counter.innerText, 10);
-        const increment = Math.ceil(target / 50);
-
-        if (current < target) {
-          const nextVal = current + increment;
-          if (nextVal >= target) {
-            counter.innerText = target + "+";
-          } else {
-            counter.innerText = nextVal;
-            setTimeout(update, 25);
-          }
-        } else {
-          counter.innerText = target + "+";
-        }
+    function gainXP(amount) {
+      xp += amount;
+      if (xp >= 100) {
+        level += Math.floor(xp / 100);
+        xp = xp % 100;
+        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
       }
-      
-      const counterObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if(entry.isIntersecting && counter.innerText === "0") {
-            update();
-          }
-        });
-      });
-      counterObserver.observe(counter);
-    });
-  </script>
+      document.getElementById('player-xp').innerText = xp;
+      document.getElementById('player-lvl').innerText = level;
+      document.getElementById('xp-bar').style.width = `${xp}%`;
+    }
 
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+      document.getElementById(`page-${tabId}`).classList.remove('hidden');
+    }
+
+    const snacks = ["Matcha Boba 🧋", "Garlic Noodles 🍜", "Crispy Rice Tacos 🌮", "Mango Sticky Rice 🥭", "Loaded Fries 🍟"];
+    function spinSnack() {
+      const display = document.getElementById('snack-display');
+      let count = 0;
+      const interval = setInterval(() => {
+        display.innerText = snacks[Math.floor(Math.random() * snacks.length)];
+        count++;
+        if (count > 10) { clearInterval(interval); gainXP(10); }
+      }, 100);
+    }
+
+    const garments = ["Bucket Hat", "Corset Top", "Cargo Trousers", "Tote Bag", "Oversized Jacket"];
+    const fabrics = ["Pastel Corduroy", "Upcycled Quilt", "Floral Tapestry", "Raw Denim", "Satin Silk"];
+    function generateSewingIdea() {
+      document.getElementById('sew-garment').innerText = garments[Math.floor(Math.random() * garments.length)];
+      document.getElementById('sew-fabric').innerText = fabrics[Math.floor(Math.random() * fabrics.length)];
+      gainXP(10);
+    }
+
+    const tops = ["Baby Tee + Cardigan", "Oversized Sweater", "Vintage Graphic Tee", "Crocheted Vest"];
+    const bottoms = ["Baggy Cargo Pants", "Pleated Mini Skirt", "Wide-Leg Jeans", "Parachute Pants"];
+    const shoes = ["Chunky Platform Boots", "Retro Sneakers", "Loafers + White Socks", "Mary Janes"];
+    function randomizeOutfit() {
+      document.getElementById('slot-top').innerText = tops[Math.floor(Math.random() * tops.length)];
+      document.getElementById('slot-bottom').innerText = bottoms[Math.floor(Math.random() * bottoms.length)];
+      document.getElementById('slot-shoes').innerText = shoes[Math.floor(Math.random() * shoes.length)];
+      gainXP(10);
+    }
+  </script>
 </body>
 </html>
