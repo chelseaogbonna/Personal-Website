@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Secret Lair 🎮</title>
+  <title>My Fun Arcade Hub 🎮</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -15,7 +15,7 @@
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
-  <!-- HUD HEADER -->
+  <!-- HUD / TOP BAR -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
     <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -26,6 +26,7 @@
         </div>
       </div>
 
+      <!-- XP & Level Tracker -->
       <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
         <div class="text-right">
           <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
@@ -41,31 +42,29 @@
   <!-- NAVIGATION TABS -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🍱 Food Quest
       </a>
-      <a href="build.html" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🛠️ Wishlist Labs
       </a>
-      <a href="sewing.html" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🪡 Stitch Guild
       </a>
-      <a href="outfits.html" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         👗 Style Closet
       </a>
     </div>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <main class="max-w-5xl mx-auto px-4">
     <div class="bg-white border-4 border-black rounded-3xl p-8 pixel-shadow-lg text-center">
-      <h2 class="text-3xl font-black mb-2 text-purple-900">Welcome to Headquarters 👾</h2>
-      <p class="text-slate-600 mb-6 text-sm">Select any room above to jump directly to that page!</p>
-      <div class="inline-block bg-purple-100 p-4 rounded-2xl border-2 border-black">
-        <p class="font-bold text-xs text-purple-700">Quick Start Bonus:</p>
-        <button onclick="gainXP(25)" class="mt-2 bg-purple-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow hover:bg-purple-700">
-          Claim +25 Daily XP 🎁
-        </button>
-      </div>
+      <h2 class="text-3xl font-black mb-2 text-purple-900">Welcome to HQ 👾</h2>
+      <p class="text-slate-600 mb-6 text-sm">Select any room above to jump into that section!</p>
+      <a href="food.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow">
+        Enter Lair 🚀
+      </a>
     </div>
   </main>
 
@@ -79,16 +78,6 @@
       document.getElementById('xp-bar').style.width = `${xp}%`;
       localStorage.setItem('playerXP', xp);
       localStorage.setItem('playerLvl', level);
-    }
-
-    function gainXP(amount) {
-      xp += amount;
-      if (xp >= 100) {
-        level += Math.floor(xp / 100);
-        xp = xp % 100;
-        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
-      }
-      updateHUD();
     }
 
     updateHUD();
