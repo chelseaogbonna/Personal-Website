@@ -15,6 +15,7 @@
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
+  <!-- HUD / TOP BAR -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
     <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
@@ -25,6 +26,7 @@
         </div>
       </div>
 
+      <!-- XP & Level Tracker -->
       <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
         <div class="text-right">
           <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
@@ -37,57 +39,65 @@
     </div>
   </header>
 
+  <!-- NAVIGATION TABS -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-      <a href="index.html" class="bg-slate-400 hover:bg-slate-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
-        🏠 Hub
-      </a>
-      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🍱 Food Quest
       </a>
-      <a href="build.html" class="bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center ring-4 ring-black">
+      <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
         🛠️ Wishlist Labs
       </a>
-      <a href="sewing.html" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🪡 Stitch Guild
       </a>
-      <a href="outfits.html" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         👗 Style Closet
       </a>
     </div>
   </nav>
 
+  <!-- MAIN CONTAINER -->
   <main class="max-w-5xl mx-auto px-4">
-    <section class="bg-cyan-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+
+    <!-- 2. WHAT I WANT TO BUILD PAGE -->
+    <section id="page-build" class="tab-page bg-cyan-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-bold text-cyan-900">🚀 Build Quest Log</h2>
-        <span class="bg-cyan-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+25 XP per build</span>
+        <span class="bg-cyan-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+25 XP per quest completed</span>
       </div>
 
       <div class="space-y-4">
-        <div class="bg-white p-4 rounded-2xl border-2 border-black flex items-center justify-between">
+        <!-- Quest Item 1 -->
+        <div class="bg-white p-4 rounded-2xl border-2 border-black flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span class="bg-yellow-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">HARD</span>
-            <h3 class="font-bold text-lg inline ml-2">Custom Mechanical Keyboard</h3>
-            <p class="text-xs text-slate-600">Solder switches, hand-lube stabilizers, custom keycaps.</p>
+            <div class="flex items-center gap-2">
+              <span class="bg-yellow-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">HARD</span>
+              <h3 class="font-bold text-lg">Custom Mechanical Keyboard</h3>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Solder switches, hand-lube stabilizers, custom keycap set.</p>
           </div>
-          <button onclick="gainXP(25); this.disabled=true; this.innerText='Done! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          <button onclick="gainXP(25); this.disabled=true; this.innerText='Completed! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
             Complete (+25 XP)
           </button>
         </div>
 
-        <div class="bg-white p-4 rounded-2xl border-2 border-black flex items-center justify-between">
+        <!-- Quest Item 2 -->
+        <div class="bg-white p-4 rounded-2xl border-2 border-black flex flex-wrap items-center justify-between gap-4">
           <div>
-            <span class="bg-green-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">EASY</span>
-            <h3 class="font-bold text-lg inline ml-2">Interactive Desk LED Display</h3>
-            <p class="text-xs text-slate-600">Program WS2812B matrix for pixel graphics & clock.</p>
+            <div class="flex items-center gap-2">
+              <span class="bg-green-300 text-black text-xs font-bold px-2 py-0.5 rounded border border-black">EASY</span>
+              <h3 class="font-bold text-lg">Interactive Desk LED Matrix</h3>
+            </div>
+            <p class="text-xs text-slate-600 mt-1">Program WS2812B pixel display for animations & clock.</p>
           </div>
-          <button onclick="gainXP(25); this.disabled=true; this.innerText='Done! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          <button onclick="gainXP(25); this.disabled=true; this.innerText='Completed! 🎉'; this.classList.add('opacity-50')" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
             Complete (+25 XP)
           </button>
         </div>
       </div>
     </section>
+
   </main>
 
   <script>
