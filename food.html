@@ -3,158 +3,567 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Food Quest Selector</title>
+  <title>Food Quest 🍜</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Eliminates unwanted vertical spacing/gaps between grid columns */
-    .tight-grid {
+    body { font-family: 'Fredoka', cursive, sans-serif; }
+    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+
+    /* Seamless Grid Layout: Eliminates spacing gap between columns */
+    .seamless-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 0px; 
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0px;
     }
   </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen p-6 flex flex-col items-center">
+<body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
-  <header class="text-center mb-8">
-    <h1 class="text-3xl font-bold text-yellow-400 tracking-wider">FOOD QUEST SELECTOR</h1>
-    <p class="text-slate-400 text-sm mt-1">Cycle through dishes like picking a game character</p>
+  <!-- HUD / TOP BAR -->
+  <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl animate-bounce">⚡</span>
+        <div>
+          <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
+          <p class="text-xs text-purple-200">Player 1: Ready</p>
+        </div>
+      </div>
+
+      <!-- XP & Level Tracker -->
+      <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
+        <div class="text-right">
+          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
+          <div class="text-[10px] text-purple-200"><span id="player-xp">0</span> / 100 XP</div>
+        </div>
+        <div class="w-24 bg-purple-950 h-4 rounded-full border border-black overflow-hidden">
+          <div id="xp-bar" class="bg-yellow-400 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
   </header>
 
-  <!-- Category Selector Tabs -->
-  <div id="category-tabs" class="flex flex-wrap justify-center gap-2 mb-8">
-    <!-- Rendered dynamically by JS -->
-  </div>
-
-  <!-- Main Carousel Container (Character Select Interface) -->
-  <main class="w-full max-w-xl bg-slate-800 border-2 border-slate-700 rounded-2xl p-6 shadow-2xl flex flex-col items-center">
-    
-    <!-- Category Header -->
-    <div class="w-full flex justify-between items-center mb-4 border-b border-slate-700 pb-3">
-      <h2 id="active-category-title" class="text-xl font-bold text-yellow-300 uppercase tracking-wider">Category</h2>
-      <span id="counter" class="text-xs font-mono bg-slate-700 text-slate-300 px-3 py-1 rounded-full">1 / 30</span>
+  <!-- NAVIGATION TABS -->
+  <nav class="max-w-5xl mx-auto my-6 px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
+        🍱 Food Quest
+      </a>
+      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🛠️ Wishlist Labs
+      </a>
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🪡 Stitch Guild
+      </a>
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        👗 Style Closet
+      </a>
     </div>
+  </nav>
 
-    <!-- Active Dish Display Card -->
-    <div class="w-full bg-slate-900 border border-slate-700 rounded-xl p-8 my-4 text-center min-h-[160px] flex flex-col justify-center items-center shadow-inner relative overflow-hidden">
-      <span class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-1">Selected Dish</span>
-      <h3 id="dish-name" class="text-2xl font-extrabold text-white transition-all duration-200">Loading...</h3>
-    </div>
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-5xl mx-auto px-4 space-y-8">
 
-    <!-- Character Select Controls (Prev / Next) -->
-    <div class="flex gap-4 w-full mt-2">
-      <button id="prev-btn" onclick="prevDish()" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg border-b-4 border-slate-900 active:border-b-0 active:translate-y-1 transition-all">
-        ◀ PREV
-      </button>
-      <button id="next-btn" onclick="nextDish()" class="flex-1 bg-yellow-500 hover:bg-yellow-400 text-slate-900 font-extrabold py-3 px-4 rounded-xl shadow-lg border-b-4 border-yellow-700 active:border-b-0 active:translate-y-1 transition-all">
-        NEXT ▶
-      </button>
-    </div>
+    <!-- CHARACTER SELECT DISH CAROUSEL SECTION -->
+    <section class="bg-purple-900 border-4 border-black rounded-3xl p-6 pixel-shadow-lg text-white">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 border-b-2 border-purple-700 pb-3">
+        <div>
+          <h2 class="text-2xl font-bold text-yellow-300">🎮 Dish Character Select</h2>
+          <p class="text-xs text-purple-200">Click NEXT or PREV to cycle through items like choosing a hero!</p>
+        </div>
+        <div id="character-select-counter" class="bg-purple-950 text-yellow-400 px-4 py-1.5 rounded-xl border border-black font-mono text-sm font-bold">
+          DISH 1 / 30
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center gap-6 my-2">
+        <button onclick="prevCharacterSelect()" class="w-full sm:w-auto bg-purple-700 hover:bg-purple-600 active:translate-y-1 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow">
+          ◀ PREV
+        </button>
+
+        <div class="flex-1 w-full bg-purple-950 border-2 border-black rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4 pixel-shadow-inner">
+          <div id="character-select-img" class="w-28 h-28 shrink-0 rounded-xl border-2 border-black overflow-hidden bg-purple-900 flex items-center justify-center">
+            <!-- Image loaded dynamically -->
+          </div>
+          <div class="text-center sm:text-left flex-1">
+            <span id="character-select-tag" class="text-[10px] font-bold bg-purple-700 text-purple-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Breakfast</span>
+            <h3 id="character-select-title" class="text-xl font-bold text-yellow-300 mt-1">Avocado Egg Toast</h3>
+            <p id="character-select-ingredients" class="text-xs text-purple-200 mt-1">Ingredients: Bread, Avocado, Eggs, Chili Flakes</p>
+          </div>
+        </div>
+
+        <button onclick="nextCharacterSelect()" class="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-300 active:translate-y-1 text-purple-950 font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow">
+          NEXT ▶
+        </button>
+      </div>
+    </section>
+
+    <!-- MEAL UNITS & INVENTORY EXPLORER -->
+    <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault & Item Inventory</h2>
+          <p class="text-xs text-pink-800">Browse items by category or toggle meals to spin!</p>
+        </div>
+        
+        <!-- MULTI-TOGGLE RANDOM SPINNER CONTROL PANEL -->
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow flex flex-col sm:flex-row items-center gap-3">
+          <div class="flex flex-wrap items-center gap-1.5" id="spinner-toggle-group">
+            <span class="text-[11px] font-bold text-slate-500 mr-1">Spin Pool:</span>
+            <button onclick="toggleSpinFilter('breakfast')" id="spin-btn-breakfast" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍳 Breakfast
+            </button>
+            <button onclick="toggleSpinFilter('lunch')" id="spin-btn-lunch" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🥗 Lunch
+            </button>
+            <button onclick="toggleSpinFilter('dinner')" id="spin-btn-dinner" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍜 Dinner
+            </button>
+          </div>
+          <button onclick="spinRandomMeal()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+            Spin Meal (+10 XP)
+          </button>
+        </div>
+      </div>
+
+      <!-- Meal Unit Selection (Breakfast / Lunch / Dinner) -->
+      <div class="flex gap-2 mb-4">
+        <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          🍳 Breakfast
+        </button>
+        <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          🥗 Lunch
+        </button>
+        <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          🍜 Dinner
+        </button>
+      </div>
+
+      <!-- Sub-Category Filter -->
+      <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
+        <!-- Dynamic Subcategory Pills -->
+      </div>
+
+      <!-- Inventory Grid + Item Detail Card -->
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Compact Seamless Inventory Grid (Columns sit directly together without gaps) -->
+        <div class="md:col-span-2 bg-white rounded-2xl border-2 border-black p-1 max-h-[480px] overflow-y-auto">
+          <div id="food-inventory-grid" class="seamless-grid divide-x divide-y divide-pink-300 border border-pink-300 rounded-xl overflow-hidden">
+            <!-- Dynamic Food Item Cards -->
+          </div>
+        </div>
+
+        <!-- Selected Item Detail View -->
+        <div id="food-detail-card" class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-1" id="detail-category">Select an Item</div>
+            
+            <!-- Detail Image Slot -->
+            <div id="detail-img-container" class="w-full h-32 rounded-xl border-2 border-black overflow-hidden mb-2 bg-pink-50 flex items-center justify-center">
+              <span class="text-slate-400 text-xs italic">No item selected</span>
+            </div>
+
+            <h3 class="text-lg font-bold mb-2 flex items-center gap-1.5" id="detail-title">
+              <span>🎒 Inventory Empty</span>
+            </h3>
+            
+            <p class="text-[11px] font-bold text-slate-500 mb-1">Required Ingredients:</p>
+            <ul id="detail-ingredients" class="space-y-0.5 text-xs list-disc list-inside text-slate-700 bg-pink-50 p-2 rounded-xl border border-pink-200 min-h-[50px] mb-2">
+              <li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>
+            </ul>
+
+            <!-- Recommended Pairings Box -->
+            <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 text-xs space-y-1">
+              <p class="font-bold text-amber-900 border-b border-amber-200 pb-0.5">Pairing Suggestions:</p>
+              <p class="text-slate-700">🥤 <strong>Drink:</strong> <span id="detail-drink" class="text-slate-500 italic">None</span></p>
+              <p class="text-slate-700">🥣 <strong>Sauce:</strong> <span id="detail-sauce" class="text-slate-500 italic">None</span></p>
+            </div>
+          </div>
+
+          <button id="eat-btn" disabled onclick="consumeSelectedFood()" class="mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed">
+            Eat Meal (+15 XP)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANTRY RECIPE MATCHERS -->
+    <section class="bg-amber-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <h2 class="text-2xl font-bold text-amber-900 mb-2">🥖 Pantry Crafting Station</h2>
+      <p class="text-xs text-amber-800 mb-6">Select available ingredients from your kitchen pantry to generate custom or web recipes.</p>
+
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
+        <h4 class="font-bold text-slate-700 mb-3 text-sm border-b pb-1">Available Ingredients:</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="eggs" class="pantry-item w-4 h-4 accent-amber-500"> 🍳 Eggs
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="bread" class="pantry-item w-4 h-4 accent-amber-500"> 🍞 Bread
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="matcha" class="pantry-item w-4 h-4 accent-amber-500"> 🍵 Matcha
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="boba" class="pantry-item w-4 h-4 accent-amber-500"> 🧋 Boba
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="ramen noodles" class="pantry-item w-4 h-4 accent-amber-500"> 🍜 Ramen
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="garlic" class="pantry-item w-4 h-4 accent-amber-500"> 🧄 Garlic
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="flour" class="pantry-item w-4 h-4 accent-amber-500"> 🌾 Flour
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="strawberries" class="pantry-item w-4 h-4 accent-amber-500"> 🍓 Strawberries
+          </label>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3 mb-6">
+        <button onclick="matchCustomRecipe()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          📖 Match My Vault Recipes
+        </button>
+        <button onclick="searchWebRecipes()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          🌐 Search Web Recipes
+        </button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-emerald-700 border-b-2 border-emerald-100 pb-1 mb-2">📖 Vault Recipes Found</h4>
+          <div id="custom-recipe-output" class="text-sm text-slate-600 space-y-2">
+            <p class="italic text-slate-400">Select items above and click "Match My Vault Recipes".</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-sky-700 border-b-2 border-sky-100 pb-1 mb-2">🌐 Internet Recipe Finder</h4>
+          <div id="web-recipe-output" class="text-sm text-slate-600 space-y-2">
+            <p class="italic text-slate-400">Select items above and click "Search Web Recipes".</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <!-- Full List View (Zero-gap grid layout) -->
-  <section class="w-full max-w-4xl mt-12 bg-slate-800/50 border border-slate-700/50 rounded-2xl p-6">
-    <h3 class="text-lg font-bold text-slate-300 mb-4 border-b border-slate-700 pb-2">Category Overview</h3>
-    <!-- tight-grid class ensures adjacent items stick together with no extra column gaps -->
-    <div id="full-grid" class="tight-grid border border-slate-700 rounded-lg overflow-hidden divide-x divide-y divide-slate-700/60 text-sm">
-      <!-- Grid items injected dynamically -->
-    </div>
-  </section>
-
   <script>
-    // 30 Items per Category Placeholder Dataset
-    const foodData = {
-      breakfast: Array.from({ length: 30 }, (_, i) => `Breakfast Item ${i + 1}`),
-      lunch: Array.from({ length: 30 }, (_, i) => `Lunch Item ${i + 1}`),
-      dinner: Array.from({ length: 30 }, (_, i) => `Dinner Item ${i + 1}`),
-      sandwiches: Array.from({ length: 30 }, (_, i) => `Sandwich Item ${i + 1}`),
-      snacks: Array.from({ length: 30 }, (_, i) => `Snack Item ${i + 1}`)
-    };
+    // --- HUD XP SYSTEM ---
+    let xp = parseInt(localStorage.getItem('playerXP')) || 0;
+    let level = parseInt(localStorage.getItem('playerLvl')) || 1;
 
-    let currentCategory = "breakfast";
-    let currentIndex = 0;
-
-    // Initialize UI
-    function init() {
-      renderTabs();
-      loadCategory(currentCategory);
+    function updateHUD() {
+      document.getElementById('player-xp').innerText = xp;
+      document.getElementById('player-lvl').innerText = level;
+      document.getElementById('xp-bar').style.width = `${xp}%`;
+      localStorage.setItem('playerXP', xp);
+      localStorage.setItem('playerLvl', level);
     }
 
-    // Render Navigation Tabs
-    function renderTabs() {
-      const tabsContainer = document.getElementById("category-tabs");
-      tabsContainer.innerHTML = Object.keys(foodData).map(cat => `
-        <button 
-          onclick="switchCategory('${cat}')" 
-          id="tab-${cat}"
-          class="px-4 py-2 rounded-lg font-bold text-sm transition-all uppercase ${
-            cat === currentCategory 
-              ? 'bg-yellow-500 text-slate-900 shadow-md' 
-              : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white'
-          }">
-          ${cat}
-        </button>
-      `).join('');
+    function gainXP(amount) {
+      xp += amount;
+      if (xp >= 100) {
+        level += Math.floor(xp / 100);
+        xp = xp % 100;
+        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
+      }
+      updateHUD();
     }
 
-    // Switch Selected Category
-    function switchCategory(cat) {
-      currentCategory = cat;
-      currentIndex = 0;
-      renderTabs();
-      loadCategory(cat);
-    }
+    // --- 30 BREAKFAST, 30 LUNCH, 30 DINNER DATABASE ---
+    const imgPlaceholder = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80';
 
-    // Update Card Display
-    function updateDisplay() {
-      const list = foodData[currentCategory];
-      document.getElementById("dish-name").innerText = list[currentIndex];
-      document.getElementById("counter").innerText = `${currentIndex + 1} / ${list.length}`;
-      document.getElementById("active-category-title").innerText = currentCategory;
+    const foodDatabase = [
+      // 🍳 30 BREAKFAST ITEMS
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: `b${i + 1}`,
+        name: i === 0 ? 'Avocado Egg Toast' : i === 1 ? 'Breakfast Burrito' : i === 2 ? 'Acai Smoothie Bowl' : i === 3 ? 'Matcha Boba Latte' : `Breakfast Item ${i + 1}`,
+        icon: i % 3 === 0 ? '🥑' : i % 3 === 1 ? '🌯' : '🥣',
+        img: imgPlaceholder,
+        mealTypes: ['breakfast'],
+        category: i % 3 === 0 ? 'sandwiches' : i % 3 === 1 ? 'bowls' : 'drinks',
+        ingredients: [`Breakfast Ingredient A${i + 1}`, `Breakfast Ingredient B${i + 1}`, 'Butter', 'Salt'],
+        drinkPairing: 'Iced Cold Brew',
+        saucePairing: 'Maple Syrup'
+      })),
+
+      // 🥗 30 LUNCH ITEMS
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: `l${i + 1}`,
+        name: i === 0 ? 'Caprese Focaccia' : i === 1 ? 'Spicy Garlic Ramen' : i === 2 ? 'Salmon Poke Bowl' : i === 3 ? 'Yuzu Lemonade' : `Lunch Item ${i + 1}`,
+        icon: i % 3 === 0 ? '🥪' : i % 3 === 1 ? '🍜' : '🥗',
+        img: imgPlaceholder,
+        mealTypes: ['lunch'],
+        category: i % 3 === 0 ? 'sandwiches' : i % 3 === 1 ? 'bowls' : 'drinks',
+        ingredients: [`Lunch Ingredient A${i + 1}`, `Lunch Ingredient B${i + 1}`, 'Olive Oil', 'Herbs'],
+        drinkPairing: 'Yuzu Lemonade',
+        saucePairing: 'Garlic Aioli'
+      })),
+
+      // 🍜 30 DINNER ITEMS
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: `d${i + 1}`,
+        name: i === 0 ? 'Crispy Rice Tacos' : i === 1 ? 'Garlic Butter Noodles' : i === 2 ? 'Sourdough Focaccia Pizza' : i === 3 ? 'Strawberry Soda' : `Dinner Item ${i + 1}`,
+        icon: i % 3 === 0 ? '🌮' : i % 3 === 1 ? '🍝' : '🍕',
+        img: imgPlaceholder,
+        mealTypes: ['dinner'],
+        category: i % 3 === 0 ? 'sandwiches' : i % 3 === 1 ? 'bowls' : 'drinks',
+        ingredients: [`Dinner Ingredient A${i + 1}`, `Dinner Ingredient B${i + 1}`, 'Garlic', 'Parmesan'],
+        drinkPairing: 'Strawberry Soda',
+        saucePairing: 'Chili Crisp'
+      }))
+    ];
+
+    let currentMealUnit = 'breakfast';
+    let currentSubcategory = 'all';
+    let activeSelectedItem = null;
+    let characterSelectIndex = 0;
+
+    // ACTIVE SPINNER FILTERS
+    let activeSpinFilters = ['breakfast', 'lunch', 'dinner'];
+
+    function toggleSpinFilter(meal) {
+      if (activeSpinFilters.includes(meal)) {
+        if (activeSpinFilters.length === 1) return; 
+        activeSpinFilters = activeSpinFilters.filter(m => m !== meal);
+      } else {
+        activeSpinFilters.push(meal);
+      }
       
-      // Update Grid Highlight
-      renderGrid();
+      ['breakfast', 'lunch', 'dinner'].forEach(m => {
+        const btn = document.getElementById(`spin-btn-${m}`);
+        if (activeSpinFilters.includes(m)) {
+          btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
+        } else {
+          btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-100 text-slate-400 transition-all';
+        }
+      });
     }
 
-    // Character Select Logic: Next
-    function nextDish() {
-      const list = foodData[currentCategory];
-      currentIndex = (currentIndex + 1) % list.length;
-      updateDisplay();
-    }
-
-    // Character Select Logic: Prev
-    function prevDish() {
-      const list = foodData[currentCategory];
-      currentIndex = (currentIndex - 1 + list.length) % list.length;
-      updateDisplay();
-    }
-
-    // Render tight 2D overview grid with zero column spacing gap
-    function renderGrid() {
-      const grid = document.getElementById("full-grid");
-      const list = foodData[currentCategory];
+    function selectMealUnit(unit) {
+      currentMealUnit = unit;
+      currentSubcategory = 'all';
+      characterSelectIndex = 0;
       
-      grid.innerHTML = list.map((item, idx) => `
-        <div 
-          onclick="selectSpecificIndex(${idx})"
-          class="p-3 cursor-pointer transition-colors text-center ${
-            idx === currentIndex 
-              ? 'bg-yellow-500/20 text-yellow-300 font-bold border-2 border-yellow-400' 
-              : 'bg-slate-900/60 hover:bg-slate-800 text-slate-400'
-          }">
-          ${item}
+      document.querySelectorAll('.meal-unit-btn').forEach(btn => {
+        btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+      });
+      const activeTab = document.getElementById(`tab-${unit}`);
+      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+
+      renderSubcategories();
+      renderFoodGrid();
+      updateCharacterSelectView();
+    }
+
+    function renderSubcategories() {
+      const subcatBar = document.getElementById('subcategory-bar');
+      const mealItems = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+      const categories = [...new Set(mealItems.map(item => item.category))];
+      
+      let html = `<button onclick="filterSubcategory('all')" class="px-3 py-1 text-xs font-bold rounded-lg border border-black ${currentSubcategory === 'all' ? 'bg-pink-500 text-white' : 'bg-white text-slate-700'}">All</button>`;
+      
+      categories.forEach(cat => {
+        const isSelected = currentSubcategory === cat;
+        html += `<button onclick="filterSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-lg border border-black capitalize ${isSelected ? 'bg-pink-500 text-white' : 'bg-white text-slate-700'}">${cat}</button>`;
+      });
+
+      subcatBar.innerHTML = html;
+    }
+
+    function filterSubcategory(cat) {
+      currentSubcategory = cat;
+      characterSelectIndex = 0;
+      renderSubcategories();
+      renderFoodGrid();
+      updateCharacterSelectView();
+    }
+
+    // --- CHARACTER SELECT CONTROLS ---
+    function getActiveCategoryList() {
+      let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+      if (currentSubcategory !== 'all') {
+        list = list.filter(item => item.category === currentSubcategory);
+      }
+      return list;
+    }
+
+    function updateCharacterSelectView() {
+      const list = getActiveCategoryList();
+      if (list.length === 0) return;
+
+      const currentItem = list[characterSelectIndex];
+
+      document.getElementById('character-select-counter').innerText = `DISH ${characterSelectIndex + 1} / ${list.length}`;
+      document.getElementById('character-select-tag').innerText = `${currentMealUnit.toUpperCase()} • ${currentItem.category.toUpperCase()}`;
+      document.getElementById('character-select-title').innerText = `${currentItem.icon} ${currentItem.name}`;
+      document.getElementById('character-select-ingredients').innerText = `Ingredients: ${currentItem.ingredients.join(', ')}`;
+      document.getElementById('character-select-img').innerHTML = `<img src="${currentItem.img}" alt="${currentItem.name}" class="w-full h-full object-cover" />`;
+
+      selectFoodItem(currentItem);
+    }
+
+    function nextCharacterSelect() {
+      const list = getActiveCategoryList();
+      if (list.length === 0) return;
+      characterSelectIndex = (characterSelectIndex + 1) % list.length;
+      updateCharacterSelectView();
+    }
+
+    function prevCharacterSelect() {
+      const list = getActiveCategoryList();
+      if (list.length === 0) return;
+      characterSelectIndex = (characterSelectIndex - 1 + list.length) % list.length;
+      updateCharacterSelectView();
+    }
+
+    function renderFoodGrid() {
+      const grid = document.getElementById('food-inventory-grid');
+      const itemsToDisplay = getActiveCategoryList();
+
+      grid.innerHTML = itemsToDisplay.map((item, idx) => {
+        const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
+        return `
+          <div onclick='selectGridIndex(${idx}, ${JSON.stringify(item)})' 
+               class="group cursor-pointer p-2 bg-white hover:bg-pink-50 transition-all flex flex-col justify-between overflow-hidden h-24 ${isSelected ? 'bg-pink-100 ring-2 ring-pink-500 font-bold' : ''}">
+            
+            <div class="w-full h-12 rounded-lg border border-black overflow-hidden bg-pink-100 relative shrink-0">
+              <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+            </div>
+
+            <div class="text-[10px] font-bold text-slate-800 flex items-center gap-1 w-full mt-1">
+              <span class="shrink-0">${item.icon}</span>
+              <span class="truncate w-full">${item.name}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectGridIndex(idx, item) {
+      characterSelectIndex = idx;
+      updateCharacterSelectView();
+    }
+
+    function selectFoodItem(item) {
+      activeSelectedItem = item;
+      renderFoodGrid();
+
+      document.getElementById('detail-category').innerText = currentMealUnit.toUpperCase();
+      document.getElementById('detail-title').innerHTML = `<span>${item.icon}</span> <span class="truncate">${item.name}</span>`;
+      
+      document.getElementById('detail-img-container').innerHTML = `
+        <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
+      `;
+
+      const ingredientsList = document.getElementById('detail-ingredients');
+      ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
+
+      document.getElementById('detail-drink').innerText = item.drinkPairing || 'N/A';
+      document.getElementById('detail-sauce').innerText = item.saucePairing || 'N/A';
+
+      const eatBtn = document.getElementById('eat-btn');
+      eatBtn.disabled = false;
+      eatBtn.className = "mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all";
+    }
+
+    function consumeSelectedFood() {
+      if (!activeSelectedItem) return;
+      gainXP(15);
+      alert(`Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
+    }
+
+    function spinRandomMeal() {
+      const eligibleItems = foodDatabase.filter(item => 
+        item.mealTypes.some(meal => activeSpinFilters.includes(meal))
+      );
+
+      if (eligibleItems.length === 0) {
+        alert("No recipes found matching your selected active filters!");
+        return;
+      }
+
+      const randomItem = eligibleItems[Math.floor(Math.random() * eligibleItems.length)];
+
+      const displayUnit = randomItem.mealTypes.includes(currentMealUnit) 
+        ? currentMealUnit 
+        : randomItem.mealTypes[0];
+
+      selectMealUnit(displayUnit);
+      selectFoodItem(randomItem);
+      gainXP(10);
+    }
+
+    // --- PANTRY RECIPE MATCHERS ---
+    const customVaultRecipes = [
+      { name: "Matcha Boba Latte", ingredients: ["matcha", "boba"], desc: "Whisk matcha powder, mix with sweetened boba pearls and cold milk." },
+      { name: "Spicy Garlic Ramen", ingredients: ["ramen noodles", "garlic"], desc: "Sauté garlic, boil ramen noodles, and toss in hot chili broth." },
+      { name: "Sourdough Focaccia", ingredients: ["flour"], desc: "Ferment dough, dimple with oil, and bake until golden brown." },
+      { name: "Egg & Toast Special", ingredients: ["eggs", "bread"], desc: "Toast bread, fry eggs in butter, and serve with a dash of pepper." },
+      { name: "Strawberry Tanghulu", ingredients: ["strawberries"], desc: "Skewer strawberries, dip in melted sugar syrup, and chill for crackle." }
+    ];
+
+    function getSelectedPantryItems() {
+      const checkboxes = document.querySelectorAll('.pantry-item:checked');
+      return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
+    }
+
+    function matchCustomRecipe() {
+      const selected = getSelectedPantryItems();
+      const output = document.getElementById('custom-recipe-output');
+
+      if (selected.length === 0) {
+        output.innerHTML = `<p class="text-xs text-red-500 font-bold">Please check at least one ingredient!</p>`;
+        return;
+      }
+
+      const matches = customVaultRecipes.filter(recipe => 
+        recipe.ingredients.some(ing => selected.includes(ing))
+      );
+
+      if (matches.length === 0) {
+        output.innerHTML = `<p class="text-xs text-slate-500">No vault recipes match these exact items. Try selecting others!</p>`;
+      } else {
+        output.innerHTML = matches.map(m => `
+          <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+            <div class="font-bold text-emerald-800">${m.name}</div>
+            <div class="text-xs text-slate-600 mt-1">${m.desc}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function searchWebRecipes() {
+      const selected = getSelectedPantryItems();
+      const output = document.getElementById('web-recipe-output');
+
+      if (selected.length === 0) {
+        output.innerHTML = `<p class="text-xs text-red-500 font-bold">Please check at least one ingredient!</p>`;
+        return;
+      }
+
+      const query = encodeURIComponent(selected.join(' ') + ' recipe');
+      const searchUrl = `https://www.google.com/search?q=${query}`;
+
+      output.innerHTML = `
+        <div class="bg-sky-50 p-3 rounded-xl border border-sky-200">
+          <p class="font-bold text-sky-900 mb-1">Web Search Query Ready!</p>
+          <p class="text-xs text-slate-600 mb-3">Looking for recipes using: <strong>${selected.join(', ')}</strong></p>
+          <a href="${searchUrl}" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-1.5 px-3 rounded-lg text-xs border border-black pixel-shadow-sm">
+            🔗 Search Google for "${selected.join(' + ')}" Recipes
+          </a>
         </div>
-      `).join('');
+      `;
     }
 
-    function selectSpecificIndex(idx) {
-      currentIndex = idx;
-      updateDisplay();
-    }
-
-    // Start App
-    init();
+    selectMealUnit('breakfast');
+    updateHUD();
   </script>
 </body>
 </html>
