@@ -10,30 +10,105 @@
     body { font-family: 'Fredoka', cursive, sans-serif; }
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
   </style>
 </head>
-<body class="bg-emerald-100 text-slate-800 min-h-screen pb-12">
+<body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
+
+  <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl animate-bounce">⚡</span>
+        <div>
+          <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
+          <p class="text-xs text-purple-200">Player 1: Ready</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
+        <div class="text-right">
+          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
+          <div class="text-[10px] text-purple-200"><span id="player-xp">0</span> / 100 XP</div>
+        </div>
+        <div class="w-24 bg-purple-950 h-4 rounded-full border border-black overflow-hidden">
+          <div id="xp-bar" class="bg-yellow-400 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <a href="index.html" class="bg-white border-2 border-black px-4 py-2 rounded-xl font-bold pixel-shadow inline-block mb-4">← Back to Hub</a>
-    <div class="bg-emerald-300 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <h1 class="text-3xl font-black text-emerald-900 mb-4">🪡 Sewing & Fabric Guild</h1>
-      
-      <div class="bg-white p-4 rounded-2xl border-2 border-black text-center">
-        <h3 class="font-bold text-emerald-800 mb-2">Project Randomizer</h3>
-        <div id="sew-result" class="text-xl font-bold my-4 text-emerald-600">Click to Roll Idea</div>
-        <button onclick="rollSewing()" class="bg-emerald-400 text-white font-bold py-2 px-6 rounded-xl border-2 border-black pixel-shadow">
-          🎲 Generate Project
-        </button>
-      </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <a href="index.html" class="bg-slate-400 hover:bg-slate-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🏠 Hub
+      </a>
+      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🍱 Food Quest
+      </a>
+      <a href="build.html" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🛠️ Wishlist Labs
+      </a>
+      <a href="sewing.html" class="bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center ring-4 ring-black">
+        🪡 Stitch Guild
+      </a>
+      <a href="outfits.html" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        👗 Style Closet
+      </a>
     </div>
   </nav>
 
+  <main class="max-w-5xl mx-auto px-4">
+    <section class="bg-emerald-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-emerald-900">🪡 Thread & Fabric Guild</h2>
+        <span class="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Stitch Master</span>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
+        <h3 class="font-bold text-emerald-800 mb-2">🎲 Sewing Idea Generator</h3>
+        <div class="flex gap-2 text-center text-sm font-bold my-3">
+          <div id="sew-garment" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Garment</div>
+          <span class="self-center">+</span>
+          <div id="sew-fabric" class="flex-1 bg-emerald-100 p-3 rounded-xl border border-emerald-300">??? Fabric</div>
+        </div>
+        <button onclick="generateSewingIdea()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow">
+          Roll Fabric Combo
+        </button>
+      </div>
+    </section>
+  </main>
+
   <script>
-    const projects = ["Linen Bucket Hat", "Upcycled Denim Jacket", "Corduroy Tote Bag", "Patchwork Tapestry Vest"];
-    function rollSewing() {
-      document.getElementById('sew-result').innerText = projects[Math.floor(Math.random() * projects.length)];
+    let xp = parseInt(localStorage.getItem('playerXP')) || 0;
+    let level = parseInt(localStorage.getItem('playerLvl')) || 1;
+
+    function updateHUD() {
+      document.getElementById('player-xp').innerText = xp;
+      document.getElementById('player-lvl').innerText = level;
+      document.getElementById('xp-bar').style.width = `${xp}%`;
+      localStorage.setItem('playerXP', xp);
+      localStorage.setItem('playerLvl', level);
     }
+
+    function gainXP(amount) {
+      xp += amount;
+      if (xp >= 100) {
+        level += Math.floor(xp / 100);
+        xp = xp % 100;
+        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
+      }
+      updateHUD();
+    }
+
+    const garments = ["Bucket Hat", "Corset Top", "Cargo Trousers", "Tote Bag", "Oversized Jacket"];
+    const fabrics = ["Pastel Corduroy", "Upcycled Quilt", "Floral Tapestry", "Raw Denim", "Satin Silk"];
+    function generateSewingIdea() {
+      document.getElementById('sew-garment').innerText = garments[Math.floor(Math.random() * garments.length)];
+      document.getElementById('sew-fabric').innerText = fabrics[Math.floor(Math.random() * fabrics.length)];
+      gainXP(10);
+    }
+
+    updateHUD();
   </script>
 </body>
 </html>
