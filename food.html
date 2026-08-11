@@ -62,14 +62,26 @@
 
     <!-- 1. MEAL UNITS & INVENTORY EXPLORER -->
     <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault & Item Inventory</h2>
-          <p class="text-xs text-pink-800">Browse items like inventory gear or hit the spin button for a random meal!</p>
+          <p class="text-xs text-pink-800">Browse items by category or filter and spin for a random meal!</p>
         </div>
-        <button onclick="spinRandomMeal()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
-          🎲 Spin Random Meal (+10 XP)
-        </button>
+        
+        <!-- RANDOM GENERATOR CONTROL PANEL -->
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow flex flex-wrap items-center gap-2">
+          <select id="spinner-filter" class="bg-pink-100 font-bold text-xs py-2 px-3 rounded-xl border border-black cursor-pointer">
+            <option value="all">🎲 Any Meal (All)</option>
+            <option value="breakfast">🍳 Breakfast Only</option>
+            <option value="lunch">🥗 Lunch Only</option>
+            <option value="dinner">🍜 Dinner Only</option>
+            <option value="brunch">🥐 Brunch (Breakfast + Lunch)</option>
+            <option value="breakfast_dinner">🌙 Breakfast + Dinner</option>
+          </select>
+          <button onclick="spinRandomMeal()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+            Spin Meal (+10 XP)
+          </button>
+        </div>
       </div>
 
       <!-- Meal Unit Selection (Breakfast / Lunch / Dinner) -->
@@ -92,12 +104,12 @@
 
       <!-- Inventory Grid + Item Detail Card -->
       <div class="grid md:grid-cols-3 gap-6">
-        <!-- Compact Inventory Grid (Fits 30+ items comfortably) -->
+        <!-- Compact Inventory Grid -->
         <div id="food-inventory-grid" class="md:col-span-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 max-h-[480px] overflow-y-auto p-1">
           <!-- Dynamic Food Item Cards -->
         </div>
 
-        <!-- Selected Item Detail View (1 Column) -->
+        <!-- Selected Item Detail View -->
         <div id="food-detail-card" class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow flex flex-col justify-between">
           <div>
             <div class="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-1" id="detail-category">Select an Item</div>
@@ -110,11 +122,20 @@
             <h3 class="text-lg font-bold mb-2 flex items-center gap-1.5" id="detail-title">
               <span>🎒 Inventory Empty</span>
             </h3>
+            
             <p class="text-[11px] font-bold text-slate-500 mb-1">Required Ingredients:</p>
-            <ul id="detail-ingredients" class="space-y-0.5 text-xs list-disc list-inside text-slate-700 bg-pink-50 p-2.5 rounded-xl border border-pink-200 min-h-[70px]">
+            <ul id="detail-ingredients" class="space-y-0.5 text-xs list-disc list-inside text-slate-700 bg-pink-50 p-2 rounded-xl border border-pink-200 min-h-[50px] mb-2">
               <li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>
             </ul>
+
+            <!-- Recommended Pairings Box -->
+            <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 text-xs space-y-1">
+              <p class="font-bold text-amber-900 border-b border-amber-200 pb-0.5">Pairing Suggestions:</p>
+              <p class="text-slate-700">🥤 <strong>Drink:</strong> <span id="detail-drink" class="text-slate-500 italic">None</span></p>
+              <p class="text-slate-700">🥣 <strong>Sauce:</strong> <span id="detail-sauce" class="text-slate-500 italic">None</span></p>
+            </div>
           </div>
+
           <button id="eat-btn" disabled onclick="consumeSelectedFood()" class="mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed">
             Eat Meal (+15 XP)
           </button>
@@ -127,7 +148,6 @@
       <h2 class="text-2xl font-bold text-amber-900 mb-2">🥖 Pantry Crafting Station</h2>
       <p class="text-xs text-amber-800 mb-6">Select available ingredients from your kitchen pantry to generate custom or web recipes.</p>
 
-      <!-- Pantry Checkbox Selection -->
       <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
         <h4 class="font-bold text-slate-700 mb-3 text-sm border-b pb-1">Available Ingredients:</h4>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
@@ -158,7 +178,6 @@
         </div>
       </div>
 
-      <!-- Action Buttons -->
       <div class="flex flex-wrap gap-3 mb-6">
         <button onclick="matchCustomRecipe()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
           📖 Match My Vault Recipes
@@ -168,9 +187,7 @@
         </button>
       </div>
 
-      <!-- Output Results Box -->
       <div class="grid md:grid-cols-2 gap-4">
-        <!-- Vault Matches -->
         <div class="bg-white p-4 rounded-2xl border-2 border-black">
           <h4 class="font-bold text-emerald-700 border-b-2 border-emerald-100 pb-1 mb-2">📖 Vault Recipes Found</h4>
           <div id="custom-recipe-output" class="text-sm text-slate-600 space-y-2">
@@ -178,7 +195,6 @@
           </div>
         </div>
 
-        <!-- Web Matches -->
         <div class="bg-white p-4 rounded-2xl border-2 border-black">
           <h4 class="font-bold text-sky-700 border-b-2 border-sky-100 pb-1 mb-2">🌐 Internet Recipe Finder</h4>
           <div id="web-recipe-output" class="text-sm text-slate-600 space-y-2">
@@ -213,46 +229,27 @@
       updateHUD();
     }
 
-    // --- FOOD VAULT DATA STRUCTURE ---
-    const foodDatabase = {
-      breakfast: {
-        sandwiches: [
-          { id: 'b1', name: 'Avocado Egg Toast', icon: '🥑', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&auto=format&fit=crop&q=80', ingredients: ['Bread', 'Avocado', 'Eggs', 'Chili Flakes'] },
-          { id: 'b2', name: 'Breakfast Burrito', icon: '🌯', img: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=300&auto=format&fit=crop&q=80', ingredients: ['Tortilla', 'Eggs', 'Cheese', 'Salsa', 'Hashbrowns'] }
-        ],
-        bowls: [
-          { id: 'b3', name: 'Acai Smoothie Bowl', icon: '🫐', img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=300&auto=format&fit=crop&q=80', ingredients: ['Acai Puree', 'Banana', 'Granola', 'Chia Seeds'] },
-          { id: 'b4', name: 'Savory Oatmeal', icon: '🥣', img: 'https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=300&auto=format&fit=crop&q=80', ingredients: ['Oats', 'Soft Boiled Egg', 'Soy Sauce', 'Green Onion'] }
-        ],
-        drinks: [
-          { id: 'b5', name: 'Matcha Boba Latte', icon: '🧋', img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=300&auto=format&fit=crop&q=80', ingredients: ['Matcha Powder', 'Oat Milk', 'Boba Pearls', 'Honey'] },
-          { id: 'b6', name: 'Iced Cold Brew', icon: '☕', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=300&auto=format&fit=crop&q=80', ingredients: ['Cold Brew', 'Vanilla Syrup', 'Splash of Milk'] }
-        ]
-      },
-      lunch: {
-        sandwiches: [
-          { id: 'l1', name: 'Caprese Focaccia', icon: '🥪', img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=300&auto=format&fit=crop&q=80', ingredients: ['Focaccia', 'Mozzarella', 'Tomato', 'Pesto'] }
-        ],
-        bowls: [
-          { id: 'l2', name: 'Spicy Garlic Ramen', icon: '🍜', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&auto=format&fit=crop&q=80', ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Soft Egg', 'Broth'] },
-          { id: 'l3', name: 'Salmon Poke Bowl', icon: '🥗', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80', ingredients: ['Sushi Rice', 'Salmon', 'Edamame', 'Spicy Mayo'] }
-        ],
-        drinks: [
-          { id: 'l4', name: 'Yuzu Lemonade', icon: '🍋', img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=300&auto=format&fit=crop&q=80', ingredients: ['Yuzu Juice', 'Sparkling Water', 'Sugar', 'Mint'] }
-        ]
-      },
-      dinner: {
-        sandwiches: [
-          { id: 'd1', name: 'Crispy Rice Tacos', icon: '🌮', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=300&auto=format&fit=crop&q=80', ingredients: ['Nori Shell', 'Crispy Rice', 'Spicy Tuna', 'Avocado'] }
-        ],
-        bowls: [
-          { id: 'd2', name: 'Garlic Butter Noodles', icon: '🍝', img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=300&auto=format&fit=crop&q=80', ingredients: ['Noodles', 'Garlic', 'Butter', 'Parmesan Cheese'] }
-        ],
-        drinks: [
-          { id: 'd3', name: 'Strawberry Drink', icon: '🍓', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300&auto=format&fit=crop&q=80', ingredients: ['Strawberries', 'Sugar Crackle', 'Club Soda'] }
-        ]
-      }
-    };
+    // --- OPTIMAL FLAT FOOD DATABASE ---
+    const foodDatabase = [
+      // Breakfast Items
+      { id: 'b1', name: 'Avocado Egg Toast', icon: '🥑', img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&auto=format&fit=crop&q=80', mealTypes: ['breakfast', 'lunch'], category: 'sandwiches', ingredients: ['Bread', 'Avocado', 'Eggs', 'Chili Flakes'], drinkPairing: 'Iced Cold Brew', saucePairing: 'Sriracha Mayo' },
+      { id: 'b2', name: 'Breakfast Burrito', icon: '🌯', img: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?w=300&auto=format&fit=crop&q=80', mealTypes: ['breakfast', 'lunch'], category: 'sandwiches', ingredients: ['Tortilla', 'Eggs', 'Cheese', 'Salsa', 'Hashbrowns'], drinkPairing: 'Orange Juice', saucePairing: 'Fire Salsa' },
+      { id: 'b3', name: 'Acai Smoothie Bowl', icon: '🫐', img: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?w=300&auto=format&fit=crop&q=80', mealTypes: ['breakfast'], category: 'bowls', ingredients: ['Acai Puree', 'Banana', 'Granola', 'Chia Seeds'], drinkPairing: 'Green Tea', saucePairing: 'Honey Drizzle' },
+      { id: 'b4', name: 'Savory Oatmeal', icon: '🥣', img: 'https://images.unsplash.com/photo-1517673400267-0251440c45dc?w=300&auto=format&fit=crop&q=80', mealTypes: ['breakfast'], category: 'bowls', ingredients: ['Oats', 'Soft Boiled Egg', 'Soy Sauce', 'Green Onion'], drinkPairing: 'Hot Jasmine Tea', saucePairing: 'Chili Crisp' },
+      { id: 'b5', name: 'Matcha Boba Latte', icon: '🧋', img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=300&auto=format&fit=crop&q=80', mealTypes: ['breakfast', 'lunch'], category: 'drinks', ingredients: ['Matcha Powder', 'Oat Milk', 'Boba Pearls', 'Honey'], drinkPairing: 'N/A (Drink Item)', saucePairing: 'Condensed Milk' },
+      { id: 'b6', name: 'Iced Cold Brew', icon: '☕', img: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=300&auto=format&fit=crop&q=80', mealTypes: ['breakfast', 'lunch'], category: 'drinks', ingredients: ['Cold Brew', 'Vanilla Syrup', 'Splash of Milk'], drinkPairing: 'N/A (Drink Item)', saucePairing: 'Caramel Drizzle' },
+
+      // Lunch Items
+      { id: 'l1', name: 'Caprese Focaccia', icon: '🥪', img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=300&auto=format&fit=crop&q=80', mealTypes: ['lunch'], category: 'sandwiches', ingredients: ['Focaccia', 'Mozzarella', 'Tomato', 'Pesto'], drinkPairing: 'Sparkling Water', saucePairing: 'Balsamic Glaze' },
+      { id: 'l2', name: 'Spicy Garlic Ramen', icon: '🍜', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=300&auto=format&fit=crop&q=80', mealTypes: ['lunch', 'dinner'], category: 'bowls', ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Soft Egg', 'Broth'], drinkPairing: 'Yuzu Lemonade', saucePairing: 'Rayu Chili Oil' },
+      { id: 'l3', name: 'Salmon Poke Bowl', icon: '🥗', img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80', mealTypes: ['lunch', 'dinner'], category: 'bowls', ingredients: ['Sushi Rice', 'Salmon', 'Edamame', 'Spicy Mayo'], drinkPairing: 'Matcha Boba Latte', saucePairing: 'Ponzu Sauce' },
+      { id: 'l4', name: 'Yuzu Lemonade', icon: '🍋', img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=300&auto=format&fit=crop&q=80', mealTypes: ['lunch'], category: 'drinks', ingredients: ['Yuzu Juice', 'Sparkling Water', 'Sugar', 'Mint'], drinkPairing: 'N/A (Drink Item)', saucePairing: 'Agave Nectar' },
+
+      // Dinner Items
+      { id: 'd1', name: 'Crispy Rice Tacos', icon: '🌮', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=300&auto=format&fit=crop&q=80', mealTypes: ['dinner'], category: 'sandwiches', ingredients: ['Nori Shell', 'Crispy Rice', 'Spicy Tuna', 'Avocado'], drinkPairing: 'Iced Peach Tea', saucePairing: 'Eel Sauce' },
+      { id: 'd2', name: 'Garlic Butter Noodles', icon: '🍝', img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=300&auto=format&fit=crop&q=80', mealTypes: ['dinner'], category: 'bowls', ingredients: ['Noodles', 'Garlic', 'Butter', 'Parmesan Cheese'], drinkPairing: 'Strawberry Soda', saucePairing: 'Garlic Aioli' },
+      { id: 'd3', name: 'Strawberry Drink', icon: '🍓', img: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=300&auto=format&fit=crop&q=80', mealTypes: ['dinner'], category: 'drinks', ingredients: ['Strawberries', 'Sugar Crackle', 'Club Soda'], drinkPairing: 'N/A (Drink Item)', saucePairing: 'Strawberry Puree' }
+    ];
 
     let currentMealUnit = 'breakfast';
     let currentSubcategory = 'all';
@@ -274,7 +271,9 @@
 
     function renderSubcategories() {
       const subcatBar = document.getElementById('subcategory-bar');
-      const categories = Object.keys(foodDatabase[currentMealUnit]);
+      // Extract unique categories dynamically from items matching the current meal unit
+      const mealItems = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+      const categories = [...new Set(mealItems.map(item => item.category))];
       
       let html = `<button onclick="filterSubcategory('all')" class="px-3 py-1 text-xs font-bold rounded-lg border border-black ${currentSubcategory === 'all' ? 'bg-pink-500 text-white' : 'bg-white text-slate-700'}">All</button>`;
       
@@ -292,16 +291,12 @@
       renderFoodGrid();
     }
 
-    // Short & Compact Inventory Grid Slot Renderer
     function renderFoodGrid() {
       const grid = document.getElementById('food-inventory-grid');
-      let itemsToDisplay = [];
-
-      const categories = foodDatabase[currentMealUnit];
-      if (currentSubcategory === 'all') {
-        Object.values(categories).forEach(arr => itemsToDisplay.push(...arr));
-      } else {
-        itemsToDisplay = categories[currentSubcategory] || [];
+      
+      let itemsToDisplay = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+      if (currentSubcategory !== 'all') {
+        itemsToDisplay = itemsToDisplay.filter(item => item.category === currentSubcategory);
       }
 
       grid.innerHTML = itemsToDisplay.map(item => {
@@ -310,12 +305,10 @@
           <div onclick='selectFoodItem(${JSON.stringify(item)})' 
                class="group cursor-pointer bg-white p-1.5 rounded-xl border-2 border-black pixel-shadow-sm hover:scale-105 transition-all flex flex-col justify-between overflow-hidden h-28 ${isSelected ? 'ring-2 ring-pink-500 bg-pink-50' : ''}">
             
-            <!-- Compact Image Box (h-16) -->
             <div class="w-full h-16 rounded-lg border border-black overflow-hidden bg-pink-100 relative shrink-0">
               <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
             </div>
 
-            <!-- Single-Line Truncated Title -->
             <div class="text-[11px] font-bold text-slate-800 flex items-center gap-1 w-full mt-1">
               <span class="shrink-0">${item.icon}</span>
               <span class="truncate w-full">${item.name}</span>
@@ -339,6 +332,10 @@
       const ingredientsList = document.getElementById('detail-ingredients');
       ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
 
+      // Display Pairings
+      document.getElementById('detail-drink').innerText = item.drinkPairing || 'N/A';
+      document.getElementById('detail-sauce').innerText = item.saucePairing || 'N/A';
+
       const eatBtn = document.getElementById('eat-btn');
       eatBtn.disabled = false;
       eatBtn.className = "mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all";
@@ -350,15 +347,34 @@
       alert(`Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
     }
 
+    // --- RANDOM GENERATOR FOR MULTIPLE FILTER CHOICES ---
     function spinRandomMeal() {
-      const units = ['breakfast', 'lunch', 'dinner'];
-      const randomUnit = units[Math.floor(Math.random() * units.length)];
-      const categories = Object.keys(foodDatabase[randomUnit]);
-      const randomCat = categories[Math.floor(Math.random() * categories.length)];
-      const items = foodDatabase[randomUnit][randomCat];
-      const randomItem = items[Math.floor(Math.random() * items.length)];
+      const selectedFilter = document.getElementById('spinner-filter').value;
 
-      selectMealUnit(randomUnit);
+      const eligibleItems = foodDatabase.filter(item => {
+        if (selectedFilter === 'all') return true;
+        if (selectedFilter === 'brunch') {
+          return item.mealTypes.includes('breakfast') || item.mealTypes.includes('lunch');
+        }
+        if (selectedFilter === 'breakfast_dinner') {
+          return item.mealTypes.includes('breakfast') || item.mealTypes.includes('dinner');
+        }
+        return item.mealTypes.includes(selectedFilter);
+      });
+
+      if (eligibleItems.length === 0) {
+        alert("No recipes found for this filter!");
+        return;
+      }
+
+      const randomItem = eligibleItems[Math.floor(Math.random() * eligibleItems.length)];
+
+      // Auto-switch HUD view to a valid meal unit for this item
+      const displayUnit = randomItem.mealTypes.includes(currentMealUnit) 
+        ? currentMealUnit 
+        : randomItem.mealTypes[0];
+
+      selectMealUnit(displayUnit);
       selectFoodItem(randomItem);
       gainXP(10);
     }
