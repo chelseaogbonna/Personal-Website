@@ -58,50 +58,125 @@
   </nav>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto px-4">
+  <main class="max-w-5xl mx-auto px-4 space-y-8">
 
-    <!-- 1. FOOD PAGE -->
-    <section id="page-food" class="tab-page bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-pink-900">🍜 Food Vault & Meal Spinner</h2>
-        <span class="bg-pink-400 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">+15 XP per snack logged</span>
-      </div>
-
-      <!-- Meal Generator Game -->
-      <div class="bg-white rounded-2xl p-6 border-2 border-black text-center mb-6">
-        <h3 class="font-bold text-lg mb-2">Can't decide what to eat?</h3>
-        <div id="snack-display" class="text-3xl my-4 font-black text-pink-600 animate-pulse">???</div>
-        <button onclick="spinSnack()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
-          🎲 Spin Meal Wheel
+    <!-- 1. MEAL UNITS & INVENTORY EXPLORER -->
+    <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault & Item Inventory</h2>
+          <p class="text-xs text-pink-800">Browse items like inventory gear or hit the spin button for a random meal!</p>
+        </div>
+        <button onclick="spinRandomMeal()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          🎲 Spin Random Meal (+10 XP)
         </button>
       </div>
 
-      <!-- Favorite Cravings List -->
-      <div class="grid md:grid-cols-2 gap-4">
-        <div class="bg-white p-4 rounded-2xl border-2 border-black">
-          <h4 class="font-bold text-pink-700 border-b-2 border-pink-100 pb-1 mb-2">🔥 Top Craving Tier List</h4>
-          <ul class="space-y-2 text-sm">
-            <li class="flex justify-between items-center bg-pink-50 p-2 rounded-xl border border-pink-200">
-              <span>Matcha Latte + Boba</span>
-              <button onclick="gainXP(15)" class="text-xs bg-pink-400 text-white px-2 py-1 rounded-lg border border-black hover:bg-pink-500">Eat (+15 XP)</button>
-            </li>
-            <li class="flex justify-between items-center bg-pink-50 p-2 rounded-xl border border-pink-200">
-              <span>Spicy Garlic Ramen</span>
-              <button onclick="gainXP(15)" class="text-xs bg-pink-400 text-white px-2 py-1 rounded-lg border border-black hover:bg-pink-500">Eat (+15 XP)</button>
-            </li>
-          </ul>
+      <!-- Meal Unit Selection (Breakfast / Lunch / Dinner) -->
+      <div class="flex gap-2 mb-4">
+        <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          🍳 Breakfast
+        </button>
+        <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          🥗 Lunch
+        </button>
+        <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+          🍜 Dinner
+        </button>
+      </div>
+
+      <!-- Sub-Category Filter -->
+      <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
+        <!-- Dynamic Subcategory Pills -->
+      </div>
+
+      <!-- Inventory Grid + Item Detail Card -->
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Item Slots (2 Columns) -->
+        <div id="food-inventory-grid" class="md:col-span-2 grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <!-- Dynamic Food Item Cards -->
         </div>
+
+        <!-- Selected Item Detail View (1 Column) -->
+        <div id="food-detail-card" class="bg-white p-5 rounded-2xl border-2 border-black pixel-shadow flex flex-col justify-between">
+          <div>
+            <div class="text-xs font-bold text-pink-500 uppercase tracking-wider mb-1" id="detail-category">Select an Item</div>
+            <h3 class="text-xl font-bold mb-3 flex items-center gap-2" id="detail-title">
+              <span>🎒 Inventory Empty</span>
+            </h3>
+            <p class="text-xs font-bold text-slate-500 mb-2">Required Ingredients:</p>
+            <ul id="detail-ingredients" class="space-y-1 text-sm list-disc list-inside text-slate-700 bg-pink-50 p-3 rounded-xl border border-pink-200 min-h-[100px]">
+              <li class="list-none text-slate-400 italic">Click any food item on the left to inspect its stats & ingredients.</li>
+            </ul>
+          </div>
+          <button id="eat-btn" disabled onclick="consumeSelectedFood()" class="mt-4 w-full bg-slate-300 text-slate-500 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed">
+            Eat Meal (+15 XP)
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PANTRY RECIPE MATCHERS -->
+    <section class="bg-amber-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <h2 class="text-2xl font-bold text-amber-900 mb-2">🥖 Pantry Crafting Station</h2>
+      <p class="text-xs text-amber-800 mb-6">Select available ingredients from your kitchen pantry to generate custom or web recipes.</p>
+
+      <!-- Pantry Checkbox Selection -->
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
+        <h4 class="font-bold text-slate-700 mb-3 text-sm border-b pb-1">Available Ingredients:</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="eggs" class="pantry-item w-4 h-4 accent-amber-500"> 🍳 Eggs
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="bread" class="pantry-item w-4 h-4 accent-amber-500"> 🍞 Bread
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="matcha" class="pantry-item w-4 h-4 accent-amber-500"> 🍵 Matcha
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="boba" class="pantry-item w-4 h-4 accent-amber-500"> 🧋 Boba
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="ramen noodles" class="pantry-item w-4 h-4 accent-amber-500"> 🍜 Ramen
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="garlic" class="pantry-item w-4 h-4 accent-amber-500"> 🧄 Garlic
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="flour" class="pantry-item w-4 h-4 accent-amber-500"> 🌾 Flour
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+            <input type="checkbox" value="strawberries" class="pantry-item w-4 h-4 accent-amber-500"> 🍓 Strawberries
+          </label>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <button onclick="matchCustomRecipe()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          📖 Match My Vault Recipes
+        </button>
+        <button onclick="searchWebRecipes()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          🌐 Search Web Recipes
+        </button>
+      </div>
+
+      <!-- Output Results Box -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <!-- Vault Matches -->
         <div class="bg-white p-4 rounded-2xl border-2 border-black">
-          <h4 class="font-bold text-pink-700 border-b-2 border-pink-100 pb-1 mb-2">🧪 Recipes to Experiment With</h4>
-          <div class="space-y-2 text-sm">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" onchange="gainXP(20)" class="w-4 h-4 accent-pink-500">
-              <span>Homemade Sourdough Focaccia</span>
-            </label>
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" onchange="gainXP(20)" class="w-4 h-4 accent-pink-500">
-              <span>Strawberry Tanghulu Crackle</span>
-            </label>
+          <h4 class="font-bold text-emerald-700 border-b-2 border-emerald-100 pb-1 mb-2">📖 Vault Recipes Found</h4>
+          <div id="custom-recipe-output" class="text-sm text-slate-600 space-y-2">
+            <p class="italic text-slate-400">Select items above and click "Match My Vault Recipes".</p>
+          </div>
+        </div>
+
+        <!-- Web Matches -->
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-sky-700 border-b-2 border-sky-100 pb-1 mb-2">🌐 Internet Recipe Finder</h4>
+          <div id="web-recipe-output" class="text-sm text-slate-600 space-y-2">
+            <p class="italic text-slate-400">Select items above and click "Search Web Recipes".</p>
           </div>
         </div>
       </div>
@@ -110,6 +185,7 @@
   </main>
 
   <script>
+    // --- HUD XP SYSTEM ---
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
 
@@ -131,21 +207,214 @@
       updateHUD();
     }
 
-    // Food Wheel
-    const snacks = ["Matcha Boba 🧋", "Garlic Butter Noodles 🍜", "Crispy Rice Tacos 🌮", "Mango Sticky Rice 🥭", "Loaded Fries 🍟"];
-    function spinSnack() {
-      const display = document.getElementById('snack-display');
-      let count = 0;
-      const interval = setInterval(() => {
-        display.innerText = snacks[Math.floor(Math.random() * snacks.length)];
-        count++;
-        if (count > 10) {
-          clearInterval(interval);
-          gainXP(10);
-        }
-      }, 100);
+    // --- FOOD VAULT DATA STRUCTURE ---
+    const foodDatabase = {
+      breakfast: {
+        sandwiches: [
+          { id: 'b1', name: 'Avocado Egg Toast', icon: '🥑', ingredients: ['Bread', 'Avocado', 'Eggs', 'Chili Flakes'] },
+          { id: 'b2', name: 'Breakfast Burrito', icon: '🌯', ingredients: ['Tortilla', 'Eggs', 'Cheese', 'Salsa', 'Hashbrowns'] }
+        ],
+        bowls: [
+          { id: 'b3', name: 'Acai Smoothie Bowl', icon: '🫐', ingredients: ['Acai Puree', 'Banana', 'Granola', 'Chia Seeds'] },
+          { id: 'b4', name: 'Savory Oatmeal', icon: '🥣', ingredients: ['Oats', 'Soft Boiled Egg', 'Soy Sauce', 'Green Onion'] }
+        ],
+        drinks: [
+          { id: 'b5', name: 'Matcha Boba Latte', icon: '🧋', ingredients: ['Matcha Powder', 'Oat Milk', 'Boba Pearls', 'Honey'] },
+          { id: 'b6', name: 'Iced Vanilla Cold Brew', icon: '☕', ingredients: ['Cold Brew', 'Vanilla Syrup', 'Splash of Milk'] }
+        ]
+      },
+      lunch: {
+        sandwiches: [
+          { id: 'l1', name: 'Caprese Focaccia', icon: '🥪', ingredients: ['Focaccia', 'Mozzarella', 'Tomato', 'Pesto'] }
+        ],
+        bowls: [
+          { id: 'l2', name: 'Spicy Garlic Ramen', icon: '🍜', ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Soft Egg', 'Broth'] },
+          { id: 'l3', name: 'Salmon Poke Bowl', icon: '🥗', ingredients: ['Sushi Rice', 'Salmon', 'Edamame', 'Spicy Mayo'] }
+        ],
+        drinks: [
+          { id: 'l4', name: 'Sparkling Yuzu Lemonade', icon: '🍋', ingredients: ['Yuzu Juice', 'Sparkling Water', 'Sugar', 'Mint'] }
+        ]
+      },
+      dinner: {
+        sandwiches: [
+          { id: 'd1', name: 'Crispy Rice Tacos', icon: '🌮', ingredients: ['Nori Shell', 'Crispy Rice', 'Spicy Tuna', 'Avocado'] }
+        ],
+        bowls: [
+          { id: 'd2', name: 'Garlic Butter Noodles', icon: '🍝', ingredients: ['Noodles', 'Garlic', 'Butter', 'Parmesan Cheese'] }
+        ],
+        drinks: [
+          { id: 'd3', name: 'Strawberry Tanghulu Drink', icon: '🍓', ingredients: ['Strawberries', 'Sugar Crackle', 'Club Soda'] }
+        ]
+      }
+    };
+
+    let currentMealUnit = 'breakfast';
+    let currentSubcategory = 'all';
+    let activeSelectedItem = null;
+
+    // Switch top-level meal unit
+    function selectMealUnit(unit) {
+      currentMealUnit = unit;
+      currentSubcategory = 'all';
+      
+      // Update Tab Styles
+      document.querySelectorAll('.meal-unit-btn').forEach(btn => {
+        btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+      });
+      const activeTab = document.getElementById(`tab-${unit}`);
+      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+
+      renderSubcategories();
+      renderFoodGrid();
     }
 
+    // Render Subcategory Filter Buttons
+    function renderSubcategories() {
+      const subcatBar = document.getElementById('subcategory-bar');
+      const categories = Object.keys(foodDatabase[currentMealUnit]);
+      
+      let html = `<button onclick="filterSubcategory('all')" class="px-3 py-1 text-xs font-bold rounded-lg border border-black ${currentSubcategory === 'all' ? 'bg-pink-500 text-white' : 'bg-white text-slate-700'}">All</button>`;
+      
+      categories.forEach(cat => {
+        const isSelected = currentSubcategory === cat;
+        html += `<button onclick="filterSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-lg border border-black capitalize ${isSelected ? 'bg-pink-500 text-white' : 'bg-white text-slate-700'}">${cat}</button>`;
+      });
+
+      subcatBar.innerHTML = html;
+    }
+
+    function filterSubcategory(cat) {
+      currentSubcategory = cat;
+      renderSubcategories();
+      renderFoodGrid();
+    }
+
+    // Render Food Inventory Grid
+    function renderFoodGrid() {
+      const grid = document.getElementById('food-inventory-grid');
+      let itemsToDisplay = [];
+
+      const categories = foodDatabase[currentMealUnit];
+      if (currentSubcategory === 'all') {
+        Object.values(categories).forEach(arr => itemsToDisplay.push(...arr));
+      } else {
+        itemsToDisplay = categories[currentSubcategory] || [];
+      }
+
+      grid.innerHTML = itemsToDisplay.map(item => {
+        const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
+        return `
+          <div onclick='selectFoodItem(${JSON.stringify(item)})' 
+               class="cursor-pointer bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm hover:scale-105 transition-all flex flex-col items-center justify-center text-center ${isSelected ? 'ring-4 ring-pink-500 bg-pink-50' : ''}">
+            <div class="text-3xl mb-1">${item.icon}</div>
+            <div class="text-xs font-bold text-slate-800">${item.name}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Select Item and View Details
+    function selectFoodItem(item) {
+      activeSelectedItem = item;
+      renderFoodGrid(); // Refresh grid highlighting
+
+      document.getElementById('detail-category').innerText = currentMealUnit.toUpperCase();
+      document.getElementById('detail-title').innerHTML = `<span>${item.icon}</span> <span>${item.name}</span>`;
+      
+      const ingredientsList = document.getElementById('detail-ingredients');
+      ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
+
+      const eatBtn = document.getElementById('eat-btn');
+      eatBtn.disabled = false;
+      eatBtn.className = "mt-4 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all";
+    }
+
+    function consumeSelectedFood() {
+      if (!activeSelectedItem) return;
+      gainXP(15);
+      alert(` Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
+    }
+
+    // Spin Random Meal Generator
+    function spinRandomMeal() {
+      const units = ['breakfast', 'lunch', 'dinner'];
+      const randomUnit = units[Math.floor(Math.random() * units.length)];
+      const categories = Object.keys(foodDatabase[randomUnit]);
+      const randomCat = categories[Math.floor(Math.random() * categories.length)];
+      const items = foodDatabase[randomUnit][randomCat];
+      const randomItem = items[Math.floor(Math.random() * items.length)];
+
+      selectMealUnit(randomUnit);
+      selectFoodItem(randomItem);
+      gainXP(10);
+    }
+
+    // --- PANTRY RECIPE MATCHERS ---
+    const customVaultRecipes = [
+      { name: "Matcha Boba Latte", ingredients: ["matcha", "boba"], desc: "Whisk matcha powder, mix with sweetened boba pearls and cold milk." },
+      { name: "Spicy Garlic Ramen", ingredients: ["ramen noodles", "garlic"], desc: "Sauté garlic, boil ramen noodles, and toss in hot chili broth." },
+      { name: "Sourdough Focaccia", ingredients: ["flour"], desc: "Ferment dough, dimple with oil, and bake until golden brown." },
+      { name: "Egg & Toast Special", ingredients: ["eggs", "bread"], desc: "Toast bread, fry eggs in butter, and serve with a dash of pepper." },
+      { name: "Strawberry Tanghulu", ingredients: ["strawberries"], desc: "Skewer strawberries, dip in melted sugar syrup, and chill for crackle." }
+    ];
+
+    function getSelectedPantryItems() {
+      const checkboxes = document.querySelectorAll('.pantry-item:checked');
+      return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
+    }
+
+    // Match recipes from personal vault
+    function matchCustomRecipe() {
+      const selected = getSelectedPantryItems();
+      const output = document.getElementById('custom-recipe-output');
+
+      if (selected.length === 0) {
+        output.innerHTML = `<p class="text-xs text-red-500 font-bold">Please check at least one ingredient!</p>`;
+        return;
+      }
+
+      const matches = customVaultRecipes.filter(recipe => 
+        recipe.ingredients.some(ing => selected.includes(ing))
+      );
+
+      if (matches.length === 0) {
+        output.innerHTML = `<p class="text-xs text-slate-500">No vault recipes match these exact items. Try selecting others!</p>`;
+      } else {
+        output.innerHTML = matches.map(m => `
+          <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+            <div class="font-bold text-emerald-800">${m.name}</div>
+            <div class="text-xs text-slate-600 mt-1">${m.desc}</div>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Search external recipes via Google search query link
+    function searchWebRecipes() {
+      const selected = getSelectedPantryItems();
+      const output = document.getElementById('web-recipe-output');
+
+      if (selected.length === 0) {
+        output.innerHTML = `<p class="text-xs text-red-500 font-bold">Please check at least one ingredient!</p>`;
+        return;
+      }
+
+      const query = encodeURIComponent(selected.join(' ') + ' recipe');
+      const searchUrl = `https://www.google.com/search?q=${query}`;
+
+      output.innerHTML = `
+        <div class="bg-sky-50 p-3 rounded-xl border border-sky-200">
+          <p class="font-bold text-sky-900 mb-1">Web Search Query Ready!</p>
+          <p class="text-xs text-slate-600 mb-3">Looking for recipes using: <strong>${selected.join(', ')}</strong></p>
+          <a href="${searchUrl}" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-1.5 px-3 rounded-lg text-xs border border-black pixel-shadow-sm">
+            🔗 Search Google for "${selected.join(' + ')}" Recipes
+          </a>
+        </div>
+      `;
+    }
+
+    // Initialize View
+    selectMealUnit('breakfast');
     updateHUD();
   </script>
 </body>
