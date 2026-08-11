@@ -62,23 +62,27 @@
 
     <!-- 1. MEAL UNITS & INVENTORY EXPLORER -->
     <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault & Item Inventory</h2>
-          <p class="text-xs text-pink-800">Browse items by category or filter and spin for a random meal!</p>
+          <p class="text-xs text-pink-800">Browse items by category or toggle meals to spin!</p>
         </div>
         
-        <!-- RANDOM GENERATOR CONTROL PANEL -->
-        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow flex flex-wrap items-center gap-2">
-          <select id="spinner-filter" class="bg-pink-100 font-bold text-xs py-2 px-3 rounded-xl border border-black cursor-pointer">
-            <option value="all">🎲 Any Meal (All)</option>
-            <option value="breakfast">🍳 Breakfast Only</option>
-            <option value="lunch">🥗 Lunch Only</option>
-            <option value="dinner">🍜 Dinner Only</option>
-            <option value="brunch">🥐 Brunch (Breakfast + Lunch)</option>
-            <option value="breakfast_dinner">🌙 Breakfast + Dinner</option>
-          </select>
-          <button onclick="spinRandomMeal()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+        <!-- MULTI-TOGGLE RANDOM SPINNER CONTROL PANEL -->
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow flex flex-col sm:flex-row items-center gap-3">
+          <div class="flex flex-wrap items-center gap-1.5" id="spinner-toggle-group">
+            <span class="text-[11px] font-bold text-slate-500 mr-1">Spin Pool:</span>
+            <button onclick="toggleSpinFilter('breakfast')" id="spin-btn-breakfast" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍳 Breakfast
+            </button>
+            <button onclick="toggleSpinFilter('lunch')" id="spin-btn-lunch" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🥗 Lunch
+            </button>
+            <button onclick="toggleSpinFilter('dinner')" id="spin-btn-dinner" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍜 Dinner
+            </button>
+          </div>
+          <button onclick="spinRandomMeal()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
             Spin Meal (+10 XP)
           </button>
         </div>
@@ -255,6 +259,29 @@
     let currentSubcategory = 'all';
     let activeSelectedItem = null;
 
+    // ACTIVE SPINNER FILTERS (Array allows toggle combinations like ['breakfast', 'lunch'])
+    let activeSpinFilters = ['breakfast', 'lunch', 'dinner'];
+
+    function toggleSpinFilter(meal) {
+      if (activeSpinFilters.includes(meal)) {
+        // Don't allow unchecking if it's the last remaining filter
+        if (activeSpinFilters.length === 1) return; 
+        activeSpinFilters = activeSpinFilters.filter(m => m !== meal);
+      } else {
+        activeSpinFilters.push(meal);
+      }
+      
+      // Update Button Styles dynamically based on selection state
+      ['breakfast', 'lunch', 'dinner'].forEach(m => {
+        const btn = document.getElementById(`spin-btn-${m}`);
+        if (activeSpinFilters.includes(m)) {
+          btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
+        } else {
+          btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-100 text-slate-400 transition-all';
+        }
+      });
+    }
+
     function selectMealUnit(unit) {
       currentMealUnit = unit;
       currentSubcategory = 'all';
@@ -271,7 +298,6 @@
 
     function renderSubcategories() {
       const subcatBar = document.getElementById('subcategory-bar');
-      // Extract unique categories dynamically from items matching the current meal unit
       const mealItems = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
       const categories = [...new Set(mealItems.map(item => item.category))];
       
@@ -332,7 +358,6 @@
       const ingredientsList = document.getElementById('detail-ingredients');
       ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
 
-      // Display Pairings
       document.getElementById('detail-drink').innerText = item.drinkPairing || 'N/A';
       document.getElementById('detail-sauce').innerText = item.saucePairing || 'N/A';
 
@@ -347,29 +372,21 @@
       alert(`Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
     }
 
-    // --- RANDOM GENERATOR FOR MULTIPLE FILTER CHOICES ---
+    // --- RANDOM GENERATOR SUPPORTING TOGGLED COMBINATIONS ---
     function spinRandomMeal() {
-      const selectedFilter = document.getElementById('spinner-filter').value;
-
-      const eligibleItems = foodDatabase.filter(item => {
-        if (selectedFilter === 'all') return true;
-        if (selectedFilter === 'brunch') {
-          return item.mealTypes.includes('breakfast') || item.mealTypes.includes('lunch');
-        }
-        if (selectedFilter === 'breakfast_dinner') {
-          return item.mealTypes.includes('breakfast') || item.mealTypes.includes('dinner');
-        }
-        return item.mealTypes.includes(selectedFilter);
-      });
+      // Find items matching ANY active toggle button
+      const eligibleItems = foodDatabase.filter(item => 
+        item.mealTypes.some(meal => activeSpinFilters.includes(meal))
+      );
 
       if (eligibleItems.length === 0) {
-        alert("No recipes found for this filter!");
+        alert("No recipes found matching your selected active filters!");
         return;
       }
 
       const randomItem = eligibleItems[Math.floor(Math.random() * eligibleItems.length)];
 
-      // Auto-switch HUD view to a valid meal unit for this item
+      // Auto-switch view tab to an active unit for this rolled item
       const displayUnit = randomItem.mealTypes.includes(currentMealUnit) 
         ? currentMealUnit 
         : randomItem.mealTypes[0];
