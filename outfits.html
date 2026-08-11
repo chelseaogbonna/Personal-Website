@@ -10,33 +10,107 @@
     body { font-family: 'Fredoka', cursive, sans-serif; }
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
   </style>
 </head>
-<body class="bg-fuchsia-100 text-slate-800 min-h-screen pb-12">
+<body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
+
+  <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl animate-bounce">⚡</span>
+        <div>
+          <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
+          <p class="text-xs text-purple-200">Player 1: Ready</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
+        <div class="text-right">
+          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
+          <div class="text-[10px] text-purple-200"><span id="player-xp">0</span> / 100 XP</div>
+        </div>
+        <div class="w-24 bg-purple-950 h-4 rounded-full border border-black overflow-hidden">
+          <div id="xp-bar" class="bg-yellow-400 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <a href="index.html" class="bg-white border-2 border-black px-4 py-2 rounded-xl font-bold pixel-shadow inline-block mb-4">← Back to Hub</a>
-    <div class="bg-fuchsia-300 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <h1 class="text-3xl font-black text-fuchsia-900 mb-4">👗 Style Closet & Dress-Up</h1>
-
-      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center">
-        <div id="fit-display" class="text-xl font-bold my-4 text-fuchsia-600">Roll for Outfit!</div>
-        <button onclick="rollFit()" class="bg-fuchsia-500 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow">
-          🎲 Randomize Fit
-        </button>
-      </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <a href="index.html" class="bg-slate-400 hover:bg-slate-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🏠 Hub
+      </a>
+      <a href="food.html" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🍱 Food Quest
+      </a>
+      <a href="build.html" class="bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🛠️ Wishlist Labs
+      </a>
+      <a href="sewing.html" class="bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🪡 Stitch Guild
+      </a>
+      <a href="outfits.html" class="bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center ring-4 ring-black">
+        👗 Style Closet
+      </a>
     </div>
   </nav>
 
+  <main class="max-w-5xl mx-auto px-4">
+    <section class="bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold text-fuchsia-900">👗 Virtual Outfit Picker</h2>
+        <span class="bg-fuchsia-500 text-white px-3 py-1 rounded-full text-xs border border-black font-bold">Dress-Up Mode</span>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center">
+        <h3 class="font-bold text-fuchsia-800 mb-4">✨ Outfit Slot Machine</h3>
+        <div class="grid grid-cols-3 gap-4 mb-4">
+          <div id="slot-top" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">🧥 Top</div>
+          <div id="slot-bottom" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👖 Bottom</div>
+          <div id="slot-shoes" class="bg-fuchsia-50 p-4 rounded-xl border-2 border-fuchsia-200 font-bold text-sm">👟 Shoes</div>
+        </div>
+        <button onclick="randomizeOutfit()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow">
+          🎲 Roll Fits
+        </button>
+      </div>
+    </section>
+  </main>
+
   <script>
-    const fits = [
-      "Crocheted Vest + Baggy Cargo Pants + Chunky Boots",
-      "Oversized Sweater + Pleated Mini Skirt + Retro Sneakers",
-      "Vintage Graphic Tee + Wide-Leg Jeans + Platform Loafers"
-    ];
-    function rollFit() {
-      document.getElementById('fit-display').innerText = fits[Math.floor(Math.random() * fits.length)];
+    let xp = parseInt(localStorage.getItem('playerXP')) || 0;
+    let level = parseInt(localStorage.getItem('playerLvl')) || 1;
+
+    function updateHUD() {
+      document.getElementById('player-xp').innerText = xp;
+      document.getElementById('player-lvl').innerText = level;
+      document.getElementById('xp-bar').style.width = `${xp}%`;
+      localStorage.setItem('playerXP', xp);
+      localStorage.setItem('playerLvl', level);
     }
+
+    function gainXP(amount) {
+      xp += amount;
+      if (xp >= 100) {
+        level += Math.floor(xp / 100);
+        xp = xp % 100;
+        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
+      }
+      updateHUD();
+    }
+
+    const tops = ["Baby Tee + Cardigan", "Oversized Sweater", "Vintage Graphic Tee", "Crocheted Vest"];
+    const bottoms = ["Baggy Cargo Pants", "Pleated Mini Skirt", "Wide-Leg Jeans", "Parachute Pants"];
+    const shoes = ["Chunky Platform Boots", "Retro Sneakers", "Loafers + White Socks", "Mary Janes"];
+    function randomizeOutfit() {
+      document.getElementById('slot-top').innerText = tops[Math.floor(Math.random() * tops.length)];
+      document.getElementById('slot-bottom').innerText = bottoms[Math.floor(Math.random() * bottoms.length)];
+      document.getElementById('slot-shoes').innerText = shoes[Math.floor(Math.random() * shoes.length)];
+      gainXP(10);
+    }
+
+    updateHUD();
   </script>
 </body>
 </html>
