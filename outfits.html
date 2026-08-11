@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Style Closet 👗</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Fredoka', cursive, sans-serif; }
+    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+  </style>
+</head>
+<body class="bg-fuchsia-100 text-slate-800 min-h-screen pb-12">
+
+  <nav class="max-w-5xl mx-auto my-6 px-4">
+    <a href="index.html" class="bg-white border-2 border-black px-4 py-2 rounded-xl font-bold pixel-shadow inline-block mb-4">← Back to Hub</a>
+    <div class="bg-fuchsia-300 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <h1 class="text-3xl font-black text-fuchsia-900 mb-4">👗 Style Closet & Dress-Up</h1>
+
+      <div class="bg-white p-6 rounded-2xl border-2 border-black text-center">
+        <div id="fit-display" class="text-xl font-bold my-4 text-fuchsia-600">Roll for Outfit!</div>
+        <button onclick="rollFit()" class="bg-fuchsia-500 text-white font-bold py-2 px-8 rounded-xl border-2 border-black pixel-shadow">
+          🎲 Randomize Fit
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    const fits = [
+      "Crocheted Vest + Baggy Cargo Pants + Chunky Boots",
+      "Oversized Sweater + Pleated Mini Skirt + Retro Sneakers",
+      "Vintage Graphic Tee + Wide-Leg Jeans + Platform Loafers"
+    ];
+    function rollFit() {
+      document.getElementById('fit-display').innerText = fits[Math.floor(Math.random() * fits.length)];
+    }
+  </script>
+</body>
+</html>
