@@ -277,47 +277,260 @@
   }
 
   // --- 30 BREAKFAST, 30 LUNCH, 30 DINNER DATABASE ---
-  const imgPlaceholder = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&auto=format&fit=crop&q=80';
 
-  const foodDatabase = [
-    // 🍳 30 BREAKFAST ITEMS
-    ...Array.from({ length: 30 }, (_, i) => ({
-      id: `b${i + 1}`,
-      name: i === 0 ? 'Avocado Egg Toast' : i === 1 ? 'Breakfast Burrito' : i === 2 ? 'Acai Smoothie Bowl' : i === 3 ? 'Matcha Boba Latte' : `Breakfast Item ${i + 1}`,
-      icon: i % 3 === 0 ? '🥑' : i % 3 === 1 ? '🌯' : '🥣',
-      img: imgPlaceholder,
-      mealTypes: ['breakfast'],
-      category: i % 3 === 0 ? 'sandwiches' : i % 3 === 1 ? 'bowls' : 'drinks',
-      ingredients: [`Breakfast Ingredient A${i + 1}`, `Breakfast Ingredient B${i + 1}`, 'Butter', 'Salt'],
-      drinkPairing: 'Iced Cold Brew',
-      saucePairing: 'Maple Syrup'
-    })),
+  // =========================
+  // 🍳 BREAKFAST
+  // =========================
 
-    // 🥗 30 LUNCH ITEMS
-    ...Array.from({ length: 30 }, (_, i) => ({
-      id: `l${i + 1}`,
-      name: i === 0 ? 'Caprese Focaccia' : i === 1 ? 'Spicy Garlic Ramen' : i === 2 ? 'Salmon Poke Bowl' : i === 3 ? 'Yuzu Lemonade' : `Lunch Item ${i + 1}`,
-      icon: i % 3 === 0 ? '🥪' : i % 3 === 1 ? '🍜' : '🥗',
-      img: imgPlaceholder,
-      mealTypes: ['lunch'],
-      category: i % 3 === 0 ? 'sandwiches' : i % 3 === 1 ? 'bowls' : 'drinks',
-      ingredients: [`Lunch Ingredient A${i + 1}`, `Lunch Ingredient B${i + 1}`, 'Olive Oil', 'Herbs'],
-      drinkPairing: 'Yuzu Lemonade',
-      saucePairing: 'Garlic Aioli'
-    })),
+  {
+    id: 'b1',
+    name: 'Avocado Egg Toast',
+    icon: '🥑',
+    img: 'images/avocado-egg-toast.jpg',
+    mealTypes: ['breakfast'],
+    category: 'sandwiches',
+    ingredients: ['Sourdough Bread', 'Avocado', 'Eggs', 'Chili Flakes'],
+    drinkPairing: 'Iced Cold Brew',
+    saucePairing: 'Hot Honey'
+  },
 
-    // 🍜 30 DINNER ITEMS
-    ...Array.from({ length: 30 }, (_, i) => ({
-      id: `d${i + 1}`,
-      name: i === 0 ? 'Crispy Rice Tacos' : i === 1 ? 'Garlic Butter Noodles' : i === 2 ? 'Sourdough Focaccia Pizza' : i === 3 ? 'Strawberry Soda' : `Dinner Item ${i + 1}`,
-      icon: i % 3 === 0 ? '🌮' : i % 3 === 1 ? '🍝' : '🍕',
-      img: imgPlaceholder,
-      mealTypes: ['dinner'],
-      category: i % 3 === 0 ? 'sandwiches' : i % 3 === 1 ? 'bowls' : 'drinks',
-      ingredients: [`Dinner Ingredient A${i + 1}`, `Dinner Ingredient B${i + 1}`, 'Garlic', 'Parmesan'],
-      drinkPairing: 'Strawberry Soda',
-      saucePairing: 'Chili Crisp'
-    }))
+  {
+    id: 'b2',
+    name: 'Breakfast Burrito',
+    icon: '🌯',
+    img: 'images/breakfast-burrito.jpg',
+    mealTypes: ['breakfast'],
+    category: 'wraps',
+    ingredients: ['Flour Tortilla', 'Eggs', 'Potatoes', 'Cheddar Cheese'],
+    drinkPairing: 'Iced Coffee',
+    saucePairing: 'Chipotle Sauce'
+  },
+
+  {
+    id: 'b3',
+    name: 'Acai Smoothie Bowl',
+    icon: '🫐',
+    img: 'images/acai-bowl.jpg',
+    mealTypes: ['breakfast'],
+    category: 'bowls',
+    ingredients: ['Acai', 'Banana', 'Blueberries', 'Granola'],
+    drinkPairing: 'Coconut Water',
+    saucePairing: 'Almond Butter'
+  },
+
+  {
+    id: 'b4',
+    name: 'Matcha Boba Latte',
+    icon: '🍵',
+    img: 'images/matcha-boba.jpg',
+    mealTypes: ['breakfast'],
+    category: 'drinks',
+    ingredients: ['Matcha', 'Milk', 'Brown Sugar', 'Boba'],
+    drinkPairing: 'Water',
+    saucePairing: 'Vanilla Syrup'
+  },
+
+  {
+    id: 'b5',
+    name: 'French Toast',
+    icon: '🍞',
+    img: 'images/french-toast.jpg',
+    mealTypes: ['breakfast'],
+    category: 'sweet',
+    ingredients: ['Brioche', 'Eggs', 'Milk', 'Cinnamon'],
+    drinkPairing: 'Cappuccino',
+    saucePairing: 'Maple Syrup'
+  },
+
+  {
+    id: 'b6',
+    name: 'Blueberry Pancakes',
+    icon: '🥞',
+    img: 'images/blueberry-pancakes.jpg',
+    mealTypes: ['breakfast'],
+    category: 'sweet',
+    ingredients: ['Flour', 'Blueberries', 'Eggs', 'Milk'],
+    drinkPairing: 'Iced Latte',
+    saucePairing: 'Maple Syrup'
+  },
+
+  {
+    id: 'b7',
+    name: 'Shakshuka',
+    icon: '🍳',
+    img: 'images/shakshuka.jpg',
+    mealTypes: ['breakfast'],
+    category: 'eggs',
+    ingredients: ['Eggs', 'Tomatoes', 'Bell Peppers', 'Onion'],
+    drinkPairing: 'Mint Tea',
+    saucePairing: 'Harissa'
+  },
+
+  {
+    id: 'b8',
+    name: 'Eggs Benedict',
+    icon: '🍳',
+    img: 'images/eggs-benedict.jpg',
+    mealTypes: ['breakfast'],
+    category: 'eggs',
+    ingredients: ['English Muffin', 'Eggs', 'Canadian Bacon', 'Hollandaise'],
+    drinkPairing: 'Orange Juice',
+    saucePairing: 'Hollandaise'
+  },
+
+  {
+    id: 'b9',
+    name: 'Greek Yogurt Parfait',
+    icon: '🥣',
+    img: 'images/yogurt-parfait.jpg',
+    mealTypes: ['breakfast'],
+    category: 'bowls',
+    ingredients: ['Greek Yogurt', 'Granola', 'Strawberries', 'Honey'],
+    drinkPairing: 'Green Tea',
+    saucePairing: 'Honey'
+  },
+
+  {
+    id: 'b10',
+    name: 'Breakfast Hash',
+    icon: '🥔',
+    img: 'images/breakfast-hash.jpg',
+    mealTypes: ['breakfast'],
+    category: 'savory',
+    ingredients: ['Potatoes', 'Eggs', 'Bell Peppers', 'Onions'],
+    drinkPairing: 'Cold Brew',
+    saucePairing: 'Sriracha'
+  },
+
+  // =========================
+  // 🥗 LUNCH
+  // =========================
+
+  {
+    id: 'l1',
+    name: 'Caprese Focaccia',
+    icon: '🥪',
+    img: 'images/caprese-focaccia.jpg',
+    mealTypes: ['lunch'],
+    category: 'sandwiches',
+    ingredients: ['Focaccia', 'Tomatoes', 'Mozzarella', 'Basil'],
+    drinkPairing: 'Sparkling Water',
+    saucePairing: 'Balsamic Glaze'
+  },
+
+  {
+    id: 'l2',
+    name: 'Spicy Garlic Ramen',
+    icon: '🍜',
+    img: 'images/spicy-garlic-ramen.jpg',
+    mealTypes: ['lunch'],
+    category: 'noodles',
+    ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Green Onion'],
+    drinkPairing: 'Iced Green Tea',
+    saucePairing: 'Chili Crisp'
+  },
+
+  {
+    id: 'l3',
+    name: 'Salmon Poke Bowl',
+    icon: '🍣',
+    img: 'images/salmon-poke-bowl.jpg',
+    mealTypes: ['lunch'],
+    category: 'bowls',
+    ingredients: ['Salmon', 'Rice', 'Avocado', 'Cucumber'],
+    drinkPairing: 'Yuzu Lemonade',
+    saucePairing: 'Spicy Mayo'
+  },
+
+  {
+    id: 'l4',
+    name: 'Chicken Caesar Wrap',
+    icon: '🌯',
+    img: 'images/chicken-caesar-wrap.jpg',
+    mealTypes: ['lunch'],
+    category: 'wraps',
+    ingredients: ['Chicken', 'Romaine', 'Parmesan', 'Flour Tortilla'],
+    drinkPairing: 'Iced Tea',
+    saucePairing: 'Caesar Dressing'
+  },
+
+  {
+    id: 'l5',
+    name: 'Margherita Pizza',
+    icon: '🍕',
+    img: 'images/margherita-pizza.jpg',
+    mealTypes: ['lunch'],
+    category: 'pizza',
+    ingredients: ['Pizza Dough', 'Tomatoes', 'Mozzarella', 'Basil'],
+    drinkPairing: 'Sparkling Water',
+    saucePairing: 'Garlic Oil'
+  },
+
+  // =========================
+  // 🍜 DINNER
+  // =========================
+
+  {
+    id: 'd1',
+    name: 'Crispy Rice Tacos',
+    icon: '🌮',
+    img: 'images/crispy-rice-tacos.jpg',
+    mealTypes: ['dinner'],
+    category: 'tacos',
+    ingredients: ['Rice', 'Corn Tortillas', 'Avocado', 'Lime'],
+    drinkPairing: 'Horchata',
+    saucePairing: 'Chipotle Crema'
+  },
+
+  {
+    id: 'd2',
+    name: 'Garlic Butter Noodles',
+    icon: '🍝',
+    img: 'images/garlic-butter-noodles.jpg',
+    mealTypes: ['dinner'],
+    category: 'noodles',
+    ingredients: ['Spaghetti', 'Garlic', 'Butter', 'Parmesan'],
+    drinkPairing: 'Sparkling Water',
+    saucePairing: 'Garlic Butter'
+  },
+
+  {
+    id: 'd3',
+    name: 'Focaccia Pizza',
+    icon: '🍕',
+    img: 'images/focaccia-pizza.jpg',
+    mealTypes: ['dinner'],
+    category: 'pizza',
+    ingredients: ['Focaccia', 'Tomato Sauce', 'Mozzarella', 'Basil'],
+    drinkPairing: 'Italian Soda',
+    saucePairing: 'Basil Pesto'
+  },
+
+  {
+    id: 'd4',
+    name: 'Teriyaki Chicken Bowl',
+    icon: '🍗',
+    img: 'images/teriyaki-chicken-bowl.jpg',
+    mealTypes: ['dinner'],
+    category: 'bowls',
+    ingredients: ['Chicken', 'Rice', 'Broccoli', 'Sesame Seeds'],
+    drinkPairing: 'Iced Green Tea',
+    saucePairing: 'Teriyaki Sauce'
+  },
+
+  {
+    id: 'd5',
+    name: 'Creamy Tuscan Pasta',
+    icon: '🍝',
+    img: 'images/creamy-tuscan-pasta.jpg',
+    mealTypes: ['dinner'],
+    category: 'pasta',
+    ingredients: ['Pasta', 'Cream', 'Spinach', 'Sun-Dried Tomatoes'],
+    drinkPairing: 'Sparkling Water',
+    saucePairing: 'Parmesan Cream'
+  },
+
+  // ... continue through d30
   ];
 
   let currentMealUnit = 'breakfast';
