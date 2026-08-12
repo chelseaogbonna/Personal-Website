@@ -88,7 +88,6 @@
             <button onclick="toggleSpinFilter('dinner')" id="spin-btn-dinner" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
               🍜 Dinner
             </button>
-      
           </div>
           <button onclick="spinRandomMeal()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
             Spin Meal (+10 XP)
@@ -126,12 +125,12 @@
         </div>
       </div>
       
-      <!-- Sub-Category Filter (All, Sandwiches, Bowls, Drinks) -->
+      <!-- Sub-Category Filter -->
       <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
         <!-- Dynamic Subcategory Pills -->
       </div>
 
-      <!-- CHARACTER SELECT DISH CAROUSEL SECTION (Placed below tabs, above main grid) -->
+      <!-- CHARACTER SELECT DISH CAROUSEL SECTION -->
       <div class="bg-purple-900 border-4 border-black rounded-3xl p-6 pixel-shadow-lg text-white mb-6">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 border-b-2 border-purple-700 pb-3">
           <div>
@@ -150,7 +149,7 @@
 
           <div class="flex-1 w-full bg-purple-950 border-2 border-black rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4 pixel-shadow-inner">
             <div id="character-select-img" class="w-28 h-28 shrink-0 rounded-xl border-2 border-black overflow-hidden bg-purple-900 flex items-center justify-center">
-              <!-- Image loaded dynamically -->
+              <!-- Loaded dynamically -->
             </div>
             <div class="text-center sm:text-left flex-1">
               <span id="character-select-tag" class="text-[10px] font-bold bg-purple-700 text-purple-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Breakfast</span>
@@ -179,7 +178,6 @@
           <div>
             <div class="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-1" id="detail-category">Select an Item</div>
             
-            <!-- Detail Image Slot -->
             <div id="detail-img-container" class="w-full h-32 rounded-xl border-2 border-black overflow-hidden mb-2 bg-pink-50 flex items-center justify-center">
               <span class="text-slate-400 text-xs italic">No item selected</span>
             </div>
@@ -193,7 +191,6 @@
               <li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>
             </ul>
 
-            <!-- Recommended Pairings Box -->
             <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 text-xs space-y-1">
               <p class="font-bold text-amber-900 border-b border-amber-200 pb-0.5">Pairing Suggestions:</p>
               <p class="text-slate-700">🥤 <strong>Drink:</strong> <span id="detail-drink" class="text-slate-500 italic">None</span></p>
@@ -294,7 +291,7 @@
     updateHUD();
   }
 
-  // --- DATABASE ARRAY (ADD NEW DISHES HERE!) ---
+  // --- DATABASE ARRAY ---
   const foodDatabase = [
     {
       id: 'b1',
@@ -551,17 +548,15 @@
     }
   ];
 
+  // --- STATE VARIABLES ---
   let currentMealUnit = 'breakfast';
   let currentSubcategory = 'all';
   let activeSelectedItem = null;
   let characterSelectIndex = 0;
   let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
-  let searchQuery = ''; // <-- ADD THIS LINE HERE
-
-  // --- ADD SEARCH STATE VARIABLE ---
   let searchQuery = '';
 
-  // --- HANDLE LIVE SEARCH INPUT ---
+  // --- SEARCH HANDLER ---
   function handleSearchInput(val) {
     searchQuery = val.toLowerCase().trim();
     characterSelectIndex = 0;
@@ -569,12 +564,16 @@
     updateCharacterSelectView();
   }
 
-  // --- UPDATE MEAL UNIT SELECTION (RESETS SEARCH IF DESIRED) ---
+  // --- MEAL TAB SELECTION ---
   function selectMealUnit(unit) {
     currentMealUnit = unit;
     currentSubcategory = 'all';
     characterSelectIndex = 0;
     
+    searchQuery = '';
+    const searchInput = document.getElementById('recipe-search-input');
+    if (searchInput) searchInput.value = '';
+
     document.querySelectorAll('.meal-unit-btn').forEach(btn => {
       btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
     });
@@ -588,16 +587,14 @@
     updateCharacterSelectView();
   }
 
-  // --- UPDATE FILTERING TO INCLUDE SEARCH QUERY ---
+  // --- FILTERING LOGIC ---
   function getActiveCategoryList() {
     let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
     
-    // Filter by subcategory
     if (currentSubcategory !== 'all') {
       list = list.filter(item => item.category === currentSubcategory);
     }
 
-    // Filter by search term matching name or ingredients
     if (searchQuery !== '') {
       list = list.filter(item => 
         item.name.toLowerCase().includes(searchQuery) ||
@@ -608,6 +605,7 @@
     return list;
   }
 
+  // --- SPINNER TOGGLE ---
   function toggleSpinFilter(meal) {
     if (activeSpinFilters.includes(meal)) {
       if (activeSpinFilters.length === 1) return; 
@@ -627,14 +625,26 @@
       }
     });
   }
-  function handleSearchInput(val) {
-    searchQuery = val.toLowerCase().trim();
-    characterSelectIndex = 0;
-    renderFoodGrid();
-    updateCharacterSelectView();
-  }
-  
 
+  function spinRandomMeal() {
+    const spinPool = foodDatabase.filter(item => 
+      item.mealTypes.some(type => activeSpinFilters.includes(type))
+    );
+    if (spinPool.length === 0) return;
+
+    const randomItem = spinPool[Math.floor(Math.random() * spinPool.length)];
+    selectMealUnit(randomItem.mealTypes[0]);
+    
+    const list = getActiveCategoryList();
+    const itemIdx = list.findIndex(i => i.id === randomItem.id);
+    if (itemIdx !== -1) {
+      characterSelectIndex = itemIdx;
+      updateCharacterSelectView();
+    }
+    gainXP(10);
+  }
+
+  // --- SUBCATEGORIES ---
   function renderSubcategories() {
     const subcatBar = document.getElementById('subcategory-bar');
     const mealItems = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
@@ -658,32 +668,17 @@
     updateCharacterSelectView();
   }
 
-  function getActiveCategoryList() {
-    let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
-    
-    // Filter by subcategory
-    if (currentSubcategory !== 'all') {
-      list = list.filter(item => item.category === currentSubcategory);
-    }
-
-    // Filter by search query (matches name or ingredients)
-    if (searchQuery !== '') {
-      list = list.filter(item => 
-        item.name.toLowerCase().includes(searchQuery) ||
-        item.ingredients.some(ing => ing.toLowerCase().includes(searchQuery))
-      );
-    }
-
-    return list;
-  }
-
-  // --- RENDER FOOD CARDS ---
-// --- RENDER FOOD CARDS ---
+  // --- RENDER FOOD GRID ---
   function renderFoodGrid() {
     const grid = document.getElementById('food-inventory-grid');
     if (!grid) return;
 
     const itemsToDisplay = getActiveCategoryList();
+
+    if (itemsToDisplay.length === 0) {
+      grid.innerHTML = `<div class="col-span-2 text-center text-xs text-slate-400 py-6">No matching recipes found</div>`;
+      return;
+    }
 
     grid.innerHTML = itemsToDisplay.map((item, idx) => {
       const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
@@ -712,9 +707,18 @@
     updateCharacterSelectView();
   }
 
+  // --- CAROUSEL & SELECTION ---
   function updateCharacterSelectView() {
     const list = getActiveCategoryList();
-    if (list.length === 0) return;
+    if (list.length === 0) {
+      document.getElementById('character-select-counter').innerText = `DISH 0 / 0`;
+      document.getElementById('character-select-title').innerText = `No Recipe Found`;
+      document.getElementById('character-select-ingredients').innerText = `Try clearing your search or filters.`;
+      document.getElementById('character-select-img').innerHTML = `<span class="text-2xl">🔍</span>`;
+      return;
+    }
+
+    if (characterSelectIndex >= list.length) characterSelectIndex = 0;
 
     const currentItem = list[characterSelectIndex];
 
@@ -743,137 +747,79 @@
 
   function selectFoodItem(item) {
     activeSelectedItem = item;
-    renderFoodGrid();
-
-    document.getElementById('detail-category').innerText = currentMealUnit.toUpperCase();
-    document.getElementById('detail-title').innerHTML = `<span>${item.icon}</span> <span class="truncate">${item.name}</span>`;
     
-    document.getElementById('detail-img-container').innerHTML = `
-      <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover hover:scale-110 transition-transform duration-300" />
-    `;
-
-    const ingredientsList = document.getElementById('detail-ingredients');
-    ingredientsList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
-
-    document.getElementById('detail-drink').innerText = item.drinkPairing || 'N/A';
-    document.getElementById('detail-sauce').innerText = item.saucePairing || 'N/A';
-
+    document.getElementById('detail-category').innerText = currentMealUnit.toUpperCase();
+    document.getElementById('detail-title').innerText = `${item.icon} ${item.name}`;
+    document.getElementById('detail-img-container').innerHTML = `<img src="${item.img}" class="w-full h-full object-cover" />`;
+    document.getElementById('detail-ingredients').innerHTML = item.ingredients.map(i => `<li>${i}</li>`).join('');
+    document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
+    document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
+    
     const eatBtn = document.getElementById('eat-btn');
-    eatBtn.disabled = false;
-    eatBtn.className = "mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all";
+    if (eatBtn) {
+      eatBtn.disabled = false;
+      eatBtn.className = 'mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow cursor-pointer transition-all';
+    }
+
+    renderFoodGrid();
   }
 
   function consumeSelectedFood() {
     if (!activeSelectedItem) return;
     gainXP(15);
-    alert(`Yum! You ate ${activeSelectedItem.name} (+15 XP)`);
+    alert(`Nom nom! You ate ${activeSelectedItem.name}! (+15 XP)`);
   }
 
-  function spinRandomMeal() {
-    const eligibleItems = foodDatabase.filter(item => 
-      item.mealTypes.some(meal => activeSpinFilters.includes(meal))
-    );
-
-    if (eligibleItems.length === 0) {
-      alert("No recipes found matching your selected active filters!");
-      return;
-    }
-
-    const randomIndex = Math.floor(Math.random() * eligibleItems.length);
-    const randomItem = eligibleItems[randomIndex];
-
-    const displayUnit = randomItem.mealTypes.includes(currentMealUnit) 
-      ? currentMealUnit 
-      : randomItem.mealTypes[0];
-
-    currentMealUnit = displayUnit;
-    currentSubcategory = 'all';
-
-    document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
-    });
-    const activeTab = document.getElementById(`tab-${displayUnit}`);
-    if (activeTab) {
-      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
-    }
-
-    renderSubcategories();
-
-    const currentList = getActiveCategoryList();
-    const itemIdx = currentList.findIndex(item => item.id === randomItem.id);
-
-    if (itemIdx !== -1) {
-      characterSelectIndex = itemIdx;
-    }
-
-    updateCharacterSelectView();
-    gainXP(10);
-  }
-
-  // --- PANTRY RECIPE MATCHERS ---
-  const customVaultRecipes = [
-    { name: "Matcha Boba Latte", ingredients: ["matcha", "boba"], desc: "Whisk matcha powder, mix with sweetened boba pearls and cold milk." },
-    { name: "Spicy Garlic Ramen", ingredients: ["ramen noodles", "garlic"], desc: "Sauté garlic, boil ramen noodles, and toss in hot chili broth." },
-    { name: "Sourdough Focaccia", ingredients: ["flour"], desc: "Ferment dough, dimple with oil, and bake until golden brown." },
-    { name: "Egg & Toast Special", ingredients: ["eggs", "bread"], desc: "Toast bread, fry eggs in butter, and serve with a dash of pepper." },
-    { name: "Strawberry Tanghulu", ingredients: ["strawberries"], desc: "Skewer strawberries, dip in melted sugar syrup, and chill for crackle." }
-  ];
-
-  function getSelectedPantryItems() {
-    const checkboxes = document.querySelectorAll('.pantry-item:checked');
-    return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
-  }
-
+  // --- PANTRY MATCHING ---
   function matchCustomRecipe() {
-    const selected = getSelectedPantryItems();
-    const output = document.getElementById('custom-recipe-output');
-
-    if (selected.length === 0) {
-      output.innerHTML = `<p class="text-xs text-red-500 font-bold">Please check at least one ingredient!</p>`;
+    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(c => c.value.toLowerCase());
+    const out = document.getElementById('custom-recipe-output');
+    
+    if (checked.length === 0) {
+      out.innerHTML = `<p class="italic text-amber-600">Please check at least one ingredient!</p>`;
       return;
     }
 
-    const matches = customVaultRecipes.filter(recipe => 
-      recipe.ingredients.some(ing => selected.includes(ing))
+    const matches = foodDatabase.filter(item => 
+      item.ingredients.some(ing => checked.some(c => ing.toLowerCase().includes(c)))
     );
 
     if (matches.length === 0) {
-      output.innerHTML = `<p class="text-xs text-slate-500">No vault recipes match these exact items.</p>`;
-      return;
+      out.innerHTML = `<p class="text-slate-500">No vault recipes match those ingredients!</p>`;
+    } else {
+      out.innerHTML = matches.map(m => `
+        <div class="p-2 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between">
+          <span class="font-bold text-xs">${m.icon} ${m.name}</span>
+          <span class="text-[10px] bg-pink-500 text-white px-2 py-0.5 rounded-md capitalize">${m.category}</span>
+        </div>
+      `).join('');
     }
-
-    output.innerHTML = matches.map(r => `
-      <div class="p-2 bg-emerald-50 border border-emerald-200 rounded-xl">
-        <strong class="text-emerald-900">${r.name}</strong>
-        <p class="text-xs text-slate-600 mt-0.5">${r.desc}</p>
-      </div>
-    `).join('');
   }
 
   function searchWebRecipes() {
-    const selected = getSelectedPantryItems();
-    const output = document.getElementById('web-recipe-output');
-
-    if (selected.length === 0) {
-      output.innerHTML = `<p class="text-xs text-red-500 font-bold">Please check at least one ingredient!</p>`;
+    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(c => c.value);
+    const out = document.getElementById('web-recipe-output');
+    
+    if (checked.length === 0) {
+      out.innerHTML = `<p class="italic text-sky-600">Please check at least one ingredient!</p>`;
       return;
     }
 
-    const query = encodeURIComponent(selected.join(' ') + ' recipe');
-    output.innerHTML = `
-      <div class="p-2 bg-sky-50 border border-sky-200 rounded-xl text-center">
-        <p class="text-xs text-sky-900 font-bold mb-2">Ready to search Google for selected items!</p>
-        <a href="https://www.google.com/search?q=${query}" target="_blank" class="inline-block bg-sky-500 text-white font-bold px-3 py-1.5 text-xs rounded-lg border border-black">
-          🔍 Search Google Recipes ↗
-        </a>
-      </div>
+    const query = encodeURIComponent(checked.join(' ') + ' recipes');
+    out.innerHTML = `
+      <p class="text-xs text-slate-600 mb-2">Search Google for ideas using: <strong>${checked.join(', ')}</strong></p>
+      <a href="https://www.google.com/search?q=${query}" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-1.5 px-3 text-xs rounded-lg border border-black pixel-shadow-sm">
+        Launch Web Search ↗
+      </a>
     `;
   }
 
-  // --- INITIAL LOAD ---
+  // --- INITIALIZATION ---
   window.addEventListener('DOMContentLoaded', () => {
     updateHUD();
-    selectMealUnit('breakfast');
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
   });
 </script>
 </body>
