@@ -280,7 +280,7 @@
     updateHUD();
   }
 
-  // --- DATABASE ARRAY FIX ---
+  // --- DATABASE ARRAY ---
   const foodDatabase = [
     {
       id: 'b1',
@@ -501,8 +501,8 @@
       ingredients: ['Pasta', 'Cream', 'Spinach', 'Sun-Dried Tomatoes'],
       drinkPairing: 'Sparkling Water',
       saucePairing: 'Parmesan Cream'
-    }
-    // Dessert:
+    },
+    // Dessert (Added missing comma above)
     {
       id: 'ds1',
       name: 'Strawberry Tanghulu',
@@ -542,7 +542,7 @@
   let currentSubcategory = 'all';
   let activeSelectedItem = null;
   let characterSelectIndex = 0;
-  let activeSpinFilters = ['breakfast', 'lunch', 'dinner'];
+  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
 
   function toggleSpinFilter(meal) {
     if (activeSpinFilters.includes(meal)) {
@@ -552,12 +552,14 @@
       activeSpinFilters.push(meal);
     }
     
-    ['breakfast', 'lunch', 'dinner'].forEach(m => {
+    ['breakfast', 'lunch', 'dinner', 'dessert'].forEach(m => {
       const btn = document.getElementById(`spin-btn-${m}`);
-      if (activeSpinFilters.includes(m)) {
-        btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
-      } else {
-        btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-100 text-slate-400 transition-all';
+      if (btn) {
+        if (activeSpinFilters.includes(m)) {
+          btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
+        } else {
+          btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-100 text-slate-400 transition-all';
+        }
       }
     });
   }
