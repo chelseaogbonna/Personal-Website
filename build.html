@@ -67,9 +67,9 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl font-bold text-cyan-900 flex items-center gap-2">
-            🚀 Build Quest Log
+            🚀 Project Select
           </h2>
-          <p class="text-xs text-cyan-800 font-semibold mt-0.5">Track lab blueprints, apartment upgrades, and custom builds.</p>
+          <p class="text-xs text-cyan-800 font-semibold mt-0.5">Cycle through lab blueprints and change project build statuses.</p>
         </div>
         <div class="flex items-center gap-2 self-start md:self-auto">
           <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all whitespace-nowrap active:translate-y-0.5">
@@ -115,8 +115,39 @@
         </div>
       </div>
 
-      <!-- Projects Container -->
-      <div id="projects-container" class="space-y-4"></div>
+      <!-- PROJECT SELECT / TURNTABLE STAGE -->
+      <div class="bg-white rounded-3xl border-4 border-black p-6 pixel-shadow mb-6">
+        
+        <!-- Turntable Stage Container -->
+        <div class="relative flex items-center justify-between min-h-[340px] gap-2 sm:gap-4">
+          
+          <!-- Prev Button -->
+          <button 
+            onclick="prevProject()" 
+            class="z-10 bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold p-3 sm:p-4 rounded-2xl border-3 border-black pixel-shadow text-xl sm:text-2xl transition-transform active:translate-y-1 shrink-0"
+          >
+            ◀
+          </button>
+
+          <!-- Selected Project Stage Card -->
+          <div id="project-select-card" class="w-full max-w-lg mx-auto flex flex-col items-center text-center">
+            <!-- Dynamic Content Injected Here -->
+          </div>
+
+          <!-- Next Button -->
+          <button 
+            onclick="nextProject()" 
+            class="z-10 bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold p-3 sm:p-4 rounded-2xl border-3 border-black pixel-shadow text-xl sm:text-2xl transition-transform active:translate-y-1 shrink-0"
+          >
+            ▶
+          </button>
+
+        </div>
+
+        <!-- Carousel Index Indicator Dots -->
+        <div id="carousel-dots" class="flex items-center justify-center gap-2 mt-4 pt-4 border-t-2 border-slate-100"></div>
+
+      </div>
 
     </section>
 
@@ -325,6 +356,7 @@
     let buildProjects = loadAllProjects();
     let currentCategory = 'all';
     let searchQuery = '';
+    let currentProjectIndex = 0;
 
     // Load saved statuses from localStorage
     function loadSavedStatuses() {
@@ -372,56 +404,87 @@
       });
     }
 
-    function renderProjects() {
-      const container = document.getElementById('projects-container');
-      const projects = getFilteredProjects();
+    // Render Project Select Stage Card
+    function renderProjectSelectView() {
+      const card = document.getElementById('project-select-card');
+      const dotsContainer = document.getElementById('carousel-dots');
+      const filtered = getFilteredProjects();
 
-      if (projects.length === 0) {
-        container.innerHTML = `
-          <div class="bg-white p-6 rounded-2xl border-2 border-black text-center font-bold text-slate-500">
-            No build projects found matching your search.
+      if (filtered.length === 0) {
+        card.innerHTML = `
+          <div class="py-12">
+            <span class="text-4xl block mb-2">🔍</span>
+            <p class="font-bold text-slate-500 text-sm">No build projects found matching your search.</p>
           </div>
         `;
+        dotsContainer.innerHTML = '';
         return;
       }
 
-      container.innerHTML = projects.map(p => `
-        <div class="bg-white p-4 rounded-2xl border-2 border-black flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pixel-shadow hover:scale-[1.01] transition-transform">
-          
-          <!-- Image + Info -->
-          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full md:w-auto">
-            <div class="w-full sm:w-24 h-24 rounded-xl border-2 border-black overflow-hidden shrink-0 bg-slate-100">
-              <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
-            </div>
+      // Safeguard index bounds
+      if (currentProjectIndex >= filtered.length) {
+        currentProjectIndex = 0;
+      }
 
-            <div class="space-y-1 max-w-md">
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
-                  ${p.difficulty}
-                </span>
-                <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black bg-cyan-100 text-cyan-800 uppercase">
-                  ${p.category}
-                </span>
-              </div>
-              <h3 class="font-bold text-base sm:text-lg leading-snug text-slate-900">${p.title}</h3>
-              <p class="text-xs text-slate-600 leading-relaxed">${p.description}</p>
-            </div>
+      const p = filtered[currentProjectIndex];
+
+      card.innerHTML = `
+        <!-- Image Stage Pedestal -->
+        <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-3xl border-4 border-black overflow-hidden mb-4 pixel-shadow bg-slate-100 shrink-0">
+          <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
+          <div class="absolute top-2 left-2 flex items-center gap-1.5 flex-wrap">
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
+              ${p.difficulty}
+            </span>
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black bg-cyan-100 text-cyan-800 uppercase">
+              ${p.category}
+            </span>
           </div>
-
-          <!-- Status Dropdown Select -->
-          <div class="w-full md:w-auto flex items-center justify-end border-t md:border-t-0 pt-3 md:pt-0 border-slate-200">
-            <select 
-              onchange="handleStatusChange('${p.id}', this.value)" 
-              class="w-full md:w-44 font-bold text-xs py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
-            >
-              <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ Incomplete</option>
-              <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ In Progress</option>
-              <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Completed</option>
-            </select>
-          </div>
-
         </div>
+
+        <!-- Project Info -->
+        <h3 class="font-extrabold text-xl sm:text-2xl text-slate-900 mb-1 leading-snug">${p.title}</h3>
+        <p class="text-xs text-slate-600 max-w-md mb-4 leading-relaxed">${p.description}</p>
+
+        <!-- Status Dropdown Select -->
+        <div class="w-full max-w-xs">
+          <select 
+            onchange="handleStatusChange('${p.id}', this.value)" 
+            class="w-full font-bold text-xs py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
+          >
+            <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ Incomplete</option>
+            <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ In Progress</option>
+            <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Completed</option>
+          </select>
+        </div>
+      `;
+
+      // Render Carousel Dots
+      dotsContainer.innerHTML = filtered.map((_, idx) => `
+        <button 
+          onclick="setProjectIndex(${idx})" 
+          class="h-3 rounded-full transition-all border border-black ${idx === currentProjectIndex ? 'w-8 bg-cyan-600' : 'w-3 bg-slate-300 hover:bg-slate-400'}"
+        ></button>
       `).join('');
+    }
+
+    function prevProject() {
+      const filtered = getFilteredProjects();
+      if (filtered.length === 0) return;
+      currentProjectIndex = (currentProjectIndex - 1 + filtered.length) % filtered.length;
+      renderProjectSelectView();
+    }
+
+    function nextProject() {
+      const filtered = getFilteredProjects();
+      if (filtered.length === 0) return;
+      currentProjectIndex = (currentProjectIndex + 1) % filtered.length;
+      renderProjectSelectView();
+    }
+
+    function setProjectIndex(idx) {
+      currentProjectIndex = idx;
+      renderProjectSelectView();
     }
 
     function handleStatusChange(id, newStatus) {
@@ -439,11 +502,12 @@
       }
 
       saveStatuses();
-      renderProjects();
+      renderProjectSelectView();
     }
 
     function filterCategory(cat) {
       currentCategory = cat;
+      currentProjectIndex = 0;
       
       document.querySelectorAll('.cat-btn').forEach(btn => {
         if (btn.getAttribute('data-cat') === cat) {
@@ -453,12 +517,13 @@
         }
       });
 
-      renderProjects();
+      renderProjectSelectView();
     }
 
     function handleSearch() {
       searchQuery = document.getElementById('build-search-input').value;
-      renderProjects();
+      currentProjectIndex = 0;
+      renderProjectSelectView();
     }
 
     // --- MODAL HANDLERS ---
@@ -498,14 +563,23 @@
 
       buildProjects = loadAllProjects();
       loadSavedStatuses();
-      renderProjects();
+      currentProjectIndex = getFilteredProjects().length - 1; // Jump to newly created project
+      renderProjectSelectView();
       closeModal();
     }
+
+    // Keyboard Arrow Navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('add-modal').classList.contains('hidden')) {
+        if (e.key === 'ArrowLeft') prevProject();
+        if (e.key === 'ArrowRight') nextProject();
+      }
+    });
 
     // Initialize Page
     loadSavedStatuses();
     updateHUD();
-    renderProjects();
+    renderProjectSelectView();
   </script>
 </body>
 </html>
