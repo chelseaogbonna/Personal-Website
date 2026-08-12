@@ -58,18 +58,18 @@
   </nav>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto px-4">
+  <main class="max-w-5xl mx-auto px-4 space-y-6">
 
     <!-- BUILD QUEST LOG SECTION -->
-    <section id="page-build" class="tab-page bg-cyan-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+    <section id="page-build" class="bg-cyan-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       
       <!-- Header Bar -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl font-bold text-cyan-900 flex items-center gap-2">
-            🚀 Project Select
+            🛠️ Wishlist Labs Blueprint Log
           </h2>
-          <p class="text-xs text-cyan-800 font-semibold mt-0.5">Cycle through lab blueprints and change project build statuses.</p>
+          <p class="text-xs text-cyan-800 font-semibold mt-0.5">Explore featured lab projects or scroll down to view the complete blueprint list.</p>
         </div>
         <div class="flex items-center gap-2 self-start md:self-auto">
           <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all whitespace-nowrap active:translate-y-0.5">
@@ -115,12 +115,14 @@
         </div>
       </div>
 
-      <!-- PROJECT SELECT / TURNTABLE STAGE -->
-      <div class="bg-white rounded-3xl border-4 border-black p-6 pixel-shadow mb-6">
+      <!-- 1. FEATURED PROJECT SELECT / TURNTABLE STAGE -->
+      <div class="bg-white rounded-3xl border-4 border-black p-6 pixel-shadow mb-8">
+        <h3 class="text-sm font-extrabold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <span>🚀</span> Featured Project Showcase
+        </h3>
         
         <!-- Turntable Stage Container -->
-        <div class="relative flex items-center justify-between min-h-[340px] gap-2 sm:gap-4">
-          
+        <div class="relative flex items-center justify-between min-h-[320px] gap-2 sm:gap-4">
           <!-- Prev Button -->
           <button 
             onclick="prevProject()" 
@@ -141,12 +143,24 @@
           >
             ▶
           </button>
-
         </div>
 
-        <!-- Carousel Index Indicator Dots -->
+        <!-- Carousel Dots -->
         <div id="carousel-dots" class="flex items-center justify-center gap-2 mt-4 pt-4 border-t-2 border-slate-100"></div>
+      </div>
 
+      <!-- 2. FULL BLUEPRINT GRID / LIST VIEW SECTION -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-cyan-950 flex items-center gap-2">
+            📂 All Lab Blueprints (<span id="project-count">0</span>)
+          </h3>
+        </div>
+
+        <!-- Grid Cards Container -->
+        <div id="full-projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Dynamic Project Cards Injected Here -->
+        </div>
       </div>
 
     </section>
@@ -249,7 +263,7 @@
       updateHUD();
     }
 
-    // --- 10 DEFAULT BUILD PROJECTS DATABASE ---
+    // --- DEFAULT PROJECTS DATABASE ---
     const defaultProjects = [
       // ⚡ ELECTRONICS (4)
       {
@@ -404,15 +418,23 @@
       });
     }
 
-    // Render Project Select Stage Card
-    function renderProjectSelectView() {
+    // Main Render Function
+    function renderViews() {
+      const filtered = getFilteredProjects();
+      document.getElementById('project-count').innerText = filtered.length;
+
+      renderTurntableStage(filtered);
+      renderFullGridList(filtered);
+    }
+
+    // 1. RENDER FEATURED TURNTABLE STAGE
+    function renderTurntableStage(filtered) {
       const card = document.getElementById('project-select-card');
       const dotsContainer = document.getElementById('carousel-dots');
-      const filtered = getFilteredProjects();
 
       if (filtered.length === 0) {
         card.innerHTML = `
-          <div class="py-12">
+          <div class="py-10">
             <span class="text-4xl block mb-2">🔍</span>
             <p class="font-bold text-slate-500 text-sm">No build projects found matching your search.</p>
           </div>
@@ -421,7 +443,6 @@
         return;
       }
 
-      // Safeguard index bounds
       if (currentProjectIndex >= filtered.length) {
         currentProjectIndex = 0;
       }
@@ -429,8 +450,7 @@
       const p = filtered[currentProjectIndex];
 
       card.innerHTML = `
-        <!-- Image Stage Pedestal -->
-        <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-3xl border-4 border-black overflow-hidden mb-4 pixel-shadow bg-slate-100 shrink-0">
+        <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl border-4 border-black overflow-hidden mb-3 pixel-shadow bg-slate-100 shrink-0">
           <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
           <div class="absolute top-2 left-2 flex items-center gap-1.5 flex-wrap">
             <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
@@ -442,11 +462,9 @@
           </div>
         </div>
 
-        <!-- Project Info -->
-        <h3 class="font-extrabold text-xl sm:text-2xl text-slate-900 mb-1 leading-snug">${p.title}</h3>
-        <p class="text-xs text-slate-600 max-w-md mb-4 leading-relaxed">${p.description}</p>
+        <h3 class="font-extrabold text-lg sm:text-xl text-slate-900 mb-1 leading-snug">${p.title}</h3>
+        <p class="text-xs text-slate-600 max-w-md mb-3 leading-relaxed">${p.description}</p>
 
-        <!-- Status Dropdown Select -->
         <div class="w-full max-w-xs">
           <select 
             onchange="handleStatusChange('${p.id}', this.value)" 
@@ -459,7 +477,6 @@
         </div>
       `;
 
-      // Render Carousel Dots
       dotsContainer.innerHTML = filtered.map((_, idx) => `
         <button 
           onclick="setProjectIndex(${idx})" 
@@ -468,23 +485,68 @@
       `).join('');
     }
 
+    // 2. RENDER FULL BLUEPRINT GRID LIST
+    function renderFullGridList(filtered) {
+      const grid = document.getElementById('full-projects-grid');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white p-8 rounded-2xl border-2 border-black text-center">
+            <p class="text-sm font-bold text-slate-500">No projects match the current filter or search criteria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl border-3 border-black p-4 pixel-shadow flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div class="relative w-full sm:w-28 h-28 rounded-xl border-2 border-black overflow-hidden shrink-0 bg-slate-100">
+            <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
+          </div>
+
+          <div class="flex-1 min-w-0 w-full">
+            <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
+                ${p.difficulty}
+              </span>
+              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black bg-cyan-100 text-cyan-800 uppercase">
+                ${p.category}
+              </span>
+            </div>
+
+            <h4 class="font-extrabold text-base text-slate-900 truncate mb-1">${p.title}</h4>
+            <p class="text-xs text-slate-600 line-clamp-2 mb-3 leading-relaxed">${p.description}</p>
+
+            <select 
+              onchange="handleStatusChange('${p.id}', this.value)" 
+              class="w-full font-bold text-xs py-1.5 px-2.5 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
+            >
+              <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ Incomplete</option>
+              <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ In Progress</option>
+              <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Completed</option>
+            </select>
+          </div>
+        </div>
+      `).join('');
+    }
+
     function prevProject() {
       const filtered = getFilteredProjects();
       if (filtered.length === 0) return;
       currentProjectIndex = (currentProjectIndex - 1 + filtered.length) % filtered.length;
-      renderProjectSelectView();
+      renderViews();
     }
 
     function nextProject() {
       const filtered = getFilteredProjects();
       if (filtered.length === 0) return;
       currentProjectIndex = (currentProjectIndex + 1) % filtered.length;
-      renderProjectSelectView();
+      renderViews();
     }
 
     function setProjectIndex(idx) {
       currentProjectIndex = idx;
-      renderProjectSelectView();
+      renderViews();
     }
 
     function handleStatusChange(id, newStatus) {
@@ -494,7 +556,6 @@
       const oldStatus = proj.status;
       proj.status = newStatus;
 
-      // Handle XP state changes
       if (oldStatus !== 'completed' && newStatus === 'completed') {
         gainXP(25);
       } else if (oldStatus === 'completed' && newStatus !== 'completed') {
@@ -502,7 +563,7 @@
       }
 
       saveStatuses();
-      renderProjectSelectView();
+      renderViews();
     }
 
     function filterCategory(cat) {
@@ -517,13 +578,13 @@
         }
       });
 
-      renderProjectSelectView();
+      renderViews();
     }
 
     function handleSearch() {
       searchQuery = document.getElementById('build-search-input').value;
       currentProjectIndex = 0;
-      renderProjectSelectView();
+      renderViews();
     }
 
     // --- MODAL HANDLERS ---
@@ -563,12 +624,12 @@
 
       buildProjects = loadAllProjects();
       loadSavedStatuses();
-      currentProjectIndex = getFilteredProjects().length - 1; // Jump to newly created project
-      renderProjectSelectView();
+      currentProjectIndex = getFilteredProjects().length - 1;
+      renderViews();
       closeModal();
     }
 
-    // Keyboard Arrow Navigation
+    // Keyboard Navigation
     document.addEventListener('keydown', (e) => {
       if (document.getElementById('add-modal').classList.contains('hidden')) {
         if (e.key === 'ArrowLeft') prevProject();
@@ -579,7 +640,7 @@
     // Initialize Page
     loadSavedStatuses();
     updateHUD();
-    renderProjectSelectView();
+    renderViews();
   </script>
 </body>
 </html>
