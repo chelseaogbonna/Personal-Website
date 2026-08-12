@@ -155,8 +155,8 @@
       <div class="grid md:grid-cols-3 gap-6">
         <!-- Compact Seamless Inventory Grid -->
         <div class="md:col-span-2 bg-white rounded-2xl border-2 border-black p-3 max-h-[480px] overflow-y-auto">
-          <div id="food-inventory-grid" class="flex flex-wrap gap-3">
-            <!-- Dynamic Food Item Cards -->
+          <div id="food-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+             <!-- Dynamic Food Item Cards -->
           </div>
         </div>
         
@@ -613,6 +613,7 @@
   }
 
   // --- RENDER FOOD CARDS ---
+// --- RENDER FOOD CARDS ---
   function renderFoodGrid() {
     const grid = document.getElementById('food-inventory-grid');
     if (!grid) return;
@@ -623,7 +624,7 @@
       const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
       return `
         <div onclick='selectGridIndex(${idx})' 
-             class="group cursor-pointer p-3 bg-white hover:bg-pink-50 transition-all flex items-center gap-3 rounded-2xl border-2 border-black pixel-shadow min-w-[200px] flex-1 sm:flex-initial ${isSelected ? 'bg-pink-100 ring-2 ring-pink-500 font-bold' : ''}">
+             class="group cursor-pointer p-3 bg-white hover:bg-pink-50 transition-all flex items-center gap-3 rounded-2xl border-2 border-black pixel-shadow w-full ${isSelected ? 'bg-pink-100 ring-2 ring-pink-500 font-bold' : ''}">
           
           <div class="w-12 h-12 rounded-xl border border-black overflow-hidden bg-pink-100 shrink-0">
             <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
