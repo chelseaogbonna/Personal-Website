@@ -96,22 +96,36 @@
         </div>
       </div>
 
-      <!-- Meal Unit Selection (Breakfast / Lunch / Dinner) -->
-      <div class="flex gap-2 mb-4">
-        <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
-          🍳 Breakfast
-        </button>
-        <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
-          🥗 Lunch
-        </button>
-        <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
-          🍜 Dinner
-        </button>
-        <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
-          🍰 Dessert
-        </button>
-      </div>
+      <!-- Meal Unit Selection + Live Search Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <!-- Tabs -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍳 Breakfast
+          </button>
+          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🥗 Lunch
+          </button>
+          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍜 Dinner
+          </button>
+          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍰 Dessert
+          </button>
+        </div>
 
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-64">
+          <input 
+            type="text" 
+            id="recipe-search-input"
+            oninput="handleSearchInput(this.value)"
+            placeholder="🔍 Search recipes..." 
+            class="w-full bg-white px-3 py-2 text-xs font-bold rounded-xl border-2 border-black pixel-shadow focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
+          />
+        </div>
+      </div>
+      
       <!-- Sub-Category Filter (All, Sandwiches, Bowls, Drinks) -->
       <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
         <!-- Dynamic Subcategory Pills -->
@@ -542,6 +556,57 @@
   let activeSelectedItem = null;
   let characterSelectIndex = 0;
   let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
+  let searchQuery = ''; // <-- ADD THIS LINE HERE
+
+  // --- ADD SEARCH STATE VARIABLE ---
+  let searchQuery = '';
+
+  // --- HANDLE LIVE SEARCH INPUT ---
+  function handleSearchInput(val) {
+    searchQuery = val.toLowerCase().trim();
+    characterSelectIndex = 0;
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
+
+  // --- UPDATE MEAL UNIT SELECTION (RESETS SEARCH IF DESIRED) ---
+  function selectMealUnit(unit) {
+    currentMealUnit = unit;
+    currentSubcategory = 'all';
+    characterSelectIndex = 0;
+    
+    document.querySelectorAll('.meal-unit-btn').forEach(btn => {
+      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+    });
+    const activeTab = document.getElementById(`tab-${unit}`);
+    if (activeTab) {
+      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+    }
+
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
+
+  // --- UPDATE FILTERING TO INCLUDE SEARCH QUERY ---
+  function getActiveCategoryList() {
+    let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+    
+    // Filter by subcategory
+    if (currentSubcategory !== 'all') {
+      list = list.filter(item => item.category === currentSubcategory);
+    }
+
+    // Filter by search term matching name or ingredients
+    if (searchQuery !== '') {
+      list = list.filter(item => 
+        item.name.toLowerCase().includes(searchQuery) ||
+        item.ingredients.some(ing => ing.toLowerCase().includes(searchQuery))
+      );
+    }
+
+    return list;
+  }
 
   function toggleSpinFilter(meal) {
     if (activeSpinFilters.includes(meal)) {
@@ -562,24 +627,13 @@
       }
     });
   }
-
-  function selectMealUnit(unit) {
-    currentMealUnit = unit;
-    currentSubcategory = 'all';
+  function handleSearchInput(val) {
+    searchQuery = val.toLowerCase().trim();
     characterSelectIndex = 0;
-    
-    document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
-    });
-    const activeTab = document.getElementById(`tab-${unit}`);
-    if (activeTab) {
-      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
-    }
-
-    renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
   }
+  
 
   function renderSubcategories() {
     const subcatBar = document.getElementById('subcategory-bar');
@@ -606,9 +660,20 @@
 
   function getActiveCategoryList() {
     let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+    
+    // Filter by subcategory
     if (currentSubcategory !== 'all') {
       list = list.filter(item => item.category === currentSubcategory);
     }
+
+    // Filter by search query (matches name or ingredients)
+    if (searchQuery !== '') {
+      list = list.filter(item => 
+        item.name.toLowerCase().includes(searchQuery) ||
+        item.ingredients.some(ing => ing.toLowerCase().includes(searchQuery))
+      );
+    }
+
     return list;
   }
 
