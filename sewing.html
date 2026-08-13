@@ -3,532 +3,628 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stitch Guild Project Log</title>
+  <title>Stitch Guild - Sewing Project & Stash Tracker</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
-    .pixel-shadow-md { box-shadow: 4px 4px 0px #000; }
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
   </style>
 </head>
-<body class="bg-emerald-100 min-h-screen p-4 md:p-8 font-sans antialiased text-slate-800">
+<bg-slate-100 text-slate-800 antialiased min-h-screen p-4 md:p-8">
 
-  <!-- TOP HUD HEADER -->
-  <header class="max-w-5xl mx-auto mb-6 bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-md flex flex-wrap items-center justify-between gap-4">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 bg-emerald-500 rounded-xl border-2 border-black flex items-center justify-center text-xl font-black text-white">
-        🧵
-      </div>
+  <!-- MAIN CONTAINER (Borders removed) -->
+  <div class="max-w-6xl mx-auto bg-emerald-50/60 rounded-3xl p-4 md:p-8 space-y-8">
+
+    <!-- HUD / HEADER -->
+    <header class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white p-6 rounded-2xl shadow-sm">
       <div>
-        <h1 class="font-extrabold text-lg text-slate-900 leading-tight">Stitch Guild Studio</h1>
-        <p class="text-xs font-bold text-slate-500">Pattern Log & Stash Tracker</p>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="text-2xl">🧵</span>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Stitch Guild</h1>
+        </div>
+        <p class="text-sm font-semibold text-slate-500">Tailored Projects & Stash Management</p>
       </div>
-    </div>
 
-    <!-- XP / LEVEL BADGE -->
-    <div class="flex items-center gap-3">
-      <div class="bg-yellow-300 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm flex items-center gap-2">
-        <span class="text-xs font-black uppercase">Level <span id="user-level">1</span></span>
-        <span class="text-[10px] bg-white px-2 py-0.5 rounded-md font-bold border border-black"><span id="user-xp">0</span> XP</span>
+      <!-- XP & LEVEL HUD -->
+      <div class="flex items-center gap-4 bg-emerald-50 px-4 py-2.5 rounded-xl">
+        <div class="text-right">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Guild Rank</div>
+          <div id="guild-level" class="text-sm font-extrabold text-emerald-950">Apprentice Tailor (Lvl 1)</div>
+        </div>
+        <div class="h-8 w-px bg-emerald-200"></div>
+        <div>
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Experience</div>
+          <div id="guild-xp" class="text-sm font-extrabold text-emerald-700">0 / 100 XP</div>
+        </div>
       </div>
-      <button onclick="generateSewingIdea()" class="bg-purple-300 hover:bg-purple-400 font-bold text-xs px-3 py-2 rounded-xl border-2 border-black pixel-shadow-sm transition-all">
-        💡 Quick Idea
-      </button>
-    </div>
-  </header>
+    </header>
 
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto space-y-6">
-
-    <!-- SEARCH & CATEGORY FILTERS -->
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-md flex flex-col md:flex-row gap-4 items-center justify-between">
-      <input 
-        type="text" 
-        id="sew-search-input" 
-        oninput="handleSearch()" 
-        placeholder="Search patterns or fabrics..." 
-        class="w-full md:w-64 px-3 py-2 border-2 border-black rounded-xl text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-400"
-      />
-      <div class="flex gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0">
-        <button onclick="filterCategory('all')" data-cat="all" class="cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-emerald-600 text-white pixel-shadow-sm transition-all shrink-0">All</button>
-        <button onclick="filterCategory('tops')" data-cat="tops" class="cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-white text-slate-800 pixel-shadow-sm transition-all shrink-0">Tops</button>
-        <button onclick="filterCategory('bottoms')" data-cat="bottoms" class="cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-white text-slate-800 pixel-shadow-sm transition-all shrink-0">Bottoms</button>
-        <button onclick="filterCategory('outerwear')" data-cat="outerwear" class="cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-white text-slate-800 pixel-shadow-sm transition-all shrink-0">Outerwear</button>
-        <button onclick="filterCategory('dresses')" data-cat="dresses" class="cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-white text-slate-800 pixel-shadow-sm transition-all shrink-0">Dresses</button>
-      </div>
-    </div>
-
-    <!-- TURNTABLE STAGE DISPLAY (OUTER WRAPPER REMOVED) -->
+    <!-- SEARCH & CATEGORY FILTER BAR -->
     <section class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="font-extrabold text-base text-slate-900">Featured Sewing Canvas</h2>
-        <button onclick="openModal('project')" class="bg-emerald-400 hover:bg-emerald-500 font-extrabold text-xs px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm transition-all">
-          + New Pattern
-        </button>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            id="sew-search-input" 
+            oninput="handleSearch()" 
+            placeholder="Search patterns, garments, or fabrics..." 
+            class="w-full bg-white text-slate-800 text-sm font-semibold px-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all shadow-sm"
+          />
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openModal('project')" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm whitespace-nowrap">
+            + New Project
+          </button>
+          <button onclick="openModal('supply')" class="px-4 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl transition-all shadow-sm whitespace-nowrap">
+            + Add Stash Item
+          </button>
+        </div>
       </div>
 
-      <div id="turntable-container" class="relative bg-emerald-50 border-2 border-black rounded-2xl p-4 min-h-[220px]">
-        <!-- Dynamic Turntable Rendered Here -->
-      </div>
-
-      <!-- TURNTABLE CONTROLS -->
-      <div class="flex items-center justify-between">
-        <button onclick="prevProject()" class="bg-white hover:bg-slate-100 font-black text-xs px-4 py-2 rounded-xl border-2 border-black pixel-shadow-sm">◀ Prev</button>
-        <div id="turntable-dots" class="flex gap-1.5"></div>
-        <button onclick="nextProject()" class="bg-white hover:bg-slate-100 font-black text-xs px-4 py-2 rounded-xl border-2 border-black pixel-shadow-sm">Next ▶</button>
+      <!-- Categories -->
+      <div id="category-filter-bar" class="flex items-center gap-2 overflow-x-auto pb-2">
+        <button onclick="filterCategory('all')" data-cat="all" class="cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white transition-all shrink-0">All Projects</button>
+        <button onclick="filterCategory('outerwear')" data-cat="outerwear" class="cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-slate-700 transition-all shrink-0">Outerwear</button>
+        <button onclick="filterCategory('tops')" data-cat="tops" class="cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-slate-700 transition-all shrink-0">Tops & Shirts</button>
+        <button onclick="filterCategory('bottoms')" data-cat="bottoms" class="cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-slate-700 transition-all shrink-0">Bottoms</button>
+        <button onclick="filterCategory('dresses')" data-cat="dresses" class="cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-slate-700 transition-all shrink-0">Dresses</button>
+        <button onclick="filterCategory('accessories')" data-cat="accessories" class="cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-slate-700 transition-all shrink-0">Accessories</button>
       </div>
     </section>
 
-    <!-- QUICK IDEA BANNER -->
-    <div class="bg-yellow-200 border-2 border-black rounded-2xl p-4 pixel-shadow-md flex items-center justify-between gap-4">
-      <div>
-        <span class="text-[10px] font-black uppercase text-yellow-900">Inspiration Spark</span>
-        <h3 class="font-bold text-sm text-slate-900"><span id="sew-garment">Tailored Unlined Blazer</span> in <span id="sew-fabric">Emerald Silk Satin</span></h3>
+    <!-- FEATURED CAROUSEL STAGE -->
+    <section id="turntable-container" class="bg-white rounded-2xl p-6 shadow-sm min-h-[220px] flex items-center justify-center">
+      <!-- Injected dynamically via JavaScript -->
+    </section>
+
+    <!-- ALL PROJECTS & STASH GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Project List (2 Cols) -->
+      <div class="lg:col-span-2 space-y-4">
+        <h3 class="font-extrabold text-lg text-slate-900 flex items-center gap-2">
+          <span>📋</span> Sewing Workbench
+        </h3>
+        <div id="projects-grid" class="space-y-3">
+          <!-- Injected dynamically -->
+        </div>
       </div>
-      <button onclick="generateSewingIdea()" class="bg-white hover:bg-yellow-100 font-bold text-xs px-3 py-1.5 rounded-xl border-2 border-black shrink-0">
-        Roll Again 🎲
-      </button>
+
+      <!-- Stash Inventory & Idea Generator (1 Col) -->
+      <div class="space-y-6">
+        
+        <!-- Random Idea Generator -->
+        <div class="bg-gradient-to-br from-yellow-100 to-amber-100 p-5 rounded-2xl shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-extrabold text-sm text-amber-950 flex items-center gap-1.5">
+              <span>💡</span> Spark Inspiration
+            </h4>
+            <button onclick="generateSewingIdea()" class="text-[11px] font-bold bg-amber-200 hover:bg-amber-300 text-amber-950 px-2.5 py-1 rounded-lg transition-all">
+              Roll Combo
+            </button>
+          </div>
+          <div class="space-y-1.5 text-xs font-semibold text-amber-900">
+            <div><span class="text-amber-700 font-bold">Garment:</span> <span id="sew-garment">Boxy Camp Shirt</span></div>
+            <div><span class="text-amber-700 font-bold">Fabric Match:</span> <span id="sew-fabric">Raw Selvedge Denim (3 Yds)</span></div>
+          </div>
+        </div>
+
+        <!-- Fabric & Notions Stash -->
+        <div class="bg-white p-5 rounded-2xl shadow-sm space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="font-extrabold text-base text-slate-900 flex items-center gap-2">
+              <span>📦</span> Stash Inventory
+            </h3>
+            <button onclick="openModal('supply')" class="text-xs font-bold text-emerald-600 hover:text-emerald-700">+ Add</button>
+          </div>
+
+          <div id="supplies-grid" class="grid grid-cols-1 gap-2.5">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- STASH INVENTORY SECTION -->
-    <section class="bg-white border-2 border-black rounded-2xl p-6 pixel-shadow-md">
-      <div class="flex items-center justify-between mb-4">
-        <h2 class="font-extrabold text-base text-slate-900">Fabric & Notions Stash</h2>
-        <button onclick="openModal('supply')" class="bg-yellow-300 hover:bg-yellow-400 font-extrabold text-xs px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm transition-all">
-          + Add Supply
-        </button>
-      </div>
-
-      <div id="supplies-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <!-- Dynamic Supplies List Rendered Here -->
-      </div>
-    </section>
-  </main>
+  </div>
 
   <!-- MODAL: ADD PROJECT -->
-  <div id="add-project-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white border-2 border-black rounded-2xl p-6 w-full max-w-md pixel-shadow-md space-y-4">
-      <h3 class="font-extrabold text-base text-slate-900">Add Sewing Pattern</h3>
-      <form id="new-project-form" onsubmit="handleAddProject(event)" class="space-y-3">
-        <input type="text" id="modal-title" placeholder="Pattern Title" required class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
+  <div id="add-project-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-lg text-slate-900">Add Sewing Project</h3>
+        <button onclick="closeModal('project')" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+      <form id="new-project-form" onsubmit="handleAddProject(event)" class="space-y-3 text-xs font-semibold">
+        <div>
+          <label class="block text-slate-600 mb-1">Project Title</label>
+          <input type="text" id="modal-title" required placeholder="e.g. Linen Camp Collar Shirt" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
         <div class="grid grid-cols-2 gap-2">
-          <select id="modal-category" class="px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold">
-            <option value="tops">Tops</option>
-            <option value="bottoms">Bottoms</option>
-            <option value="outerwear">Outerwear</option>
-            <option value="dresses">Dresses</option>
-          </select>
-          <select id="modal-difficulty" class="px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold">
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
+          <div>
+            <label class="block text-slate-600 mb-1">Category</label>
+            <select id="modal-category" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="tops">Tops & Shirts</option>
+              <option value="bottoms">Bottoms</option>
+              <option value="outerwear">Outerwear</option>
+              <option value="dresses">Dresses</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-600 mb-1">Difficulty</label>
+            <select id="modal-difficulty" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
         </div>
-        <input type="number" step="0.1" id="modal-yardage" placeholder="Yardage Required (e.g. 2.5)" required class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
-        <input type="url" id="modal-pattern-url" placeholder="Pattern URL (optional)" class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
-        <input type="url" id="modal-img" placeholder="Image URL (optional)" class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
-        <textarea id="modal-desc" placeholder="Brief project details..." class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold h-20"></textarea>
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('project')" class="px-4 py-1.5 font-bold text-xs border-2 border-black rounded-xl">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 font-extrabold text-xs bg-emerald-400 border-2 border-black rounded-xl">Save Pattern</button>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-600 mb-1">Yardage Required</label>
+            <input type="number" step="0.1" id="modal-yardage" placeholder="2.5" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label class="block text-slate-600 mb-1">Pattern URL</label>
+            <input type="url" id="modal-pattern-url" placeholder="https://..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
         </div>
+        <div>
+          <label class="block text-slate-600 mb-1">Image URL</label>
+          <input type="url" id="modal-img" placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div>
+          <label class="block text-slate-600 mb-1">Description / Notes</label>
+          <textarea id="modal-desc" rows="2" placeholder="Fabric choices, modifications..." class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+        </div>
+        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition-all shadow-sm mt-2">
+          Save Project
+        </button>
       </form>
     </div>
   </div>
 
   <!-- MODAL: ADD SUPPLY -->
-  <div id="add-supply-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-    <div class="bg-white border-2 border-black rounded-2xl p-6 w-full max-w-md pixel-shadow-md space-y-4">
-      <h3 class="font-extrabold text-base text-slate-900">Add Stash Supply</h3>
-      <form id="new-supply-form" onsubmit="handleAddSupply(event)" class="space-y-3">
-        <input type="text" id="supply-name" placeholder="Supply Name (e.g., Raw Linen)" required class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
+  <div id="add-supply-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-lg text-slate-900">Add Stash Item</h3>
+        <button onclick="closeModal('supply')" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+      <form id="new-supply-form" onsubmit="handleAddSupply(event)" class="space-y-3 text-xs font-semibold">
+        <div>
+          <label class="block text-slate-600 mb-1">Item Name</label>
+          <input type="text" id="supply-name" required placeholder="e.g. Japanese Indigo Selvedge" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
         <div class="grid grid-cols-2 gap-2">
-          <select id="supply-type" class="px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold">
-            <option value="Fabric">Fabric</option>
-            <option value="Notion">Notion</option>
-            <option value="Thread">Thread</option>
-          </select>
-          <input type="number" step="0.1" id="supply-amount" placeholder="Quantity" required class="px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
+          <div>
+            <label class="block text-slate-600 mb-1">Type</label>
+            <select id="supply-type" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option value="Fabric">Fabric</option>
+              <option value="Notion">Notion</option>
+              <option value="Thread">Thread</option>
+              <option value="Tool">Tool</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-slate-600 mb-1">Amount</label>
+            <input type="text" id="supply-amount" required placeholder="e.g. 3.5" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
         </div>
-        <input type="text" id="supply-details" placeholder="Details (e.g., 54&quot; Wide, Dusty Rose)" class="w-full px-3 py-1.5 border-2 border-black rounded-xl text-xs font-bold" />
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('supply')" class="px-4 py-1.5 font-bold text-xs border-2 border-black rounded-xl">Cancel</button>
-          <button type="submit" class="px-4 py-1.5 font-extrabold text-xs bg-yellow-300 border-2 border-black rounded-xl">Save Supply</button>
+        <div>
+          <label class="block text-slate-600 mb-1">Details / Notes</label>
+          <input type="text" id="supply-details" placeholder="100% Cotton, 12oz weight" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
         </div>
+        <button type="submit" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all shadow-sm mt-2">
+          Add to Stash
+        </button>
       </form>
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // Initial Seed Data
-    const defaultProjects = [
-      {
-        id: 'sew_1',
-        title: 'Pleated High-Waist Trousers',
-        category: 'bottoms',
-        difficulty: 'Intermediate',
-        yardage: 2.5,
-        patternUrl: '#',
-        img: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400&auto=format&fit=crop&q=80',
-        description: 'Double-pleated waist with deep slash pockets and tab closure.',
-        status: 'incomplete'
-      },
-      {
-        id: 'sew_2',
-        title: 'Boxy Camp-Collar Shirt',
-        category: 'tops',
-        difficulty: 'Beginner',
-        yardage: 1.8,
-        patternUrl: '#',
-        img: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400&auto=format&fit=crop&q=80',
-        description: 'Relaxed fit camp collar using vintage textured linen.',
-        status: 'in-progress'
-      }
-    ];
-
-    const defaultSupplies = [
-      { id: 'sup_1', name: 'Raw Selvedge Denim', type: 'Fabric', amount: 4.5, unit: 'Yards', details: '14oz indigo stiff twill' },
-      { id: 'sup_2', name: 'Brass Jean Buttons', type: 'Notion', amount: 12, unit: 'Pcs', details: '17mm tack buttons' }
-    ];
-
-    // State Variables
-    let userXP = parseInt(localStorage.getItem('stitchGuildXP')) || 0;
-    let currentCategory = 'all';
-    let searchQuery = '';
-    let currentProjectIndex = 0;
-
-    let sewingProjects = loadAllProjects();
-    let stashSupplies = JSON.parse(localStorage.getItem('stitchGuildSupplies')) || defaultSupplies;
-
-    // Local Storage Helpers
-    function loadAllProjects() {
-      const custom = JSON.parse(localStorage.getItem('stitchGuildCustomProjects')) || [];
-      return [...defaultProjects, ...custom];
+  // --- INITIAL STATE & SEED DATA ---
+  const defaultProjects = [
+    {
+      id: 'sew_1',
+      title: 'Pleated Wide-Leg Trousers',
+      category: 'bottoms',
+      difficulty: 'Intermediate',
+      yardage: 2.5,
+      patternUrl: '',
+      img: 'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=500&auto=format&fit=crop&q=80',
+      description: 'High-waisted tailored trousers featuring front pleats and deep slash pockets.',
+      status: 'incomplete'
+    },
+    {
+      id: 'sew_2',
+      title: 'Camp Collar Linen Shirt',
+      category: 'tops',
+      difficulty: 'Beginner',
+      yardage: 2.0,
+      patternUrl: '',
+      img: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=500&auto=format&fit=crop&q=80',
+      description: 'Relaxed fit summer shirt with a open camp collar and French seams.',
+      status: 'in-progress'
+    },
+    {
+      id: 'sew_3',
+      title: 'Double-Breasted Wool Vest',
+      category: 'outerwear',
+      difficulty: 'Advanced',
+      yardage: 1.5,
+      patternUrl: '',
+      img: 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&auto=format&fit=crop&q=80',
+      description: 'Structured tailored waistcoat with welt pockets and a satin back-lining.',
+      status: 'completed'
     }
+  ];
 
-    function loadSavedStatuses() {
-      const statuses = JSON.parse(localStorage.getItem('stitchGuildStatuses')) || {};
+  const defaultSupplies = [
+    { id: 'sup_1', name: 'Raw Selvedge Denim', type: 'Fabric', amount: 4.5, unit: 'Yards', details: '14oz Heavyweight, Dark Indigo' },
+    { id: 'sup_2', name: 'Washer Linen', type: 'Fabric', amount: 3.0, unit: 'Yards', details: 'Oatmeal, 100% Flax' },
+    { id: 'sup_3', name: 'Horn Buttons (20mm)', type: 'Notion', amount: 12, unit: 'Pcs', details: 'Natural Dark Brown' }
+  ];
+
+  let currentCategory = 'all';
+  let searchQuery = '';
+  let currentProjectIndex = 0;
+  let userXP = parseInt(localStorage.getItem('stitchGuildXP')) || 0;
+
+  function loadAllProjects() {
+    const custom = JSON.parse(localStorage.getItem('stitchGuildCustomProjects')) || [];
+    return [...defaultProjects, ...custom];
+  }
+
+  let sewingProjects = loadAllProjects();
+  let stashSupplies = JSON.parse(localStorage.getItem('stitchGuildSupplies')) || defaultSupplies;
+
+  function saveSupplies() {
+    localStorage.setItem('stitchGuildSupplies', JSON.stringify(stashSupplies));
+  }
+
+  function saveStatuses() {
+    const statusMap = {};
+    sewingProjects.forEach(p => statusMap[p.id] = p.status);
+    localStorage.setItem('stitchGuildStatuses', JSON.stringify(statusMap));
+  }
+
+  function loadSavedStatuses() {
+    const saved = JSON.parse(localStorage.getItem('stitchGuildStatuses'));
+    if (saved) {
       sewingProjects.forEach(p => {
-        if (statuses[p.id]) p.status = statuses[p.id];
+        if (saved[p.id]) p.status = saved[p.id];
       });
     }
+  }
 
-    function saveStatuses() {
-      const map = {};
-      sewingProjects.forEach(p => map[p.id] = p.status);
-      localStorage.setItem('stitchGuildStatuses', JSON.stringify(map));
+  // --- HUD & GAMIFICATION LOGIC ---
+  function updateHUD() {
+    const level = Math.floor(userXP / 100) + 1;
+    const titles = ['Novice Stitcher', 'Apprentice Tailor', 'Journeyman Seamster', 'Master Patternmaker', 'Guild Grandmaster'];
+    const title = titles[Math.min(level - 1, titles.length - 1)];
+
+    document.getElementById('guild-level').innerText = `${title} (Lvl ${level})`;
+    document.getElementById('guild-xp').innerText = `${userXP % 100} / 100 XP`;
+    localStorage.setItem('stitchGuildXP', userXP);
+  }
+
+  function gainXP(amount) {
+    userXP += amount;
+    updateHUD();
+  }
+
+  function revokeXP(amount) {
+    userXP = Math.max(0, userXP - amount);
+    updateHUD();
+  }
+
+  // --- FILTERING & STYLING HELPER FUNCTIONS ---
+  function getFilteredProjects() {
+    return sewingProjects.filter(p => {
+      const matchCat = currentCategory === 'all' || p.category === currentCategory;
+      const matchSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          p.description.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchCat && matchSearch;
+    });
+  }
+
+  function getDifficultyBadge(diff) {
+    if (diff === 'Beginner') return 'bg-emerald-100 text-emerald-800';
+    if (diff === 'Intermediate') return 'bg-amber-100 text-amber-800';
+    return 'bg-rose-100 text-rose-800';
+  }
+
+  function getCategoryLabel(cat) {
+    const map = { tops: 'Tops', bottoms: 'Bottoms', outerwear: 'Outerwear', dresses: 'Dresses', accessories: 'Accessories' };
+    return map[cat] || cat;
+  }
+
+  function getStatusStyles(status) {
+    if (status === 'completed') return 'bg-emerald-100 text-emerald-900 border-emerald-300';
+    if (status === 'in-progress') return 'bg-amber-100 text-amber-900 border-amber-300';
+    return 'bg-slate-100 text-slate-700 border-slate-300';
+  }
+
+  // --- RENDERING FUNCTIONS ---
+  function renderViews() {
+    const filtered = getFilteredProjects();
+    renderTurntableStage(filtered);
+    renderProjectsList(filtered);
+    renderSuppliesList();
+  }
+
+  // 1. RENDER FEATURED CAROUSEL STAGE
+  function renderTurntableStage(filtered) {
+    const stage = document.getElementById('turntable-container');
+    if (filtered.length === 0) {
+      stage.innerHTML = `<div class="text-xs font-bold text-slate-400">No projects matching criteria.</div>`;
+      return;
     }
 
-    function saveSupplies() {
-      localStorage.setItem('stitchGuildSupplies', JSON.stringify(stashSupplies));
-    }
+    if (currentProjectIndex >= filtered.length) currentProjectIndex = 0;
+    const p = filtered[currentProjectIndex];
 
-    function updateHUD() {
-      document.getElementById('user-xp').innerText = userXP;
-      document.getElementById('user-level').innerText = Math.floor(userXP / 100) + 1;
-      localStorage.setItem('stitchGuildXP', userXP.toString());
-    }
-
-    function gainXP(amt) {
-      userXP += amt;
-      updateHUD();
-    }
-
-    function revokeXP(amt) {
-      userXP = Math.max(0, userXP - amt);
-      updateHUD();
-    }
-
-    // Filter Logic
-    function getFilteredProjects() {
-      return sewingProjects.filter(p => {
-        const matchesCategory = currentCategory === 'all' || p.category === currentCategory;
-        const matchesSearch = p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              p.description.toLowerCase().includes(searchQuery.toLowerCase());
-        return matchesCategory && matchesSearch;
-      });
-    }
-
-    // Badge Helpers
-    function getDifficultyBadge(diff) {
-      if (diff === 'Beginner') return 'bg-sky-100 text-sky-900';
-      if (diff === 'Intermediate') return 'bg-amber-100 text-amber-900';
-      return 'bg-rose-100 text-rose-900';
-    }
-
-    function getCategoryLabel(cat) {
-      return cat.charAt(0).toUpperCase() + cat.slice(1);
-    }
-
-    function getStatusStyles(status) {
-      if (status === 'completed') return 'bg-emerald-100 border-emerald-500 text-emerald-950';
-      if (status === 'in-progress') return 'bg-amber-100 border-amber-500 text-amber-950';
-      return 'bg-white border-black text-slate-800';
-    }
-
-    // Render Routines
-    function renderViews() {
-      const filtered = getFilteredProjects();
-      renderTurntableStage(filtered);
-      renderSuppliesList();
-    }
-
-    function renderTurntableStage(list) {
-      const container = document.getElementById('turntable-container');
-      const dotsContainer = document.getElementById('turntable-dots');
-
-      if (list.length === 0) {
-        container.innerHTML = `
-          <div class="py-12 text-center text-slate-400 font-bold text-xs">
-            No patterns match your filter criteria.
+    stage.innerHTML = `
+      <div class="flex flex-col md:flex-row items-center gap-6 w-full">
+        <img src="${p.img}" alt="${p.title}" class="w-full md:w-48 h-48 object-cover rounded-xl shadow-sm shrink-0">
+        <div class="flex-1 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded uppercase ${getDifficultyBadge(p.difficulty)}">${p.difficulty}</span>
+            <span class="text-xs font-bold text-slate-400">Project ${currentProjectIndex + 1} of ${filtered.length}</span>
           </div>
-        `;
-        dotsContainer.innerHTML = '';
-        return;
-      }
-
-      if (currentProjectIndex >= list.length) currentProjectIndex = 0;
-      const p = list[currentProjectIndex];
-
-      container.innerHTML = `
-        <div class="flex flex-col md:flex-row items-center gap-6">
-          <img src="${p.img}" alt="${p.title}" class="w-full md:w-48 h-48 object-cover rounded-xl border-2 border-black pixel-shadow-sm shrink-0" />
-          <div class="flex-1 min-w-0 w-full">
-            <div class="flex items-center gap-1.5 mb-1 flex-wrap">
-              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
-                ${p.difficulty}
-              </span>
-              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black bg-emerald-100 text-emerald-900 uppercase">
-                ${getCategoryLabel(p.category)}
-              </span>
-            </div>
-
-            <h4 class="font-extrabold text-base text-slate-900 truncate mb-1">${p.title}</h4>
-            <p class="text-xs text-slate-600 line-clamp-2 mb-2 leading-relaxed">${p.description}</p>
-
-            <select 
-              onchange="handleStatusChange('${p.id}', this.value)" 
-              class="w-full font-bold text-xs py-1.5 px-2.5 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
-            >
-              <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ To Stitch</option>
-              <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ On Cutting Table</option>
-              <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Finished Tailored Piece</option>
-            </select>
+          <h2 class="text-xl font-extrabold text-slate-900">${p.title}</h2>
+          <p class="text-xs text-slate-600 line-clamp-2">${p.description}</p>
+          <div class="text-xs font-semibold text-slate-500">Fabric Required: <span class="font-bold text-emerald-700">${p.yardage} Yds</span></div>
+          <div class="flex items-center gap-2 pt-2">
+            <button onclick="prevProject()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition-all">← Prev</button>
+            <button onclick="nextProject()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-lg transition-all">Next →</button>
           </div>
         </div>
-      `;
+      </div>
+    `;
+  }
 
-      dotsContainer.innerHTML = list.map((_, idx) => `
-        <button 
-          onclick="setProjectIndex(${idx})" 
-          class="w-2.5 h-2.5 rounded-full border border-black transition-all ${idx === currentProjectIndex ? 'bg-black w-5' : 'bg-white'}"
-        ></button>
-      `).join('');
+  // 2. RENDER WORKBENCH PROJECTS LIST
+  function renderProjectsList(filtered) {
+    const container = document.getElementById('projects-grid');
+    if (filtered.length === 0) {
+      container.innerHTML = `<div class="p-6 bg-white rounded-2xl text-center text-xs font-bold text-slate-400">No projects found.</div>`;
+      return;
     }
 
-    function renderSuppliesList() {
-      const container = document.getElementById('supplies-grid');
-
-      if (stashSupplies.length === 0) {
-        container.innerHTML = `
-          <div class="col-span-full py-6 text-center text-slate-400 font-bold text-xs">
-            No items in stash yet.
+    container.innerHTML = filtered.map(p => `
+      <div class="p-4 bg-white rounded-2xl shadow-sm flex items-start gap-4">
+        <img src="${p.img}" alt="${p.title}" class="w-20 h-20 rounded-xl object-cover shrink-0">
+        <div class="flex-1 min-w-0 w-full">
+          <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+            <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded uppercase ${getDifficultyBadge(p.difficulty)}">
+              ${p.difficulty}
+            </span>
+            <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 uppercase">
+              ${getCategoryLabel(p.category)}
+            </span>
           </div>
-        `;
-        return;
-      }
 
-      container.innerHTML = stashSupplies.map(s => `
-        <div class="p-3 bg-emerald-50 rounded-2xl border-2 border-black pixel-shadow-sm flex flex-col justify-between">
-          <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black bg-white text-slate-800">
-                ${s.type}
-              </span>
-              <span class="text-xs font-black text-emerald-900 bg-yellow-300 px-2 py-0.5 rounded-md border border-black">
-                ${s.amount} ${s.unit}
-              </span>
-            </div>
-            <span class="font-extrabold text-sm text-slate-900 block truncate">${s.name}</span>
-            <span class="text-xs text-slate-600 block mt-0.5">${s.details}</span>
-          </div>
+          <h4 class="font-extrabold text-base text-slate-900 truncate mb-1">${p.title}</h4>
+          <p class="text-xs text-slate-600 line-clamp-2 mb-2 leading-relaxed">${p.description}</p>
+
+          <select 
+            onchange="handleStatusChange('${p.id}', this.value)" 
+            class="w-full font-bold text-xs py-1.5 px-2.5 rounded-xl cursor-pointer focus:outline-none transition-all ${getStatusStyles(p.status)}"
+          >
+            <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ To Stitch</option>
+            <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ On Cutting Table</option>
+            <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Finished Tailored Piece</option>
+          </select>
         </div>
-      `).join('');
+      </div>
+    `).join('');
+  }
+
+  // 3. RENDER STASH INVENTORY
+  function renderSuppliesList() {
+    const container = document.getElementById('supplies-grid');
+    if (stashSupplies.length === 0) {
+      container.innerHTML = `<div class="text-xs font-semibold text-slate-400 text-center py-2">Stash is empty.</div>`;
+      return;
     }
 
-    // Deduct Yardage Logic
-    function deductYardageFromStash(requiredYards, projectTitle) {
-      const fabricItem = stashSupplies.find(s => s.type === 'Fabric' && parseFloat(s.amount) > 0);
+    container.innerHTML = stashSupplies.map(s => `
+      <div class="p-3 bg-emerald-50/70 rounded-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white text-slate-800">
+              ${s.type}
+            </span>
+            <span class="text-xs font-black text-emerald-900 bg-yellow-300 px-2 py-0.5 rounded-md">
+              ${s.amount} ${s.unit}
+            </span>
+          </div>
+          <span class="font-extrabold text-sm text-slate-900 block truncate">${s.name}</span>
+          <span class="text-xs text-slate-600 block mt-0.5">${s.details}</span>
+        </div>
+      </div>
+    `).join('');
+  }
 
-      if (fabricItem) {
-        const currentAmt = parseFloat(fabricItem.amount);
-        const newAmt = Math.max(0, currentAmt - requiredYards);
-        fabricItem.amount = parseFloat(newAmt.toFixed(1));
-        saveSupplies();
-        alert(`✂️ Deducted ${requiredYards} Yds from "${fabricItem.name}" for ${projectTitle}! Remaining: ${fabricItem.amount} Yds`);
-      }
-    }
+  // --- AUTOMATIC YARDAGE DEDUCTION LOGIC ---
+  function deductYardageFromStash(requiredYards, projectTitle) {
+    const fabricItem = stashSupplies.find(s => s.type === 'Fabric' && parseFloat(s.amount) > 0);
 
-    // Handlers
-    function prevProject() {
-      const filtered = getFilteredProjects();
-      if (filtered.length === 0) return;
-      currentProjectIndex = (currentProjectIndex - 1 + filtered.length) % filtered.length;
-      renderViews();
-    }
-
-    function nextProject() {
-      const filtered = getFilteredProjects();
-      if (filtered.length === 0) return;
-      currentProjectIndex = (currentProjectIndex + 1) % filtered.length;
-      renderViews();
-    }
-
-    function setProjectIndex(idx) {
-      currentProjectIndex = idx;
-      renderViews();
-    }
-
-    function handleStatusChange(id, newStatus) {
-      const proj = sewingProjects.find(p => p.id === id);
-      if (!proj) return;
-
-      const oldStatus = proj.status;
-      proj.status = newStatus;
-
-      if (oldStatus !== 'completed' && newStatus === 'completed') {
-        gainXP(25);
-        deductYardageFromStash(proj.yardage, proj.title);
-      } else if (oldStatus === 'completed' && newStatus !== 'completed') {
-        revokeXP(25);
-      }
-
-      saveStatuses();
-      renderViews();
-    }
-
-    function filterCategory(cat) {
-      currentCategory = cat;
-      currentProjectIndex = 0;
-
-      document.querySelectorAll('.cat-btn').forEach(btn => {
-        if (btn.getAttribute('data-cat') === cat) {
-          btn.className = 'cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-emerald-600 text-white pixel-shadow-sm transition-all shrink-0';
-        } else {
-          btn.className = 'cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-white text-slate-800 pixel-shadow-sm transition-all shrink-0';
-        }
-      });
-
-      renderViews();
-    }
-
-    function handleSearch() {
-      searchQuery = document.getElementById('sew-search-input').value;
-      currentProjectIndex = 0;
-      renderViews();
-    }
-
-    const garmentIdeas = ["Boxy Camp Shirt", "Pleated Wide Pants", "High-Neck Corset", "Double-Breasted Tux Vest", "Dramatic Capelet", "Slip Midi Dress"];
-    const fabricIdeas = ["Gingham Linen (2.5 Yds)", "Raw Selvedge Denim (3 Yds)", "Stretch Ribbed Velvet (2 Yds)", "Floral Tapestry Cotton", "Metallic Holographic Vinyl"];
-
-    function generateSewingIdea() {
-      document.getElementById('sew-garment').innerText = garmentIdeas[Math.floor(Math.random() * garmentIdeas.length)];
-      document.getElementById('sew-fabric').innerText = fabricIdeas[Math.floor(Math.random() * fabricIdeas.length)];
-      gainXP(10);
-    }
-
-    function openModal(type) {
-      if (type === 'project') document.getElementById('add-project-modal').classList.remove('hidden');
-      if (type === 'supply') document.getElementById('add-supply-modal').classList.remove('hidden');
-    }
-
-    function closeModal(type) {
-      if (type === 'project') {
-        document.getElementById('add-project-modal').classList.add('hidden');
-        document.getElementById('new-project-form').reset();
-      }
-      if (type === 'supply') {
-        document.getElementById('add-supply-modal').classList.add('hidden');
-        document.getElementById('new-supply-form').reset();
-      }
-    }
-
-    function handleAddProject(e) {
-      e.preventDefault();
-
-      const title = document.getElementById('modal-title').value;
-      const category = document.getElementById('modal-category').value;
-      const difficulty = document.getElementById('modal-difficulty').value;
-      const yardage = parseFloat(document.getElementById('modal-yardage').value) || 2.0;
-      const patternUrl = document.getElementById('modal-pattern-url').value;
-      const imgInput = document.getElementById('modal-img').value;
-      const description = document.getElementById('modal-desc').value;
-
-      const defaultPlaceholder = 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=400&auto=format&fit=crop&q=80';
-
-      const newProj = {
-        id: 'sew_custom_' + Date.now(),
-        title: title,
-        category: category,
-        difficulty: difficulty,
-        yardage: yardage,
-        patternUrl: patternUrl,
-        img: imgInput.trim() !== '' ? imgInput : defaultPlaceholder,
-        description: description,
-        status: 'incomplete'
-      };
-
-      const savedCustom = JSON.parse(localStorage.getItem('stitchGuildCustomProjects')) || [];
-      savedCustom.push(newProj);
-      localStorage.setItem('stitchGuildCustomProjects', JSON.stringify(savedCustom));
-
-      sewingProjects = loadAllProjects();
-      loadSavedStatuses();
-      currentProjectIndex = getFilteredProjects().length - 1;
-      renderViews();
-      closeModal('project');
-    }
-
-    function handleAddSupply(e) {
-      e.preventDefault();
-
-      const name = document.getElementById('supply-name').value;
-      const type = document.getElementById('supply-type').value;
-      const rawAmount = document.getElementById('supply-amount').value;
-      const details = document.getElementById('supply-details').value;
-
-      const parsedNum = parseFloat(rawAmount) || 1.0;
-      const unit = type === 'Fabric' ? 'Yards' : 'Pcs';
-
-      const newSup = {
-        id: 'sup_custom_' + Date.now(),
-        name: name,
-        type: type,
-        amount: parsedNum,
-        unit: unit,
-        details: details
-      };
-
-      stashSupplies.push(newSup);
+    if (fabricItem) {
+      const currentAmt = parseFloat(fabricItem.amount);
+      const newAmt = Math.max(0, currentAmt - requiredYards);
+      fabricItem.amount = parseFloat(newAmt.toFixed(1));
       saveSupplies();
+      alert(`✂️ Deducted ${requiredYards} Yds from "${fabricItem.name}" for ${projectTitle}! Remaining: ${fabricItem.amount} Yds`);
+    }
+  }
 
-      renderSuppliesList();
-      closeModal('supply');
+  function prevProject() {
+    const filtered = getFilteredProjects();
+    if (filtered.length === 0) return;
+    currentProjectIndex = (currentProjectIndex - 1 + filtered.length) % filtered.length;
+    renderViews();
+  }
+
+  function nextProject() {
+    const filtered = getFilteredProjects();
+    if (filtered.length === 0) return;
+    currentProjectIndex = (currentProjectIndex + 1) % filtered.length;
+    renderViews();
+  }
+
+  function setProjectIndex(idx) {
+    currentProjectIndex = idx;
+    renderViews();
+  }
+
+  function handleStatusChange(id, newStatus) {
+    const proj = sewingProjects.find(p => p.id === id);
+    if (!proj) return;
+
+    const oldStatus = proj.status;
+    proj.status = newStatus;
+
+    if (oldStatus !== 'completed' && newStatus === 'completed') {
+      gainXP(25);
+      deductYardageFromStash(proj.yardage, proj.title);
+    } else if (oldStatus === 'completed' && newStatus !== 'completed') {
+      revokeXP(25);
     }
 
-    // Keyboard Arrow Navigation
-    document.addEventListener('keydown', (e) => {
-      if (document.getElementById('add-project-modal').classList.contains('hidden') && 
-          document.getElementById('add-supply-modal').classList.contains('hidden')) {
-        if (e.key === 'ArrowLeft') prevProject();
-        if (e.key === 'ArrowRight') nextProject();
+    saveStatuses();
+    renderViews();
+  }
+
+  function filterCategory(cat) {
+    currentCategory = cat;
+    currentProjectIndex = 0;
+    
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+      if (btn.getAttribute('data-cat') === cat) {
+        btn.className = 'cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-emerald-600 text-white transition-all shrink-0';
+      } else {
+        btn.className = 'cat-btn px-3.5 py-2 text-xs font-bold rounded-xl bg-white text-slate-700 transition-all shrink-0';
       }
     });
 
-    // Initialize Page
-    loadSavedStatuses();
-    updateHUD();
     renderViews();
+  }
+
+  function handleSearch() {
+    searchQuery = document.getElementById('sew-search-input').value;
+    currentProjectIndex = 0;
+    renderViews();
+  }
+
+  // --- RANDOM IDEA GENERATOR ---
+  const garmentIdeas = ["Boxy Camp Shirt", "Pleated Wide Pants", "High-Neck Corset", "Double-Breasted Tux Vest", "Dramatic Capelet", "Slip Midi Dress"];
+  const fabricIdeas = ["Gingham Linen (2.5 Yds)", "Raw Selvedge Denim (3 Yds)", "Stretch Ribbed Velvet (2 Yds)", "Floral Tapestry Cotton", "Metallic Holographic Vinyl"];
+
+  function generateSewingIdea() {
+    document.getElementById('sew-garment').innerText = garmentIdeas[Math.floor(Math.random() * garmentIdeas.length)];
+    document.getElementById('sew-fabric').innerText = fabricIdeas[Math.floor(Math.random() * fabricIdeas.length)];
+    gainXP(10);
+  }
+
+  // --- MODAL HANDLERS ---
+  function openModal(type) {
+    if (type === 'project') document.getElementById('add-project-modal').classList.remove('hidden');
+    if (type === 'supply') document.getElementById('add-supply-modal').classList.remove('hidden');
+  }
+
+  function closeModal(type) {
+    if (type === 'project') {
+      document.getElementById('add-project-modal').classList.add('hidden');
+      document.getElementById('new-project-form').reset();
+    }
+    if (type === 'supply') {
+      document.getElementById('add-supply-modal').classList.add('hidden');
+      document.getElementById('new-supply-form').reset();
+    }
+  }
+
+  function handleAddProject(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('modal-title').value;
+    const category = document.getElementById('modal-category').value;
+    const difficulty = document.getElementById('modal-difficulty').value;
+    const yardage = parseFloat(document.getElementById('modal-yardage').value) || 2.0;
+    const patternUrl = document.getElementById('modal-pattern-url').value;
+    const imgInput = document.getElementById('modal-img').value;
+    const description = document.getElementById('modal-desc').value;
+
+    const defaultPlaceholder = 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=400&auto=format&fit=crop&q=80';
+
+    const newProj = {
+      id: 'sew_custom_' + Date.now(),
+      title: title,
+      category: category,
+      difficulty: difficulty,
+      yardage: yardage,
+      patternUrl: patternUrl,
+      img: imgInput.trim() !== '' ? imgInput : defaultPlaceholder,
+      description: description,
+      status: 'incomplete'
+    };
+
+    const savedCustom = JSON.parse(localStorage.getItem('stitchGuildCustomProjects')) || [];
+    savedCustom.push(newProj);
+    localStorage.setItem('stitchGuildCustomProjects', JSON.stringify(savedCustom));
+
+    sewingProjects = loadAllProjects();
+    loadSavedStatuses();
+    currentProjectIndex = getFilteredProjects().length - 1;
+    renderViews();
+    closeModal('project');
+  }
+
+  function handleAddSupply(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('supply-name').value;
+    const type = document.getElementById('supply-type').value;
+    const rawAmount = document.getElementById('supply-amount').value;
+    const details = document.getElementById('supply-details').value;
+
+    const parsedNum = parseFloat(rawAmount) || 1.0;
+    const unit = type === 'Fabric' ? 'Yards' : 'Pcs';
+
+    const newSup = {
+      id: 'sup_custom_' + Date.now(),
+      name: name,
+      type: type,
+      amount: parsedNum,
+      unit: unit,
+      details: details
+    };
+
+    stashSupplies.push(newSup);
+    saveSupplies();
+
+    renderSuppliesList();
+    closeModal('supply');
+  }
+
+  // Keyboard Arrow Navigation
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('add-project-modal').classList.contains('hidden') && 
+        document.getElementById('add-supply-modal').classList.contains('hidden')) {
+      if (e.key === 'ArrowLeft') prevProject();
+      if (e.key === 'ArrowRight') nextProject();
+    }
+  });
+
+  // Initialize Page
+  loadSavedStatuses();
+  updateHUD();
+  renderViews();
   </script>
 </body>
 </html>
