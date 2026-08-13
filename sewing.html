@@ -61,28 +61,36 @@
   <main class="max-w-5xl mx-auto px-4 space-y-6">
 
     <!-- SEWING GUILD SECTION -->
-    <section id="page-sewing" class="bg-emerald-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      
+    <section id="page-sewing" class="space-y-6">
+  
       <!-- Header Bar -->
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 class="text-2xl font-bold text-emerald-950 flex items-center gap-2">
-            🪡 Stitch Guild Sewing Projects
-          </h2>
-          <p class="text-xs text-emerald-900 font-semibold mt-0.5">Manage garment patterns, track fabric stashes, and log finished pieces.</p>
-        </div>
-        <div class="flex items-center gap-2 self-start md:self-auto">
-          <button onclick="openModal('project')" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all whitespace-nowrap active:translate-y-0.5">
-            ➕ New Pattern
-          </button>
-          <span class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl border-2 border-black font-bold text-xs pixel-shadow-sm">
-            ⭐ +25 XP per tailored piece
-          </span>
+      <div class="bg-emerald-200 border-4 border-black rounded-3xl p-5 pixel-shadow-lg">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-emerald-950 flex items-center gap-2">
+              🪡 Stitch Guild Sewing Projects
+            </h2>
+            <p class="text-xs text-emerald-900 font-semibold mt-0.5">
+              Manage garment patterns, track fabric stashes, and log finished pieces.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 self-start md:self-auto">
+            <button onclick="openModal('project')" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all whitespace-nowrap active:translate-y-0.5">
+              ➕ New Pattern
+            </button>
+
+            <span class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl border-2 border-black font-bold text-xs pixel-shadow-sm">
+              ⭐ +25 XP per tailored piece
+            </span>
+          </div>
         </div>
       </div>
+      
+
 
       <!-- Quick Sewing Idea Generator -->
-      <div class="bg-white p-4 rounded-2xl border-3 border-black pixel-shadow mb-6">
+      <div class="bg-white p-4 rounded-2xl border-4 border-black pixel-shadow">
         <div class="flex items-center justify-between mb-2">
           <h3 class="font-extrabold text-xs text-emerald-900 uppercase tracking-wider flex items-center gap-1.5">
             <span>🎲</span> Quick Pattern & Fabric Combo Generator
@@ -100,7 +108,7 @@
       </div>
 
       <!-- Filters & Search Bar -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         
         <!-- Category Filter Buttons -->
         <div id="category-filter-bar" class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
@@ -175,8 +183,8 @@
       </div>
 
       <!-- 2. FULL SEWING PROJECTS GRID -->
-      <div class="mb-8">
-        <div class="flex items-center justify-between mb-4">
+      <div class="bg-white p-5 rounded-3xl border-4 border-black pixel-shadow">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-slate-100">
           <h3 class="text-lg font-bold text-emerald-950 flex items-center gap-2">
             🧵 Pattern Catalogue (<span id="project-count">0</span>)
           </h3>
