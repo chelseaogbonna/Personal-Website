@@ -309,25 +309,34 @@
           : `<span class="text-4xl">${item.image || '💅'}</span>`;
 
         grid.innerHTML += `
-          <div class="bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
+          <div class="bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between group">
             <div>
               <div class="h-36 bg-rose-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center overflow-hidden relative">
                 ${imgContent}
+                
+                <!-- INCONSPICUOUS TINY ACTION BUTTONS OVERLAY -->
+                <div class="absolute top-2 left-2 flex gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                  <button onclick="openEditModal(${item.id})" title="Edit set" class="bg-white/90 hover:bg-amber-200 text-[10px] w-6 h-6 rounded-md border border-black flex items-center justify-center font-bold shadow-xs">
+                    ✏️
+                  </button>
+                  <button onclick="deleteNailSet(${item.id})" title="Delete set" class="bg-white/90 hover:bg-rose-300 text-[10px] w-6 h-6 rounded-md border border-black flex items-center justify-center font-bold shadow-xs">
+                    🗑️
+                  </button>
+                </div>
+
                 <span class="absolute top-2 right-2 bg-rose-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">${item.status}</span>
               </div>
+              
               <span class="text-[10px] bg-rose-200 text-black px-2 py-0.5 rounded-md border border-black font-bold uppercase">${item.shape || 'Nail Set'}</span>
               <h3 class="font-bold text-lg mt-1 text-rose-950">${item.title}</h3>
               <p class="text-xs text-slate-600 mt-1">${item.desc}</p>
             </div>
-            <div class="mt-4 pt-2 border-t border-rose-200 flex flex-col gap-2">
-              <div class="flex justify-between items-center text-[10px] font-bold text-rose-800">
-                <span class="capitalize">Color: ${item.color}</span>
-                <button onclick="setFeatured(${actualIndex})" class="text-xs bg-rose-300 hover:bg-rose-400 px-2 py-1 rounded-md border border-black font-bold">Spotlight ⭐</button>
-              </div>
-              <div class="flex gap-2">
-                <button onclick="openEditModal(${item.id})" class="flex-1 text-xs bg-amber-200 hover:bg-amber-300 text-amber-950 py-1 rounded-md border border-black font-bold">✏️ Edit</button>
-                <button onclick="deleteNailSet(${item.id})" class="text-xs bg-red-200 hover:bg-red-300 text-red-950 px-2 py-1 rounded-md border border-black font-bold">🗑️</button>
-              </div>
+            
+            <div class="mt-4 pt-2 border-t border-rose-200 flex justify-between items-center text-[10px] font-bold text-rose-800">
+              <span class="capitalize">Color: ${item.color}</span>
+              <button onclick="setFeatured(${actualIndex})" class="text-xs bg-rose-300 hover:bg-rose-400 px-2.5 py-1 rounded-md border border-black font-bold transition">
+                Spotlight ⭐
+              </button>
             </div>
           </div>
         `;
