@@ -715,40 +715,60 @@
     updateCharacterSelectView();
   }
 
-  // --- RENDER INVENTORY GRID ---
-  function renderFoodGrid() {
-    const grid = document.getElementById('food-inventory-grid');
-    if (!grid) return;
+// --- RENDER INVENTORY GRID ---
+function renderFoodGrid() {
+  const grid = document.getElementById('food-inventory-grid');
+  if (!grid) return;
 
-    const items = getActiveCategoryList();
+  const items = getActiveCategoryList();
 
-    // Tile to trigger modal directly inside grid
+  // Show message when no recipes match the current filters
+  if (items.length === 0) {
+    grid.innerHTML = `
+      <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
+        No recipes found matching current filters.
+      </div>
+    `;
+    return;
+  }
 
-    if (items.length === 0) {
-      grid.innerHTML = `
-        <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
-          No recipes found matching current filters.
-        </div>
-  `    ;
-      return;
-    }
-
+  // Render recipes only
     grid.innerHTML = items.map(item => {
-      const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
-      const selectedBorder = isSelected ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50' : 'border-black bg-white hover:bg-slate-50';
+      const isSelected =
+        activeSelectedItem &&
+        activeSelectedItem.id === item.id;
+
+      const selectedBorder = isSelected
+        ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50'
+        : 'border-black bg-white hover:bg-slate-50';
 
       return `
-        <div onclick="selectFoodItem('${item.id}')" class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group">
-          <img src="${item.img}" alt="${item.name}" class="w-12 h-12 rounded-lg border border-black object-cover shrink-0" />
+        <div
+          onclick="selectFoodItem('${item.id}')"
+          class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group"
+        >
+
+          <img
+            src="${item.img}"
+            alt="${item.name}"
+            class="w-12 h-12 rounded-lg border border-black object-cover shrink-0"
+          />
+
           <div class="overflow-hidden flex-1">
-            <h4 class="font-bold text-xs truncate text-slate-800">${item.icon} ${item.name}</h4>
-            <p class="text-[10px] text-slate-500 truncate">${item.ingredients.join(', ')}</p>
+            <h4 class="font-bold text-xs truncate text-slate-800">
+              ${item.icon} ${item.name}
+            </h4>
+
+            <p class="text-[10px] text-slate-500 truncate">
+              ${item.ingredients.join(', ')}
+            </p>
           </div>
+
         </div>
       `;
     }).join('');
-  }
-
+  }  
+  
   // --- SELECT FOOD ITEM FOR DETAILS ---
   function selectFoodItem(id) {
     const item = foodDatabase.find(i => i.id === id);
