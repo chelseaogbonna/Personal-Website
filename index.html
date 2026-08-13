@@ -39,32 +39,83 @@
     </div>
   </header>
 
-  <!-- NAVIGATION TABS -->
-  <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
-        🍱 Food Quest
-      </a>
-      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
-        🛠️ Wishlist Labs
-      </a>
-      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
-        🪡 Stitch Guild
-      </a>
-      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
-        👗 Style Closet
-      </a>
-    </div>
-  </nav>
-
-  <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto px-4">
+  <!-- MAIN CONTAINER HUB -->
+  <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
+    
+    <!-- WELCOME HERO CARD -->
     <div class="bg-white border-4 border-black rounded-3xl p-8 pixel-shadow-lg text-center">
       <h2 class="text-3xl font-black mb-2 text-purple-900">Welcome to HQ 👾</h2>
       <p class="text-slate-600 mb-6 text-sm">Select any room above to jump into that section!</p>
-      <a href="food.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow">
+      <a href="food.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
         Enter Lair 🚀
       </a>
+    </div>
+
+    <!-- ROOM SELECTOR GRID -->
+    <div class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg text-center">
+      <h2 class="text-2xl md:text-3xl font-black text-purple-900 mb-1">SELECT A QUEST ROOM 🕹️</h2>
+      <p class="text-slate-600 text-sm mb-6">Choose a category below to explore logs, ideas, and builds.</p>
+
+      <!-- CATEGORY CARDS GRID -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-left">
+        
+        <!-- 1. Nails Vault -->
+        <a href="nails.html" class="group bg-rose-300 hover:bg-rose-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">💅</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Nails Vault</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Sets, art & inspo</p>
+        </a>
+
+        <!-- 2. Loc Studio -->
+        <a href="locs.html" class="group bg-amber-300 hover:bg-amber-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">👑</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Loc Studio</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Styles & maintenance</p>
+        </a>
+
+        <!-- 3. Style Closet -->
+        <a href="outfits.html" class="group bg-fuchsia-300 hover:bg-fuchsia-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">👗</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Style Closet</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Outfits & lookbooks</p>
+        </a>
+
+        <!-- 4. Stitch Guild -->
+        <a href="sewing.html" class="group bg-emerald-300 hover:bg-emerald-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">🪡</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Stitch Guild</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Sewing & DIY crafts</p>
+        </a>
+
+        <!-- 5. Wishlist Labs -->
+        <a href="build.html" class="group bg-cyan-300 hover:bg-cyan-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">🛠️</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Wishlist Labs</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Builds & custom gear</p>
+        </a>
+
+        <!-- 6. Food Quest -->
+        <a href="food.html" class="group bg-pink-300 hover:bg-pink-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">🍱</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Food Quest</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Recipes & bites</p>
+        </a>
+
+        <!-- 7. Media Den -->
+        <a href="media.html" class="group bg-violet-300 hover:bg-violet-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">🎧</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Media Den</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Music, games & reads</p>
+        </a>
+
+        <!-- 8. Arcade Gallery -->
+        <a href="scrapbook.html" class="group bg-teal-300 hover:bg-teal-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
+          <div class="text-3xl mb-2">✨</div>
+          <h3 class="font-bold text-lg leading-tight text-black">Arcade Gallery</h3>
+          <p class="text-xs text-slate-800 mt-1 font-medium">Random snapshots</p>
+        </a>
+
+      </div>
     </div>
   </main>
 
