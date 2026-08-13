@@ -723,23 +723,17 @@
     const items = getActiveCategoryList();
 
     // Tile to trigger modal directly inside grid
-    const addNewTileHTML = `
-      <div onclick="openRecipeModal()" class="bg-dashed border-2 border-dashed border-purple-400 hover:border-purple-600 bg-purple-50 hover:bg-purple-100/60 rounded-xl p-3 flex flex-col items-center justify-center min-h-[90px] cursor-pointer transition-all hover:scale-102 group">
-        <span class="text-2xl mb-1 group-hover:scale-110 transition-transform">➕</span>
-        <span class="text-xs font-bold text-purple-700">Custom Recipe</span>
-      </div>
-    `;
 
     if (items.length === 0) {
-      grid.innerHTML = addNewTileHTML + `
+      grid.innerHTML = `
         <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
           No recipes found matching current filters.
         </div>
-      `;
+  `    ;
       return;
     }
 
-    grid.innerHTML = addNewTileHTML + items.map(item => {
+    grid.innerHTML = items.map(item => {
       const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
       const selectedBorder = isSelected ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50' : 'border-black bg-white hover:bg-slate-50';
 
