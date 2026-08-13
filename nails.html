@@ -33,7 +33,7 @@
 
   <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
 
-    <!-- 1. FEATURED INTERACTIVE CAROUSEL (STITCH GUILD TURNTABLE STYLE) -->
+    <!-- 1. FEATURED INTERACTIVE CAROUSEL -->
     <section class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg text-center relative">
       <div class="flex items-center justify-between mb-4">
         <div class="text-left">
@@ -49,7 +49,6 @@
 
       <!-- CAROUSEL CARD DISPLAY -->
       <div class="bg-rose-50 border-4 border-black rounded-2xl p-6 pixel-shadow relative max-w-2xl mx-auto my-4 transition-all duration-300">
-        
         <!-- ARROW CONTROLS -->
         <button onclick="prevFeatured()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-rose-400 hover:bg-rose-500 text-white font-black w-10 h-10 rounded-xl border-2 border-black pixel-shadow-sm flex items-center justify-center text-lg transition active:translate-y-0">
           👈
@@ -76,9 +75,7 @@
       </div>
 
       <!-- PAGINATION DOTS -->
-      <div id="pagination-dots" class="flex justify-center gap-2 mt-4">
-        <!-- Rendered via JavaScript -->
-      </div>
+      <div id="pagination-dots" class="flex justify-center gap-2 mt-4"></div>
     </section>
 
     <!-- 2. MAIN LOG & FILTERABLE VAULT -->
@@ -88,14 +85,13 @@
           <h2 class="text-3xl font-black text-rose-900">Nail Vault Library 💅</h2>
           <p class="text-xs text-slate-600">Filter through completed sets, active ideas, and design categories.</p>
         </div>
-        <button onclick="openModal()" class="bg-rose-400 hover:bg-rose-500 text-white font-bold py-3 px-5 rounded-2xl border-2 border-black pixel-shadow transition active:translate-y-1">
+        <button onclick="openAddModal()" class="bg-rose-400 hover:bg-rose-500 text-white font-bold py-3 px-5 rounded-2xl border-2 border-black pixel-shadow transition active:translate-y-1">
           + Log New Set (+15 XP) 💖
         </button>
       </div>
 
       <!-- FILTERS ROW -->
       <div class="space-y-3 mb-6 bg-rose-50 p-4 rounded-2xl border-2 border-black">
-        
         <!-- COLOR FILTER -->
         <div class="flex flex-wrap items-center gap-2">
           <span class="text-xs font-bold text-rose-900 w-16">Color:</span>
@@ -107,7 +103,7 @@
           <button onclick="filterColor('neutral')" class="color-btn bg-amber-100 text-xs font-bold px-3 py-1 rounded-xl border border-black">Nude/Neutral ✨</button>
         </div>
 
-        <!-- STYLE & DESIGN FILTER -->
+        <!-- STYLE FILTER -->
         <div class="flex flex-wrap items-center gap-2">
           <span class="text-xs font-bold text-rose-900 w-16">Style:</span>
           <button onclick="filterStyle('all')" class="style-btn active bg-rose-300 text-xs font-bold px-3 py-1 rounded-xl border border-black">All Styles</button>
@@ -120,9 +116,7 @@
       </div>
 
       <!-- ALL SETS GRID -->
-      <div id="nail-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-        <!-- Dynamic Cards render here -->
-      </div>
+      <div id="nail-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"></div>
     </section>
 
     <!-- 3. NAIL STASH & SUPPLIES INVENTORY -->
@@ -136,19 +130,16 @@
           <h4 class="font-bold text-sm">Tip Blanks</h4>
           <p class="text-[11px] text-slate-600 mt-1">Medium Almond, Long Coffin</p>
         </div>
-
         <div class="bg-purple-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
           <div class="text-3xl mb-1">✨</div>
           <h4 class="font-bold text-sm">Charms & Gems</h4>
           <p class="text-[11px] text-slate-600 mt-1">Daisies, Ribbons, Pixies</p>
         </div>
-
         <div class="bg-yellow-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
           <div class="text-3xl mb-1">💡</div>
           <h4 class="font-bold text-sm">Curing Lamp</h4>
           <p class="text-[11px] text-slate-600 mt-1">48W UV/LED Studio Lamp</p>
         </div>
-
         <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
           <div class="text-3xl mb-1">🧪</div>
           <h4 class="font-bold text-sm">Top & Base</h4>
@@ -159,15 +150,17 @@
 
   </main>
 
-  <!-- ADD NEW NAIL SET MODAL -->
+  <!-- ADD / EDIT NAIL SET MODAL -->
   <div id="add-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white border-4 border-black rounded-3xl p-6 max-w-md w-full pixel-shadow-lg relative max-h-[90vh] overflow-y-auto">
       <button onclick="closeModal()" class="absolute top-4 right-4 bg-rose-200 hover:bg-rose-300 rounded-full w-8 h-8 border-2 border-black font-bold">✕</button>
       
-      <h3 class="text-2xl font-black text-rose-900 mb-1">Log New Nail Set 💅</h3>
-      <p class="text-xs text-slate-600 mb-4">Add a custom photo/art URL, select colors, and earn 15 XP!</p>
+      <h3 id="modal-heading" class="text-2xl font-black text-rose-900 mb-1">Log New Nail Set 💅</h3>
+      <p id="modal-subheading" class="text-xs text-slate-600 mb-4">Add a custom photo/art URL, select colors, and earn 15 XP!</p>
 
       <form id="nail-form" onsubmit="saveNailSet(event)" class="space-y-4">
+        <input type="hidden" id="edit-id" value="" />
+
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Set Title</label>
           <input type="text" id="set-title" required placeholder="e.g. Lavender Aura Cat Eye" class="w-full border-2 border-black rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400" />
@@ -222,7 +215,7 @@
           <textarea id="set-desc" rows="2" placeholder="Gels used, charm placement notes..." class="w-full border-2 border-black rounded-xl p-2.5 text-sm"></textarea>
         </div>
 
-        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-2xl border-2 border-black pixel-shadow text-sm transition">
+        <button type="submit" id="submit-btn" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-2xl border-2 border-black pixel-shadow text-sm transition">
           Save Set & Claim +15 XP 🚀
         </button>
       </form>
@@ -230,8 +223,7 @@
   </div>
 
   <script>
-    // INITIAL DATA - UPDATED WITH DIRECT IMAGE URLS
-    let defaultSets = [
+    const defaultSets = [
       { id: 1, title: 'Pastel Chrome Floral', color: 'pink', style: 'chrome', shape: 'Medium Almond', status: 'CURRENT SET', image: 'https://i.pinimg.com/1200x/01/3a/a6/013aa66d543f6d25cbf7d6cd48b8d09a.jpg', desc: 'Pink chrome base with 3D white gel flowers & gems.' },
       { id: 2, title: 'Retro Pixel Hearts', color: 'purple', style: 'aura', shape: 'Short Square', status: 'WISHLIST', image: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80', desc: 'Lavender aura center with red 8-bit hearts.' },
       { id: 3, title: 'Matcha French Tips', color: 'green', style: 'french', shape: 'Long Coffin', status: 'COMPLETED', image: 'https://i.pinimg.com/736x/31/fa/fa/31fafa4d664d30f1c439879adb23b2bd.jpg', desc: 'Sage green French tips with gold foil flakes.' },
@@ -244,9 +236,15 @@
     let currentColorFilter = 'all';
     let currentStyleFilter = 'all';
 
+    function syncStorage() {
+      localStorage.setItem('nailVaultSets', JSON.stringify(nailSets));
+    }
+
     // RENDER FEATURED TURNTABLE CAROUSEL
     function renderCarousel() {
       if (nailSets.length === 0) return;
+      if (featuredIndex >= nailSets.length) featuredIndex = 0;
+
       const current = nailSets[featuredIndex];
 
       document.getElementById('carousel-badge').innerText = current.status || 'FEATURED';
@@ -263,7 +261,6 @@
         imgContainer.innerHTML = `<span id="carousel-icon">${current.image || '💅'}</span>`;
       }
 
-      // Render Dots
       const dotsContainer = document.getElementById('pagination-dots');
       dotsContainer.innerHTML = '';
       nailSets.forEach((_, idx) => {
@@ -304,7 +301,8 @@
         return;
       }
 
-      filtered.forEach((item, index) => {
+      filtered.forEach((item) => {
+        const actualIndex = nailSets.findIndex(s => s.id === item.id);
         const isUrl = item.image && (item.image.startsWith('http') || item.image.startsWith('data:'));
         const imgContent = isUrl 
           ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" />`
@@ -321,9 +319,15 @@
               <h3 class="font-bold text-lg mt-1 text-rose-950">${item.title}</h3>
               <p class="text-xs text-slate-600 mt-1">${item.desc}</p>
             </div>
-            <div class="mt-4 pt-2 border-t border-rose-200 flex justify-between items-center text-[10px] font-bold text-rose-800">
-              <span class="capitalize">Color: ${item.color}</span>
-              <button onclick="setFeatured(${index})" class="text-xs bg-rose-300 hover:bg-rose-400 px-2 py-1 rounded-md border border-black font-bold">Spotlight ⭐</button>
+            <div class="mt-4 pt-2 border-t border-rose-200 flex flex-col gap-2">
+              <div class="flex justify-between items-center text-[10px] font-bold text-rose-800">
+                <span class="capitalize">Color: ${item.color}</span>
+                <button onclick="setFeatured(${actualIndex})" class="text-xs bg-rose-300 hover:bg-rose-400 px-2 py-1 rounded-md border border-black font-bold">Spotlight ⭐</button>
+              </div>
+              <div class="flex gap-2">
+                <button onclick="openEditModal(${item.id})" class="flex-1 text-xs bg-amber-200 hover:bg-amber-300 text-amber-950 py-1 rounded-md border border-black font-bold">✏️ Edit</button>
+                <button onclick="deleteNailSet(${item.id})" class="text-xs bg-red-200 hover:bg-red-300 text-red-950 px-2 py-1 rounded-md border border-black font-bold">🗑️</button>
+              </div>
             </div>
           </div>
         `;
@@ -345,14 +349,44 @@
       renderSets();
     }
 
-    // MODAL & SAVE
-    function openModal() { document.getElementById('add-modal').classList.remove('hidden'); }
-    function closeModal() { document.getElementById('add-modal').classList.add('hidden'); }
+    // MODAL MODES: ADD & EDIT
+    function openAddModal() {
+      document.getElementById('nail-form').reset();
+      document.getElementById('edit-id').value = '';
+      document.getElementById('modal-heading').innerText = 'Log New Nail Set 💅';
+      document.getElementById('modal-subheading').innerText = 'Add a custom photo/art URL, select colors, and earn 15 XP!';
+      document.getElementById('submit-btn').innerText = 'Save Set & Claim +15 XP 🚀';
+      document.getElementById('add-modal').classList.remove('hidden');
+    }
+
+    function openEditModal(id) {
+      const set = nailSets.find(s => s.id === id);
+      if (!set) return;
+
+      document.getElementById('edit-id').value = set.id;
+      document.getElementById('set-title').value = set.title;
+      document.getElementById('set-color').value = set.color;
+      document.getElementById('set-style').value = set.style;
+      document.getElementById('set-shape').value = set.shape || '';
+      document.getElementById('set-status').value = set.status || 'CURRENT SET';
+      document.getElementById('set-image').value = set.image || '';
+      document.getElementById('set-desc').value = set.desc || '';
+
+      document.getElementById('modal-heading').innerText = 'Edit Nail Set ✏️';
+      document.getElementById('modal-subheading').innerText = 'Update set parameters and polish details.';
+      document.getElementById('submit-btn').innerText = 'Update Changes ✨';
+      document.getElementById('add-modal').classList.remove('hidden');
+    }
+
+    function closeModal() { 
+      document.getElementById('add-modal').classList.add('hidden'); 
+    }
 
     function saveNailSet(e) {
       e.preventDefault();
-      const newSet = {
-        id: Date.now(),
+      const editId = document.getElementById('edit-id').value;
+
+      const payload = {
         title: document.getElementById('set-title').value,
         color: document.getElementById('set-color').value,
         style: document.getElementById('set-style').value,
@@ -362,14 +396,33 @@
         desc: document.getElementById('set-desc').value || 'Custom design build.'
       };
 
-      nailSets.unshift(newSet);
-      localStorage.setItem('nailVaultSets', JSON.stringify(nailSets));
-      featuredIndex = 0;
+      if (editId) {
+        // Edit Existing Set
+        const idx = nailSets.findIndex(s => s.id == editId);
+        if (idx !== -1) {
+          nailSets[idx] = { ...nailSets[idx], ...payload };
+        }
+      } else {
+        // Create New Set
+        const newSet = { id: Date.now(), ...payload };
+        nailSets.unshift(newSet);
+        featuredIndex = 0;
+        gainXP(15);
+      }
+
+      syncStorage();
       renderCarousel();
       renderSets();
       closeModal();
-      document.getElementById('nail-form').reset();
-      gainXP(15);
+    }
+
+    function deleteNailSet(id) {
+      if (confirm('Delete this set from your vault?')) {
+        nailSets = nailSets.filter(s => s.id !== id);
+        syncStorage();
+        renderCarousel();
+        renderSets();
+      }
     }
 
     // XP SYSTEM
@@ -389,7 +442,7 @@
       document.getElementById('player-lvl').innerText = lvl;
     }
 
-    // INIT
+    // INITIALIZATION
     updateHUD();
     renderCarousel();
     renderSets();
