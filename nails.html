@@ -9,65 +9,362 @@
   <style>
     body { font-family: 'Fredoka', cursive, sans-serif; }
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-rose-100 text-slate-800 min-h-screen pb-12">
 
   <!-- HUD TOP BAR -->
   <header class="bg-rose-500 text-white p-4 border-b-4 border-black sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 bg-rose-700 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold hover:bg-rose-800 transition">
+    <div class="max-w-5xl mx-auto flex items-center justify-between gap-4">
+      <a href="index.html" class="flex items-center gap-2 bg-rose-700 hover:bg-rose-800 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold transition active:translate-y-0.5">
         ⬅️ Main Lair
       </a>
       <h1 class="text-xl md:text-2xl font-bold tracking-wider">NAILS VAULT 💅</h1>
-      <div class="text-xs font-bold bg-rose-800 px-3 py-1.5 rounded-xl border-2 border-black text-yellow-300">
-        LVL <span id="player-lvl">1</span>
+      <div class="flex items-center gap-3 bg-rose-800 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm">
+        <div class="text-right">
+          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
+          <div class="text-[10px] text-rose-200"><span id="player-xp">0</span> / 100 XP</div>
+        </div>
       </div>
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 mt-8">
-    <div class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+  <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
+
+    <!-- 1. FEATURED CAROUSEL SECTION -->
+    <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-2xl font-black text-rose-900">Set Showcase & Ideas</h2>
-          <p class="text-xs text-slate-600">Track current sets, press-on builds, and design inspiration.</p>
+          <h2 class="text-2xl font-black text-rose-900 flex items-center gap-2">
+            ⭐ Showcase Carousel
+          </h2>
+          <p class="text-xs text-slate-600">Your top-tier fresh sets & dream inspo builds.</p>
         </div>
-        <button onclick="gainXP(15)" class="bg-rose-400 hover:bg-rose-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition">
-          + Log New Set (+15 XP)
+        <div class="flex gap-2">
+          <button onclick="scrollCarousel(-300)" class="bg-rose-300 hover:bg-rose-400 p-2 rounded-xl border-2 border-black pixel-shadow-sm font-bold">👈</button>
+          <button onclick="scrollCarousel(300)" class="bg-rose-300 hover:bg-rose-400 p-2 rounded-xl border-2 border-black pixel-shadow-sm font-bold">👉</button>
+        </div>
+      </div>
+
+      <!-- CAROUSEL TRACK -->
+      <div id="carousel-track" class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar py-2">
+        <!-- Sample Featured Card 1 -->
+        <div class="min-w-[260px] md:min-w-[300px] bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex-shrink-0">
+          <div class="h-44 bg-rose-200 rounded-xl border-2 border-black mb-3 overflow-hidden flex items-center justify-center relative">
+            <span class="text-5xl">🌸</span>
+            <span class="absolute top-2 right-2 bg-rose-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">CURRENT</span>
+          </div>
+          <h3 class="font-bold text-lg text-rose-950">Pastel Chrome Floral</h3>
+          <p class="text-xs text-slate-600 mt-1">Medium Almond • Pink / Chrome</p>
+          <div class="flex gap-1 mt-2 flex-wrap">
+            <span class="text-[10px] bg-pink-200 px-2 py-0.5 rounded-md border border-black font-semibold">3D Gems</span>
+            <span class="text-[10px] bg-amber-200 px-2 py-0.5 rounded-md border border-black font-semibold">Gel Overlay</span>
+          </div>
+        </div>
+
+        <!-- Sample Featured Card 2 -->
+        <div class="min-w-[260px] md:min-w-[300px] bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex-shrink-0">
+          <div class="h-44 bg-purple-200 rounded-xl border-2 border-black mb-3 overflow-hidden flex items-center justify-center relative">
+            <span class="text-5xl">👾</span>
+            <span class="absolute top-2 right-2 bg-purple-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">NEXT UP</span>
+          </div>
+          <h3 class="font-bold text-lg text-rose-950">Retro Pixel Hearts</h3>
+          <p class="text-xs text-slate-600 mt-1">Short Square • Purple / Lavender</p>
+          <div class="flex gap-1 mt-2 flex-wrap">
+            <span class="text-[10px] bg-purple-200 px-2 py-0.5 rounded-md border border-black font-semibold">Aura</span>
+            <span class="text-[10px] bg-cyan-200 px-2 py-0.5 rounded-md border border-black font-semibold">8-Bit Art</span>
+          </div>
+        </div>
+
+        <!-- Sample Featured Card 3 -->
+        <div class="min-w-[260px] md:min-w-[300px] bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex-shrink-0">
+          <div class="h-44 bg-emerald-200 rounded-xl border-2 border-black mb-3 overflow-hidden flex items-center justify-center relative">
+            <span class="text-5xl">🍵</span>
+            <span class="absolute top-2 right-2 bg-emerald-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">COMPLETED</span>
+          </div>
+          <h3 class="font-bold text-lg text-rose-950">Matcha French Tips</h3>
+          <p class="text-xs text-slate-600 mt-1">Long Coffin • Sage Green</p>
+          <div class="flex gap-1 mt-2 flex-wrap">
+            <span class="text-[10px] bg-emerald-200 px-2 py-0.5 rounded-md border border-black font-semibold">French</span>
+            <span class="text-[10px] bg-yellow-200 px-2 py-0.5 rounded-md border border-black font-semibold">Gold Foil</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. MAIN LOG & FILTERABLE VAULT -->
+    <section class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-3xl font-black text-rose-900">Nail Vault Library 💅</h2>
+          <p class="text-xs text-slate-600">Filter through completed sets, active ideas, and design categories.</p>
+        </div>
+        <button onclick="openModal()" class="bg-rose-400 hover:bg-rose-500 text-white font-bold py-3 px-5 rounded-2xl border-2 border-black pixel-shadow transition active:translate-y-1">
+          + Log New Set (+15 XP) 💖
         </button>
       </div>
 
-      <!-- NAIL LOGS GRID -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div class="bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="h-32 bg-rose-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center text-3xl">🌸</div>
-          <span class="text-[10px] bg-rose-300 text-black px-2 py-0.5 rounded-full border border-black font-bold">CURRENT SET</span>
-          <h3 class="font-bold text-lg mt-1">Pastel Chrome Floral</h3>
-          <p class="text-xs text-slate-600">Almond shape, chrome base with tiny hand-painted daisies.</p>
+      <!-- FILTERS ROW -->
+      <div class="space-y-3 mb-6 bg-rose-50 p-4 rounded-2xl border-2 border-black">
+        
+        <!-- COLOR FILTER -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-rose-900 w-16">Color:</span>
+          <button onclick="filterColor('all')" class="color-btn active bg-rose-300 text-xs font-bold px-3 py-1 rounded-xl border border-black">All</button>
+          <button onclick="filterColor('pink')" class="color-btn bg-pink-200 text-xs font-bold px-3 py-1 rounded-xl border border-black">Pink/Red 🌸</button>
+          <button onclick="filterColor('purple')" class="color-btn bg-purple-200 text-xs font-bold px-3 py-1 rounded-xl border border-black">Purple/Lavender 🔮</button>
+          <button onclick="filterColor('green')" class="color-btn bg-emerald-200 text-xs font-bold px-3 py-1 rounded-xl border border-black">Green/Matcha 🍵</button>
+          <button onclick="filterColor('blue')" class="color-btn bg-cyan-200 text-xs font-bold px-3 py-1 rounded-xl border border-black">Blue/Ocean 🌊</button>
+          <button onclick="filterColor('neutral')" class="color-btn bg-amber-100 text-xs font-bold px-3 py-1 rounded-xl border border-black">Nude/Neutral ✨</button>
         </div>
 
-        <div class="bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="h-32 bg-pink-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center text-3xl">✨</div>
-          <span class="text-[10px] bg-purple-300 text-black px-2 py-0.5 rounded-full border border-black font-bold">WISHLIST</span>
-          <h3 class="font-bold text-lg mt-1">Retro Pixel Hearts</h3>
-          <p class="text-xs text-slate-600">Square tip, red & lavender 8-bit heart patterns.</p>
+        <!-- STYLE & DESIGN FILTER -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-rose-900 w-16">Style:</span>
+          <button onclick="filterStyle('all')" class="style-btn active bg-rose-300 text-xs font-bold px-3 py-1 rounded-xl border border-black">All Styles</button>
+          <button onclick="filterStyle('chrome')" class="style-btn bg-white text-xs font-bold px-3 py-1 rounded-xl border border-black">Chrome / Metallic</button>
+          <button onclick="filterStyle('french')" class="style-btn bg-white text-xs font-bold px-3 py-1 rounded-xl border border-black">French Tip</button>
+          <button onclick="filterStyle('3d')" class="style-btn bg-white text-xs font-bold px-3 py-1 rounded-xl border border-black">3D / Gems</button>
+          <button onclick="filterStyle('aura')" class="style-btn bg-white text-xs font-bold px-3 py-1 rounded-xl border border-black">Aura / Gradient</button>
+          <button onclick="filterStyle('presson')" class="style-btn bg-white text-xs font-bold px-3 py-1 rounded-xl border border-black">Press-On Build</button>
         </div>
       </div>
-    </div>
+
+      <!-- ALL SETS GRID -->
+      <div id="nail-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
+        <!-- Dynamic Cards render here -->
+      </div>
+    </section>
+
+    <!-- 3. NAIL STASH & SUPPLIES INVENTORY -->
+    <section class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg">
+      <h2 class="text-2xl font-black text-rose-900 mb-1">Polishes & Prep Stash 🎨</h2>
+      <p class="text-xs text-slate-600 mb-6">Keep track of your charms, tip shapes, gel polishes, and lamps.</p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="bg-pink-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <div class="text-3xl mb-1">💅</div>
+          <h4 class="font-bold text-sm">Tip Blanks</h4>
+          <p class="text-[11px] text-slate-600 mt-1">Medium Almond, Long Coffin</p>
+        </div>
+
+        <div class="bg-purple-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <div class="text-3xl mb-1">✨</div>
+          <h4 class="font-bold text-sm">Charms & Gems</h4>
+          <p class="text-[11px] text-slate-600 mt-1">Daisies, Ribbons, Pixies</p>
+        </div>
+
+        <div class="bg-yellow-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <div class="text-3xl mb-1">💡</div>
+          <h4 class="font-bold text-sm">Curing Lamp</h4>
+          <p class="text-[11px] text-slate-600 mt-1">48W UV/LED Studio Lamp</p>
+        </div>
+
+        <div class="bg-emerald-50 p-4 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <div class="text-3xl mb-1">🧪</div>
+          <h4 class="font-bold text-sm">Top & Base</h4>
+          <p class="text-[11px] text-slate-600 mt-1">No-wipe Top, Structure Gel</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ADD NEW NAIL SET MODAL -->
+  <div id="add-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 max-w-md w-full pixel-shadow-lg relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeModal()" class="absolute top-4 right-4 bg-rose-200 hover:bg-rose-300 rounded-full w-8 h-8 border-2 border-black font-bold">✕</button>
+      
+      <h3 class="text-2xl font-black text-rose-900 mb-1">Log New Nail Set 💅</h3>
+      <p class="text-xs text-slate-600 mb-4">Add a custom photo/art URL, select colors, and earn 15 XP!</p>
+
+      <form id="nail-form" onsubmit="saveNailSet(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Set Title</label>
+          <input type="text" id="set-title" required placeholder="e.g. Lavender Aura Cat Eye" class="w-full border-2 border-black rounded-xl p-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-400" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Primary Color</label>
+            <select id="set-color" class="w-full border-2 border-black rounded-xl p-2.5 text-sm bg-white">
+              <option value="pink">Pink / Red 🌸</option>
+              <option value="purple">Purple / Lavender 🔮</option>
+              <option value="green">Green / Matcha 🍵</option>
+              <option value="blue">Blue / Ocean 🌊</option>
+              <option value="neutral">Nude / Neutral ✨</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Style Category</label>
+            <select id="set-style" class="w-full border-2 border-black rounded-xl p-2.5 text-sm bg-white">
+              <option value="chrome">Chrome / Metallic</option>
+              <option value="french">French Tip</option>
+              <option value="3d">3D / Gems</option>
+              <option value="aura">Aura / Gradient</option>
+              <option value="presson">Press-On Build</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Nail Shape</label>
+            <input type="text" id="set-shape" placeholder="Almond, Coffin, Square..." class="w-full border-2 border-black rounded-xl p-2.5 text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Status</label>
+            <select id="set-status" class="w-full border-2 border-black rounded-xl p-2.5 text-sm bg-white">
+              <option value="CURRENT">Current Set</option>
+              <option value="WISHLIST">Wishlist / Next</option>
+              <option value="COMPLETED">Completed Archive</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Image URL or Emoji Icon</label>
+          <input type="text" id="set-image" placeholder="Paste image link or single emoji (e.g. 💅)" class="w-full border-2 border-black rounded-xl p-2.5 text-sm" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Description & Details</label>
+          <textarea id="set-desc" rows="2" placeholder="Gels used, charm placement notes..." class="w-full border-2 border-black rounded-xl p-2.5 text-sm"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-3 rounded-2xl border-2 border-black pixel-shadow text-sm transition">
+          Save Set & Claim +15 XP 🚀
+        </button>
+      </form>
+    </div>
+  </div>
+
   <script>
+    // INITIAL SAMPLE DATA
+    let defaultSets = [
+      { id: 1, title: 'Pastel Chrome Floral', color: 'pink', style: 'chrome', shape: 'Medium Almond', status: 'CURRENT', image: '🌸', desc: 'Pink chrome base with 3D white gel flowers.' },
+      { id: 2, title: 'Retro Pixel Hearts', color: 'purple', style: 'aura', shape: 'Short Square', status: 'WISHLIST', image: '🔮', desc: 'Lavender aura center with red 8-bit hearts.' },
+      { id: 3, title: 'Matcha French Tips', color: 'green', style: 'french', shape: 'Long Coffin', status: 'COMPLETED', image: '🍵', desc: 'Sage green French tips with gold foil flakes.' },
+      { id: 4, title: 'Ocean Pearl Velvet', color: 'blue', style: '3d', shape: 'Medium Oval', status: 'WISHLIST', image: '🌊', desc: 'Cat eye magnetic polish with real pearl charms.' },
+      { id: 5, title: 'Milk Tea Nude', color: 'neutral', style: 'presson', shape: 'Short Round', status: 'COMPLETED', image: '✨', desc: 'Clean nude tone base for everyday press-ons.' }
+    ];
+
+    let nailSets = JSON.parse(localStorage.getItem('nailVaultSets')) || defaultSets;
+    let currentColorFilter = 'all';
+    let currentStyleFilter = 'all';
+
+    // RENDER SETS TO GRID
+    function renderSets() {
+      const grid = document.getElementById('nail-grid');
+      grid.innerHTML = '';
+
+      let filtered = nailSets.filter(item => {
+        let matchColor = currentColorFilter === 'all' || item.color === currentColorFilter;
+        let matchStyle = currentStyleFilter === 'all' || item.style === currentStyleFilter;
+        return matchColor && matchStyle;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-8 text-slate-500 text-sm">No nail sets found matching these filters! 🌸</div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const isUrl = item.image.startsWith('http');
+        const imgContent = isUrl 
+          ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" />`
+          : `<span class="text-4xl">${item.image || '💅'}</span>`;
+
+        grid.innerHTML += `
+          <div class="bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="h-36 bg-rose-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center overflow-hidden relative">
+                ${imgContent}
+                <span class="absolute top-2 right-2 bg-rose-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">${item.status}</span>
+              </div>
+              <span class="text-[10px] bg-rose-200 text-black px-2 py-0.5 rounded-md border border-black font-bold uppercase">${item.shape || 'Nail Set'}</span>
+              <h3 class="font-bold text-lg mt-1 text-rose-950">${item.title}</h3>
+              <p class="text-xs text-slate-600 mt-1">${item.desc}</p>
+            </div>
+            <div class="mt-4 pt-2 border-t border-rose-200 flex justify-between items-center text-[10px] font-bold text-rose-800">
+              <span class="capitalize">Color: ${item.color}</span>
+              <span class="capitalize">Style: ${item.style}</span>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // CAROUSEL SCROLL
+    function scrollCarousel(offset) {
+      document.getElementById('carousel-track').scrollBy({ left: offset, behavior: 'smooth' });
+    }
+
+    // FILTERS
+    function filterColor(color) {
+      currentColorFilter = color;
+      document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active', 'bg-rose-300'));
+      event.target.classList.add('active', 'bg-rose-300');
+      renderSets();
+    }
+
+    function filterStyle(style) {
+      currentStyleFilter = style;
+      document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active', 'bg-rose-300'));
+      event.target.classList.add('active', 'bg-rose-300');
+      renderSets();
+    }
+
+    // MODAL & SAVE
+    function openModal() { document.getElementById('add-modal').classList.remove('hidden'); }
+    function closeModal() { document.getElementById('add-modal').classList.add('hidden'); }
+
+    function saveNailSet(e) {
+      e.preventDefault();
+      const newSet = {
+        id: Date.now(),
+        title: document.getElementById('set-title').value,
+        color: document.getElementById('set-color').value,
+        style: document.getElementById('set-style').value,
+        shape: document.getElementById('set-shape').value || 'Medium Almond',
+        status: document.getElementById('set-status').value,
+        image: document.getElementById('set-image').value || '💅',
+        desc: document.getElementById('set-desc').value || 'Custom design build.'
+      };
+
+      nailSets.unshift(newSet);
+      localStorage.setItem('nailVaultSets', JSON.stringify(nailSets));
+      renderSets();
+      closeModal();
+      document.getElementById('nail-form').reset();
+      gainXP(15);
+    }
+
+    // XP SYSTEM
     function gainXP(amount) {
       let xp = (parseInt(localStorage.getItem('playerXP')) || 0) + amount;
       let lvl = parseInt(localStorage.getItem('playerLvl')) || 1;
       if (xp >= 100) { xp -= 100; lvl += 1; alert('🎉 LEVEL UP!'); }
       localStorage.setItem('playerXP', xp);
       localStorage.setItem('playerLvl', lvl);
+      updateHUD();
+    }
+
+    function updateHUD() {
+      const xp = parseInt(localStorage.getItem('playerXP')) || 0;
+      const lvl = parseInt(localStorage.getItem('playerLvl')) || 1;
+      document.getElementById('player-xp').innerText = xp;
       document.getElementById('player-lvl').innerText = lvl;
     }
-    document.getElementById('player-lvl').innerText = localStorage.getItem('playerLvl') || 1;
+
+    // INIT
+    updateHUD();
+    renderSets();
   </script>
 </body>
 </html>
