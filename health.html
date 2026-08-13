@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Health & Cycle Lab 💖</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Fredoka', cursive, sans-serif; }
+    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+  </style>
+</head>
+<body class="bg-rose-100 text-slate-800 min-h-screen pb-12">
+
+  <!-- HUD / TOP BAR -->
+  <header class="bg-rose-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl animate-bounce">💖</span>
+        <div>
+          <a href="index.html" class="hover:text-yellow-300 transition-colors">
+            <h1 class="text-2xl font-bold tracking-wider">HEALTH & CYCLE LAB</h1>
+          </a>
+          <p class="text-xs text-rose-200">Female Health & Fitness Intelligence</p>
+        </div>
+      </div>
+
+      <!-- Lock State Controller -->
+      <div id="auth-status-container" class="hidden flex items-center gap-2">
+        <button onclick="lockDashboard()" class="bg-rose-800 hover:bg-rose-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm">
+          🔒 Lock Dashboard
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- PASSWORD LOCK OVERLAY -->
+  <div id="lock-screen" class="max-w-md mx-auto my-12 p-6 bg-white border-4 border-black rounded-3xl pixel-shadow-lg text-center space-y-4">
+    <div class="text-5xl">🔐</div>
+    <h2 class="text-2xl font-bold text-rose-900" id="lock-title">Access Protected Area</h2>
+    <p class="text-xs text-slate-600" id="lock-desc">Enter your passcode to unlock your personal health ledger.</p>
+    
+    <div class="space-y-3">
+      <input type="password" id="passcode-input" placeholder="Enter PIN or Passcode" class="w-full text-center bg-rose-50 border-2 border-black rounded-xl py-2 px-4 font-bold text-lg focus:outline-none focus:ring-2 focus:ring-rose-500" />
+      <button onclick="verifyPasscode()" class="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow transition-all">
+        Unlock Vault
+      </button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD CONTENT (HIDDEN UNTIL UNLOCKED) -->
+  <div id="dashboard-content" class="hidden max-w-5xl mx-auto px-4 my-6 space-y-8">
+
+    <!-- NAVIGATION TABS -->
+    <nav class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🍱 Food Quest
+      </a>
+      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🛠️ Wishlist Labs
+      </a>
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        🪡 Stitch Guild
+      </a>
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center">
+        👗 Style Closet
+      </a>
+    </nav>
+
+    <!-- SECTION 1: CYCLE TRACKER & TODAY'S STATUS -->
+    <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6 border-b-2 border-slate-100 pb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-rose-900">🩸 Cycle & Fitness Tracker</h2>
+          <p class="text-xs text-slate-500">Track your current phase and sync your lifestyle accordingly.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="date" id="period-start-date" class="bg-rose-50 border-2 border-black rounded-xl px-3 py-1.5 text-xs font-bold" />
+          <button onclick="savePeriodDate()" class="bg-rose-500 text-white font-bold text-xs px-3 py-2 rounded-xl border-2 border-black pixel-shadow">
+            Set Last Period
+          </button>
+        </div>
+      </div>
+
+      <!-- Current Phase Status Banner -->
+      <div id="phase-banner" class="bg-rose-50 border-2 border-black rounded-2xl p-4 mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div id="phase-badge-icon" class="text-4xl bg-white p-3 rounded-2xl border-2 border-black">🩸</div>
+          <div>
+            <div class="text-[10px] uppercase font-bold text-rose-600 tracking-wider">Estimated Phase</div>
+            <h3 id="phase-title" class="text-xl font-bold text-slate-800">Menstrual Phase (Day 1-5)</h3>
+            <p id="phase-subtitle" class="text-xs text-slate-600 mt-0.5">Energy is at its baseline. Focus on rest, hydration, and iron-dense foods.</p>
+          </div>
+        </div>
+        <div class="text-right border-t md:border-t-0 md:border-l border-rose-200 pt-2 md:pt-0 md:pl-4">
+          <div class="text-xs font-bold text-slate-500">Gym Recommendation:</div>
+          <div id="phase-gym-rec" class="text-sm font-bold text-rose-700">Light Walks, Yoga & Low Impact</div>
+        </div>
+      </div>
+
+      <!-- Quick Daily Logger -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-rose-50/50 p-4 rounded-2xl border-2 border-black">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Water Intake (Glasses)</label>
+          <div class="flex items-center gap-2">
+            <button onclick="adjustWater(-1)" class="bg-white border border-black font-bold px-2 rounded-lg">-</button>
+            <span id="water-count" class="font-bold text-sm">0</span> / 10 🥛
+            <button onclick="adjustWater(1)" class="bg-white border border-black font-bold px-2 rounded-lg">+</button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Workout Type Logged</label>
+          <input type="text" id="workout-log-input" placeholder="e.g. 45m Lower Body Resistance" class="w-full bg-white border border-black rounded-xl px-2 py-1 text-xs" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Energy / Symptoms</label>
+          <input type="text" id="symptom-log-input" placeholder="e.g. Mild cramps, 6/10 energy" class="w-full bg-white border border-black rounded-xl px-2 py-1 text-xs" />
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: COMPREHENSIVE NUTRITION & BODY REPORT -->
+    <section class="bg-amber-50 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <h2 class="text-2xl font-bold text-amber-900 mb-1">📊 20s Female Health Blueprint</h2>
+      <p class="text-xs text-amber-800 mb-6">Standard nutritional benchmarks and physiological recommendations for active women in their 20s.</p>
+
+      <!-- Macro Dashboard Grid -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <span class="text-2xl">🍗</span>
+          <div class="text-xs font-bold text-slate-500 mt-1">Protein Target</div>
+          <div class="text-lg font-bold text-rose-600">1.2 – 2.0g / kg</div>
+          <p class="text-[10px] text-slate-400 mt-0.5">Supports lean muscle & recovery</p>
+        </div>
+
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <span class="text-2xl">🥑</span>
+          <div class="text-xs font-bold text-slate-500 mt-1">Healthy Fats</div>
+          <div class="text-lg font-bold text-amber-600">25% – 35% Calories</div>
+          <p class="text-[10px] text-slate-400 mt-0.5">Vital for estrogen/progesterone synthesis</p>
+        </div>
+
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <span class="text-2xl">🌾</span>
+          <div class="text-xs font-bold text-slate-500 mt-1">Dietary Fiber</div>
+          <div class="text-lg font-bold text-emerald-600">25g – 30g / day</div>
+          <p class="text-[10px] text-slate-400 mt-0.5">Aids estrogen excretion & digestion</p>
+        </div>
+
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm text-center">
+          <span class="text-2xl">💧</span>
+          <div class="text-xs font-bold text-slate-500 mt-1">Hydration</div>
+          <div class="text-lg font-bold text-sky-600">2.2L – 3.0L / day</div>
+          <p class="text-[10px] text-slate-400 mt-0.5">Mitigates luteal phase fluid retention</p>
+        </div>
+      </div>
+
+      <!-- Critical Micronutrients for Women in 20s -->
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
+        <h3 class="font-bold text-sm text-slate-800 border-b pb-2 mb-3">🧪 Essential Micronutrient Targets</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div class="bg-rose-50 p-2.5 rounded-xl border border-rose-200">
+            <span class="font-bold text-rose-900">🩸 Iron (18 mg/day)</span>
+            <p class="text-[11px] text-slate-600 mt-1">Replaces blood loss from menstruation. Pair with Vitamin C for absorption.</p>
+          </div>
+          <div class="bg-amber-50 p-2.5 rounded-xl border border-amber-200">
+            <span class="font-bold text-amber-900">🦴 Calcium (1000 mg) + Vit D3</span>
+            <p class="text-[11px] text-slate-600 mt-1">Peak bone mass density is built up to age 30. Crucial for long-term health.</p>
+          </div>
+          <div class="bg-purple-50 p-2.5 rounded-xl border border-purple-200">
+            <span class="font-bold text-purple-900">🧠 Magnesium (310-320 mg)</span>
+            <p class="text-[11px] text-slate-600 mt-1">Eases PMS cramps, improves sleep, and supports muscle recovery post-gym.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: CYCLE SYNCING GUIDE (PHASE BREAKDOWN) -->
+      <div class="bg-white p-4 rounded-2xl border-2 border-black">
+        <h3 class="font-bold text-sm text-slate-800 border-b pb-2 mb-3">🗓️ Cycle Phase Blueprint (Gym & Nutrition Alignment)</h3>
+        
+        <div class="space-y-3 text-xs">
+          <!-- Menstrual -->
+          <div class="p-3 bg-rose-50 border border-rose-200 rounded-xl">
+            <div class="flex justify-between font-bold text-rose-800 mb-1">
+              <span>1. Menstrual Phase (Days 1–5)</span>
+              <span>Low Estrogen & Progesterone</span>
+            </div>
+            <p class="text-slate-600"><strong>Gym Strategy:</strong> Low-intensity steady state (LISS), walking, mat Pilates, gentle mobility. Focus on recovery.</p>
+            <p class="text-slate-600 mt-1"><strong>Nutrition Focus:</strong> Iron-rich foods (red meat, spinach, lentils), warm soups, berries, magnesium-rich dark chocolate.</p>
+          </div>
+
+          <!-- Follicular -->
+          <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <div class="flex justify-between font-bold text-emerald-800 mb-1">
+              <span>2. Follicular Phase (Days 6–12)</span>
+              <span>Rising Estrogen</span>
+            </div>
+            <p class="text-slate-600"><strong>Gym Strategy:</strong> Energy spikes! Great time to try new workouts, progressive overload lifting, and moderate-to-high resistance.</p>
+            <p class="text-slate-600 mt-1"><strong>Nutrition Focus:</strong> Lean proteins, fermented foods (kimchi, yogurt), fresh vegetables, complex carbs to sustain rising stamina.</p>
+          </div>
+
+          <!-- Ovulatory -->
+          <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+            <div class="flex justify-between font-bold text-amber-800 mb-1">
+              <span>3. Ovulatory Phase (Days 13–16)</span>
+              <span>Peak Estrogen & Testosterone Spike</span>
+            </div>
+            <p class="text-slate-600"><strong>Gym Strategy:</strong> Peak strength potential! Best window for personal records (PRs), HIIT, and high-intensity lifting.</p>
+            <p class="text-slate-600 mt-1"><strong>Nutrition Focus:</strong> High fiber (cruciferous veggies), antioxidant-rich fruits, lighter grains to support liver metabolism of peak estrogen.</p>
+          </div>
+
+          <!-- Luteal -->
+          <div class="p-3 bg-purple-50 border border-purple-200 rounded-xl">
+            <div class="flex justify-between font-bold text-purple-800 mb-1">
+              <span>4. Luteal Phase (Days 17–28)</span>
+              <span>Rising Progesterone & Metabolic Rate</span>
+            </div>
+            <p class="text-slate-600"><strong>Gym Strategy:</strong> Taper down load. Shift from heavy weights to moderate hypertrophy or light cardio as PMS approaches.</p>
+            <p class="text-slate-600 mt-1"><strong>Nutrition Focus:</strong> Metabolic rate increases slightly (+100-300 kcal/day). Prioritize complex carbs (sweet potatoes) to curb sugar cravings.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // --- SHA-256 HELPER FOR PRIVACY ---
+    async function hashPasscode(passcode) {
+      const msgBuffer = new TextEncoder().encode(passcode);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // --- LOCK SYSTEM ---
+    const SAVED_HASH_KEY = 'health_app_hash';
+
+    async function verifyPasscode() {
+      const input = document.getElementById('passcode-input').value.trim();
+      if (!input) return;
+
+      const hashedInput = await hashPasscode(input);
+      const storedHash = localStorage.getItem(SAVED_HASH_KEY);
+
+      if (!storedHash) {
+        // First-time setup: set the passcode
+        localStorage.setItem(SAVED_HASH_KEY, hashedInput);
+        alert('Passcode successfully set! Keep it in a safe place.');
+        unlockDashboard();
+      } else if (hashedInput === storedHash) {
+        unlockDashboard();
+      } else {
+        alert('Incorrect passcode!');
+      }
+    }
+
+    function unlockDashboard() {
+      document.getElementById('lock-screen').classList.add('hidden');
+      document.getElementById('dashboard-content').classList.remove('hidden');
+      document.getElementById('auth-status-container').classList.remove('hidden');
+      initCycleTracker();
+    }
+
+    function lockDashboard() {
+      document.getElementById('dashboard-content').classList.add('hidden');
+      document.getElementById('auth-status-container').classList.add('hidden');
+      document.getElementById('lock-screen').classList.remove('hidden');
+      document.getElementById('passcode-input').value = '';
+    }
+
+    // Initial setup check
+    window.addEventListener('DOMContentLoaded', () => {
+      const storedHash = localStorage.getItem(SAVED_HASH_KEY);
+      if (!storedHash) {
+        document.getElementById('lock-title').innerText = '✨ Set Your Health Vault Passcode';
+        document.getElementById('lock-desc').innerText = 'Choose a personal PIN/Passcode to protect your private health data.';
+      }
+    });
+
+    // --- CYCLE TRACKER LOGIC ---
+    let waterCount = parseInt(localStorage.getItem('health_water')) || 0;
+
+    function savePeriodDate() {
+      const dateVal = document.getElementById('period-start-date').value;
+      if (!dateVal) return;
+      localStorage.setItem('health_last_period', dateVal);
+      calculateCyclePhase(dateVal);
+    }
+
+    function initCycleTracker() {
+      const savedDate = localStorage.getItem('health_last_period');
+      if (savedDate) {
+        document.getElementById('period-start-date').value = savedDate;
+        calculateCyclePhase(savedDate);
+      }
+      document.getElementById('water-count').innerText = waterCount;
+    }
+
+    function calculateCyclePhase(startDateStr) {
+      const start = new Date(startDateStr);
+      const today = new Date();
+      const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24)) % 28 + 1;
+
+      const titleEl = document.getElementById('phase-title');
+      const subEl = document.getElementById('phase-subtitle');
+      const gymEl = document.getElementById('phase-gym-rec');
+      const iconEl = document.getElementById('phase-badge-icon');
+
+      if (diffDays >= 1 && diffDays <= 5) {
+        iconEl.innerText = '🩸';
+        titleEl.innerText = `Menstrual Phase (Day ${diffDays} of 28)`;
+        subEl.innerText = 'Estrogen & progesterone are low. Prioritize iron-rich foods, magnesium, and warm meals.';
+        gymEl.innerText = 'Walking, Rest & Light Stretching';
+      } else if (diffDays >= 6 && diffDays <= 12) {
+        iconEl.innerText = '🌱';
+        titleEl.innerText = `Follicular Phase (Day ${diffDays} of 28)`;
+        subEl.innerText = 'Estrogen is rising. High energy potential, great focus, and increased stamina.';
+        gymEl.innerText = 'Strength Training & Resistance Workouts';
+      } else if (diffDays >= 13 && diffDays <= 16) {
+        iconEl.innerText = '🔥';
+        titleEl.innerText = `Ovulatory Phase (Day ${diffDays} of 28)`;
+        subEl.innerText = 'Peak energy & strength. Estrogen & testosterone hit maximum concentration.';
+        gymEl.innerText = 'Heavy Lifting & High-Intensity (HIIT)';
+      } else {
+        iconEl.innerText = '🌙';
+        titleEl.innerText = `Luteal Phase (Day ${diffDays} of 28)`;
+        subEl.innerText = 'Progesterone dominates. Metabolism slightly increases; focus on complex carbs and recovery.';
+        gymEl.innerText = 'Moderate Weights, Pilates & Incline Walking';
+      }
+    }
+
+    function adjustWater(amount) {
+      waterCount = Math.max(0, waterCount + amount);
+      document.getElementById('water-count').innerText = waterCount;
+      localStorage.setItem('health_water', waterCount);
+    }
+  </script>
+</body>
+</html>
