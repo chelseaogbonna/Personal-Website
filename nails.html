@@ -11,8 +11,6 @@
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-rose-100 text-slate-800 min-h-screen pb-12">
@@ -35,64 +33,51 @@
 
   <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
 
-    <!-- 1. FEATURED CAROUSEL SECTION -->
-    <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+    <!-- 1. FEATURED INTERACTIVE CAROUSEL (STITCH GUILD TURNTABLE STYLE) -->
+    <section class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg text-center relative">
       <div class="flex items-center justify-between mb-4">
-        <div>
-          <h2 class="text-2xl font-black text-rose-900 flex items-center gap-2">
-            ⭐ Showcase Carousel
+        <div class="text-left">
+          <h2 class="text-2xl md:text-3xl font-black text-rose-900 flex items-center gap-2">
+            ⭐ FEATURED SET SHOWCASE
           </h2>
-          <p class="text-xs text-slate-600">Your top-tier fresh sets & dream inspo builds.</p>
+          <p class="text-xs text-slate-600">Spotlight turntable for your top sets and active builds.</p>
         </div>
-        <div class="flex gap-2">
-          <button onclick="scrollCarousel(-300)" class="bg-rose-300 hover:bg-rose-400 p-2 rounded-xl border-2 border-black pixel-shadow-sm font-bold">👈</button>
-          <button onclick="scrollCarousel(300)" class="bg-rose-300 hover:bg-rose-400 p-2 rounded-xl border-2 border-black pixel-shadow-sm font-bold">👉</button>
+        <span id="carousel-badge" class="bg-rose-300 text-black text-xs font-bold px-3 py-1 rounded-full border-2 border-black">
+          CURRENT SET
+        </span>
+      </div>
+
+      <!-- CAROUSEL CARD DISPLAY -->
+      <div class="bg-rose-50 border-4 border-black rounded-2xl p-6 pixel-shadow relative max-w-2xl mx-auto my-4 transition-all duration-300">
+        
+        <!-- ARROW CONTROLS -->
+        <button onclick="prevFeatured()" class="absolute left-3 top-1/2 -translate-y-1/2 bg-rose-400 hover:bg-rose-500 text-white font-black w-10 h-10 rounded-xl border-2 border-black pixel-shadow-sm flex items-center justify-center text-lg transition active:translate-y-0">
+          👈
+        </button>
+        <button onclick="nextFeatured()" class="absolute right-3 top-1/2 -translate-y-1/2 bg-rose-400 hover:bg-rose-500 text-white font-black w-10 h-10 rounded-xl border-2 border-black pixel-shadow-sm flex items-center justify-center text-lg transition active:translate-y-0">
+          👉
+        </button>
+
+        <!-- CARD CONTENT -->
+        <div class="px-8">
+          <div id="carousel-img-container" class="w-36 h-36 mx-auto bg-rose-200 border-2 border-black rounded-2xl flex items-center justify-center text-6xl mb-4 overflow-hidden pixel-shadow-sm">
+            <span id="carousel-icon">🌸</span>
+          </div>
+
+          <h3 id="carousel-title" class="text-2xl font-black text-rose-950">Pastel Chrome Floral</h3>
+          <p id="carousel-desc" class="text-xs text-slate-600 mt-1 max-w-md mx-auto">Almond shape, pink chrome base with 3D white gel flowers & gems.</p>
+
+          <div class="flex flex-wrap justify-center gap-2 mt-4">
+            <span id="carousel-shape" class="text-xs bg-rose-200 px-3 py-1 rounded-xl border border-black font-bold">Medium Almond</span>
+            <span id="carousel-style" class="text-xs bg-purple-200 px-3 py-1 rounded-xl border border-black font-bold">Chrome / Metallic</span>
+            <span id="carousel-color" class="text-xs bg-pink-200 px-3 py-1 rounded-xl border border-black font-bold">Pink / Red 🌸</span>
+          </div>
         </div>
       </div>
 
-      <!-- CAROUSEL TRACK -->
-      <div id="carousel-track" class="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar py-2">
-        <!-- Sample Featured Card 1 -->
-        <div class="min-w-[260px] md:min-w-[300px] bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex-shrink-0">
-          <div class="h-44 bg-rose-200 rounded-xl border-2 border-black mb-3 overflow-hidden flex items-center justify-center relative">
-            <span class="text-5xl">🌸</span>
-            <span class="absolute top-2 right-2 bg-rose-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">CURRENT</span>
-          </div>
-          <h3 class="font-bold text-lg text-rose-950">Pastel Chrome Floral</h3>
-          <p class="text-xs text-slate-600 mt-1">Medium Almond • Pink / Chrome</p>
-          <div class="flex gap-1 mt-2 flex-wrap">
-            <span class="text-[10px] bg-pink-200 px-2 py-0.5 rounded-md border border-black font-semibold">3D Gems</span>
-            <span class="text-[10px] bg-amber-200 px-2 py-0.5 rounded-md border border-black font-semibold">Gel Overlay</span>
-          </div>
-        </div>
-
-        <!-- Sample Featured Card 2 -->
-        <div class="min-w-[260px] md:min-w-[300px] bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex-shrink-0">
-          <div class="h-44 bg-purple-200 rounded-xl border-2 border-black mb-3 overflow-hidden flex items-center justify-center relative">
-            <span class="text-5xl">👾</span>
-            <span class="absolute top-2 right-2 bg-purple-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">NEXT UP</span>
-          </div>
-          <h3 class="font-bold text-lg text-rose-950">Retro Pixel Hearts</h3>
-          <p class="text-xs text-slate-600 mt-1">Short Square • Purple / Lavender</p>
-          <div class="flex gap-1 mt-2 flex-wrap">
-            <span class="text-[10px] bg-purple-200 px-2 py-0.5 rounded-md border border-black font-semibold">Aura</span>
-            <span class="text-[10px] bg-cyan-200 px-2 py-0.5 rounded-md border border-black font-semibold">8-Bit Art</span>
-          </div>
-        </div>
-
-        <!-- Sample Featured Card 3 -->
-        <div class="min-w-[260px] md:min-w-[300px] bg-rose-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex-shrink-0">
-          <div class="h-44 bg-emerald-200 rounded-xl border-2 border-black mb-3 overflow-hidden flex items-center justify-center relative">
-            <span class="text-5xl">🍵</span>
-            <span class="absolute top-2 right-2 bg-emerald-400 text-white text-[10px] font-bold px-2 py-0.5 rounded-full border border-black">COMPLETED</span>
-          </div>
-          <h3 class="font-bold text-lg text-rose-950">Matcha French Tips</h3>
-          <p class="text-xs text-slate-600 mt-1">Long Coffin • Sage Green</p>
-          <div class="flex gap-1 mt-2 flex-wrap">
-            <span class="text-[10px] bg-emerald-200 px-2 py-0.5 rounded-md border border-black font-semibold">French</span>
-            <span class="text-[10px] bg-yellow-200 px-2 py-0.5 rounded-md border border-black font-semibold">Gold Foil</span>
-          </div>
-        </div>
+      <!-- PAGINATION DOTS -->
+      <div id="pagination-dots" class="flex justify-center gap-2 mt-4">
+        <!-- Rendered via JavaScript -->
       </div>
     </section>
 
@@ -220,7 +205,7 @@
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">Status</label>
             <select id="set-status" class="w-full border-2 border-black rounded-xl p-2.5 text-sm bg-white">
-              <option value="CURRENT">Current Set</option>
+              <option value="CURRENT SET">Current Set</option>
               <option value="WISHLIST">Wishlist / Next</option>
               <option value="COMPLETED">Completed Archive</option>
             </select>
@@ -245,9 +230,9 @@
   </div>
 
   <script>
-    // INITIAL SAMPLE DATA
+    // INITIAL DATA
     let defaultSets = [
-      { id: 1, title: 'Pastel Chrome Floral', color: 'pink', style: 'chrome', shape: 'Medium Almond', status: 'CURRENT', image: '🌸', desc: 'Pink chrome base with 3D white gel flowers.' },
+      { id: 1, title: 'Pastel Chrome Floral', color: 'pink', style: 'chrome', shape: 'Medium Almond', status: 'CURRENT SET', image: '🌸', desc: 'Pink chrome base with 3D white gel flowers & gems.' },
       { id: 2, title: 'Retro Pixel Hearts', color: 'purple', style: 'aura', shape: 'Short Square', status: 'WISHLIST', image: '🔮', desc: 'Lavender aura center with red 8-bit hearts.' },
       { id: 3, title: 'Matcha French Tips', color: 'green', style: 'french', shape: 'Long Coffin', status: 'COMPLETED', image: '🍵', desc: 'Sage green French tips with gold foil flakes.' },
       { id: 4, title: 'Ocean Pearl Velvet', color: 'blue', style: '3d', shape: 'Medium Oval', status: 'WISHLIST', image: '🌊', desc: 'Cat eye magnetic polish with real pearl charms.' },
@@ -255,8 +240,53 @@
     ];
 
     let nailSets = JSON.parse(localStorage.getItem('nailVaultSets')) || defaultSets;
+    let featuredIndex = 0;
     let currentColorFilter = 'all';
     let currentStyleFilter = 'all';
+
+    // RENDER FEATURED TURNTABLE CAROUSEL
+    function renderCarousel() {
+      if (nailSets.length === 0) return;
+      const current = nailSets[featuredIndex];
+
+      document.getElementById('carousel-badge').innerText = current.status || 'FEATURED';
+      document.getElementById('carousel-title').innerText = current.title;
+      document.getElementById('carousel-desc').innerText = current.desc;
+      document.getElementById('carousel-shape').innerText = current.shape || 'Medium Almond';
+      document.getElementById('carousel-style').innerText = `Style: ${current.style}`;
+      document.getElementById('carousel-color').innerText = `Color: ${current.color}`;
+
+      const imgContainer = document.getElementById('carousel-img-container');
+      if (current.image.startsWith('http')) {
+        imgContainer.innerHTML = `<img src="${current.image}" alt="${current.title}" class="w-full h-full object-cover" />`;
+      } else {
+        imgContainer.innerHTML = `<span id="carousel-icon">${current.image || '💅'}</span>`;
+      }
+
+      // Render Dots
+      const dotsContainer = document.getElementById('pagination-dots');
+      dotsContainer.innerHTML = '';
+      nailSets.forEach((_, idx) => {
+        dotsContainer.innerHTML += `
+          <button onclick="setFeatured(${idx})" class="w-3 h-3 rounded-full border border-black transition-all ${idx === featuredIndex ? 'bg-rose-500 w-6' : 'bg-rose-200'}"></button>
+        `;
+      });
+    }
+
+    function nextFeatured() {
+      featuredIndex = (featuredIndex + 1) % nailSets.length;
+      renderCarousel();
+    }
+
+    function prevFeatured() {
+      featuredIndex = (featuredIndex - 1 + nailSets.length) % nailSets.length;
+      renderCarousel();
+    }
+
+    function setFeatured(index) {
+      featuredIndex = index;
+      renderCarousel();
+    }
 
     // RENDER SETS TO GRID
     function renderSets() {
@@ -274,7 +304,7 @@
         return;
       }
 
-      filtered.forEach(item => {
+      filtered.forEach((item, index) => {
         const isUrl = item.image.startsWith('http');
         const imgContent = isUrl 
           ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" />`
@@ -293,16 +323,11 @@
             </div>
             <div class="mt-4 pt-2 border-t border-rose-200 flex justify-between items-center text-[10px] font-bold text-rose-800">
               <span class="capitalize">Color: ${item.color}</span>
-              <span class="capitalize">Style: ${item.style}</span>
+              <button onclick="setFeatured(${index})" class="text-xs bg-rose-300 hover:bg-rose-400 px-2 py-1 rounded-md border border-black font-bold">Spotlight ⭐</button>
             </div>
           </div>
         `;
       });
-    }
-
-    // CAROUSEL SCROLL
-    function scrollCarousel(offset) {
-      document.getElementById('carousel-track').scrollBy({ left: offset, behavior: 'smooth' });
     }
 
     // FILTERS
@@ -339,6 +364,8 @@
 
       nailSets.unshift(newSet);
       localStorage.setItem('nailVaultSets', JSON.stringify(nailSets));
+      featuredIndex = 0;
+      renderCarousel();
       renderSets();
       closeModal();
       document.getElementById('nail-form').reset();
@@ -364,6 +391,7 @@
 
     // INIT
     updateHUD();
+    renderCarousel();
     renderSets();
   </script>
 </body>
