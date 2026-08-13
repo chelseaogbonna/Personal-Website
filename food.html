@@ -12,7 +12,7 @@
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
 
-    /* Seamless Grid Layout: Eliminates spacing gap between columns */
+    /* Seamless Grid Layout */
     .seamless-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -245,12 +245,16 @@
         </div>
       </div>
 
-      <div class="flex flex-wrap gap-3 mb-6">
+      <!-- Action Buttons Row -->
+      <div class="flex flex-wrap items-center gap-3 mb-6">
         <button onclick="matchCustomRecipe()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
           📖 Match My Vault Recipes
         </button>
         <button onclick="searchWebRecipes()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
           🌐 Search Web Recipes
+        </button>
+        <button onclick="openRecipeModal()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all flex items-center gap-1.5">
+          ✨ Add New Recipe
         </button>
       </div>
 
@@ -695,14 +699,11 @@
     const categories = ['all', ...new Set(currentMealItems.map(i => i.category))];
 
     subBar.innerHTML = categories.map(cat => {
-      const activeClass = cat === currentSubcategory 
-        ? 'bg-pink-500 text-white border-2 border-black pixel-shadow-sm' 
-        : 'bg-white hover:bg-pink-100 text-slate-700 border border-slate-300';
-      return `
-        <button onclick="setSubcategory('${cat}')" class="px-3 py-1 rounded-xl text-xs font-bold capitalize transition-all ${activeClass}">
-          ${cat}
-        </button>
-      `;
+      const isSelected = currentSubcategory === cat;
+      const bgStyle = isSelected ? 'bg-purple-600 text-white' : 'bg-white hover:bg-pink-100 text-slate-700';
+      return `<button onclick="setSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-xl border border-black transition-all ${bgStyle}">
+        ${cat.toUpperCase()}
+      </button>`;
     }).join('');
   }
 
@@ -714,130 +715,104 @@
     updateCharacterSelectView();
   }
 
-  // --- RENDER FOOD INVENTORY GRID ---
+  // --- RENDER INVENTORY GRID ---
   function renderFoodGrid() {
     const grid = document.getElementById('food-inventory-grid');
     if (!grid) return;
 
-    const list = getActiveCategoryList();
+    const items = getActiveCategoryList();
 
-    // Add Tile HTML
-    const addCardHtml = `
-      <div onclick="openRecipeModal()" class="cursor-pointer bg-dashed border-2 border-dashed border-pink-400 hover:border-pink-600 bg-pink-50/50 hover:bg-pink-100 rounded-xl p-3 flex flex-col items-center justify-center text-center transition-all min-h-[110px] group">
-        <div class="w-8 h-8 rounded-full bg-pink-400 text-white flex items-center justify-center font-bold text-lg mb-1 group-hover:scale-110 transition-transform">
-          +
-        </div>
-        <span class="text-xs font-bold text-pink-700">Add New Recipe</span>
+    // Tile to trigger modal directly inside grid
+    const addNewTileHTML = `
+      <div onclick="openRecipeModal()" class="bg-dashed border-2 border-dashed border-purple-400 hover:border-purple-600 bg-purple-50 hover:bg-purple-100/60 rounded-xl p-3 flex flex-col items-center justify-center min-h-[90px] cursor-pointer transition-all hover:scale-102 group">
+        <span class="text-2xl mb-1 group-hover:scale-110 transition-transform">➕</span>
+        <span class="text-xs font-bold text-purple-700">Custom Recipe</span>
       </div>
     `;
 
-    if (list.length === 0) {
-      grid.innerHTML = addCardHtml + `
-        <div class="col-span-full py-8 text-center text-slate-400 text-xs italic">
-          No recipes found matching your filter.
+    if (items.length === 0) {
+      grid.innerHTML = addNewTileHTML + `
+        <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
+          No recipes found matching current filters.
         </div>
       `;
       return;
     }
 
-    grid.innerHTML = list.map(item => {
+    grid.innerHTML = addNewTileHTML + items.map(item => {
       const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
-      const borderClass = isSelected ? 'border-4 border-pink-500 bg-pink-50 ring-2 ring-black' : 'border-2 border-black bg-white hover:bg-pink-50';
+      const selectedBorder = isSelected ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50' : 'border-black bg-white hover:bg-slate-50';
 
       return `
-        <div class="relative group ${borderClass} rounded-xl p-2.5 flex flex-col justify-between transition-all pixel-shadow-sm cursor-pointer" onclick="selectFoodItem('${item.id}')">
-          <div class="flex items-start gap-2.5">
-            <img src="${item.img}" alt="${item.name}" class="w-12 h-12 rounded-lg border border-black object-cover shrink-0" onerror="this.src='https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=100'"/>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-1">
-                <span class="text-sm">${item.icon}</span>
-                <h4 class="font-bold text-xs truncate text-slate-800">${item.name}</h4>
-              </div>
-              <span class="inline-block mt-1 text-[9px] font-bold uppercase tracking-wider text-pink-600 bg-pink-100 px-1.5 py-0.5 rounded">
-                ${item.category}
-              </span>
-            </div>
-          </div>
-
-          <!-- Quick Action Buttons -->
-          <div class="flex items-center justify-end gap-1 mt-2 pt-2 border-t border-slate-100">
-            <button onclick="event.stopPropagation(); editRecipe('${item.id}')" class="p-1 px-2 text-[10px] font-bold bg-amber-200 hover:bg-amber-300 text-amber-900 border border-black rounded-lg transition-colors">
-              ✏️ Edit
-            </button>
-            <button onclick="event.stopPropagation(); deleteRecipe('${item.id}')" class="p-1 px-2 text-[10px] font-bold bg-red-200 hover:bg-red-300 text-red-900 border border-black rounded-lg transition-colors">
-              🗑️
-            </button>
+        <div onclick="selectFoodItem('${item.id}')" class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group">
+          <img src="${item.img}" alt="${item.name}" class="w-12 h-12 rounded-lg border border-black object-cover shrink-0" />
+          <div class="overflow-hidden flex-1">
+            <h4 class="font-bold text-xs truncate text-slate-800">${item.icon} ${item.name}</h4>
+            <p class="text-[10px] text-slate-500 truncate">${item.ingredients.join(', ')}</p>
           </div>
         </div>
       `;
-    }).join('') + addCardHtml;
+    }).join('');
   }
 
-  // --- ITEM SELECTION & DETAILS ---
+  // --- SELECT FOOD ITEM FOR DETAILS ---
   function selectFoodItem(id) {
     const item = foodDatabase.find(i => i.id === id);
     if (!item) return;
 
     activeSelectedItem = item;
-    renderFoodGrid();
 
-    document.getElementById('detail-category').innerText = `${item.category} • ${item.mealTypes.join(', ')}`;
+    document.getElementById('detail-category').innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
     document.getElementById('detail-title').innerHTML = `<span>${item.icon} ${item.name}</span>`;
-    
-    document.getElementById('detail-img-container').innerHTML = `
-      <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=300'"/>
-    `;
+    document.getElementById('detail-img-container').innerHTML = `<img src="${item.img}" class="w-full h-full object-cover" alt="${item.name}" />`;
 
-    document.getElementById('detail-ingredients').innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
+    const ingList = document.getElementById('detail-ingredients');
+    ingList.innerHTML = item.ingredients.map(ing => `<li class="text-slate-700">${ing}</li>`).join('');
+
     document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
     document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
 
     const eatBtn = document.getElementById('eat-btn');
     eatBtn.disabled = false;
-    eatBtn.className = 'mt-3 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-pointer';
+    eatBtn.className = 'mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all';
+
+    renderFoodGrid();
   }
 
   function consumeSelectedFood() {
     if (!activeSelectedItem) return;
     gainXP(15);
-    alert(`😋 Yum! You ate ${activeSelectedItem.name} and gained +15 XP!`);
   }
 
-  // --- CHARACTER SELECT VIEW ---
+  // --- CHARACTER SELECT CAROUSEL ---
   function updateCharacterSelectView() {
-    const list = getActiveCategoryList();
+    const items = getActiveCategoryList();
     const counter = document.getElementById('character-select-counter');
-    const imgContainer = document.getElementById('character-select-img');
+    const imgCont = document.getElementById('character-select-img');
     const tag = document.getElementById('character-select-tag');
     const title = document.getElementById('character-select-title');
-    const ingredients = document.getElementById('character-select-ingredients');
+    const ing = document.getElementById('character-select-ingredients');
 
-    if (list.length === 0) {
+    if (items.length === 0) {
       if (counter) counter.innerText = 'DISH 0 / 0';
-      if (title) title.innerText = 'No Dish Found';
-      if (tag) tag.innerText = currentMealUnit;
-      if (ingredients) ingredients.innerText = 'Ingredients: None';
-      if (imgContainer) imgContainer.innerHTML = '<span class="text-2xl">❓</span>';
+      if (title) title.innerText = 'No Dishes Available';
+      if (ing) ing.innerText = 'Try changing category or clearing search.';
+      if (imgCont) imgCont.innerHTML = '<span class="text-2xl">❓</span>';
       return;
     }
 
-    if (characterSelectIndex >= list.length) characterSelectIndex = 0;
-    if (characterSelectIndex < 0) characterSelectIndex = list.length - 1;
+    if (characterSelectIndex >= items.length) characterSelectIndex = 0;
+    if (characterSelectIndex < 0) characterSelectIndex = items.length - 1;
 
-    const item = list[characterSelectIndex];
+    const current = items[characterSelectIndex];
 
-    if (counter) counter.innerText = `DISH ${characterSelectIndex + 1} / ${list.length}`;
-    if (tag) tag.innerText = item.category;
-    if (title) title.innerText = `${item.icon} ${item.name}`;
-    if (ingredients) ingredients.innerText = `Ingredients: ${item.ingredients.join(', ')}`;
-    if (imgContainer) {
-      imgContainer.innerHTML = `<img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=100'"/>`;
+    if (counter) counter.innerText = `DISH ${characterSelectIndex + 1} / ${items.length}`;
+    if (tag) tag.innerText = current.category;
+    if (title) title.innerText = `${current.icon} ${current.name}`;
+    if (ing) ing.innerText = `Ingredients: ${current.ingredients.join(', ')}`;
+    if (imgCont) {
+      imgCont.innerHTML = `<img src="${current.img}" class="w-full h-full object-cover" alt="${current.name}" />`;
     }
-  }
-
-  function nextCharacterSelect() {
-    characterSelectIndex++;
-    updateCharacterSelectView();
   }
 
   function prevCharacterSelect() {
@@ -845,144 +820,106 @@
     updateCharacterSelectView();
   }
 
-  // --- SPINNER ---
-  function toggleSpinFilter(meal) {
-    if (activeSpinFilters.includes(meal)) {
-      if (activeSpinFilters.length === 1) return; 
-      activeSpinFilters = activeSpinFilters.filter(m => m !== meal);
+  function nextCharacterSelect() {
+    characterSelectIndex++;
+    updateCharacterSelectView();
+  }
+
+  // --- SPINNER FUNCTIONALITY ---
+  function toggleSpinFilter(type) {
+    const btn = document.getElementById(`spin-btn-${type}`);
+    if (activeSpinFilters.includes(type)) {
+      if (activeSpinFilters.length === 1) return; // Keep at least one filter active
+      activeSpinFilters = activeSpinFilters.filter(t => t !== type);
+      if (btn) btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-200 text-slate-500 opacity-60 transition-all';
     } else {
-      activeSpinFilters.push(meal);
+      activeSpinFilters.push(type);
+      if (btn) btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
     }
-    
-    ['breakfast', 'lunch', 'dinner', 'dessert'].forEach(m => {
-      const btn = document.getElementById(`spin-btn-${m}`);
-      if (!btn) return;
-      if (activeSpinFilters.includes(m)) {
-        btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
-      } else {
-        btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-200 text-slate-500 transition-all';
-      }
-    });
   }
 
   function spinRandomMeal() {
-    const eligible = foodDatabase.filter(item => item.mealTypes.some(m => activeSpinFilters.includes(m)));
-    if (eligible.length === 0) return;
+    const pool = foodDatabase.filter(i => i.mealTypes.some(mt => activeSpinFilters.includes(mt)));
+    if (pool.length === 0) {
+      alert('No recipes in selected spin pool!');
+      return;
+    }
 
-    const choice = eligible[Math.floor(Math.random() * eligible.length)];
-    selectMealUnit(choice.mealTypes[0]);
-    selectFoodItem(choice.id);
+    const randomItem = pool[Math.floor(Math.random() * pool.length)];
+    selectMealUnit(randomItem.mealTypes[0]);
+    selectFoodItem(randomItem.id);
     gainXP(10);
-    alert(`🎲 SPUN: You landed on ${choice.icon} ${choice.name}! (+10 XP)`);
   }
 
   // --- PANTRY MATCHERS ---
-  function matchCustomRecipe() {
-    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(cb => cb.value.toLowerCase());
-    const out = document.getElementById('custom-recipe-output');
+  function getSelectedPantryItems() {
+    return Array.from(document.querySelectorAll('.pantry-item:checked')).map(cb => cb.value.toLowerCase());
+  }
 
-    if (checked.length === 0) {
-      out.innerHTML = `<p class="italic text-amber-700">Please select at least one pantry item above!</p>`;
+  function matchCustomRecipe() {
+    const selected = getSelectedPantryItems();
+    const output = document.getElementById('custom-recipe-output');
+
+    if (selected.length === 0) {
+      output.innerHTML = `<p class="italic text-slate-400">Select ingredients above to match vault recipes.</p>`;
       return;
     }
 
     const matches = foodDatabase.filter(item => 
-      item.ingredients.some(ing => checked.some(c => ing.toLowerCase().includes(c)))
+      item.ingredients.some(ing => selected.some(s => ing.toLowerCase().includes(s)))
     );
 
     if (matches.length === 0) {
-      out.innerHTML = `<p class="italic text-slate-400">No matching recipes found in your Vault.</p>`;
-    } else {
-      out.innerHTML = matches.map(m => `
-        <div class="p-2 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-between cursor-pointer hover:bg-emerald-100" onclick="selectMealUnit('${m.mealTypes[0]}'); selectFoodItem('${m.id}')">
-          <span class="font-bold text-xs text-emerald-900">${m.icon} ${m.name}</span>
-          <span class="text-[10px] text-emerald-700 capitalize bg-white px-2 py-0.5 rounded-md border border-emerald-200">${m.category}</span>
-        </div>
-      `).join('');
-    }
-  }
-
-  function searchWebRecipes() {
-    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(cb => cb.value);
-    const out = document.getElementById('web-recipe-output');
-
-    if (checked.length === 0) {
-      out.innerHTML = `<p class="italic text-sky-700">Please select at least one pantry item above!</p>`;
+      output.innerHTML = `<p class="text-amber-800 font-bold">No exact vault matches! Try adding more ingredients.</p>`;
       return;
     }
 
-    const query = checked.join(', ');
-    const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query + ' recipes')}`;
+    output.innerHTML = matches.map(m => `
+      <div onclick="selectMealUnit('${m.mealTypes[0]}'); selectFoodItem('${m.id}')" class="p-2 bg-emerald-50 border border-emerald-200 rounded-xl cursor-pointer hover:bg-emerald-100 transition-all flex items-center justify-between">
+        <span class="font-bold text-xs">${m.icon} ${m.name}</span>
+        <span class="text-[10px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold">View</span>
+      </div>
+    `).join('');
+  }
 
-    out.innerHTML = `
-      <div class="p-3 bg-sky-50 rounded-xl border border-sky-200 space-y-2">
-        <p class="text-xs text-sky-900">Search online for dishes using: <strong>${query}</strong></p>
-        <a href="${searchUrl}" target="_blank" rel="noopener noreferrer" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-1.5 px-3 text-xs rounded-lg border border-black pixel-shadow-sm">
-          🔍 Open Google Recipe Results ↗
+  function searchWebRecipes() {
+    const selected = getSelectedPantryItems();
+    const output = document.getElementById('web-recipe-output');
+
+    if (selected.length === 0) {
+      output.innerHTML = `<p class="italic text-slate-400">Select ingredients above to search web recipes.</p>`;
+      return;
+    }
+
+    const query = encodeURIComponent(selected.join(' ') + ' recipe');
+    const searchUrl = `https://www.google.com/search?q=${query}`;
+
+    output.innerHTML = `
+      <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl space-y-2">
+        <p class="text-xs text-sky-900 font-bold">Generated Web Search Query:</p>
+        <p class="text-xs text-slate-600 bg-white p-2 rounded-lg border border-sky-100 font-mono">"${selected.join(', ')} recipes"</p>
+        <a href="${searchUrl}" target="_blank" class="inline-block w-full text-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 rounded-xl text-xs pixel-shadow transition-all">
+          🚀 Search Google Recipes ↗
         </a>
       </div>
     `;
   }
 
-  // --- MODAL & RECIPE MANAGEMENT (CREATE / EDIT / DELETE) ---
-  function openRecipeModal(editId = null) {
-    const modal = document.getElementById('recipe-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const form = document.getElementById('recipe-modal-form');
-
-    form.reset();
+  // --- RECIPE MODAL FUNCTIONS ---
+  function openRecipeModal() {
+    document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-recipe-id').value = '';
-
-    if (editId) {
-      const item = foodDatabase.find(i => i.id === editId);
-      if (item) {
-        modalTitle.innerText = `✏️ Edit Recipe: ${item.name}`;
-        document.getElementById('modal-recipe-id').value = item.id;
-        document.getElementById('modal-name').value = item.name;
-        document.getElementById('modal-icon').value = item.icon;
-        document.getElementById('modal-meal-type').value = item.mealTypes[0] || 'breakfast';
-        document.getElementById('modal-category').value = item.category;
-        document.getElementById('modal-ingredients').value = item.ingredients.join(', ');
-        document.getElementById('modal-img').value = item.img;
-      }
-    } else {
-      modalTitle.innerText = '✨ Add New Recipe to Vault';
-      document.getElementById('modal-meal-type').value = currentMealUnit;
-    }
-
-    modal.classList.remove('hidden');
+    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
+    document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
   function closeRecipeModal() {
     document.getElementById('recipe-modal').classList.add('hidden');
   }
 
-  function editRecipe(id) {
-    openRecipeModal(id);
-  }
+  function handleSaveModalRecipe(e) {
+    e.preventDefault();
 
-  function deleteRecipe(id) {
-    const item = foodDatabase.find(i => i.id === id);
-    if (!item) return;
-
-    if (confirm(`Are you sure you want to delete "${item.name}" from your vault?`)) {
-      foodDatabase = foodDatabase.filter(i => i.id !== id);
-      saveFoodDatabase();
-      
-      if (activeSelectedItem && activeSelectedItem.id === id) {
-        activeSelectedItem = null;
-      }
-
-      renderSubcategories();
-      renderFoodGrid();
-      updateCharacterSelectView();
-    }
-  }
-
-  function handleSaveModalRecipe(event) {
-    event.preventDefault();
-
-    const editId = document.getElementById('modal-recipe-id').value;
     const name = document.getElementById('modal-name').value.trim();
     const icon = document.getElementById('modal-icon').value.trim();
     const mealType = document.getElementById('modal-meal-type').value;
@@ -990,46 +927,27 @@
     const ingredientsRaw = document.getElementById('modal-ingredients').value;
     const img = document.getElementById('modal-img').value.trim();
 
-    const ingredients = ingredientsRaw.split(',').map(i => i.trim()).filter(Boolean);
+    const ingredients = ingredientsRaw.split(',').map(s => s.trim()).filter(Boolean);
 
-    if (editId) {
-      // Edit Existing
-      const index = foodDatabase.findIndex(i => i.id === editId);
-      if (index !== -1) {
-        foodDatabase[index] = {
-          ...foodDatabase[index],
-          name,
-          icon,
-          img,
-          mealTypes: [mealType],
-          category,
-          ingredients
-        };
-      }
-    } else {
-      // Add New
-      const newRecipe = {
-        id: 'custom-' + Date.now(),
-        name,
-        icon,
-        img,
-        mealTypes: [mealType],
-        category,
-        ingredients,
-        drinkPairing: 'Water',
-        saucePairing: 'House Sauce'
-      };
-      foodDatabase.push(newRecipe);
-      gainXP(25);
-    }
+    const newRecipe = {
+      id: 'custom_' + Date.now(),
+      name,
+      icon,
+      img,
+      mealTypes: [mealType],
+      category,
+      ingredients,
+      drinkPairing: 'Custom Drink',
+      saucePairing: 'Custom Sauce'
+    };
 
+    foodDatabase.unshift(newRecipe);
     saveFoodDatabase();
-    closeRecipeModal();
 
     selectMealUnit(mealType);
-    renderSubcategories();
-    renderFoodGrid();
-    updateCharacterSelectView();
+    selectFoodItem(newRecipe.id);
+    closeRecipeModal();
+    gainXP(25);
   }
 
   // --- INITIALIZATION ---
