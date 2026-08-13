@@ -242,7 +242,6 @@
             <select id="modal-difficulty" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
               <option value="BEGINNER">BEGINNER</option>
               <option value="INTERMEDIATE">INTERMEDIATE</option>
-
               <option value="ADVANCED">ADVANCED</option>
             </select>
           </div>
@@ -502,12 +501,12 @@
 
   // --- STASH SUPPLIES DATABASE ---
   const defaultSupplies = [
-    { id: 'sup1', name: 'Gingham Linen', type: 'Fabric', amount: 2.5, unit: 'Yards', details: 'Dusty Rose • 100% Linen' },
-    { id: 'sup2', name: 'Heavy Selvedge Denim', type: 'Fabric', amount: 3.0, unit: 'Yards', details: '14oz Vintage Wash' },
-    { id: 'sup3', name: 'Ribbed Stretch Velvet', type: 'Fabric', amount: 2.0, unit: 'Yards', details: 'Lavender Pearl' },
-    { id: 'sup4', name: 'Invisible Zippers (Set)', type: 'Hardware', amount: 6, unit: 'Pcs', details: '9-inch Mixed Colors' },
-    { id: 'sup5', name: 'Gutermann Poly Thread', type: 'Notion', amount: 4, unit: 'Spools', details: 'Black, Cream, Navy, Rose' },
-    { id: 'sup6', name: 'Natural Shell Buttons', type: 'Notion', amount: 24, unit: 'Pcs', details: '15mm Coconut & Pearl' }
+    { id: 'sup1', name: 'Gingham Linen', type: 'Fabric', amount: '2.5 Yds', details: 'Dusty Rose • 100% Linen' },
+    { id: 'sup2', name: 'Heavy Selvedge Denim', type: 'Fabric', amount: '3.0 Yds', details: '14oz Vintage Wash' },
+    { id: 'sup3', name: 'Ribbed Stretch Velvet', type: 'Fabric', amount: '2.0 Yds', details: 'Lavender Pearl' },
+    { id: 'sup4', name: 'Invisible Zippers (Set)', type: 'Hardware', amount: '6 Pcs', details: '9-inch Mixed Colors' },
+    { id: 'sup5', name: 'Gutermann Poly Thread', type: 'Notion', amount: '4 Spools', details: 'Black, Cream, Navy, Rose' },
+    { id: 'sup6', name: 'Natural Shell Buttons', type: 'Notion', amount: '24 Pcs', details: '15mm Coconut & Pearl' }
   ];
 
   function loadAllProjects() {
@@ -557,7 +556,7 @@
   function getCategoryLabel(cat) {
     const map = {
       'shirt': '👔 Shirt',
-      'pants': 'JB Pants',
+      'pants': '👖 Pants',
       'business-casual': '💼 Business Casual',
       'dinner': '🍷 Dinner',
       'elevated-dinner': '✨ Elevated Dinner',
@@ -684,107 +683,95 @@
             <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
               ${p.difficulty}
             </span>
-            <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black bg-emerald-100 text-emerald-900 uppercase">
+            <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black bg-emerald-100 text-emerald-950 uppercase">
               ${getCategoryLabel(p.category)}
             </span>
           </div>
 
-          <h4 class="font-extrabold text-base text-slate-900 truncate mb-1">${p.title}</h4>
-          <p class="text-xs text-slate-600 line-clamp-2 mb-2 leading-relaxed">${p.description}</p>
+          <h4 class="font-bold text-sm text-slate-900 truncate mb-1">${p.title}</h4>
+          <p class="text-[11px] text-slate-600 line-clamp-2 mb-2 leading-tight">${p.description}</p>
 
-          <select 
-            onchange="handleStatusChange('${p.id}', this.value)" 
-            class="w-full font-bold text-xs py-1.5 px-2.5 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
-          >
-            <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ To Stitch</option>
-            <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ On Cutting Table</option>
-            <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Finished Tailored Piece</option>
-          </select>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  // 3. RENDER STASH INVENTORY
-  function renderSuppliesList() {
-    const container = document.getElementById('supplies-grid');
-    container.innerHTML = stashSupplies.map(s => `
-      <div class="p-3 bg-emerald-50 rounded-2xl border-2 border-black pixel-shadow-sm flex flex-col justify-between">
-        <div>
-          <div class="flex items-center justify-between mb-1">
-            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black bg-white text-slate-800">
-              ${s.type}
-            </span>
-            <span class="text-xs font-black text-emerald-900 bg-yellow-300 px-2 py-0.5 rounded-md border border-black">
-              ${s.amount} ${s.unit}
-            </span>
+          <div class="flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
+            <select 
+              onchange="handleStatusChange('${p.id}', this.value)" 
+              class="font-bold text-[11px] py-1 px-2 rounded-lg border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
+            >
+              <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ To Stitch</option>
+              <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ On Table</option>
+              <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Finished</option>
+            </select>
+            ${p.patternUrl ? `<a href="${p.patternUrl}" target="_blank" class="text-[10px] font-bold text-emerald-700 underline">Pattern 🔗</a>` : ''}
           </div>
-          <span class="font-extrabold text-sm text-slate-900 block truncate">${s.name}</span>
-          <span class="text-xs text-slate-600 block mt-0.5">${s.details}</span>
         </div>
       </div>
     `).join('');
   }
 
-  // --- AUTOMATIC YARDAGE DEDUCTION LOGIC ---
-  function deductYardageFromStash(requiredYards, projectTitle) {
-    const fabricItem = stashSupplies.find(s => s.type === 'Fabric' && parseFloat(s.amount) > 0);
+  // 3. RENDER STASH SUPPLIES
+  function renderSuppliesList() {
+    const grid = document.getElementById('supplies-grid');
 
-    if (fabricItem) {
-      const currentAmt = parseFloat(fabricItem.amount);
-      const newAmt = Math.max(0, currentAmt - requiredYards);
-      fabricItem.amount = parseFloat(newAmt.toFixed(1));
-      saveSupplies();
-      alert(`✂️ Deducted ${requiredYards} Yds from "${fabricItem.name}" for ${projectTitle}! Remaining: ${fabricItem.amount} Yds`);
+    if (stashSupplies.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full text-center py-6">
+          <p class="text-xs font-bold text-slate-400">No fabric or notions in stash.</p>
+        </div>
+      `;
+      return;
     }
+
+    grid.innerHTML = stashSupplies.map(sup => `
+      <div class="bg-emerald-50 rounded-2xl border-2 border-black p-3 pixel-shadow-sm relative group">
+        <button 
+          onclick="deleteSupply('${sup.id}')" 
+          class="absolute top-2 right-2 text-slate-400 hover:text-red-600 font-extrabold text-xs opacity-80 group-hover:opacity-100 transition-opacity"
+          title="Delete Supply"
+        >
+          ✕
+        </button>
+        <div class="flex items-center justify-between gap-2 mb-1 pr-4">
+          <span class="text-xs font-extrabold text-emerald-950 truncate">${sup.name}</span>
+        </div>
+        <div class="flex items-center gap-1.5 mb-1.5">
+          <span class="text-[9px] font-black bg-emerald-200 text-emerald-900 px-1.5 py-0.5 rounded border border-black uppercase">${sup.type}</span>
+          <span class="text-[9px] font-black bg-yellow-300 text-slate-900 px-1.5 py-0.5 rounded border border-black">${sup.amount}</span>
+        </div>
+        <p class="text-[10px] font-bold text-slate-600 leading-tight">${sup.details}</p>
+      </div>
+    `).join('');
   }
 
+  // --- CONTROLLERS & HANDLERS ---
   function prevProject() {
     const filtered = getFilteredProjects();
     if (filtered.length === 0) return;
     currentProjectIndex = (currentProjectIndex - 1 + filtered.length) % filtered.length;
-    renderViews();
+    renderTurntableStage(filtered);
   }
 
   function nextProject() {
     const filtered = getFilteredProjects();
     if (filtered.length === 0) return;
     currentProjectIndex = (currentProjectIndex + 1) % filtered.length;
-    renderViews();
+    renderTurntableStage(filtered);
   }
 
   function setProjectIndex(idx) {
     currentProjectIndex = idx;
-    renderViews();
-  }
-
-  function handleStatusChange(id, newStatus) {
-    const proj = sewingProjects.find(p => p.id === id);
-    if (!proj) return;
-
-    const oldStatus = proj.status;
-    proj.status = newStatus;
-
-    if (oldStatus !== 'completed' && newStatus === 'completed') {
-      gainXP(25);
-      deductYardageFromStash(proj.yardage, proj.title);
-    } else if (oldStatus === 'completed' && newStatus !== 'completed') {
-      revokeXP(25);
-    }
-
-    saveStatuses();
-    renderViews();
+    renderTurntableStage(getFilteredProjects());
   }
 
   function filterCategory(cat) {
     currentCategory = cat;
     currentProjectIndex = 0;
-    
+
     document.querySelectorAll('.cat-btn').forEach(btn => {
-      if (btn.getAttribute('data-cat') === cat) {
-        btn.className = 'cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-emerald-600 text-white pixel-shadow-sm transition-all shrink-0';
+      if (btn.dataset.cat === cat) {
+        btn.classList.replace('bg-white', 'bg-emerald-600');
+        btn.classList.replace('text-slate-800', 'text-white');
       } else {
-        btn.className = 'cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black bg-white text-slate-800 pixel-shadow-sm transition-all shrink-0';
+        btn.classList.replace('bg-emerald-600', 'bg-white');
+        btn.classList.replace('text-white', 'text-slate-800');
       }
     });
 
@@ -797,28 +784,51 @@
     renderViews();
   }
 
-  // --- RANDOM IDEA GENERATOR ---
-  const garmentIdeas = ["Boxy Camp Shirt", "Pleated Wide Pants", "High-Neck Corset", "Double-Breasted Tux Vest", "Dramatic Capelet", "Slip Midi Dress"];
-  const fabricIdeas = ["Gingham Linen (2.5 Yds)", "Raw Selvedge Denim (3 Yds)", "Stretch Ribbed Velvet (2 Yds)", "Floral Tapestry Cotton", "Metallic Holographic Vinyl"];
+  function handleStatusChange(projectId, newStatus) {
+    const proj = sewingProjects.find(p => p.id === projectId);
+    if (!proj) return;
+
+    const oldStatus = proj.status;
+    proj.status = newStatus;
+
+    if (oldStatus !== 'completed' && newStatus === 'completed') {
+      gainXP(25);
+    } else if (oldStatus === 'completed' && newStatus !== 'completed') {
+      revokeXP(25);
+    }
+
+    saveStatuses();
+    renderViews();
+  }
+
+  // Quick Idea Generator
+  const ideaGarments = ['Boxy Camp Shirt', 'Pleated Trousers', 'Bias-Cut Slip Dress', 'Wrap Midi Skirt', 'Double-Breasted Vest', 'Structured Trench Coat'];
+  const ideaFabrics = ['Raw Heavy Denim', 'Dusty Rose Linen', 'Lavender Silk Satin', 'Plush Velvet', 'Floral Cotton Lawn', 'Holographic Vinyl'];
 
   function generateSewingIdea() {
-    document.getElementById('sew-garment').innerText = garmentIdeas[Math.floor(Math.random() * garmentIdeas.length)];
-    document.getElementById('sew-fabric').innerText = fabricIdeas[Math.floor(Math.random() * fabricIdeas.length)];
+    const garment = ideaGarments[Math.floor(Math.random() * ideaGarments.length)];
+    const fabric = ideaFabrics[Math.floor(Math.random() * ideaFabrics.length)];
+
+    document.getElementById('sew-garment').innerText = garment;
+    document.getElementById('sew-fabric').innerText = fabric;
+
     gainXP(10);
   }
 
-  // --- MODAL HANDLERS ---
+  // --- MODAL CONTROLS ---
   function openModal(type) {
-    if (type === 'project') document.getElementById('add-project-modal').classList.remove('hidden');
-    if (type === 'supply') document.getElementById('add-supply-modal').classList.remove('hidden');
+    if (type === 'project') {
+      document.getElementById('add-project-modal').classList.remove('hidden');
+    } else if (type === 'supply') {
+      document.getElementById('add-supply-modal').classList.remove('hidden');
+    }
   }
 
   function closeModal(type) {
     if (type === 'project') {
       document.getElementById('add-project-modal').classList.add('hidden');
       document.getElementById('new-project-form').reset();
-    }
-    if (type === 'supply') {
+    } else if (type === 'supply') {
       document.getElementById('add-supply-modal').classList.add('hidden');
       document.getElementById('new-supply-form').reset();
     }
@@ -827,79 +837,71 @@
   function handleAddProject(e) {
     e.preventDefault();
 
-    const title = document.getElementById('modal-title').value;
+    const title = document.getElementById('modal-title').value.trim();
     const category = document.getElementById('modal-category').value;
     const difficulty = document.getElementById('modal-difficulty').value;
     const yardage = parseFloat(document.getElementById('modal-yardage').value) || 2.0;
-    const patternUrl = document.getElementById('modal-pattern-url').value;
-    const imgInput = document.getElementById('modal-img').value;
-    const description = document.getElementById('modal-desc').value;
+    const patternUrl = document.getElementById('modal-pattern-url').value.trim();
+    const img = document.getElementById('modal-img').value.trim() || 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=400&auto=format&fit=crop&q=80';
+    const description = document.getElementById('modal-desc').value.trim();
 
-    const defaultPlaceholder = 'https://images.unsplash.com/photo-1528459801416-a9e53bbf4e17?w=400&auto=format&fit=crop&q=80';
-
-    const newProj = {
-      id: 'sew_custom_' + Date.now(),
-      title: title,
-      category: category,
-      difficulty: difficulty,
-      yardage: yardage,
-      patternUrl: patternUrl,
-      img: imgInput.trim() !== '' ? imgInput : defaultPlaceholder,
-      description: description,
+    const newProject = {
+      id: 'custom_proj_' + Date.now(),
+      title,
+      category,
+      difficulty,
+      yardage,
+      img,
+      description,
+      patternUrl,
       status: 'incomplete'
     };
 
+    sewingProjects.unshift(newProject);
+
     const savedCustom = JSON.parse(localStorage.getItem('stitchGuildCustomProjects')) || [];
-    savedCustom.push(newProj);
+    savedCustom.unshift(newProject);
     localStorage.setItem('stitchGuildCustomProjects', JSON.stringify(savedCustom));
 
-    sewingProjects = loadAllProjects();
-    loadSavedStatuses();
-    currentProjectIndex = getFilteredProjects().length - 1;
-    renderViews();
     closeModal('project');
+    currentProjectIndex = 0;
+    renderViews();
   }
 
   function handleAddSupply(e) {
     e.preventDefault();
 
-    const name = document.getElementById('supply-name').value;
+    const name = document.getElementById('supply-name').value.trim();
     const type = document.getElementById('supply-type').value;
-    const rawAmount = document.getElementById('supply-amount').value;
-    const details = document.getElementById('supply-details').value;
+    const amount = document.getElementById('supply-amount').value.trim();
+    const details = document.getElementById('supply-details').value.trim();
 
-    const parsedNum = parseFloat(rawAmount) || 1.0;
-    const unit = type === 'Fabric' ? 'Yards' : 'Pcs';
-
-    const newSup = {
-      id: 'sup_custom_' + Date.now(),
-      name: name,
-      type: type,
-      amount: parsedNum,
-      unit: unit,
-      details: details
+    const newSupply = {
+      id: 'sup_' + Date.now(),
+      name,
+      type,
+      amount,
+      details
     };
 
-    stashSupplies.push(newSup);
+    stashSupplies.unshift(newSupply);
     saveSupplies();
-
-    renderSuppliesList();
     closeModal('supply');
+    renderSuppliesList();
   }
 
-  // Keyboard Arrow Navigation
-  document.addEventListener('keydown', (e) => {
-    if (document.getElementById('add-project-modal').classList.contains('hidden') && 
-        document.getElementById('add-supply-modal').classList.contains('hidden')) {
-      if (e.key === 'ArrowLeft') prevProject();
-      if (e.key === 'ArrowRight') nextProject();
-    }
-  });
+  function deleteSupply(id) {
+    stashSupplies = stashSupplies.filter(s => s.id !== id);
+    saveSupplies();
+    renderSuppliesList();
+  }
 
-  // Initialize Page
-  loadSavedStatuses();
-  updateHUD();
-  renderViews();
-</script>
+  // --- INITIALIZATION ---
+  window.addEventListener('DOMContentLoaded', () => {
+    updateHUD();
+    loadSavedStatuses();
+    renderViews();
+  });
+  </script>
 </body>
 </html>
