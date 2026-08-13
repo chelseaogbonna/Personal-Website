@@ -341,8 +341,8 @@
     updateHUD();
   }
 
-  // --- DATABASE ARRAY ---
-  const foodDatabase = [
+  // --- DEFAULT DATABASE ARRAY ---
+  const defaultFoodDatabase = [
     {
       id: 'b1',
       name: 'Avocado Egg Toast',
@@ -598,6 +598,25 @@
     }
   ];
 
+  // --- LOCALSTORAGE DATABASE INITIALIZATION ---
+  function loadFoodDatabase() {
+    const savedData = localStorage.getItem('customFoodDatabase');
+    if (savedData) {
+      try {
+        return JSON.parse(savedData);
+      } catch (e) {
+        console.error('Could not load custom database, using default', e);
+      }
+    }
+    return defaultFoodDatabase;
+  }
+
+  function saveFoodDatabase() {
+    localStorage.setItem('customFoodDatabase', JSON.stringify(foodDatabase));
+  }
+
+  const foodDatabase = loadFoodDatabase();
+
   // --- STATE VARIABLES ---
   let currentMealUnit = 'breakfast';
   let currentSubcategory = 'all';
@@ -614,7 +633,7 @@
     updateCharacterSelectView();
   }
 
-  // --- ADD NEW RECIPE HANDLER (FIXED) ---
+  // --- ADD NEW RECIPE HANDLER (WITH LOCALSTORAGE PERSISTENCE) ---
   function handleAddNewRecipe(event) {
     event.preventDefault();
 
@@ -639,8 +658,9 @@
       saucePairing: 'House Sauce'
     };
 
-    // Direct insert into the local array (Replaced non-existent FoodManager)
+    // Save to array and persist to localStorage
     foodDatabase.push(newRecipe);
+    saveFoodDatabase();
 
     // Refresh display
     selectMealUnit(mealType);
