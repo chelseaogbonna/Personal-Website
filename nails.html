@@ -230,13 +230,13 @@
   </div>
 
   <script>
-    // INITIAL DATA
+    // INITIAL DATA - UPDATED WITH DIRECT IMAGE URLS
     let defaultSets = [
-      { id: 1, title: 'Pastel Chrome Floral', color: 'pink', style: 'chrome', shape: 'Medium Almond', status: 'CURRENT SET', image: '🌸', desc: 'Pink chrome base with 3D white gel flowers & gems.' },
-      { id: 2, title: 'Retro Pixel Hearts', color: 'purple', style: 'aura', shape: 'Short Square', status: 'WISHLIST', image: '🔮', desc: 'Lavender aura center with red 8-bit hearts.' },
-      { id: 3, title: 'Matcha French Tips', color: 'green', style: 'french', shape: 'Long Coffin', status: 'COMPLETED', image: '🍵', desc: 'Sage green French tips with gold foil flakes.' },
-      { id: 4, title: 'Ocean Pearl Velvet', color: 'blue', style: '3d', shape: 'Medium Oval', status: 'WISHLIST', image: '🌊', desc: 'Cat eye magnetic polish with real pearl charms.' },
-      { id: 5, title: 'Milk Tea Nude', color: 'neutral', style: 'presson', shape: 'Short Round', status: 'COMPLETED', image: '✨', desc: 'Clean nude tone base for everyday press-ons.' }
+      { id: 1, title: 'Pastel Chrome Floral', color: 'pink', style: 'chrome', shape: 'Medium Almond', status: 'CURRENT SET', image: 'https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80', desc: 'Pink chrome base with 3D white gel flowers & gems.' },
+      { id: 2, title: 'Retro Pixel Hearts', color: 'purple', style: 'aura', shape: 'Short Square', status: 'WISHLIST', image: 'https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80', desc: 'Lavender aura center with red 8-bit hearts.' },
+      { id: 3, title: 'Matcha French Tips', color: 'green', style: 'french', shape: 'Long Coffin', status: 'COMPLETED', image: 'https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80', desc: 'Sage green French tips with gold foil flakes.' },
+      { id: 4, title: 'Ocean Pearl Velvet', color: 'blue', style: '3d', shape: 'Medium Oval', status: 'WISHLIST', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80', desc: 'Cat eye magnetic polish with real pearl charms.' },
+      { id: 5, title: 'Milk Tea Nude', color: 'neutral', style: 'presson', shape: 'Short Round', status: 'COMPLETED', image: 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80', desc: 'Clean nude tone base for everyday press-ons.' }
     ];
 
     let nailSets = JSON.parse(localStorage.getItem('nailVaultSets')) || defaultSets;
@@ -257,7 +257,7 @@
       document.getElementById('carousel-color').innerText = `Color: ${current.color}`;
 
       const imgContainer = document.getElementById('carousel-img-container');
-      if (current.image.startsWith('http')) {
+      if (current.image && (current.image.startsWith('http') || current.image.startsWith('data:'))) {
         imgContainer.innerHTML = `<img src="${current.image}" alt="${current.title}" class="w-full h-full object-cover" />`;
       } else {
         imgContainer.innerHTML = `<span id="carousel-icon">${current.image || '💅'}</span>`;
@@ -305,7 +305,7 @@
       }
 
       filtered.forEach((item, index) => {
-        const isUrl = item.image.startsWith('http');
+        const isUrl = item.image && (item.image.startsWith('http') || item.image.startsWith('data:'));
         const imgContent = isUrl 
           ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover" />`
           : `<span class="text-4xl">${item.image || '💅'}</span>`;
