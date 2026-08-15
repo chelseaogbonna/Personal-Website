@@ -1,911 +1,948 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Recipe Vault & Kitchen Quest</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Food Quest 🍜</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Pixel shadow and arcade styling utilities */
-    .pixel-shadow {
-      box-shadow: 4px 4px 0px #000000;
-    }
-    .pixel-shadow-sm {
-      box-shadow: 2px 2px 0px #000000;
-    }
-    .pixel-shadow-lg {
-      box-shadow: 6px 6px 0px #000000;
+    body { font-family: 'Fredoka', cursive, sans-serif; }
+    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+
+    /* Seamless Grid Layout */
+    .seamless-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 0px;
     }
   </style>
 </head>
-<body class="bg-amber-50 text-slate-800 font-sans min-h-screen p-4 sm:p-6">
+<body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
-  <!-- MAIN APP CONTAINER -->
-  <div class="max-w-5xl mx-auto space-y-6">
-
-    <!-- HEADER / HUD BAR -->
-    <header class="bg-white border-4 border-black rounded-2xl p-4 pixel-shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
+  <!-- HUD / TOP BAR -->
+  <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
-        <span class="text-3xl">🍳</span>
+        <span class="text-3xl animate-bounce">⚡</span>
         <div>
-          <h1 class="text-xl font-extrabold tracking-wide text-slate-900">RECIPE VAULT & KITCHEN QUEST</h1>
-          <p class="text-xs text-slate-500">Gamified Pantry & Meal Planning Suite</p>
+          <a href="index.html" class="hover:text-yellow-300 transition-colors">
+            <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
+          </a>
+          <p class="text-xs text-purple-200">Player 1: Ready</p>
         </div>
       </div>
 
-      <!-- PLAYER STATS HUD -->
-      <div class="flex items-center gap-4 bg-amber-100 border-2 border-black rounded-xl px-4 py-2 pixel-shadow-sm">
-        <div class="text-center">
-          <span class="block text-[10px] font-bold text-amber-800 uppercase tracking-wider">Level</span>
-          <span id="player-lvl" class="text-lg font-black text-slate-900">1</span>
+      <!-- XP & Level Tracker -->
+      <div class="flex items-center gap-4 bg-purple-800 px-4 py-2 rounded-2xl border-2 border-black pixel-shadow-sm">
+        <div class="text-right">
+          <div class="text-xs font-bold text-yellow-300">LEVEL <span id="player-lvl">1</span></div>
+          <div class="text-[10px] text-purple-200"><span id="player-xp">0</span> / 100 XP</div>
         </div>
-        <div class="h-8 w-px bg-black opacity-2k"></div>
-        <div class="w-32">
-          <div class="flex justify-between text-[10px] font-bold mb-1">
-            <span>XP</span>
-            <span><span id="player-xp">0</span>/100</span>
-          </div>
-          <div class="w-full bg-white border border-black rounded-full h-3 overflow-hidden p-0.5">
-            <div id="xp-bar" class="bg-pink-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
-          </div>
+        <div class="w-24 bg-purple-950 h-4 rounded-full border border-black overflow-hidden">
+          <div id="xp-bar" class="bg-yellow-400 h-full w-0 transition-all duration-300"></div>
         </div>
       </div>
-    </header>
-
-    <!-- NAVIGATION TABS FOR MEAL UNITS -->
-    <div class="flex flex-wrap gap-2 items-center justify-between">
-      <div class="flex flex-wrap gap-2">
-        <button id="tab-breakfast" onclick="selectMealUnit('breakfast')" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all">🌅 Breakfast</button>
-        <button id="tab-lunch" onclick="selectMealUnit('lunch')" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all">☀️ Lunch</button>
-        <button id="tab-dinner" onclick="selectMealUnit('dinner')" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all">🌙 Dinner</button>
-        <button id="tab-dessert" onclick="selectMealUnit('dessert')" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all">🍰 Dessert</button>
-      </div>
-      <button onclick="openRecipeModal()" class="bg-emerald-400 hover:bg-emerald-500 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all flex items-center gap-1.5">
-        <span>✨ Add Recipe</span>
-      </button>
     </div>
+  </header>
 
-    <!-- MAIN GRID DASHBOARD -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- NAVIGATION TABS -->
+  <nav class="max-w-5xl mx-auto my-6 px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
+        🍱 Food Quest
+      </a>
+      <a href="build.html" class="nav-btn bg-cyan-400 hover:bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🛠️ Wishlist Labs
+      </a>
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🪡 Stitch Guild
+      </a>
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        👗 Style Closet
+      </a>
+    </div>
+  </nav>
 
-      <!-- COLUMN 1 & 2: INVENTORY & SEARCH -->
-      <div class="lg:col-span-2 space-y-6">
+  <!-- MAIN CONTAINER -->
+  <main class="max-w-5xl mx-auto px-4 space-y-8">
+
+    <!-- MEAL UNITS & INVENTORY EXPLORER -->
+    <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault & Item Inventory</h2>
+          <p class="text-xs text-pink-800">Browse items by category or toggle meals to spin!</p>
+        </div>
         
-        <!-- SEARCH & SUBCATEGORY FILTER BAR -->
-        <div class="bg-white border-4 border-black rounded-2xl p-4 pixel-shadow space-y-3">
-          <div class="flex gap-2">
-            <input 
-              id="recipe-search-input" 
-              type="text" 
-              placeholder="Search recipes or ingredients..." 
-              oninput="handleSearchInput(this.value)"
-              class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-pink-400"
-            />
-          </div>
-          <!-- Subcategory Filter Pills -->
-          <div id="subcategory-bar" class="flex flex-wrap gap-1.5 pt-1">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- FOOD INVENTORY GRID -->
-        <div class="bg-white border-4 border-black rounded-2xl p-4 pixel-shadow space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="font-black text-sm uppercase tracking-wider text-slate-700">📦 Vault Inventory</h3>
-            <span class="text-[10px] text-slate-400 italic">Select an item to view recipe details</span>
-          </div>
-          <div id="food-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[360px] overflow-y-auto pr-1">
-            <!-- Dynamically populated -->
-          </div>
-        </div>
-
-        <!-- PANTRY MATCHING & WEB SEARCH CONSOLE -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          
-          <!-- Vault Pantry Matcher -->
-          <div class="bg-emerald-50 border-4 border-black rounded-2xl p-4 pixel-shadow space-y-3">
-            <div class="flex items-center justify-between">
-              <h4 class="font-black text-xs uppercase text-emerald-900">🥗 Vault Recipe Matcher</h4>
-              <button onclick="openPantryModal()" class="text-[10px] bg-white border border-black px-2 py-0.5 rounded-lg font-bold hover:bg-emerald-100">+ Add Item</button>
-            </div>
-            <p class="text-[10px] text-emerald-800">Check pantry items to find matching vault recipes:</p>
-            <div id="pantry-checkboxes-grid" class="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto pr-1">
-              <!-- Dynamically populated -->
-            </div>
-            <button onclick="matchCustomRecipe()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow text-xs">
-              Match Vault Recipes
+        <!-- MULTI-TOGGLE RANDOM SPINNER CONTROL PANEL -->
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow flex flex-col sm:flex-row items-center gap-3">
+          <div class="flex flex-wrap items-center gap-1.5" id="spinner-toggle-group">
+            <span class="text-[11px] font-bold text-slate-500 mr-1">Spin Pool:</span>
+            <button onclick="toggleSpinFilter('breakfast')" id="spin-btn-breakfast" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍳 Breakfast
             </button>
-            <div id="custom-recipe-output" class="text-xs text-slate-700 mt-2"></div>
-          </div>
-
-          <!-- Internet Recipe Finder -->
-          <div class="bg-sky-50 border-4 border-black rounded-2xl p-4 pixel-shadow space-y-3">
-            <h4 class="font-black text-xs uppercase text-sky-900">🌐 Internet Recipe Finder</h4>
-            <p class="text-[10px] text-sky-800">Search public databases using your checked pantry items above:</p>
-            <div class="p-4 bg-white border-2 border-dashed border-sky-300 rounded-xl text-center">
-              <span class="text-2xl">🌍</span>
-              <p class="text-[10px] text-slate-500 mt-1">Queries all checked items asynchronously.</p>
-            </div>
-            <button onclick="searchWebRecipes()" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow text-xs">
-              Search Web Recipes
+            <button onclick="toggleSpinFilter('lunch')" id="spin-btn-lunch" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🥗 Lunch
             </button>
-            <div id="web-recipe-output" class="text-xs text-slate-700 mt-2"></div>
+            <button onclick="toggleSpinFilter('dinner')" id="spin-btn-dinner" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍜 Dinner
+            </button>
+            <button onclick="toggleSpinFilter('dessert')" id="spin-btn-dessert" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍰 Dessert
+            </button>
           </div>
-
+          <button onclick="spinRandomMeal()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+            Spin Meal (+10 XP)
+          </button>
         </div>
-
       </div>
 
-      <!-- COLUMN 3: SELECTED ITEM DETAILS & SPINNER -->
-      <div class="space-y-6">
-        
-        <!-- DETAILED CARD VIEW -->
-        <div class="bg-white border-4 border-black rounded-2xl p-4 pixel-shadow space-y-4">
-          <div class="flex items-center justify-between border-b-2 border-black pb-2">
-            <span id="detail-category" class="text-[10px] font-bold uppercase bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg border border-black">Category</span>
-            <div id="detail-actions" class="hidden items-center gap-1.5">
-              <button onclick="openEditRecipeModal()" class="p-1 bg-amber-200 hover:bg-amber-300 border border-black rounded-lg text-xs" title="Edit Recipe">✏️</button>
-              <button onclick="deleteSelectedRecipe()" class="p-1 bg-red-200 hover:bg-red-300 border border-black rounded-lg text-xs" title="Delete Recipe">🗑️</button>
-            </div>
-          </div>
-
-          <!-- Item Preview Frame -->
-          <div class="flex flex-col items-center text-center space-y-3">
-            <div id="detail-img-container" class="w-24 h-24 rounded-2xl border-2 border-black overflow-hidden bg-amber-50 shrink-0 flex items-center justify-center">
-              <span class="text-3xl">🍲</span>
-            </div>
-            <div>
-              <h3 id="detail-title" class="font-black text-base text-slate-800">Select a Recipe</h3>
-            </div>
-          </div>
-
-          <!-- Ingredients List -->
-          <div class="space-y-1.5 bg-amber-50 p-3 rounded-xl border-2 border-black">
-            <h5 class="font-bold text-[10px] uppercase text-slate-500">Ingredients</h5>
-            <ul id="detail-ingredients" class="text-xs list-disc list-inside space-y-0.5">
-              <li class="text-slate-400 italic">No ingredients listed</li>
-            </ul>
-          </div>
-
-          <!-- Pairings -->
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <div class="bg-pink-50 p-2.5 rounded-xl border border-black">
-              <span class="block text-[10px] font-bold text-pink-700">🥤 Drink</span>
-              <span id="detail-drink" class="font-medium text-slate-700">-</span>
-            </div>
-            <div class="bg-purple-50 p-2.5 rounded-xl border border-black">
-              <span class="block text-[10px] font-bold text-purple-700">🍯 Sauce</span>
-              <span id="detail-sauce" class="font-medium text-slate-700">-</span>
-            </div>
-          </div>
-
-          <!-- Consume / Cook Button -->
-          <button id="eat-btn" disabled onclick="consumeSelectedFood()" class="mt-3 w-full bg-slate-200 text-slate-400 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black cursor-not-allowed">
-            ✨ Cook & Eat (+15 XP)
+      <!-- Meal Unit Selection + Live Search Bar -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <!-- Tabs -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍳 Breakfast
+          </button>
+          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🥗 Lunch
+          </button>
+          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍜 Dinner
+          </button>
+          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍰 Dessert
           </button>
         </div>
 
-        <!-- CHARACTER SELECT CAROUSEL VIEW -->
-        <div class="bg-white border-4 border-black rounded-2xl p-4 pixel-shadow space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="font-black text-xs uppercase text-slate-700">🎠 Card Carousel</h4>
-            <span id="character-select-counter" class="text-[10px] font-bold bg-amber-200 px-2 py-0.5 rounded-lg border border-black">DISH 0 / 0</span>
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-64">
+          <input 
+            type="text" 
+            id="recipe-search-input"
+            oninput="handleSearchInput(this.value)"
+            placeholder="🔍 Search recipes..." 
+            class="w-full bg-white px-3 py-2 text-xs font-bold rounded-xl border-2 border-black pixel-shadow focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
+          />
+        </div>
+      </div>
+      
+      <!-- Sub-Category Filter -->
+      <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
+        <!-- Dynamic Subcategory Pills -->
+      </div>
+
+      <!-- CHARACTER SELECT DISH CAROUSEL SECTION -->
+      <div class="bg-purple-900 border-4 border-black rounded-3xl p-6 pixel-shadow-lg text-white mb-6">
+        <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 border-b-2 border-purple-700 pb-3">
+          <div>
+            <h3 class="text-xl font-bold text-yellow-300">🎮 Dish Character Select</h3>
+            <p class="text-xs text-purple-200">Cycle through dishes in the selected category!</p>
           </div>
-          
-          <div class="bg-amber-50 border-2 border-black rounded-xl p-3 flex items-center gap-3 relative">
-            <button onclick="prevCharacterSelect()" class="absolute -left-3 bg-white hover:bg-amber-100 border-2 border-black w-6 h-6 rounded-full font-bold text-xs flex items-center justify-center pixel-shadow-sm z-10">◀</button>
+          <div id="character-select-counter" class="bg-purple-950 text-yellow-400 px-4 py-1.5 rounded-xl border border-black font-mono text-sm font-bold">
+            DISH 1 / 30
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-6 my-2">
+          <button onclick="prevCharacterSelect()" class="w-full sm:w-auto bg-purple-700 hover:bg-purple-600 active:translate-y-1 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow">
+            ◀ PREV
+          </button>
+
+          <div class="flex-1 w-full bg-purple-950 border-2 border-black rounded-2xl p-4 flex flex-col sm:flex-row items-center gap-4 pixel-shadow-inner">
+            <div id="character-select-img" class="w-28 h-28 shrink-0 rounded-xl border-2 border-black overflow-hidden bg-purple-900 flex items-center justify-center">
+              <!-- Loaded dynamically -->
+            </div>
+            <div class="text-center sm:text-left flex-1">
+              <span id="character-select-tag" class="text-[10px] font-bold bg-purple-700 text-purple-200 px-2 py-0.5 rounded-md uppercase tracking-wider">Breakfast</span>
+              <h3 id="character-select-title" class="text-xl font-bold text-yellow-300 mt-1">Avocado Egg Toast</h3>
+              <p id="character-select-ingredients" class="text-xs text-purple-200 mt-1">Ingredients: Bread, Avocado, Eggs, Chili Flakes</p>
+            </div>
+          </div>
+
+          <button onclick="nextCharacterSelect()" class="w-full sm:w-auto bg-yellow-400 hover:bg-yellow-300 active:translate-y-1 text-purple-950 font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow">
+            NEXT ▶
+          </button>
+        </div>
+      </div>
+
+      <!-- Inventory Grid + Item Detail Card -->
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Compact Seamless Inventory Grid -->
+        <div class="md:col-span-2 bg-white rounded-2xl border-2 border-black p-3 max-h-[480px] overflow-y-auto">
+          <div id="food-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+             <!-- Dynamic Food Item Cards -->
+          </div>
+        </div>
+        
+        <!-- Selected Item Detail View -->
+        <div id="food-detail-card" class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-[10px] font-bold text-pink-500 uppercase tracking-wider" id="detail-category">Select an Item</div>
+              <div id="detail-actions" class="hidden gap-1.5">
+                <button onclick="openEditRecipeModal()" title="Edit Recipe" class="bg-amber-300 hover:bg-amber-400 text-slate-900 font-bold px-2 py-0.5 text-[10px] rounded border border-black pixel-shadow-sm">✏️ Edit</button>
+                <button onclick="deleteSelectedRecipe()" title="Delete Recipe" class="bg-red-400 hover:bg-red-500 text-white font-bold px-2 py-0.5 text-[10px] rounded border border-black pixel-shadow-sm">🗑️ Delete</button>
+              </div>
+            </div>
             
-            <div id="character-select-img" class="w-16 h-16 rounded-xl border-2 border-black overflow-hidden bg-white shrink-0 flex items-center justify-center object-cover">
-              <span class="text-xl">✨</span>
-            </div>
-            <div class="overflow-hidden flex-1">
-              <span id="character-select-tag" class="text-[9px] font-bold uppercase bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded border border-black">Tag</span>
-              <h5 id="character-select-title" class="font-bold text-xs truncate mt-1 text-slate-800">No Dishes Available</h5>
-              <p id="character-select-ingredients" class="text-[10px] text-slate-500 truncate">Select filters above</p>
+            <div id="detail-img-container" class="w-full h-32 rounded-xl border-2 border-black overflow-hidden mb-2 bg-pink-50 flex items-center justify-center">
+              <span class="text-slate-400 text-xs italic">No item selected</span>
             </div>
 
-            <button onclick="nextCharacterSelect()" class="absolute -right-3 bg-white hover:bg-amber-100 border-2 border-black w-6 h-6 rounded-full font-bold text-xs flex items-center justify-center pixel-shadow-sm z-10">▶</button>
-          </div>
-        </div>
+            <h3 class="text-lg font-bold mb-2 flex items-center gap-1.5" id="detail-title">
+              <span>🎒 Inventory Empty</span>
+            </h3>
+            
+            <p class="text-[11px] font-bold text-slate-500 mb-1">Required Ingredients:</p>
+            <ul id="detail-ingredients" class="space-y-0.5 text-xs list-disc list-inside text-slate-700 bg-pink-50 p-2 rounded-xl border border-pink-200 min-h-[50px] mb-2">
+              <li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>
+            </ul>
 
-        <!-- RANDOM MEAL SPINNER -->
-        <div class="bg-pink-100 border-4 border-black rounded-2xl p-4 pixel-shadow space-y-3">
-          <h4 class="font-black text-xs uppercase text-pink-900">🎰 Random Meal Spinner</h4>
-          <p class="text-[10px] text-pink-800">Not sure what to eat? Let destiny decide!</p>
-          <div class="flex flex-wrap gap-1">
-            <button id="spin-btn-breakfast" onclick="toggleSpinFilter('breakfast')" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">Breakfast</button>
-            <button id="spin-btn-lunch" onclick="toggleSpinFilter('lunch')" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">Lunch</button>
-            <button id="spin-btn-dinner" onclick="toggleSpinFilter('dinner')" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">Dinner</button>
-            <button id="spin-btn-dessert" onclick="toggleSpinFilter('dessert')" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">Dessert</button>
+            <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 text-xs space-y-1">
+              <p class="font-bold text-amber-900 border-b border-amber-200 pb-0.5">Pairing Suggestions:</p>
+              <p class="text-slate-700">🥤 <strong>Drink:</strong> <span id="detail-drink" class="text-slate-500 italic">None</span></p>
+              <p class="text-slate-700">🥣 <strong>Sauce:</strong> <span id="detail-sauce" class="text-slate-500 italic">None</span></p>
+            </div>
           </div>
-          <button onclick="spinRandomMeal()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2.5 rounded-xl border-2 border-black pixel-shadow text-xs transition-all hover:scale-102">
-            🎲 Spin the Meal Wheel!
+
+          <button id="eat-btn" disabled onclick="consumeSelectedFood()" class="mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed">
+            Eat Meal (+15 XP)
           </button>
         </div>
+      </div>
+    </section>
 
+    <!-- PANTRY RECIPE MATCHERS -->
+    <section class="bg-amber-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+        <div>
+          <h2 class="text-2xl font-bold text-amber-900">🥖 Pantry Crafting Station</h2>
+          <p class="text-xs text-amber-800">Select available ingredients from your kitchen pantry to generate custom or web recipes.</p>
+        </div>
+        <button onclick="openPantryModal()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow shrink-0 flex items-center gap-1.5 transition-all">
+          ➕ Add Pantry Item
+        </button>
       </div>
 
-    </div>
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6 mt-4">
+        <h4 class="font-bold text-slate-700 mb-3 text-sm border-b pb-1">Available Ingredients:</h4>
+        <!-- Dynamic Pantry Checkboxes Grid -->
+        <div id="pantry-checkboxes-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
 
+      <!-- Action Buttons Row -->
+      <div class="flex flex-wrap items-center gap-3 mb-6">
+        <button onclick="matchCustomRecipe()" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          📖 Match My Vault Recipes
+        </button>
+        <button onclick="searchWebRecipes()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
+          🌐 Search Web Recipes
+        </button>
+        <button onclick="openRecipeModal()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2.5 px-5 rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all flex items-center gap-1.5">
+          ✨ Add New Recipe
+        </button>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-emerald-700 border-b-2 border-emerald-100 pb-1 mb-2">📖 Vault Recipes Found</h4>
+          <div id="custom-recipe-output" class="text-sm text-slate-600 space-y-2">
+            <p class="italic text-slate-400">Select items above and click "Match My Vault Recipes".</p>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border-2 border-black">
+          <h4 class="font-bold text-sky-700 border-b-2 border-sky-100 pb-1 mb-2">🌐 Internet Recipe Finder</h4>
+          <div id="web-recipe-output" class="text-sm text-slate-600 space-y-2">
+            <p class="italic text-slate-400">Select items above and click "Search Web Recipes".</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PANTRY ITEM MODAL (ADD INGREDIENT) -->
+  <div id="pantry-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-sm relative animate-in fade-in zoom-in duration-150">
+      <button onclick="closePantryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
+      
+      <h3 class="text-xl font-bold text-amber-900 mb-1">➕ Add Pantry Item</h3>
+      <p class="text-xs text-amber-800 mb-4">Stock a new ingredient into your kitchen shelf!</p>
+
+      <form id="pantry-modal-form" onsubmit="handleSavePantryItem(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Emoji Icon</label>
+          <input type="text" id="pantry-modal-icon" required placeholder="e.g., 🧀" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Ingredient Name</label>
+          <input type="text" id="pantry-modal-name" required placeholder="e.g., Cheddar Cheese" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closePantryModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+            Cancel
+          </button>
+          <button type="submit" class="w-2/3 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+            Add Ingredient
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 
-  <!-- MODAL: ADD / EDIT RECIPE -->
-  <div id="recipe-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-    <div class="bg-white border-4 border-black rounded-2xl max-w-md w-full p-6 pixel-shadow-lg space-y-4 relative">
-      <div class="flex items-center justify-between border-b-2 border-black pb-3">
-        <h3 id="modal-title" class="font-black text-sm uppercase text-slate-800">✨ Add New Recipe</h3>
-        <button onclick="closeRecipeModal()" class="text-xs font-bold bg-slate-100 hover:bg-red-200 border border-black px-2 py-1 rounded-lg">✕</button>
-      </div>
-      <form id="recipe-modal-form" onsubmit="handleSaveModalRecipe(event)" class="space-y-3">
-        <input type="hidden" id="modal-recipe-id" />
+  <!-- RECIPE MODAL (CREATE / EDIT) -->
+  <div id="recipe-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-lg relative animate-in fade-in zoom-in duration-150">
+      <button onclick="closeRecipeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
+      
+      <h3 id="modal-title" class="text-2xl font-bold text-purple-900 mb-1">✨ Add New Recipe</h3>
+      <p class="text-xs text-purple-800 mb-4">Fill out the stats for your culinary vault entry!</p>
+
+      <form id="recipe-modal-form" onsubmit="handleSaveModalRecipe(event)" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <input type="hidden" id="modal-recipe-id" value="" />
+
         <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Recipe Name</label>
-          <input type="text" id="modal-name" required class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="e.g. Garlic Butter Ramen" />
+          <label class="block text-xs font-bold text-slate-700 mb-1">Recipe Name</label>
+          <input type="text" id="modal-name" required placeholder="e.g., Berry Waffles" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Emoji Icon</label>
-            <input type="text" id="modal-icon" required class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium text-center" placeholder="🍜" maxlength="2" />
-          </div>
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Meal Unit</label>
-            <select id="modal-meal-type" class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium">
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="dessert">Dessert</option>
-            </select>
-          </div>
-        </div>
+
         <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Category</label>
-          <div class="flex gap-2">
-            <select id="modal-category-select" onchange="handleCategoryDropdownChange(this.value)" class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Emoji Icon</label>
+          <input type="text" id="modal-icon" required placeholder="e.g., 🧇" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Meal Type</label>
+          <select id="modal-meal-type" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white">
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="dinner">Dinner</option>
+            <option value="dessert">Dessert</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Category</label>
+          <div class="flex gap-1.5">
+            <select id="modal-category-select" onchange="handleCategoryDropdownChange(this.value)" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white">
               <!-- Dynamically populated -->
             </select>
-            <button type="button" onclick="toggleCustomCategoryInput()" class="bg-amber-200 border-2 border-black px-2.5 py-1 rounded-xl text-xs font-bold shrink-0">+</button>
+            <button type="button" onclick="toggleCustomCategoryInput()" title="Add Custom Category" class="bg-purple-100 hover:bg-purple-200 text-purple-900 px-2 py-1 text-xs font-bold rounded-xl border-2 border-black shrink-0">➕</button>
           </div>
-          <input type="text" id="modal-category-custom" class="hidden mt-2 w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium" placeholder="Enter custom category..." />
+          <input type="text" id="modal-category-custom" placeholder="Type new category..." class="w-full mt-1.5 bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white hidden" />
         </div>
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Ingredients (comma-separated)</label>
-          <input type="text" id="modal-ingredients" required class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium" placeholder="Ramen noodles, Garlic, Butter, Egg" />
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Ingredients (comma-separated)</label>
+          <input type="text" id="modal-ingredients" required placeholder="e.g., Waffle Batter, Strawberries, Syrup" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
         </div>
-        <div>
-          <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Image URL</label>
-          <input type="url" id="modal-img" required class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs font-medium" placeholder="https://images.unsplash.com/..." />
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Image URL</label>
+          <input type="url" id="modal-img" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
         </div>
-        <div class="pt-2 flex gap-2">
-          <button type="button" onclick="closeRecipeModal()" class="w-1/2 bg-slate-200 hover:bg-slate-300 font-bold py-2 rounded-xl border-2 border-black text-xs">Cancel</button>
-          <button type="submit" id="modal-submit-btn" class="w-1/2 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow text-xs">Save Recipe (+25 XP)</button>
+
+        <div class="sm:col-span-2 flex gap-2 mt-2">
+          <button type="button" onclick="closeRecipeModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+            Cancel
+          </button>
+          <button type="submit" id="modal-submit-btn" class="w-2/3 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+            Save Recipe (+25 XP)
+          </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL: ADD PANTRY ITEM -->
-  <div id="pantry-modal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-    <div class="bg-white border-4 border-black rounded-2xl max-w-sm w-full p-6 pixel-shadow-lg space-y-4">
-      <div class="flex items-center justify-between border-b-2 border-black pb-3">
-        <h3 class="font-black text-sm uppercase text-slate-800">🥗 Add Pantry Item</h3>
-        <button onclick="closePantryModal()" class="text-xs font-bold bg-slate-100 hover:bg-red-200 border border-black px-2 py-1 rounded-lg">✕</button>
-      </div>
-      <form id="pantry-modal-form" onsubmit="handleSavePantryItem(event)" class="space-y-3">
-        <div class="grid grid-cols-3 gap-2">
-          <div>
-            <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Icon</label>
-            <input type="text" id="pantry-modal-icon" required class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs text-center" placeholder="🧀" maxlength="2" />
-          </div>
-          <div class="col-span-2">
-            <label class="block text-[10px] font-bold uppercase text-slate-600 mb-1">Item Name</label>
-            <input type="text" id="pantry-modal-name" required class="w-full bg-amber-50 border-2 border-black rounded-xl px-3 py-2 text-xs" placeholder="Cheese" />
-          </div>
-        </div>
-        <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow text-xs">Save Pantry Item (+5 XP)</button>
-      </form>
-    </div>
-  </div>
+<script>
+  // --- HUD XP SYSTEM ---
+  let xp = parseInt(localStorage.getItem('playerXP')) || 0;
+  let level = parseInt(localStorage.getItem('playerLvl')) || 1;
 
-  <!-- JAVASCRIPT LOGIC -->
-  <script>
-    // --- HUD XP SYSTEM ---
-    let xp = parseInt(localStorage.getItem('playerXP')) || 0;
-    let level = parseInt(localStorage.getItem('playerLvl')) || 1;
+  function updateHUD() {
+    document.getElementById('player-xp').innerText = xp;
+    document.getElementById('player-lvl').innerText = level;
+    document.getElementById('xp-bar').style.width = `${xp}%`;
+    localStorage.setItem('playerXP', xp);
+    localStorage.setItem('playerLvl', level);
+  }
 
-    function updateHUD() {
-      document.getElementById('player-xp').innerText = xp;
-      document.getElementById('player-lvl').innerText = level;
-      document.getElementById('xp-bar').style.width = `${xp}%`;
-      localStorage.setItem('playerXP', xp);
-      localStorage.setItem('playerLvl', level);
+  function gainXP(amount) {
+    xp += amount;
+    if (xp >= 100) {
+      level += Math.floor(xp / 100);
+      xp = xp % 100;
+      alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
     }
+    updateHUD();
+  }
 
-    function gainXP(amount) {
-      xp += amount;
-      if (xp >= 100) {
-        level += Math.floor(xp / 100);
-        xp = xp % 100;
-        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
-      }
-      updateHUD();
+  // --- DEFAULT DATABASES ---
+  const defaultPantryItems = [
+    { name: 'eggs', label: 'Eggs', icon: '🍳' },
+    { name: 'bread', label: 'Bread', icon: '🍞' },
+    { name: 'matcha', label: 'Matcha', icon: '🍵' },
+    { name: 'boba', label: 'Boba', icon: '🧋' },
+    { name: 'ramen noodles', label: 'Ramen', icon: '🍜' },
+    { name: 'garlic', label: 'Garlic', icon: '🧄' },
+    { name: 'flour', label: 'Flour', icon: '🌾' },
+    { name: 'strawberries', label: 'Strawberries', icon: '🍓' }
+  ];
+
+  const defaultFoodDatabase = [
+    {
+      id: 'b1',
+      name: 'Avocado Egg Toast',
+      icon: '🥑',
+      img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&auto=format&fit=crop&q=80',
+      mealTypes: ['breakfast'],
+      category: 'sandwiches',
+      ingredients: ['Sourdough Bread', 'Avocado', 'Eggs', 'Chili Flakes'],
+      drinkPairing: 'Iced Cold Brew',
+      saucePairing: 'Hot Honey'
+    },
+    {
+      id: 'b2',
+      name: 'Breakfast Burrito',
+      icon: '🌯',
+      img: 'https://images.unsplash.com/photo-1711488735428-27c6757beb5c?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['breakfast'],
+      category: 'wraps',
+      ingredients: ['Flour Tortilla', 'Eggs', 'Potatoes', 'Cheddar Cheese'],
+      drinkPairing: 'Iced Coffee',
+      saucePairing: 'Chipotle Sauce'
+    },
+    {
+      id: 'l1',
+      name: 'Caprese Focaccia',
+      icon: '🥪',
+      img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['lunch'],
+      category: 'sandwiches',
+      ingredients: ['Focaccia', 'Tomatoes', 'Mozzarella', 'Basil'],
+      drinkPairing: 'Sparkling Water',
+      saucePairing: 'Balsamic Glaze'
+    },
+    {
+      id: 'd1',
+      name: 'Birria Tacos',
+      icon: '🌮',
+      img: 'https://images.unsplash.com/photo-1606350383072-4b031d6bd834?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['dinner'],
+      category: 'tacos',
+      ingredients: ['Rice', 'Corn Tortillas', 'Avocado', 'Lime'],
+      drinkPairing: 'Horchata',
+      saucePairing: 'Chipotle Crema'
+    },
+    {
+      id: 'ds1',
+      name: 'Strawberry Tanghulu',
+      icon: '🍓',
+      img: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['dessert'],
+      category: 'fruit',
+      ingredients: ['Strawberries', 'Sugar', 'Water'],
+      drinkPairing: 'Jasmine Green Tea',
+      saucePairing: 'Sugar Glaze'
     }
+  ];
 
-    // --- DEFAULT DATABASES ---
-    const defaultPantryItems = [
-      { name: 'eggs', label: 'Eggs', icon: '🍳' },
-      { name: 'bread', label: 'Bread', icon: '🍞' },
-      { name: 'matcha', label: 'Matcha', icon: '🍵' },
-      { name: 'boba', label: 'Boba', icon: '🧋' },
-      { name: 'ramen noodles', label: 'Ramen', icon: '🍜' },
-      { name: 'garlic', label: 'Garlic', icon: '🧄' },
-      { name: 'flour', label: 'Flour', icon: '🌾' },
-      { name: 'strawberries', label: 'Strawberries', icon: '🍓' }
-    ];
+  // --- LOCALSTORAGE DATABASE INITIALIZATION ---
+  let pantryItems = loadPantryItems();
+  let foodDatabase = loadFoodDatabase();
 
-    const defaultFoodDatabase = [
-      {
-        id: 'b1',
-        name: 'Avocado Egg Toast',
-        icon: '🥑',
-        img: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=300&auto=format&fit=crop&q=80',
-        mealTypes: ['breakfast'],
-        category: 'sandwiches',
-        ingredients: ['Sourdough Bread', 'Avocado', 'Eggs', 'Chili Flakes'],
-        drinkPairing: 'Iced Cold Brew',
-        saucePairing: 'Hot Honey'
-      },
-      {
-        id: 'b2',
-        name: 'Breakfast Burrito',
-        icon: '🌯',
-        img: 'https://images.unsplash.com/photo-1711488735428-27c6757beb5c?w=700&auto=format&fit=crop&q=60',
-        mealTypes: ['breakfast'],
-        category: 'wraps',
-        ingredients: ['Flour Tortilla', 'Eggs', 'Potatoes', 'Cheddar Cheese'],
-        drinkPairing: 'Iced Coffee',
-        saucePairing: 'Chipotle Sauce'
-      },
-      {
-        id: 'l1',
-        name: 'Caprese Focaccia',
-        icon: '🥪',
-        img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=700&auto=format&fit=crop&q=60',
-        mealTypes: ['lunch'],
-        category: 'sandwiches',
-        ingredients: ['Focaccia', 'Tomatoes', 'Mozzarella', 'Basil'],
-        drinkPairing: 'Sparkling Water',
-        saucePairing: 'Balsamic Glaze'
-      },
-      {
-        id: 'd1',
-        name: 'Birria Tacos',
-        icon: '🌮',
-        img: 'https://images.unsplash.com/photo-1606350383072-4b031d6bd834?w=700&auto=format&fit=crop&q=60',
-        mealTypes: ['dinner'],
-        category: 'tacos',
-        ingredients: ['Rice', 'Corn Tortillas', 'Avocado', 'Lime'],
-        drinkPairing: 'Horchata',
-        saucePairing: 'Chipotle Crema'
-      },
-      {
-        id: 'ds1',
-        name: 'Strawberry Tanghulu',
-        icon: '🍓',
-        img: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=700&auto=format&fit=crop&q=60',
-        mealTypes: ['dessert'],
-        category: 'fruit',
-        ingredients: ['Strawberries', 'Sugar', 'Water'],
-        drinkPairing: 'Jasmine Green Tea',
-        saucePairing: 'Sugar Glaze'
-      }
-    ];
-
-    // --- LOCALSTORAGE DATABASE INITIALIZATION ---
-    let pantryItems = loadPantryItems();
-    let foodDatabase = loadFoodDatabase();
-
-    function loadPantryItems() {
-      const saved = localStorage.getItem('customPantryItems');
-      if (saved) {
-        try { return JSON.parse(saved); } catch (e) { }
-      }
-      return defaultPantryItems;
+  function loadPantryItems() {
+    const saved = localStorage.getItem('customPantryItems');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) { }
     }
+    return defaultPantryItems;
+  }
 
-    function savePantryItems() {
-      localStorage.setItem('customPantryItems', JSON.stringify(pantryItems));
+  function savePantryItems() {
+    localStorage.setItem('customPantryItems', JSON.stringify(pantryItems));
+  }
+
+  function loadFoodDatabase() {
+    const savedData = localStorage.getItem('customFoodDatabase');
+    if (savedData) {
+      try { return JSON.parse(savedData); } catch (e) { }
     }
+    return defaultFoodDatabase;
+  }
 
-    function loadFoodDatabase() {
-      const savedData = localStorage.getItem('customFoodDatabase');
-      if (savedData) {
-        try { return JSON.parse(savedData); } catch (e) { }
-      }
-      return defaultFoodDatabase;
-    }
+  function saveFoodDatabase() {
+    localStorage.setItem('customFoodDatabase', JSON.stringify(foodDatabase));
+  }
 
-    function saveFoodDatabase() {
-      localStorage.setItem('customFoodDatabase', JSON.stringify(foodDatabase));
-    }
+  // --- STATE VARIABLES ---
+  let currentMealUnit = 'breakfast';
+  let currentSubcategory = 'all';
+  let activeSelectedItem = null;
+  let characterSelectIndex = 0;
+  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
+  let searchQuery = '';
 
-    // --- STATE VARIABLES ---
-    let currentMealUnit = 'breakfast';
-    let currentSubcategory = 'all';
-    let activeSelectedItem = null;
-    let characterSelectIndex = 0;
-    let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
-    let searchQuery = '';
+  // --- INITIALIZATION ON LOAD ---
+  window.addEventListener('DOMContentLoaded', () => {
+    updateHUD();
+    renderPantryCheckboxes();
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  });
 
-    // --- INITIALIZATION ON LOAD ---
-    window.addEventListener('DOMContentLoaded', () => {
-      updateHUD();
+  // --- PANTRY CHECKBOXES RENDERING ---
+  function renderPantryCheckboxes() {
+    const grid = document.getElementById('pantry-checkboxes-grid');
+    if (!grid) return;
+
+    grid.innerHTML = pantryItems.map(item => `
+      <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+        <input type="checkbox" value="${item.name.toLowerCase()}" class="pantry-item w-4 h-4 accent-amber-500"> ${item.icon} ${item.label}
+      </label>
+    `).join('');
+  }
+
+  // --- ADD PANTRY ITEM MODAL CONTROLS ---
+  function openPantryModal() {
+    document.getElementById('pantry-modal').classList.remove('hidden');
+  }
+
+  function closePantryModal() {
+    document.getElementById('pantry-modal').classList.add('hidden');
+    document.getElementById('pantry-modal-form').reset();
+  }
+
+  function handleSavePantryItem(event) {
+    event.preventDefault();
+    const icon = document.getElementById('pantry-modal-icon').value.trim();
+    const label = document.getElementById('pantry-modal-name').value.trim();
+    const name = label.toLowerCase();
+
+    if (!pantryItems.some(i => i.name === name)) {
+      pantryItems.push({ name, label, icon });
+      savePantryItems();
       renderPantryCheckboxes();
-      renderSubcategories();
-      renderFoodGrid();
-      updateCharacterSelectView();
+      gainXP(5);
+    }
+    closePantryModal();
+  }
+
+  // --- SEARCH HANDLER ---
+  function handleSearchInput(val) {
+    searchQuery = val.toLowerCase().trim();
+    characterSelectIndex = 0;
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
+
+  // --- MEAL TAB SELECTION ---
+  function selectMealUnit(unit) {
+    currentMealUnit = unit;
+    currentSubcategory = 'all';
+    characterSelectIndex = 0;
+    
+    searchQuery = '';
+    const searchInput = document.getElementById('recipe-search-input');
+    if (searchInput) searchInput.value = '';
+
+    document.querySelectorAll('.meal-unit-btn').forEach(btn => {
+      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+    });
+    const activeTab = document.getElementById(`tab-${unit}`);
+    if (activeTab) {
+      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow';
+    }
+
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
+
+  // --- FILTERING LOGIC ---
+  function getActiveCategoryList() {
+    let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
+    
+    if (currentSubcategory !== 'all') {
+      list = list.filter(item => item.category === currentSubcategory);
+    }
+
+    if (searchQuery !== '') {
+      list = list.filter(item => 
+        item.name.toLowerCase().includes(searchQuery) ||
+        item.ingredients.some(ing => ing.toLowerCase().includes(searchQuery))
+      );
+    }
+
+    return list;
+  }
+
+  // --- RENDER SUBCATEGORIES ---
+  function renderSubcategories() {
+    const subBar = document.getElementById('subcategory-bar');
+    if (!subBar) return;
+
+    const currentMealItems = foodDatabase.filter(i => i.mealTypes.includes(currentMealUnit));
+    const categories = ['all', ...new Set(currentMealItems.map(i => i.category))];
+
+    subBar.innerHTML = categories.map(cat => {
+      const isSelected = currentSubcategory === cat;
+      const bgStyle = isSelected ? 'bg-purple-600 text-white' : 'bg-white hover:bg-pink-100 text-slate-700';
+      return `<button onclick="setSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-xl border border-black transition-all ${bgStyle}">
+        ${cat.toUpperCase()}
+      </button>`;
+    }).join('');
+  }
+
+  function setSubcategory(cat) {
+    currentSubcategory = cat;
+    characterSelectIndex = 0;
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
+
+  // --- RENDER INVENTORY GRID ---
+  function renderFoodGrid() {
+    const grid = document.getElementById('food-inventory-grid');
+    if (!grid) return;
+
+    const items = getActiveCategoryList();
+
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
+          No recipes found matching current filters.
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = items.map(item => {
+      const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
+      const selectedBorder = isSelected
+        ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50'
+        : 'border-black bg-white hover:bg-slate-50';
+
+      return `
+        <div
+          onclick="selectFoodItem('${item.id}')"
+          class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group"
+        >
+          <img
+            src="${item.img}"
+            alt="${item.name}"
+            class="w-12 h-12 rounded-lg border border-black object-cover shrink-0"
+          />
+          <div class="overflow-hidden flex-1">
+            <h4 class="font-bold text-xs truncate text-slate-800">
+              ${item.icon} ${item.name}
+            </h4>
+            <p class="text-[10px] text-slate-500 truncate">
+              ${item.ingredients.join(', ')}
+            </p>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }  
+  
+  // --- SELECT FOOD ITEM FOR DETAILS ---
+  function selectFoodItem(id) {
+    const item = foodDatabase.find(i => i.id === id);
+    if (!item) return;
+
+    activeSelectedItem = item;
+
+    document.getElementById('detail-category').innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
+    document.getElementById('detail-title').innerHTML = `<span>${item.icon} ${item.name}</span>`;
+    document.getElementById('detail-img-container').innerHTML = `<img src="${item.img}" class="w-full h-full object-cover" alt="${item.name}" />`;
+
+    const ingList = document.getElementById('detail-ingredients');
+    ingList.innerHTML = item.ingredients.map(ing => `<li class="text-slate-700">${ing}</li>`).join('');
+
+    document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
+    document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
+
+    const detailActions = document.getElementById('detail-actions');
+    if (detailActions) detailActions.className = 'flex items-center gap-1.5';
+
+    const eatBtn = document.getElementById('eat-btn');
+    eatBtn.disabled = false;
+    eatBtn.className = 'mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all';
+
+    renderFoodGrid();
+  }
+
+  function consumeSelectedFood() {
+    if (!activeSelectedItem) return;
+    gainXP(15);
+  }
+
+  // --- CHARACTER SELECT CAROUSEL ---
+  function updateCharacterSelectView() {
+    const items = getActiveCategoryList();
+    const counter = document.getElementById('character-select-counter');
+    const imgCont = document.getElementById('character-select-img');
+    const tag = document.getElementById('character-select-tag');
+    const title = document.getElementById('character-select-title');
+    const ing = document.getElementById('character-select-ingredients');
+
+    if (items.length === 0) {
+      if (counter) counter.innerText = 'DISH 0 / 0';
+      if (title) title.innerText = 'No Dishes Available';
+      if (ing) ing.innerText = 'Try changing category or clearing search.';
+      if (imgCont) imgCont.innerHTML = '<span class="text-2xl">❓</span>';
+      return;
+    }
+
+    if (characterSelectIndex >= items.length) characterSelectIndex = 0;
+    if (characterSelectIndex < 0) characterSelectIndex = items.length - 1;
+
+    const current = items[characterSelectIndex];
+
+    if (counter) counter.innerText = `DISH ${characterSelectIndex + 1} / ${items.length}`;
+    if (tag) tag.innerText = current.category;
+    if (title) title.innerText = `${current.icon} ${current.name}`;
+    if (ing) ing.innerText = `Ingredients: ${current.ingredients.join(', ')}`;
+    if (imgCont) {
+      imgCont.innerHTML = `<img src="${current.img}" class="w-full h-full object-cover" alt="${current.name}" />`;
+    }
+  }
+
+  function prevCharacterSelect() {
+    characterSelectIndex--;
+    updateCharacterSelectView();
+  }
+
+  function nextCharacterSelect() {
+    characterSelectIndex++;
+    updateCharacterSelectView();
+  }
+
+  // --- SPINNER FUNCTIONALITY ---
+  function toggleSpinFilter(type) {
+    const btn = document.getElementById(`spin-btn-${type}`);
+    const index = activeSpinFilters.indexOf(type);
+    if (index > -1) {
+      activeSpinFilters.splice(index, 1);
+      btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-white text-slate-400 transition-all';
+    } else {
+      activeSpinFilters.push(type);
+      btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
+    }
+  }
+
+  function spinRandomMeal() {
+    const pool = foodDatabase.filter(item => item.mealTypes.some(m => activeSpinFilters.includes(m)));
+    if (pool.length === 0) {
+      alert("⚠️ Your spin pool is empty! Enable at least one meal category.");
+      return;
+    }
+    const randomItem = pool[Math.floor(Math.random() * pool.length)];
+    selectMealUnit(randomItem.mealTypes[0]);
+    activeSelectedItem = randomItem;
+    selectFoodItem(randomItem.id);
+    gainXP(10);
+  }
+
+  // --- FULLY IMPLEMENTED: VAULT RECIPE MATCHER ---
+  function matchCustomRecipe() {
+    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
+    const output = document.getElementById('custom-recipe-output');
+    
+    if (checked.length === 0) {
+      output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
+      return;
+    }
+
+    // Find recipes where at least one checked ingredient is included in the recipe's ingredients list
+    const matchedRecipes = foodDatabase.filter(recipe => {
+      return recipe.ingredients.some(ing => 
+        checked.some(c => ing.toLowerCase().includes(c))
+      );
     });
 
-    // --- PANTRY CHECKBOXES RENDERING ---
-    function renderPantryCheckboxes() {
-      const grid = document.getElementById('pantry-checkboxes-grid');
-      if (!grid) return;
-
-      grid.innerHTML = pantryItems.map(item => `
-        <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-          <input type="checkbox" value="${item.name.toLowerCase()}" class="pantry-item w-4 h-4 accent-amber-500"> ${item.icon} ${item.label}
-        </label>
-      `).join('');
+    if (matchedRecipes.length === 0) {
+      output.innerHTML = `<p class="text-xs text-slate-600">No vault recipes match your selected ingredients (${checked.join(', ')}).</p>`;
+      return;
     }
 
-    // --- ADD PANTRY ITEM MODAL CONTROLS ---
-    function openPantryModal() {
-      document.getElementById('pantry-modal').classList.remove('hidden');
-    }
-
-    function closePantryModal() {
-      document.getElementById('pantry-modal').classList.add('hidden');
-      document.getElementById('pantry-modal-form').reset();
-    }
-
-    function handleSavePantryItem(event) {
-      event.preventDefault();
-      const icon = document.getElementById('pantry-modal-icon').value.trim();
-      const label = document.getElementById('pantry-modal-name').value.trim();
-      const name = label.toLowerCase();
-
-      if (!pantryItems.some(i => i.name === name)) {
-        pantryItems.push({ name, label, icon });
-        savePantryItems();
-        renderPantryCheckboxes();
-        gainXP(5);
-      }
-      closePantryModal();
-    }
-
-    // --- SEARCH HANDLER ---
-    function handleSearchInput(val) {
-      searchQuery = val.toLowerCase().trim();
-      characterSelectIndex = 0;
-      renderFoodGrid();
-      updateCharacterSelectView();
-    }
-
-    // --- MEAL TAB SELECTION ---
-    function selectMealUnit(unit) {
-      currentMealUnit = unit;
-      currentSubcategory = 'all';
-      characterSelectIndex = 0;
-      
-      searchQuery = '';
-      const searchInput = document.getElementById('recipe-search-input');
-      if (searchInput) searchInput.value = '';
-
-      document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-        btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all';
-      });
-      const activeTab = document.getElementById(`tab-${unit}`);
-      if (activeTab) {
-        activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow text-xs transition-all';
-      }
-
-      renderSubcategories();
-      renderFoodGrid();
-      updateCharacterSelectView();
-    }
-
-    // --- FILTERING LOGIC ---
-    function getActiveCategoryList() {
-      let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
-      
-      if (currentSubcategory !== 'all') {
-        list = list.filter(item => item.category === currentSubcategory);
-      }
-
-      if (searchQuery !== '') {
-        list = list.filter(item => 
-          item.name.toLowerCase().includes(searchQuery) ||
-          item.ingredients.some(ing => ing.toLowerCase().includes(searchQuery))
-        );
-      }
-
-      return list;
-    }
-
-    // --- RENDER SUBCATEGORIES ---
-    function renderSubcategories() {
-      const subBar = document.getElementById('subcategory-bar');
-      if (!subBar) return;
-
-      const currentMealItems = foodDatabase.filter(i => i.mealTypes.includes(currentMealUnit));
-      const categories = ['all', ...new Set(currentMealItems.map(i => i.category))];
-
-      subBar.innerHTML = categories.map(cat => {
-        const isSelected = currentSubcategory === cat;
-        const bgStyle = isSelected ? 'bg-purple-600 text-white' : 'bg-white hover:bg-pink-100 text-slate-700';
-        return `<button onclick="setSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-xl border border-black transition-all ${bgStyle}">
-          ${cat.toUpperCase()}
-        </button>`;
-      }).join('');
-    }
-
-    function setSubcategory(cat) {
-      currentSubcategory = cat;
-      characterSelectIndex = 0;
-      renderSubcategories();
-      renderFoodGrid();
-      updateCharacterSelectView();
-    }
-
-    // --- RENDER INVENTORY GRID ---
-    function renderFoodGrid() {
-      const grid = document.getElementById('food-inventory-grid');
-      if (!grid) return;
-
-      const items = getActiveCategoryList();
-
-      if (items.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
-            No recipes found matching current filters.
-          </div>
-        `;
-        return;
-      }
-
-      grid.innerHTML = items.map(item => {
-        const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
-        const selectedBorder = isSelected
-          ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50'
-          : 'border-black bg-white hover:bg-slate-50';
-
-        return `
-          <div
-            onclick="selectFoodItem('${item.id}')"
-            class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group"
-          >
-            <img
-              src="${item.img}"
-              alt="${item.name}"
-              class="w-12 h-12 rounded-lg border border-black object-cover shrink-0"
-            />
-            <div class="overflow-hidden flex-1">
-              <h4 class="font-bold text-xs truncate text-slate-800">
-                ${item.icon} ${item.name}
-              </h4>
-              <p class="text-[10px] text-slate-500 truncate">
-                ${item.ingredients.join(', ')}
-              </p>
+    output.innerHTML = `
+      <p class="text-xs font-bold text-emerald-800 mb-2">Found ${matchedRecipes.length} matching recipe(s):</p>
+      <div class="space-y-2">
+        ${matchedRecipes.map(r => `
+          <div onclick="selectFoodItem('${r.id}')" class="p-2 bg-emerald-50 rounded-xl border border-emerald-200 cursor-pointer hover:bg-emerald-100 flex items-center gap-2">
+            <span class="text-lg">${r.icon}</span>
+            <div class="text-xs">
+              <span class="font-bold text-slate-800">${r.name}</span>
+              <p class="text-[10px] text-slate-500">${r.ingredients.join(', ')}</p>
             </div>
           </div>
-        `;
-      }).join('');
-    }  
+        `).join('')}
+      </div>
+    `;
+    gainXP(5);
+  }
+
+  // --- FULLY IMPLEMENTED: INTERNET RECIPE FINDER ---
+  async function searchWebRecipes() {
+    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
+    const output = document.getElementById('web-recipe-output');
     
-    // --- SELECT FOOD ITEM FOR DETAILS ---
-    function selectFoodItem(id) {
-      const item = foodDatabase.find(i => i.id === id);
-      if (!item) return;
-
-      activeSelectedItem = item;
-
-      document.getElementById('detail-category').innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
-      document.getElementById('detail-title').innerHTML = `<span>${item.icon} ${item.name}</span>`;
-      document.getElementById('detail-img-container').innerHTML = `<img src="${item.img}" class="w-full h-full object-cover" alt="${item.name}" />`;
-
-      const ingList = document.getElementById('detail-ingredients');
-      ingList.innerHTML = item.ingredients.map(ing => `<li class="text-slate-700">${ing}</li>`).join('');
-
-      document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
-      document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
-
-      const detailActions = document.getElementById('detail-actions');
-      if (detailActions) detailActions.className = 'flex items-center gap-1.5';
-
-      const eatBtn = document.getElementById('eat-btn');
-      eatBtn.disabled = false;
-      eatBtn.className = 'mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all';
-
-      renderFoodGrid();
+    if (checked.length === 0) {
+      output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
+      return;
     }
 
-    function consumeSelectedFood() {
-      if (!activeSelectedItem) return;
-      gainXP(15);
-    }
+    output.innerHTML = `<p class="text-xs text-sky-800 animate-pulse font-bold">🌐 Searching public recipe database for ${checked.join(', ')}...</p>`;
 
-    // --- CHARACTER SELECT CAROUSEL ---
-    function updateCharacterSelectView() {
-      const items = getActiveCategoryList();
-      const counter = document.getElementById('character-select-counter');
-      const imgCont = document.getElementById('character-select-img');
-      const tag = document.getElementById('character-select-tag');
-      const title = document.getElementById('character-select-title');
-      const ing = document.getElementById('character-select-ingredients');
+    try {
+      const queryStr = checked.join(',');
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(checked[0])}`);
+      const data = await response.json();
 
-      if (items.length === 0) {
-        if (counter) counter.innerText = 'DISH 0 / 0';
-        if (title) title.innerText = 'No Dishes Available';
-        if (ing) ing.innerText = 'Try changing category or clearing search.';
-        if (imgCont) imgCont.innerHTML = '<span class="text-2xl">❓</span>';
+      if (!data.meals || data.meals.length === 0) {
+        output.innerHTML = `<p class="text-xs text-slate-600">No public recipes found online for "${checked.join(', ')}". Try selecting different ingredients!</p>`;
         return;
       }
 
-      if (characterSelectIndex >= items.length) characterSelectIndex = 0;
-      if (characterSelectIndex < 0) characterSelectIndex = items.length - 1;
-
-      const current = items[characterSelectIndex];
-
-      if (counter) counter.innerText = `DISH ${characterSelectIndex + 1} / ${items.length}`;
-      if (tag) tag.innerText = current.category;
-      if (title) title.innerText = `${current.icon} ${current.name}`;
-      if (ing) ing.innerText = `Ingredients: ${current.ingredients.join(', ')}`;
-      if (imgCont) {
-        imgCont.innerHTML = `<img src="${current.img}" class="w-full h-full object-cover" alt="${current.name}" />`;
-      }
-    }
-
-    function prevCharacterSelect() {
-      characterSelectIndex--;
-      updateCharacterSelectView();
-    }
-
-    function nextCharacterSelect() {
-      characterSelectIndex++;
-      updateCharacterSelectView();
-    }
-
-    // --- SPINNER FUNCTIONALITY ---
-    function toggleSpinFilter(type) {
-      const btn = document.getElementById(`spin-btn-${type}`);
-      const index = activeSpinFilters.indexOf(type);
-      if (index > -1) {
-        activeSpinFilters.splice(index, 1);
-        btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-white text-slate-400 transition-all';
-      } else {
-        activeSpinFilters.push(type);
-        btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
-      }
-    }
-
-    function spinRandomMeal() {
-      const pool = foodDatabase.filter(item => item.mealTypes.some(m => activeSpinFilters.includes(m)));
-      if (pool.length === 0) {
-        alert("⚠️ Your spin pool is empty! Enable at least one meal category.");
-        return;
-      }
-      const randomItem = pool[Math.floor(Math.random() * pool.length)];
-      selectMealUnit(randomItem.mealTypes[0]);
-      activeSelectedItem = randomItem;
-      selectFoodItem(randomItem.id);
-      gainXP(10);
-    }
-
-    // --- FIXED: VAULT RECIPE MATCHER (REQUIRES ALL CHECKED INGREDIENTS) ---
-    function matchCustomRecipe() {
-      const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
-      const output = document.getElementById('custom-recipe-output');
-      
-      if (checked.length === 0) {
-        output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
-        return;
-      }
-
-      const matchedRecipes = foodDatabase.filter(recipe => {
-        const recipeIngsLower = recipe.ingredients.map(i => i.toLowerCase());
-        return checked.every(c => recipeIngsLower.some(ing => ing.includes(c)));
-      });
-
-      if (matchedRecipes.length === 0) {
-        output.innerHTML = `<p class="text-xs text-slate-600">No vault recipes contain all selected ingredients (${checked.join(', ')}).</p>`;
-        return;
-      }
-
+      // Display up to 3 results from TheMealDB API
+      const meals = data.meals.slice(0, 3);
       output.innerHTML = `
-        <p class="text-xs font-bold text-emerald-800 mb-2">Found ${matchedRecipes.length} matching recipe(s):</p>
+        <p class="text-xs font-bold text-sky-800 mb-2">Top Web Matches:</p>
         <div class="space-y-2">
-          ${matchedRecipes.map(r => `
-            <div onclick="selectFoodItem('${r.id}')" class="p-2 bg-emerald-50 rounded-xl border border-emerald-200 cursor-pointer hover:bg-emerald-100 flex items-center gap-2">
-              <span class="text-lg">${r.icon}</span>
-              <div class="text-xs">
-                <span class="font-bold text-slate-800">${r.name}</span>
-                <p class="text-[10px] text-slate-500">${r.ingredients.join(', ')}</p>
+          ${meals.map(m => `
+            <div class="p-2 bg-sky-50 rounded-xl border border-sky-200 flex items-center gap-3">
+              <img src="${m.strMealThumb}" class="w-10 h-10 rounded-lg object-cover border border-black shrink-0" />
+              <div class="text-xs flex-1">
+                <span class="font-bold text-slate-800">${m.strMeal}</span>
+                <p class="text-[10px] text-sky-700">Source: TheMealDB</p>
               </div>
             </div>
           `).join('')}
         </div>
       `;
-      gainXP(5);
+      gainXP(10);
+    } catch (err) {
+      output.innerHTML = `<p class="text-xs text-red-600">⚠️ Failed to connect to recipe API. Please check your internet connection.</p>`;
+    }
+  }
+
+  // --- RECIPE MODAL (CREATE / EDIT) ---
+  function openRecipeModal() {
+    document.getElementById('recipe-modal-form').reset();
+    document.getElementById('modal-recipe-id').value = '';
+    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
+    document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
+    populateModalCategories();
+    document.getElementById('recipe-modal').classList.remove('hidden');
+  }
+
+  function closeRecipeModal() {
+    document.getElementById('recipe-modal').classList.add('hidden');
+  }
+
+  function populateModalCategories(selected = '') {
+    const select = document.getElementById('modal-category-select');
+    const cats = [...new Set(foodDatabase.map(i => i.category))];
+    select.innerHTML = cats.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c.toUpperCase()}</option>`).join('') + `<option value="custom">Other / Custom...</option>`;
+  }
+
+  function handleCategoryDropdownChange(val) {
+    const customInput = document.getElementById('modal-category-custom');
+    if (val === 'custom') {
+      customInput.classList.remove('hidden');
+      customInput.required = true;
+    } else {
+      customInput.classList.add('hidden');
+      customInput.required = false;
+      customInput.value = '';
+    }
+  }
+
+  function toggleCustomCategoryInput() {
+    const select = document.getElementById('modal-category-select');
+    select.value = 'custom';
+    handleCategoryDropdownChange('custom');
+  }
+
+  function handleSaveModalRecipe(event) {
+    event.preventDefault();
+    const idField = document.getElementById('modal-recipe-id').value;
+    const name = document.getElementById('modal-name').value.trim();
+    const icon = document.getElementById('modal-icon').value.trim();
+    const mealType = document.getElementById('modal-meal-type').value;
+    
+    let category = document.getElementById('modal-category-select').value;
+    if (category === 'custom') {
+      category = document.getElementById('modal-category-custom').value.trim().toLowerCase();
     }
 
-    // --- FIXED: INTERNET RECIPE FINDER (QUERIES ALL CHECKED INGREDIENTS & REMOVES DUPLICATES) ---
-    async function searchWebRecipes() {
-      const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
-      const output = document.getElementById('web-recipe-output');
-      
-      if (checked.length === 0) {
-        output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
-        return;
+    const ingredients = document.getElementById('modal-ingredients').value.split(',').map(s => s.trim()).filter(Boolean);
+    const img = document.getElementById('modal-img').value.trim();
+
+    if (idField) {
+      const idx = foodDatabase.findIndex(i => i.id === idField);
+      if (idx > -1) {
+        foodDatabase[idx] = { ...foodDatabase[idx], name, icon, mealTypes: [mealType], category, ingredients, img };
       }
-
-      output.innerHTML = `<p class="text-xs text-sky-800 animate-pulse font-bold">🌐 Searching public recipe database for ${checked.join(', ')}...</p>`;
-
-      try {
-        const requests = checked.map(ing => 
-          fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(ing)}`)
-            .then(res => res.json())
-            .catch(() => ({ meals: null }))
-        );
-
-        const results = await Promise.all(requests);
-        
-        let allMeals = [];
-        const seenIds = new Set();
-        
-        results.forEach(data => {
-          if (data && data.meals) {
-            data.meals.forEach(m => {
-              if (!seenIds.has(m.idMeal)) {
-                seenIds.add(m.idMeal);
-                allMeals.push(m);
-              }
-            });
-          }
-        });
-
-        if (allMeals.length === 0) {
-          output.innerHTML = `<p class="text-xs text-slate-600">No public recipes found online for "${checked.join(', ')}". Try selecting different ingredients!</p>`;
-          return;
-        }
-
-        const meals = allMeals.slice(0, 3);
-        output.innerHTML = `
-          <p class="text-xs font-bold text-sky-800 mb-2">Top Web Matches:</p>
-          <div class="space-y-2">
-            ${meals.map(m => `
-              <div class="p-2 bg-sky-50 rounded-xl border border-sky-200 flex items-center gap-3">
-                <img src="${m.strMealThumb}" class="w-10 h-10 rounded-lg object-cover border border-black shrink-0" />
-                <div class="text-xs flex-1">
-                  <span class="font-bold text-slate-800">${m.strMeal}</span>
-                  <p class="text-[10px] text-sky-700">Source: TheMealDB</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        `;
-        gainXP(10);
-      } catch (err) {
-        output.innerHTML = `<p class="text-xs text-red-600">⚠️ Failed to connect to recipe API. Please check your internet connection.</p>`;
-      }
+    } else {
+      const newRecipe = {
+        id: 'cust_' + Date.now(),
+        name,
+        icon,
+        mealTypes: [mealType],
+        category,
+        ingredients,
+        img,
+        drinkPairing: 'Water',
+        saucePairing: 'House Sauce'
+      };
+      foodDatabase.push(newRecipe);
+      gainXP(25);
     }
 
-    // --- RECIPE MODAL (CREATE / EDIT) ---
-    function openRecipeModal() {
-      document.getElementById('recipe-modal-form').reset();
-      document.getElementById('modal-recipe-id').value = '';
-      document.getElementById('modal-title').innerText = '✨ Add New Recipe';
-      document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
-      populateModalCategories();
-      document.getElementById('recipe-modal').classList.remove('hidden');
-    }
+    saveFoodDatabase();
+    closeRecipeModal();
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
 
-    function closeRecipeModal() {
-      document.getElementById('recipe-modal').classList.add('hidden');
-    }
+  function openEditRecipeModal() {
+    if (!activeSelectedItem) return;
+    document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
+    document.getElementById('modal-name').value = activeSelectedItem.name;
+    document.getElementById('modal-icon').value = activeSelectedItem.icon;
+    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
+    populateModalCategories(activeSelectedItem.category);
+    document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
+    document.getElementById('modal-img').value = activeSelectedItem.img;
+    document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
+    document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
+    document.getElementById('recipe-modal').classList.add('hidden'); // Fix modal toggle
+    document.getElementById('recipe-modal').classList.remove('hidden');
+  }
 
-    function populateModalCategories(selected = '') {
-      const select = document.getElementById('modal-category-select');
-      const cats = [...new Set(foodDatabase.map(i => i.category))];
-      select.innerHTML = cats.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c.toUpperCase()}</option>`).join('') + `<option value="custom">Other / Custom...</option>`;
-      handleCategoryDropdownChange(select.value);
-    }
-
-    function handleCategoryDropdownChange(val) {
-      const customInput = document.getElementById('modal-category-custom');
-      if (val === 'custom') {
-        customInput.classList.remove('hidden');
-        customInput.required = true;
-      } else {
-        customInput.classList.add('hidden');
-        customInput.required = false;
-        customInput.value = '';
-      }
-    }
-
-    function toggleCustomCategoryInput() {
-      const select = document.getElementById('modal-category-select');
-      select.value = 'custom';
-      handleCategoryDropdownChange('custom');
-    }
-
-    function handleSaveModalRecipe(event) {
-      event.preventDefault();
-      const idField = document.getElementById('modal-recipe-id').value;
-      const name = document.getElementById('modal-name').value.trim();
-      const icon = document.getElementById('modal-icon').value.trim();
-      const mealType = document.getElementById('modal-meal-type').value;
-      
-      let category = document.getElementById('modal-category-select').value;
-      if (category === 'custom') {
-        category = document.getElementById('modal-category-custom').value.trim().toLowerCase();
-      }
-
-      const ingredients = document.getElementById('modal-ingredients').value.split(',').map(s => s.trim()).filter(Boolean);
-      const img = document.getElementById('modal-img').value.trim();
-
-      if (idField) {
-        const idx = foodDatabase.findIndex(i => i.id === idField);
-        if (idx > -1) {
-          foodDatabase[idx] = { ...foodDatabase[idx], name, icon, mealTypes: [mealType], category, ingredients, img };
-        }
-      } else {
-        const newRecipe = {
-          id: 'cust_' + Date.now(),
-          name,
-          icon,
-          mealTypes: [mealType],
-          category,
-          ingredients,
-          img,
-          drinkPairing: 'Water',
-          saucePairing: 'House Sauce'
-        };
-        foodDatabase.push(newRecipe);
-        gainXP(25);
-      }
-
+  function deleteSelectedRecipe() {
+    if (!activeSelectedItem) return;
+    if (confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your Vault?`)) {
+      foodDatabase = foodDatabase.filter(i => i.id !== activeSelectedItem.id);
       saveFoodDatabase();
-      closeRecipeModal();
+      activeSelectedItem = null;
       renderSubcategories();
       renderFoodGrid();
       updateCharacterSelectView();
     }
-
-    function openEditRecipeModal() {
-      if (!activeSelectedItem) return;
-      document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
-      document.getElementById('modal-name').value = activeSelectedItem.name;
-      document.getElementById('modal-icon').value = activeSelectedItem.icon;
-      document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
-      populateModalCategories(activeSelectedItem.category);
-      document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
-      document.getElementById('modal-img').value = activeSelectedItem.img;
-      document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
-      document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
-      document.getElementById('recipe-modal').classList.remove('hidden');
-    }
-
-    function deleteSelectedRecipe() {
-      if (!activeSelectedItem) return;
-      if (confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your Vault?`)) {
-        foodDatabase = foodDatabase.filter(i => i.id !== activeSelectedItem.id);
-        saveFoodDatabase();
-        activeSelectedItem = null;
-        renderSubcategories();
-        renderFoodGrid();
-        updateCharacterSelectView();
-      }
-    }
-  </script>
+  }
+</script>
 </body>
 </html>
