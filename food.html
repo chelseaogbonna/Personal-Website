@@ -753,7 +753,7 @@
     gainXP(10);
   }
 
-  // --- UPDATED: VAULT RECIPE MATCHER (REQUIRES ALL CHECKED INGREDIENTS) ---
+  // --- VAULT RECIPE MATCHER (REQUIRES ALL CHECKED INGREDIENTS) ---
   function matchCustomRecipe() {
     const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
     const output = document.getElementById('custom-recipe-output');
@@ -763,7 +763,6 @@
       return;
     }
 
-    // Find recipes where ALL checked ingredients are present in the recipe's ingredients list
     const matchedRecipes = foodDatabase.filter(recipe => {
       const recipeIngsLower = recipe.ingredients.map(ing => ing.toLowerCase());
       return checked.every(c => recipeIngsLower.some(ing => ing.includes(c)));
@@ -791,7 +790,7 @@
     gainXP(5);
   }
 
-  // --- UPDATED: INTERNET RECIPE FINDER (ROBUST MULTI-INGREDIENT SEARCH & CACHE-BUSTING) ---
+  // --- INTERNET RECIPE FINDER ---
   async function searchWebRecipes() {
     const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
     const output = document.getElementById('web-recipe-output');
@@ -804,7 +803,6 @@
     output.innerHTML = `<p class="text-xs text-sky-800 animate-pulse font-bold">🌐 Searching public recipe database for ${checked.join(', ')}...</p>`;
 
     try {
-      // Fetch results for the first ingredient to establish a baseline
       const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(checked[0])}`);
       const data = await response.json();
 
@@ -813,7 +811,6 @@
         return;
       }
 
-      // Fetch full details for candidate meals concurrently to check for the remaining ingredients
       const candidateMeals = data.meals.slice(0, 15);
       const detailPromises = candidateMeals.map(m => 
         fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${m.idMeal}`)
@@ -824,7 +821,6 @@
 
       const fullMeals = (await Promise.all(detailPromises)).filter(Boolean);
 
-      // Filter meals to ensure ALL checked ingredients are present in the recipe's ingredients/measurements
       const matchedMeals = fullMeals.filter(meal => {
         const mealText = Object.keys(meal)
           .filter(k => k.startsWith('strIngredient') && meal[k])
@@ -839,7 +835,6 @@
         return;
       }
 
-      // Shuffle/rotate results using timestamp or random slice to avoid repeating the exact same recipes on repeated clicks
       const shuffledMeals = [...matchedMeals].sort(() => Math.random() - 0.5).slice(0, 3);
 
       output.innerHTML = `
@@ -866,6 +861,10 @@
   function openRecipeModal() {
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-recipe-id').value = '';
+    // Reset pairing inputs if they exist in your HTML form
+    if (document.getElementById('modal-drink-pairing')) document.getElementById('modal-drink-pairing').value = '';
+    if (document.getElementById('modal-sauce-pairing')) document.getElementById('modal-sauce-pairing').value = '';
+
     document.getElementById('modal-title').innerText = '✨ Add New Recipe';
     document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
     populateModalCategories();
@@ -914,11 +913,25 @@
 
     const ingredients = document.getElementById('modal-ingredients').value.split(',').map(s => s.trim()).filter(Boolean);
     const img = document.getElementById('modal-img').value.trim();
+    
+    // Capture pairings from inputs (defaults if fields aren't filled)
+    const drinkPairing = document.getElementById('modal-drink-pairing') ? document.getElementById('modal-drink-pairing').value.trim() : 'Water';
+    const saucePairing = document.getElementById('modal-sauce-pairing') ? document.getElementById('modal-sauce-pairing').value.trim() : 'House Sauce';
 
     if (idField) {
       const idx = foodDatabase.findIndex(i => i.id === idField);
       if (idx > -1) {
-        foodDatabase[idx] = { ...foodDatabase[idx], name, icon, mealTypes: [mealType], category, ingredients, img };
+        foodDatabase[idx] = { 
+          ...foodDatabase[idx], 
+          name, 
+          icon, 
+          mealTypes: [mealType], 
+          category, 
+          ingredients, 
+          img, 
+          drinkPairing, 
+          saucePairing 
+        };
       }
     } else {
       const newRecipe = {
@@ -929,8 +942,8 @@
         category,
         ingredients,
         img,
-        drinkPairing: 'Water',
-        saucePairing: 'House Sauce'
+        drinkPairing,
+        saucePairing
       };
       foodDatabase.push(newRecipe);
       gainXP(25);
@@ -941,6 +954,11 @@
     renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
+
+    // If we were viewing the edited recipe, refresh the details panel view
+    if (activeSelectedItem && activeSelectedItem.id === (idField || activeSelectedItem.id)) {
+      selectFoodItem(activeSelectedItem.id);
+    }
   }
 
   function openEditRecipeModal() {
@@ -952,9 +970,18 @@
     populateModalCategories(activeSelectedItem.category);
     document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
     document.getElementById('modal-img').value = activeSelectedItem.img;
+    
+    // Pre-fill pairing inputs if they exist in your HTML form
+    if (document.getElementById('modal-drink-pairing')) {
+      document.getElementById('modal-drink-pairing').value = activeSelectedItem.drinkPairing || '';
+    }
+    if (document.getElementById('modal-sauce-pairing')) {
+      document.getElementById('modal-sauce-pairing').value = activeSelectedItem.saucePairing || '';
+    }
+
     document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
     document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
-    document.getElementById('recipe-modal').classList.add('hidden'); // Fix modal toggle
+    document.getElementById('recipe-modal').classList.add('hidden');
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
