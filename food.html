@@ -193,9 +193,12 @@
               <span class="text-slate-400 text-xs italic">No item selected</span>
             </div>
 
-            <h3 class="text-lg font-bold mb-2 flex items-center gap-1.5" id="detail-title">
-              <span>🎒 Inventory Empty</span>
-            </h3>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-lg font-bold flex items-center gap-1.5" id="detail-title">
+                <span>🎒 Inventory Empty</span>
+              </h3>
+              <div id="detail-link-container"></div>
+            </div>
             
             <p class="text-[11px] font-bold text-slate-500 mb-1">Required Ingredients:</p>
             <ul id="detail-ingredients" class="space-y-0.5 text-xs list-disc list-inside text-slate-700 bg-pink-50 p-2 rounded-xl border border-pink-200 min-h-[50px] mb-2">
@@ -205,7 +208,7 @@
             <div class="bg-amber-50 p-2 rounded-xl border border-amber-200 text-xs space-y-1">
               <p class="font-bold text-amber-900 border-b border-amber-200 pb-0.5">Pairing Suggestions:</p>
               <p class="text-slate-700">🥤 <strong>Drink:</strong> <span id="detail-drink" class="text-slate-500 italic">None</span></p>
-              <p class="text-slate-700">🥣 <strong>Sauce:</strong> <span id="detail-sauce" class="text-slate-500 italic">None</span></p>
+              <p class="text-slate-700"><span id="detail-accompaniment-label">🥣 Sauce:</span> <span id="detail-accompaniment" class="text-slate-500 italic">None</span></p>
             </div>
           </div>
 
@@ -298,7 +301,7 @@
 
   <!-- RECIPE MODAL (CREATE / EDIT) -->
   <div id="recipe-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-lg relative animate-in fade-in zoom-in duration-150">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-lg relative animate-in fade-in zoom-in duration-150 max-h-[90vh] overflow-y-auto">
       <button onclick="closeRecipeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
       
       <h3 id="modal-title" class="text-2xl font-bold text-purple-900 mb-1">✨ Add New Recipe</h3>
@@ -343,19 +346,32 @@
           <input type="text" id="modal-ingredients" required placeholder="e.g., Waffle Batter, Strawberries, Syrup" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
         </div>
 
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Drink Pairing</label>
+          <input type="text" id="modal-drink" placeholder="e.g., Iced Coffee" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Accompaniment Type</label>
+          <select id="modal-accompaniment-type" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white">
+            <option value="sauce">Sauce</option>
+            <option value="side">Side Dish</option>
+          </select>
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Accompaniment Name (Sauce or Side Dish)</label>
+          <input type="text" id="modal-accompaniment-name" placeholder="e.g., Garlic Aioli or French Fries" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+
         <div class="sm:col-span-2">
           <label class="block text-xs font-bold text-slate-700 mb-1">Image URL</label>
           <input type="url" id="modal-img" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
         </div>
 
-        <div class="sm:col-span-1">
-          <label class="block text-xs font-bold text-slate-700 mb-1">Drink Pairing</label>
-          <input type="text" id="modal-drink-pairing" placeholder="e.g., Iced Cold Brew" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
-        </div>
-
-        <div class="sm:col-span-1">
-          <label class="block text-xs font-bold text-slate-700 mb-1">Sauce Pairing</label>
-          <input type="text" id="modal-sauce-pairing" placeholder="e.g., Hot Honey" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        <div class="sm:col-span-2">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Recipe Link / Source URL (Optional)</label>
+          <input type="url" id="modal-recipe-url" placeholder="https://example.com/recipe" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
         </div>
 
         <div class="sm:col-span-2 flex gap-2 mt-2">
@@ -415,7 +431,9 @@
       category: 'sandwiches',
       ingredients: ['Sourdough Bread', 'Avocado', 'Eggs', 'Chili Flakes'],
       drinkPairing: 'Iced Cold Brew',
-      saucePairing: 'Hot Honey'
+      accompanimentType: 'sauce',
+      accompanimentName: 'Hot Honey',
+      recipeUrl: 'https://www.example.com/avocado-toast'
     },
     {
       id: 'b2',
@@ -426,7 +444,9 @@
       category: 'wraps',
       ingredients: ['Flour Tortilla', 'Eggs', 'Potatoes', 'Cheddar Cheese'],
       drinkPairing: 'Iced Coffee',
-      saucePairing: 'Chipotle Sauce'
+      accompanimentType: 'sauce',
+      accompanimentName: 'Chipotle Sauce',
+      recipeUrl: ''
     },
     {
       id: 'l1',
@@ -437,7 +457,9 @@
       category: 'sandwiches',
       ingredients: ['Focaccia', 'Tomatoes', 'Mozzarella', 'Basil'],
       drinkPairing: 'Sparkling Water',
-      saucePairing: 'Balsamic Glaze'
+      accompanimentType: 'sauce',
+      accompanimentName: 'Balsamic Glaze',
+      recipeUrl: ''
     },
     {
       id: 'd1',
@@ -448,7 +470,9 @@
       category: 'tacos',
       ingredients: ['Rice', 'Corn Tortillas', 'Avocado', 'Lime'],
       drinkPairing: 'Horchata',
-      saucePairing: 'Chipotle Crema'
+      accompanimentType: 'side',
+      accompanimentName: 'Consomé & Chips',
+      recipeUrl: 'https://www.example.com/birria-tacos'
     },
     {
       id: 'ds1',
@@ -459,7 +483,9 @@
       category: 'fruit',
       ingredients: ['Strawberries', 'Sugar', 'Water'],
       drinkPairing: 'Jasmine Green Tea',
-      saucePairing: 'Sugar Glaze'
+      accompanimentType: 'sauce',
+      accompanimentName: 'Sugar Glaze',
+      recipeUrl: ''
     }
   ];
 
@@ -673,48 +699,62 @@
 
     document.getElementById('detail-category').innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
     document.getElementById('detail-title').innerHTML = `<span>${item.icon} ${item.name}</span>`;
-    document.getElementById('detail-img-container').innerHTML = `<img src="${item.img}" class="w-full h-full object-cover" alt="${item.name}" />`;
+    
+    // Render Recipe Link if present
+    const linkContainer = document.getElementById('detail-link-container');
+    if (item.recipeUrl && item.recipeUrl.trim() !== '') {
+      linkContainer.innerHTML = `<a href="${item.recipeUrl}" target="_blank" class="bg-sky-400 hover:bg-sky-500 text-white font-bold px-2.5 py-1 text-[10px] rounded-xl border border-black pixel-shadow-sm inline-flex items-center gap-1">🔗 Link</a>`;
+    } else {
+      linkContainer.innerHTML = '';
+    }
 
-    const ingList = document.getElementById('detail-ingredients');
-    ingList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
+    document.getElementById('detail-img-container').innerHTML = `
+      <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" />
+    `;
+
+    const ingredientsUl = document.getElementById('detail-ingredients');
+    ingredientsUl.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
 
     document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
-    document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
+    
+    // Accompaniment logic (Sauce vs Side Dish)
+    const accomType = item.accompanimentType === 'side' ? 'Side Dish' : 'Sauce';
+    const accomIcon = accomType === 'Side Dish' ? '🍟' : '🥣';
+    document.getElementById('detail-accompaniment-label').innerHTML = `${accomIcon} <strong>${accomType}:</strong>`;
+    document.getElementById('detail-accompaniment').innerText = item.accompanimentName || 'None';
+
+    const eatBtn = document.getElementById('eat-btn');
+    eatBtn.disabled = false;
+    eatBtn.className = 'mt-3 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-pointer';
 
     document.getElementById('detail-actions').classList.remove('hidden');
     document.getElementById('detail-actions').classList.add('flex');
 
-    const eatBtn = document.getElementById('eat-btn');
-    eatBtn.disabled = false;
-    eatBtn.className = 'mt-3 w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-pointer hover:scale-[1.02]';
-
     renderFoodGrid();
   }
 
-  // --- CONSUME SELECTED FOOD ---
+  // --- CONSUME FOOD ITEM (+XP) ---
   function consumeSelectedFood() {
     if (!activeSelectedItem) return;
     gainXP(15);
-    alert(`😋 You enjoyed ${activeSelectedItem.icon} ${activeSelectedItem.name}! +15 XP gained.`);
+    alert(`😋 You enjoyed ${activeSelectedItem.icon} ${activeSelectedItem.name}! +15 XP`);
   }
 
-  // --- CHARACTER SELECT DISH CAROUSEL ---
+  // --- CHARACTER SELECT CAROUSEL ---
   function updateCharacterSelectView() {
     const list = getActiveCategoryList();
     const counter = document.getElementById('character-select-counter');
     const imgContainer = document.getElementById('character-select-img');
-    const tagEl = document.getElementById('character-select-tag');
-    const titleEl = document.getElementById('character-select-title');
-    const ingEl = document.getElementById('character-select-ingredients');
-
-    if (!counter || !imgContainer || !titleEl) return;
+    const tag = document.getElementById('character-select-tag');
+    const title = document.getElementById('character-select-title');
+    const ingredients = document.getElementById('character-select-ingredients');
 
     if (list.length === 0) {
-      counter.innerText = 'DISH 0 / 0';
-      imgContainer.innerHTML = '<span>❌</span>';
-      tagEl.innerText = currentMealUnit.toUpperCase();
-      titleEl.innerText = 'No Dishes Available';
-      ingEl.innerText = 'Ingredients: None';
+      if (counter) counter.innerText = `DISH 0 / 0`;
+      if (imgContainer) imgContainer.innerHTML = `<span class="text-xs text-purple-400">None</span>`;
+      if (tag) tag.innerText = currentMealUnit;
+      if (title) title.innerText = 'No Dishes Available';
+      if (ingredients) ingredients.innerText = 'Ingredients: N/A';
       return;
     }
 
@@ -722,34 +762,33 @@
     if (characterSelectIndex < 0) characterSelectIndex = list.length - 1;
 
     const item = list[characterSelectIndex];
-    counter.innerText = `DISH ${characterSelectIndex + 1} / ${list.length}`;
-    imgContainer.innerHTML = `<img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" />`;
-    tagEl.innerText = `${item.mealTypes[0]} • ${item.category}`;
-    titleEl.innerText = `${item.icon} ${item.name}`;
-    ingEl.innerText = `Ingredients: ${item.ingredients.join(', ')}`;
+
+    if (counter) counter.innerText = `DISH ${characterSelectIndex + 1} / ${list.length}`;
+    if (imgContainer) {
+      imgContainer.innerHTML = `<img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" />`;
+    }
+    if (tag) tag.innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
+    if (title) title.innerText = `${item.icon} ${item.name}`;
+    if (ingredients) ingredients.innerText = `Ingredients: ${item.ingredients.join(', ')}`;
   }
 
   function nextCharacterSelect() {
-    const list = getActiveCategoryList();
-    if (list.length === 0) return;
-    characterSelectIndex = (characterSelectIndex + 1) % list.length;
+    characterSelectIndex++;
     updateCharacterSelectView();
   }
 
   function prevCharacterSelect() {
-    const list = getActiveCategoryList();
-    if (list.length === 0) return;
-    characterSelectIndex = (characterSelectIndex - 1 + list.length) % list.length;
+    characterSelectIndex--;
     updateCharacterSelectView();
   }
 
-  // --- RANDOM SPINNER ---
+  // --- RANDOM SPINNER FUNCTION ---
   function toggleSpinFilter(meal) {
     const idx = activeSpinFilters.indexOf(meal);
     const btn = document.getElementById(`spin-btn-${meal}`);
     if (idx > -1) {
       activeSpinFilters.splice(idx, 1);
-      btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-white text-slate-400 transition-all';
+      btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-200 text-slate-500 transition-all';
     } else {
       activeSpinFilters.push(meal);
       btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
@@ -757,112 +796,96 @@
   }
 
   function spinRandomMeal() {
-    const pool = foodDatabase.filter(item => item.mealTypes.some(m => activeSpinFilters.includes(m)));
-    if (pool.length === 0) {
-      alert('⚠️ No meals found in the current spin pool! Enable at least one meal category.');
+    const eligiblePool = foodDatabase.filter(i => i.mealTypes.some(m => activeSpinFilters.includes(m)));
+    if (eligiblePool.length === 0) {
+      alert('⚠️ No meals found in your active spin pool! Select at least one meal filter.');
       return;
     }
-    const chosen = pool[Math.floor(Math.random() * pool.length)];
-    selectMealUnit(chosen.mealTypes[0]);
-    
+
+    const randomItem = eligiblePool[Math.floor(Math.random() * eligiblePool.length)];
+    selectMealUnit(randomItem.mealTypes[0]);
+    currentSubcategory = 'all';
+    renderSubcategories();
+    renderFoodGrid();
+
     const list = getActiveCategoryList();
-    const index = list.findIndex(i => i.id === chosen.id);
-    if (index !== -1) {
-      characterSelectIndex = index;
+    const foundIdx = list.findIndex(i => i.id === randomItem.id);
+    if (foundIdx > -1) {
+      characterSelectIndex = foundIdx;
       updateCharacterSelectView();
     }
-    selectFoodItem(chosen.id);
+    selectFoodItem(randomItem.id);
     gainXP(10);
-    alert(`🎰 SPIN RESULT: ${chosen.icon} ${chosen.name}! (+10 XP)`);
+    alert(`🎰 Slot Machine landed on: ${randomItem.icon} ${randomItem.name}! (+10 XP)`);
   }
 
-  // --- ADD / EDIT RECIPE MODAL MANAGEMENT ---
+  // --- RECIPE MODAL HANDLING (ADD / EDIT) ---
+  function populateCategoryDropdown(selectedCat = '') {
+    const select = document.getElementById('modal-category-select');
+    const allCategories = [...new Set(foodDatabase.map(i => i.category))];
+    if (!allCategories.includes('sandwiches')) allCategories.push('sandwiches');
+    if (!allCategories.includes('wraps')) allCategories.push('wraps');
+
+    select.innerHTML = allCategories.map(cat => `
+      <option value="${cat}" ${cat === selectedCat ? 'selected' : ''}>${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+    `).join('');
+  }
+
   function openRecipeModal() {
     document.getElementById('modal-title').innerText = '✨ Add New Recipe';
-    document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
-    document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-recipe-id').value = '';
-    
-    populateCategoryDropdown();
+    document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-category-custom').classList.add('hidden');
-    document.getElementById('modal-category-custom').value = '';
-
+    populateCategoryDropdown();
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
   function openEditRecipeModal() {
     if (!activeSelectedItem) return;
-
     document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
-    document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
     document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
-
     document.getElementById('modal-name').value = activeSelectedItem.name;
     document.getElementById('modal-icon').value = activeSelectedItem.icon;
-    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0];
+    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
     
     populateCategoryDropdown(activeSelectedItem.category);
     document.getElementById('modal-category-custom').classList.add('hidden');
-    document.getElementById('modal-category-custom').value = '';
 
     document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
+    document.getElementById('modal-drink').value = activeSelectedItem.drinkPairing || '';
+    document.getElementById('modal-accompaniment-type').value = activeSelectedItem.accompanimentType || 'sauce';
+    document.getElementById('modal-accompaniment-name').value = activeSelectedItem.accompanimentName || '';
     document.getElementById('modal-img').value = activeSelectedItem.img;
-    document.getElementById('modal-drink-pairing').value = activeSelectedItem.drinkPairing || '';
-    document.getElementById('modal-sauce-pairing').value = activeSelectedItem.saucePairing || '';
+    document.getElementById('modal-recipe-url').value = activeSelectedItem.recipeUrl || '';
 
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
   function closeRecipeModal() {
     document.getElementById('recipe-modal').classList.add('hidden');
-  }
-
-  function populateCategoryDropdown(selectedCategory = '') {
-    const select = document.getElementById('modal-category-select');
-    if (!select) return;
-
-    const categories = [...new Set(foodDatabase.map(i => i.category))];
-    if (selectedCategory && !categories.includes(selectedCategory)) {
-      categories.push(selectedCategory);
-    }
-
-    select.innerHTML = categories.map(cat => 
-      `<option value="${cat}" ${cat === selectedCategory ? 'selected' : ''}>${cat.toUpperCase()}</option>`
-    ).join('') + `<option value="custom">➕ Add New Category...</option>`;
+    document.getElementById('recipe-modal-form').reset();
   }
 
   function handleCategoryDropdownChange(val) {
     const customInput = document.getElementById('modal-category-custom');
     if (val === 'custom') {
       customInput.classList.remove('hidden');
-      customInput.required = true;
       customInput.focus();
     } else {
       customInput.classList.add('hidden');
-      customInput.required = false;
-      customInput.value = '';
     }
   }
 
   function toggleCustomCategoryInput() {
     const select = document.getElementById('modal-category-select');
     const customInput = document.getElementById('modal-category-custom');
-    if (customInput.classList.contains('hidden')) {
-      customInput.classList.remove('hidden');
-      customInput.required = true;
-      customInput.focus();
-      select.value = 'custom';
-    } else {
-      customInput.classList.add('hidden');
-      customInput.required = false;
-      customInput.value = '';
-      select.selectedIndex = 0;
-    }
+    select.value = 'custom';
+    customInput.classList.remove('hidden');
+    customInput.focus();
   }
 
   function handleSaveModalRecipe(event) {
     event.preventDefault();
-
     const recipeId = document.getElementById('modal-recipe-id').value;
     const name = document.getElementById('modal-name').value.trim();
     const icon = document.getElementById('modal-icon').value.trim();
@@ -870,17 +893,21 @@
     
     let category = document.getElementById('modal-category-select').value;
     if (category === 'custom') {
-      category = document.getElementById('modal-category-custom').value.trim().toLowerCase();
+      category = document.getElementById('modal-category-custom').value.trim().toLowerCase() || 'general';
     }
 
-    const ingredients = document.getElementById('modal-ingredients').value.split(',').map(i => i.trim()).filter(Boolean);
+    const ingredientsRaw = document.getElementById('modal-ingredients').value;
+    const ingredients = ingredientsRaw.split(',').map(i => i.trim()).filter(i => i.length > 0);
+    const drinkPairing = document.getElementById('modal-drink').value.trim();
+    const accompanimentType = document.getElementById('modal-accompaniment-type').value;
+    const accompanimentName = document.getElementById('modal-accompaniment-name').value.trim();
     const img = document.getElementById('modal-img').value.trim();
-    const drinkPairing = document.getElementById('modal-drink-pairing').value.trim();
-    const saucePairing = document.getElementById('modal-sauce-pairing').value.trim();
+    const recipeUrl = document.getElementById('modal-recipe-url').value.trim();
 
     if (recipeId) {
+      // Edit existing
       const index = foodDatabase.findIndex(i => i.id === recipeId);
-      if (index !== -1) {
+      if (index > -1) {
         foodDatabase[index] = {
           ...foodDatabase[index],
           name,
@@ -888,29 +915,34 @@
           mealTypes: [mealType],
           category,
           ingredients,
-          img,
           drinkPairing,
-          saucePairing
+          accompanimentType,
+          accompanimentName,
+          img,
+          recipeUrl
         };
         activeSelectedItem = foodDatabase[index];
       }
-      alert('✨ Recipe successfully updated!');
+      alert('✅ Recipe updated successfully!');
     } else {
+      // Create new
       const newRecipe = {
         id: 'rec_' + Date.now(),
         name,
         icon,
-        img,
         mealTypes: [mealType],
         category,
         ingredients,
         drinkPairing,
-        saucePairing
+        accompanimentType,
+        accompanimentName,
+        img,
+        recipeUrl
       };
       foodDatabase.push(newRecipe);
       activeSelectedItem = newRecipe;
       gainXP(25);
-      alert('🎉 New recipe added to Vault! +25 XP');
+      alert('🎉 New recipe added to Vault! (+25 XP)');
     }
 
     saveFoodDatabase();
@@ -921,87 +953,82 @@
 
   function deleteSelectedRecipe() {
     if (!activeSelectedItem) return;
-    if (!confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your vault?`)) return;
+    if (confirm(`Are you sure you want to delete ${activeSelectedItem.name}?`)) {
+      foodDatabase = foodDatabase.filter(i => i.id !== activeSelectedItem.id);
+      saveFoodDatabase();
+      activeSelectedItem = null;
+      
+      document.getElementById('detail-category').innerText = 'Select an Item';
+      document.getElementById('detail-title').innerHTML = `<span>🎒 Inventory Empty</span>`;
+      document.getElementById('detail-link-container').innerHTML = '';
+      document.getElementById('detail-img-container').innerHTML = `<span class="text-slate-400 text-xs italic">No item selected</span>`;
+      document.getElementById('detail-ingredients').innerHTML = `<li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>`;
+      document.getElementById('detail-drink').innerText = 'None';
+      document.getElementById('detail-accompaniment').innerText = 'None';
+      document.getElementById('detail-actions').classList.remove('flex');
+      document.getElementById('detail-actions').classList.add('hidden');
+      
+      const eatBtn = document.getElementById('eat-btn');
+      eatBtn.disabled = true;
+      eatBtn.className = 'mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed';
 
-    foodDatabase = foodDatabase.filter(i => i.id !== activeSelectedItem.id);
-    saveFoodDatabase();
-    
-    activeSelectedItem = null;
-    document.getElementById('detail-category').innerText = 'Select an Item';
-    document.getElementById('detail-title').innerHTML = '<span>🎒 Inventory Empty</span>';
-    document.getElementById('detail-img-container').innerHTML = '<span class="text-slate-400 text-xs italic">No item selected</span>';
-    document.getElementById('detail-ingredients').innerHTML = '<li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>';
-    document.getElementById('detail-drink').innerText = 'None';
-    document.getElementById('detail-sauce').innerText = 'None';
-    document.getElementById('detail-actions').classList.remove('flex');
-    document.getElementById('detail-actions').classList.add('hidden');
-    
-    const eatBtn = document.getElementById('eat-btn');
-    eatBtn.disabled = true;
-    eatBtn.className = 'mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed';
-
-    renderSubcategories();
-    renderFoodGrid();
-    updateCharacterSelectView();
-    alert('🗑️ Recipe deleted successfully.');
+      renderSubcategories();
+      renderFoodGrid();
+      updateCharacterSelectView();
+    }
   }
 
-  // --- PANTRY RECIPE MATCHERS ---
+  // --- PANTRY MATCHING STATIONS ---
+  function getSelectedPantryIngredients() {
+    const checkboxes = document.querySelectorAll('.pantry-item:checked');
+    return Array.from(checkboxes).map(cb => cb.value);
+  }
+
   function matchCustomRecipe() {
-    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
+    const selected = getSelectedPantryIngredients();
     const output = document.getElementById('custom-recipe-output');
 
-    if (checked.length === 0) {
-      output.innerHTML = `<p class="text-amber-700 italic">Please select at least one pantry ingredient above!</p>`;
+    if (selected.length === 0) {
+      output.innerHTML = `<p class="italic text-amber-600">Please check at least one pantry ingredient above first!</p>`;
       return;
     }
 
     const matches = foodDatabase.filter(recipe => {
-      const recipeIngs = recipe.ingredients.map(i => i.toLowerCase());
-      return checked.some(c => recipeIngs.some(ri => ri.includes(c)));
+      const recipeIngsLower = recipe.ingredients.map(i => i.toLowerCase());
+      return selected.some(sel => recipeIngsLower.some(ing => ing.includes(sel)));
     });
 
     if (matches.length === 0) {
-      output.innerHTML = `<p class="text-slate-500 italic">No vault recipes match your selected pantry items. Try adding a new recipe!</p>`;
+      output.innerHTML = `<p class="italic text-slate-500">No vault recipes match your selected pantry ingredients.</p>`;
       return;
     }
 
     output.innerHTML = matches.map(m => `
-      <div onclick="selectMealUnit('${m.mealTypes[0]}'); selectFoodItem('${m.id}');" class="p-2 bg-emerald-50 rounded-xl border border-emerald-200 cursor-pointer hover:bg-emerald-100 flex items-center gap-2">
-        <span class="text-lg">${m.icon}</span>
-        <div>
-          <p class="font-bold text-xs text-emerald-900">${m.name}</p>
-          <p class="text-[10px] text-slate-500">Ingredients: ${m.ingredients.join(', ')}</p>
-        </div>
+      <div onclick="selectFoodItem('${m.id}')" class="p-2 bg-emerald-50 border border-emerald-200 rounded-xl cursor-pointer hover:bg-emerald-100 flex items-center justify-between">
+        <span class="font-bold text-xs">${m.icon} ${m.name}</span>
+        <span class="text-[10px] text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-lg">${m.category}</span>
       </div>
     `).join('');
   }
 
   function searchWebRecipes() {
-    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
+    const selected = getSelectedPantryIngredients();
     const output = document.getElementById('web-recipe-output');
 
-    if (checked.length === 0) {
-      output.innerHTML = `<p class="text-sky-700 italic">Please select at least one pantry ingredient to search the web!</p>`;
+    if (selected.length === 0) {
+      output.innerHTML = `<p class="italic text-sky-600">Please check at least one pantry ingredient above first!</p>`;
       return;
     }
 
-    const query = checked.join('+');
-    const mockWebResults = [
-      { name: `Quick ${checked[0]} Stir Fry Bowl`, icon: '🍲', time: '15 mins', url: `https://www.google.com/search?q=${query}+recipe` },
-      { name: `Crispy ${checked[0]} & Herb Skillet`, icon: '🍳', time: '20 mins', url: `https://www.google.com/search?q=easy+${query}+recipe` },
-      { name: `Gourmet ${checked[0]} Fusion Plate`, icon: '🍽️', time: '25 mins', url: `https://www.google.com/search?q=gourmet+${query}+recipe` }
-    ];
-
-    output.innerHTML = mockWebResults.map(r => `
-      <a href="${r.url}" target="_blank" class="block p-2 bg-sky-50 rounded-xl border border-sky-200 hover:bg-sky-100 transition-all">
-        <div class="flex items-center justify-between">
-          <span class="font-bold text-xs text-sky-900">${r.icon} ${r.name}</span>
-          <span class="text-[10px] bg-sky-200 text-sky-800 px-1.5 py-0.5 rounded font-mono">⏱️ ${r.time}</span>
-        </div>
-        <span class="text-[10px] text-sky-600 underline">Search on Google ↗</span>
-      </a>
-    `).join('');
+    const query = selected.join('+');
+    output.innerHTML = `
+      <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl space-y-2">
+        <p class="text-xs font-bold text-sky-900">🌐 Web search generated for: <span class="underline">${selected.join(', ')}</span></p>
+        <a href="https://www.google.com/search?q=recipes+with+${query}" target="_blank" class="block text-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-3 text-xs rounded-xl border border-black pixel-shadow-sm">
+          Search Google Recipes 🔍
+        </a>
+      </div>
+    `;
   }
 </script>
 </body>
