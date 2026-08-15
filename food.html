@@ -174,14 +174,20 @@
         <!-- Compact Seamless Inventory Grid -->
         <div class="md:col-span-2 bg-white rounded-2xl border-2 border-black p-3 max-h-[480px] overflow-y-auto">
           <div id="food-inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-             <!-- Dynamic Food Item Cards & Add New Tile -->
+             <!-- Dynamic Food Item Cards -->
           </div>
         </div>
         
         <!-- Selected Item Detail View -->
         <div id="food-detail-card" class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow flex flex-col justify-between">
           <div>
-            <div class="text-[10px] font-bold text-pink-500 uppercase tracking-wider mb-1" id="detail-category">Select an Item</div>
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-[10px] font-bold text-pink-500 uppercase tracking-wider" id="detail-category">Select an Item</div>
+              <div id="detail-actions" class="hidden gap-1.5">
+                <button onclick="openEditRecipeModal()" title="Edit Recipe" class="bg-amber-300 hover:bg-amber-400 text-slate-900 font-bold px-2 py-0.5 text-[10px] rounded border border-black pixel-shadow-sm">✏️ Edit</button>
+                <button onclick="deleteSelectedRecipe()" title="Delete Recipe" class="bg-red-400 hover:bg-red-500 text-white font-bold px-2 py-0.5 text-[10px] rounded border border-black pixel-shadow-sm">🗑️ Delete</button>
+              </div>
+            </div>
             
             <div id="detail-img-container" class="w-full h-32 rounded-xl border-2 border-black overflow-hidden mb-2 bg-pink-50 flex items-center justify-center">
               <span class="text-slate-400 text-xs italic">No item selected</span>
@@ -326,7 +332,7 @@
           <button type="button" onclick="closeRecipeModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
             Cancel
           </button>
-          <button type="submit" class="w-2/3 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+          <button type="submit" id="modal-submit-btn" class="w-2/3 bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
             Save Recipe (+25 XP)
           </button>
         </div>
@@ -382,94 +388,6 @@
       saucePairing: 'Chipotle Sauce'
     },
     {
-      id: 'b3',
-      name: 'Acai Smoothie Bowl',
-      icon: '🫐',
-      img: 'https://images.unsplash.com/photo-1654923064926-be7e64267a31?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'bowls',
-      ingredients: ['Acai', 'Banana', 'Blueberries', 'Granola'],
-      drinkPairing: 'Coconut Water',
-      saucePairing: 'Almond Butter'
-    },
-    {
-      id: 'b4',
-      name: 'Matcha Boba Latte',
-      icon: '🍵',
-      img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'drinks',
-      ingredients: ['Matcha', 'Milk', 'Brown Sugar', 'Boba'],
-      drinkPairing: 'Water',
-      saucePairing: 'Vanilla Syrup'
-    },
-    {
-      id: 'b5',
-      name: 'French Toast',
-      icon: '🍞',
-      img: 'https://images.unsplash.com/photo-1639108094328-2b94a49b1c2e?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'sweet',
-      ingredients: ['Brioche', 'Eggs', 'Milk', 'Cinnamon'],
-      drinkPairing: 'Cappuccino',
-      saucePairing: 'Maple Syrup'
-    },
-    {
-      id: 'b6',
-      name: 'Blueberry Pancakes',
-      icon: '🥞',
-      img: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'sweet',
-      ingredients: ['Flour', 'Blueberries', 'Eggs', 'Milk'],
-      drinkPairing: 'Iced Latte',
-      saucePairing: 'Maple Syrup'
-    },
-    {
-      id: 'b7',
-      name: 'Shakshuka',
-      icon: '🍳',
-      img: 'https://images.unsplash.com/photo-1590412200988-a436970781fa?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'eggs',
-      ingredients: ['Eggs', 'Tomatoes', 'Bell Peppers', 'Onion'],
-      drinkPairing: 'Mint Tea',
-      saucePairing: 'Harissa'
-    },
-    {
-      id: 'b8',
-      name: 'Eggs Benedict',
-      icon: '🍳',
-      img: 'https://images.unsplash.com/photo-1608039829572-78524f79c4c7?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'eggs',
-      ingredients: ['English Muffin', 'Eggs', 'Canadian Bacon', 'Hollandaise'],
-      drinkPairing: 'Orange Juice',
-      saucePairing: 'Hollandaise'
-    },
-    {
-      id: 'b9',
-      name: 'Greek Yogurt Parfait',
-      icon: '🥣',
-      img: 'https://images.unsplash.com/photo-1530259152377-3a014e1092e0?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'bowls',
-      ingredients: ['Greek Yogurt', 'Granola', 'Strawberries', 'Honey'],
-      drinkPairing: 'Green Tea',
-      saucePairing: 'Honey'
-    },
-    {
-      id: 'b10',
-      name: 'Breakfast Hash',
-      icon: '🥔',
-      img: 'https://images.unsplash.com/photo-1710533788728-800be38530a8?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['breakfast'],
-      category: 'savory',
-      ingredients: ['Potatoes', 'Eggs', 'Bell Peppers', 'Onions'],
-      drinkPairing: 'Cold Brew',
-      saucePairing: 'Sriracha'
-    },
-    {
       id: 'l1',
       name: 'Caprese Focaccia',
       icon: '🥪',
@@ -479,50 +397,6 @@
       ingredients: ['Focaccia', 'Tomatoes', 'Mozzarella', 'Basil'],
       drinkPairing: 'Sparkling Water',
       saucePairing: 'Balsamic Glaze'
-    },
-    {
-      id: 'l2',
-      name: 'Spicy Garlic Ramen',
-      icon: '🍜',
-      img: 'https://plus.unsplash.com/premium_photo-1694708455249-992010f9db32?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['lunch'],
-      category: 'noodles',
-      ingredients: ['Ramen Noodles', 'Garlic', 'Chili Oil', 'Green Onion'],
-      drinkPairing: 'Iced Green Tea',
-      saucePairing: 'Chili Crisp'
-    },
-    {
-      id: 'l3',
-      name: 'Shrimp Tempura Bowl',
-      icon: '🍣',
-      img: 'https://images.unsplash.com/photo-1738819367362-45ec5be27c24?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['lunch'],
-      category: 'bowls',
-      ingredients: ['Shrimp', 'Rice', 'Avocado', 'Cucumber'],
-      drinkPairing: 'Yuzu Lemonade',
-      saucePairing: 'Spicy Mayo'
-    },
-    {
-      id: 'l4',
-      name: 'Chicken Caesar Wrap',
-      icon: '🌯',
-      img: 'https://images.unsplash.com/photo-1666819615040-eff5e52c778a?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['lunch'],
-      category: 'wraps',
-      ingredients: ['Chicken', 'Romaine', 'Parmesan', 'Flour Tortilla'],
-      drinkPairing: 'Iced Tea',
-      saucePairing: 'Caesar Dressing'
-    },
-    {
-      id: 'l5',
-      name: 'Margherita Pizza',
-      icon: '🍕',
-      img: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['lunch'],
-      category: 'pizza',
-      ingredients: ['Pizza Dough', 'Tomatoes', 'Mozzarella', 'Basil'],
-      drinkPairing: 'Sparkling Water',
-      saucePairing: 'Garlic Oil'
     },
     {
       id: 'd1',
@@ -536,50 +410,6 @@
       saucePairing: 'Chipotle Crema'
     },
     {
-      id: 'd2',
-      name: 'Garlic Butter Noodles',
-      icon: '🍝',
-      img: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['dinner'],
-      category: 'noodles',
-      ingredients: ['Spaghetti', 'Garlic', 'Butter', 'Parmesan'],
-      drinkPairing: 'Sparkling Water',
-      saucePairing: 'Garlic Butter'
-    },
-    {
-      id: 'd3',
-      name: 'Focaccia Pizza',
-      icon: '🍕',
-      img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['dinner'],
-      category: 'pizza',
-      ingredients: ['Focaccia', 'Tomato Sauce', 'Mozzarella', 'Basil'],
-      drinkPairing: 'Italian Soda',
-      saucePairing: 'Basil Pesto'
-    },
-    {
-      id: 'd4',
-      name: 'Teriyaki Chicken Bowl',
-      icon: '🍗',
-      img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['dinner'],
-      category: 'bowls',
-      ingredients: ['Chicken', 'Rice', 'Broccoli', 'Sesame Seeds'],
-      drinkPairing: 'Iced Green Tea',
-      saucePairing: 'Teriyaki Sauce'
-    },
-    {
-      id: 'd5',
-      name: 'Pasta Alla Vodka',
-      icon: '🍝',
-      img: 'https://images.unsplash.com/photo-1626028937210-754d2118d5f7?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['dinner'],
-      category: 'pasta',
-      ingredients: ['Pasta', 'Heavy Cream', 'Spinach', 'Sun-Dried Tomatoes/Tomato Paste'],
-      drinkPairing: 'Sparkling Water',
-      saucePairing: 'Parmesan Cream'
-    },
-    {
       id: 'ds1',
       name: 'Strawberry Tanghulu',
       icon: '🍓',
@@ -589,28 +419,6 @@
       ingredients: ['Strawberries', 'Sugar', 'Water'],
       drinkPairing: 'Jasmine Green Tea',
       saucePairing: 'Sugar Glaze'
-    },
-    {
-      id: 'ds2',
-      name: 'Matcha Soft Serve',
-      icon: '🍦',
-      img: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['dessert'],
-      category: 'frozen',
-      ingredients: ['Matcha Powder', 'Milk', 'Cream', 'Sugar'],
-      drinkPairing: 'Iced Water',
-      saucePairing: 'Condensed Milk'
-    },
-    {
-      id: 'ds3',
-      name: 'Warm Chocolate Lava Cake',
-      icon: '🍫',
-      img: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?w=700&auto=format&fit=crop&q=60',
-      mealTypes: ['dessert'],
-      category: 'baked',
-      ingredients: ['Dark Chocolate', 'Butter', 'Eggs', 'Flour'],
-      drinkPairing: 'Cold Milk',
-      saucePairing: 'Vanilla Cream'
     }
   ];
 
@@ -640,6 +448,14 @@
   let characterSelectIndex = 0;
   let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
   let searchQuery = '';
+
+  // --- INITIALIZATION ON LOAD ---
+  window.addEventListener('DOMContentLoaded', () => {
+    updateHUD();
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  });
 
   // --- SEARCH HANDLER ---
   function handleSearchInput(val) {
@@ -715,29 +531,24 @@
     updateCharacterSelectView();
   }
 
-// --- RENDER INVENTORY GRID ---
-function renderFoodGrid() {
-  const grid = document.getElementById('food-inventory-grid');
-  if (!grid) return;
+  // --- RENDER INVENTORY GRID ---
+  function renderFoodGrid() {
+    const grid = document.getElementById('food-inventory-grid');
+    if (!grid) return;
 
-  const items = getActiveCategoryList();
+    const items = getActiveCategoryList();
 
-  // Show message when no recipes match the current filters
-  if (items.length === 0) {
-    grid.innerHTML = `
-      <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
-        No recipes found matching current filters.
-      </div>
-    `;
-    return;
-  }
+    if (items.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
+          No recipes found matching current filters.
+        </div>
+      `;
+      return;
+    }
 
-  // Render recipes only
     grid.innerHTML = items.map(item => {
-      const isSelected =
-        activeSelectedItem &&
-        activeSelectedItem.id === item.id;
-
+      const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
       const selectedBorder = isSelected
         ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50'
         : 'border-black bg-white hover:bg-slate-50';
@@ -747,23 +558,19 @@ function renderFoodGrid() {
           onclick="selectFoodItem('${item.id}')"
           class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group"
         >
-
           <img
             src="${item.img}"
             alt="${item.name}"
             class="w-12 h-12 rounded-lg border border-black object-cover shrink-0"
           />
-
           <div class="overflow-hidden flex-1">
             <h4 class="font-bold text-xs truncate text-slate-800">
               ${item.icon} ${item.name}
             </h4>
-
             <p class="text-[10px] text-slate-500 truncate">
               ${item.ingredients.join(', ')}
             </p>
           </div>
-
         </div>
       `;
     }).join('');
@@ -785,6 +592,10 @@ function renderFoodGrid() {
 
     document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
     document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
+
+    // Show edit/delete buttons
+    const detailActions = document.getElementById('detail-actions');
+    if (detailActions) detailActions.className = 'flex items-center gap-1.5';
 
     const eatBtn = document.getElementById('eat-btn');
     eatBtn.disabled = false;
@@ -843,7 +654,7 @@ function renderFoodGrid() {
   function toggleSpinFilter(type) {
     const btn = document.getElementById(`spin-btn-${type}`);
     if (activeSpinFilters.includes(type)) {
-      if (activeSpinFilters.length === 1) return; // Keep at least one filter active
+      if (activeSpinFilters.length === 1) return; 
       activeSpinFilters = activeSpinFilters.filter(t => t !== type);
       if (btn) btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-200 text-slate-500 opacity-60 transition-all';
     } else {
@@ -879,19 +690,23 @@ function renderFoodGrid() {
       return;
     }
 
-    const matches = foodDatabase.filter(item => 
-      item.ingredients.some(ing => selected.some(s => ing.toLowerCase().includes(s)))
-    );
+    const matches = foodDatabase.filter(recipe => {
+      const recipeIngs = recipe.ingredients.map(i => i.toLowerCase());
+      return selected.some(sel => recipeIngs.some(ri => ri.includes(sel)));
+    });
 
     if (matches.length === 0) {
-      output.innerHTML = `<p class="text-amber-800 font-bold">No exact vault matches! Try adding more ingredients.</p>`;
+      output.innerHTML = `<p class="text-xs text-slate-500 italic">No exact vault matches found for these ingredients.</p>`;
       return;
     }
 
     output.innerHTML = matches.map(m => `
-      <div onclick="selectMealUnit('${m.mealTypes[0]}'); selectFoodItem('${m.id}')" class="p-2 bg-emerald-50 border border-emerald-200 rounded-xl cursor-pointer hover:bg-emerald-100 transition-all flex items-center justify-between">
-        <span class="font-bold text-xs">${m.icon} ${m.name}</span>
-        <span class="text-[10px] bg-emerald-200 text-emerald-800 px-2 py-0.5 rounded-md font-bold">View</span>
+      <div onclick="selectFoodItem('${m.id}')" class="p-2 rounded-xl border border-emerald-200 bg-emerald-50 cursor-pointer hover:bg-emerald-100 transition-all flex items-center gap-2">
+        <span class="text-lg">${m.icon}</span>
+        <div>
+          <p class="font-bold text-xs text-emerald-900">${m.name}</p>
+          <p class="text-[10px] text-emerald-700">${m.ingredients.join(', ')}</p>
+        </div>
       </div>
     `).join('');
   }
@@ -905,25 +720,41 @@ function renderFoodGrid() {
       return;
     }
 
-    const query = encodeURIComponent(selected.join(' ') + ' recipe');
-    const searchUrl = `https://www.google.com/search?q=${query}`;
+    const queryStr = selected.join('+');
+    const mockWebResults = [
+      { title: `Quick ${selected[0]} Skillet Bowl`, link: `https://www.google.com/search?q=${queryStr}+recipe` },
+      { title: `Easy 15-Minute ${selected[0]} & ${selected[1] || 'Spice'} Meal`, link: `https://www.google.com/search?q=${queryStr}+easy+recipe` }
+    ];
 
-    output.innerHTML = `
-      <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl space-y-2">
-        <p class="text-xs text-sky-900 font-bold">Generated Web Search Query:</p>
-        <p class="text-xs text-slate-600 bg-white p-2 rounded-lg border border-sky-100 font-mono">"${selected.join(', ')} recipes"</p>
-        <a href="${searchUrl}" target="_blank" class="inline-block w-full text-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 rounded-xl text-xs pixel-shadow transition-all">
-          🚀 Search Google Recipes ↗
-        </a>
-      </div>
-    `;
+    output.innerHTML = mockWebResults.map(r => `
+      <a href="${r.link}" target="_blank" class="block p-2 rounded-xl border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-all text-xs font-bold text-sky-900">
+        🌐 ${r.title} ↗
+      </a>
+    `).join('');
   }
 
-  // --- RECIPE MODAL FUNCTIONS ---
+  // --- MODAL MANAGEMENT (ADD & EDIT) ---
   function openRecipeModal() {
+    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
+    document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-recipe-id').value = '';
-    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
+    document.getElementById('recipe-modal').classList.remove('hidden');
+  }
+
+  function openEditRecipeModal() {
+    if (!activeSelectedItem) return;
+    document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
+    document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
+    
+    document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
+    document.getElementById('modal-name').value = activeSelectedItem.name;
+    document.getElementById('modal-icon').value = activeSelectedItem.icon;
+    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
+    document.getElementById('modal-category').value = activeSelectedItem.category;
+    document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
+    document.getElementById('modal-img').value = activeSelectedItem.img;
+
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
@@ -934,43 +765,84 @@ function renderFoodGrid() {
   function handleSaveModalRecipe(e) {
     e.preventDefault();
 
+    const recipeId = document.getElementById('modal-recipe-id').value;
     const name = document.getElementById('modal-name').value.trim();
     const icon = document.getElementById('modal-icon').value.trim();
     const mealType = document.getElementById('modal-meal-type').value;
     const category = document.getElementById('modal-category').value.trim().toLowerCase();
-    const ingredientsRaw = document.getElementById('modal-ingredients').value;
+    const ingredients = document.getElementById('modal-ingredients').value.split(',').map(i => i.trim()).filter(Boolean);
     const img = document.getElementById('modal-img').value.trim();
 
-    const ingredients = ingredientsRaw.split(',').map(s => s.trim()).filter(Boolean);
+    if (recipeId) {
+      // Edit Mode
+      const index = foodDatabase.findIndex(i => i.id === recipeId);
+      if (index !== -1) {
+        foodDatabase[index] = {
+          ...foodDatabase[index],
+          name,
+          icon,
+          mealTypes: [mealType],
+          category,
+          ingredients,
+          img
+        };
+        activeSelectedItem = foodDatabase[index];
+      }
+    } else {
+      // Create Mode
+      const newRecipe = {
+        id: 'custom_' + Date.now(),
+        name,
+        icon,
+        mealTypes: [mealType],
+        category,
+        ingredients,
+        img,
+        drinkPairing: 'Water',
+        saucePairing: 'House Sauce'
+      };
+      foodDatabase.push(newRecipe);
+      activeSelectedItem = newRecipe;
+      gainXP(25);
+    }
 
-    const newRecipe = {
-      id: 'custom_' + Date.now(),
-      name,
-      icon,
-      img,
-      mealTypes: [mealType],
-      category,
-      ingredients,
-      drinkPairing: 'Custom Drink',
-      saucePairing: 'Custom Sauce'
-    };
-
-    foodDatabase.unshift(newRecipe);
     saveFoodDatabase();
-
-    selectMealUnit(mealType);
-    selectFoodItem(newRecipe.id);
     closeRecipeModal();
-    gainXP(25);
-  }
-
-  // --- INITIALIZATION ---
-  window.addEventListener('DOMContentLoaded', () => {
-    updateHUD();
+    selectMealUnit(mealType);
+    selectFoodItem(activeSelectedItem.id);
     renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
-  });
+  }
+
+  // --- DELETE RECIPE FUNCTIONALITY ---
+  function deleteSelectedRecipe() {
+    if (!activeSelectedItem) return;
+
+    if (confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your vault?`)) {
+      const idToDelete = activeSelectedItem.id;
+      foodDatabase = foodDatabase.filter(i => i.id !== idToDelete);
+      saveFoodDatabase();
+
+      // Reset selection view
+      activeSelectedItem = null;
+      document.getElementById('detail-category').innerText = 'Select an Item';
+      document.getElementById('detail-title').innerHTML = `<span>🎒 Inventory Empty</span>`;
+      document.getElementById('detail-img-container').innerHTML = `<span class="text-slate-400 text-xs italic">No item selected</span>`;
+      document.getElementById('detail-ingredients').innerHTML = `<li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>`;
+      document.getElementById('detail-drink').innerText = 'None';
+      document.getElementById('detail-sauce').innerText = 'None';
+      document.getElementById('detail-actions').className = 'hidden gap-1.5';
+
+      const eatBtn = document.getElementById('eat-btn');
+      eatBtn.disabled = true;
+      eatBtn.className = 'mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed';
+
+      renderSubcategories();
+      renderFoodGrid();
+      updateCharacterSelectView();
+    }
+  }
 </script>
 </body>
 </html>
