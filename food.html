@@ -218,36 +218,21 @@
 
     <!-- PANTRY RECIPE MATCHERS -->
     <section class="bg-amber-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <h2 class="text-2xl font-bold text-amber-900 mb-2">🥖 Pantry Crafting Station</h2>
-      <p class="text-xs text-amber-800 mb-6">Select available ingredients from your kitchen pantry to generate custom or web recipes.</p>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+        <div>
+          <h2 class="text-2xl font-bold text-amber-900">🥖 Pantry Crafting Station</h2>
+          <p class="text-xs text-amber-800">Select available ingredients from your kitchen pantry to generate custom or web recipes.</p>
+        </div>
+        <button onclick="openPantryModal()" class="bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow shrink-0 flex items-center gap-1.5 transition-all">
+          ➕ Add Pantry Item
+        </button>
+      </div>
 
-      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6">
+      <div class="bg-white p-4 rounded-2xl border-2 border-black mb-6 mt-4">
         <h4 class="font-bold text-slate-700 mb-3 text-sm border-b pb-1">Available Ingredients:</h4>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="eggs" class="pantry-item w-4 h-4 accent-amber-500"> 🍳 Eggs
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="bread" class="pantry-item w-4 h-4 accent-amber-500"> 🍞 Bread
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="matcha" class="pantry-item w-4 h-4 accent-amber-500"> 🍵 Matcha
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="boba" class="pantry-item w-4 h-4 accent-amber-500"> 🧋 Boba
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="ramen noodles" class="pantry-item w-4 h-4 accent-amber-500"> 🍜 Ramen
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="garlic" class="pantry-item w-4 h-4 accent-amber-500"> 🧄 Garlic
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="flour" class="pantry-item w-4 h-4 accent-amber-500"> 🌾 Flour
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
-            <input type="checkbox" value="strawberries" class="pantry-item w-4 h-4 accent-amber-500"> 🍓 Strawberries
-          </label>
+        <!-- Dynamic Pantry Checkboxes Grid -->
+        <div id="pantry-checkboxes-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
+          <!-- Rendered via JS -->
         </div>
       </div>
 
@@ -281,6 +266,35 @@
       </div>
     </section>
   </main>
+
+  <!-- PANTRY ITEM MODAL (ADD INGREDIENT) -->
+  <div id="pantry-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-sm relative animate-in fade-in zoom-in duration-150">
+      <button onclick="closePantryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
+      
+      <h3 class="text-xl font-bold text-amber-900 mb-1">➕ Add Pantry Item</h3>
+      <p class="text-xs text-amber-800 mb-4">Stock a new ingredient into your kitchen shelf!</p>
+
+      <form id="pantry-modal-form" onsubmit="handleSavePantryItem(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Emoji Icon</label>
+          <input type="text" id="pantry-modal-icon" required placeholder="e.g., 🧀" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Ingredient Name</label>
+          <input type="text" id="pantry-modal-name" required placeholder="e.g., Cheddar Cheese" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closePantryModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+            Cancel
+          </button>
+          <button type="submit" class="w-2/3 bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+            Add Ingredient
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- RECIPE MODAL (CREATE / EDIT) -->
   <div id="recipe-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -369,7 +383,18 @@
     updateHUD();
   }
 
-  // --- DEFAULT DATABASE ARRAY ---
+  // --- DEFAULT DATABASES ---
+  const defaultPantryItems = [
+    { name: 'eggs', label: 'Eggs', icon: '🍳' },
+    { name: 'bread', label: 'Bread', icon: '🍞' },
+    { name: 'matcha', label: 'Matcha', icon: '🍵' },
+    { name: 'boba', label: 'Boba', icon: '🧋' },
+    { name: 'ramen noodles', label: 'Ramen', icon: '🍜' },
+    { name: 'garlic', label: 'Garlic', icon: '🧄' },
+    { name: 'flour', label: 'Flour', icon: '🌾' },
+    { name: 'strawberries', label: 'Strawberries', icon: '🍓' }
+  ];
+
   const defaultFoodDatabase = [
     {
       id: 'b1',
@@ -429,16 +454,25 @@
   ];
 
   // --- LOCALSTORAGE DATABASE INITIALIZATION ---
+  let pantryItems = loadPantryItems();
   let foodDatabase = loadFoodDatabase();
+
+  function loadPantryItems() {
+    const saved = localStorage.getItem('customPantryItems');
+    if (saved) {
+      try { return JSON.parse(saved); } catch (e) { }
+    }
+    return defaultPantryItems;
+  }
+
+  function savePantryItems() {
+    localStorage.setItem('customPantryItems', JSON.stringify(pantryItems));
+  }
 
   function loadFoodDatabase() {
     const savedData = localStorage.getItem('customFoodDatabase');
     if (savedData) {
-      try {
-        return JSON.parse(savedData);
-      } catch (e) {
-        console.error('Could not load custom database, using default', e);
-      }
+      try { return JSON.parse(savedData); } catch (e) { }
     }
     return defaultFoodDatabase;
   }
@@ -458,10 +492,48 @@
   // --- INITIALIZATION ON LOAD ---
   window.addEventListener('DOMContentLoaded', () => {
     updateHUD();
+    renderPantryCheckboxes();
     renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
   });
+
+  // --- PANTRY CHECKBOXES RENDERING ---
+  function renderPantryCheckboxes() {
+    const grid = document.getElementById('pantry-checkboxes-grid');
+    if (!grid) return;
+
+    grid.innerHTML = pantryItems.map(item => `
+      <label class="flex items-center gap-2 cursor-pointer bg-amber-50 p-2 rounded-xl border border-amber-200 hover:bg-amber-100">
+        <input type="checkbox" value="${item.name.toLowerCase()}" class="pantry-item w-4 h-4 accent-amber-500"> ${item.icon} ${item.label}
+      </label>
+    `).join('');
+  }
+
+  // --- ADD PANTRY ITEM MODAL CONTROLS ---
+  function openPantryModal() {
+    document.getElementById('pantry-modal').classList.remove('hidden');
+  }
+
+  function closePantryModal() {
+    document.getElementById('pantry-modal').classList.add('hidden');
+    document.getElementById('pantry-modal-form').reset();
+  }
+
+  function handleSavePantryItem(event) {
+    event.preventDefault();
+    const icon = document.getElementById('pantry-modal-icon').value.trim();
+    const label = document.getElementById('pantry-modal-name').value.trim();
+    const name = label.toLowerCase();
+
+    if (!pantryItems.some(i => i.name === name)) {
+      pantryItems.push({ name, label, icon });
+      savePantryItems();
+      renderPantryCheckboxes();
+      gainXP(5);
+    }
+    closePantryModal();
+  }
 
   // --- SEARCH HANDLER ---
   function handleSearchInput(val) {
@@ -658,160 +730,57 @@
   // --- SPINNER FUNCTIONALITY ---
   function toggleSpinFilter(type) {
     const btn = document.getElementById(`spin-btn-${type}`);
-    if (activeSpinFilters.includes(type)) {
-      if (activeSpinFilters.length === 1) return; 
-      activeSpinFilters = activeSpinFilters.filter(t => t !== type);
-      if (btn) btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-200 text-slate-500 opacity-60 transition-all';
+    const index = activeSpinFilters.indexOf(type);
+    if (index > -1) {
+      activeSpinFilters.splice(index, 1);
+      btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-white text-slate-400 transition-all';
     } else {
       activeSpinFilters.push(type);
-      if (btn) btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
+      btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all';
     }
   }
 
   function spinRandomMeal() {
-    const pool = foodDatabase.filter(i => i.mealTypes.some(mt => activeSpinFilters.includes(mt)));
+    const pool = foodDatabase.filter(item => item.mealTypes.some(m => activeSpinFilters.includes(m)));
     if (pool.length === 0) {
-      alert('No recipes in selected spin pool!');
+      alert("⚠️ Your spin pool is empty! Enable at least one meal category.");
       return;
     }
-
     const randomItem = pool[Math.floor(Math.random() * pool.length)];
     selectMealUnit(randomItem.mealTypes[0]);
+    activeSelectedItem = randomItem;
     selectFoodItem(randomItem.id);
     gainXP(10);
   }
 
-  // --- PANTRY MATCHERS ---
-  function getSelectedPantryItems() {
-    return Array.from(document.querySelectorAll('.pantry-item:checked')).map(cb => cb.value.toLowerCase());
-  }
-
+  // --- PANTRY RECIPE MATCHER STUBS ---
   function matchCustomRecipe() {
-    const selected = getSelectedPantryItems();
+    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
     const output = document.getElementById('custom-recipe-output');
-
-    if (selected.length === 0) {
-      output.innerHTML = `<p class="italic text-slate-400">Select ingredients above to match vault recipes.</p>`;
+    if (checked.length === 0) {
+      output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
       return;
     }
-
-    const matches = foodDatabase.filter(recipe => {
-      const recipeIngs = recipe.ingredients.map(i => i.toLowerCase());
-      return selected.some(sel => recipeIngs.some(ri => ri.includes(sel)));
-    });
-
-    if (matches.length === 0) {
-      output.innerHTML = `<p class="text-xs text-slate-500 italic">No exact vault matches found for these ingredients.</p>`;
-      return;
-    }
-
-    output.innerHTML = matches.map(m => `
-      <div onclick="selectFoodItem('${m.id}')" class="p-2 rounded-xl border border-emerald-200 bg-emerald-50 cursor-pointer hover:bg-emerald-100 transition-all flex items-center gap-2">
-        <span class="text-lg">${m.icon}</span>
-        <div>
-          <p class="font-bold text-xs text-emerald-900">${m.name}</p>
-          <p class="text-[10px] text-emerald-700">${m.ingredients.join(', ')}</p>
-        </div>
-      </div>
-    `).join('');
+    output.innerHTML = `<p class="text-emerald-800 font-bold">Checked: ${checked.join(', ')}</p><p class="text-xs text-slate-600">Matching algorithm active! (Hook up to your recipe database query as needed)</p>`;
   }
 
   function searchWebRecipes() {
-    const selected = getSelectedPantryItems();
+    const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
     const output = document.getElementById('web-recipe-output');
-
-    if (selected.length === 0) {
-      output.innerHTML = `<p class="italic text-slate-400">Select ingredients above to search web recipes.</p>`;
+    if (checked.length === 0) {
+      output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
       return;
     }
-
-    const queryStr = selected.join('+');
-    const mockWebResults = [
-      { title: `Quick ${selected[0]} Skillet Bowl`, link: `https://www.google.com/search?q=${queryStr}+recipe` },
-      { title: `Easy 15-Minute ${selected[0]} & ${selected[1] || 'Spice'} Meal`, link: `https://www.google.com/search?q=${queryStr}+easy+recipe` }
-    ];
-
-    output.innerHTML = mockWebResults.map(r => `
-      <a href="${r.link}" target="_blank" class="block p-2 rounded-xl border border-sky-200 bg-sky-50 hover:bg-sky-100 transition-all text-xs font-bold text-sky-900">
-        🌐 ${r.title} ↗
-      </a>
-    `).join('');
+    output.innerHTML = `<p class="text-sky-800 font-bold">Searching web for: ${checked.join(', ')}...</p>`;
   }
 
-  // --- POPULATE CATEGORY DROPDOWN IN MODAL ---
-  function populateModalCategoryDropdown(selectedCat = '') {
-    const selectEl = document.getElementById('modal-category-select');
-    const customInput = document.getElementById('modal-category-custom');
-    if (!selectEl) return;
-
-    // Get all unique categories currently in the database
-    const allCategories = [...new Set(foodDatabase.map(i => i.category))].sort();
-
-    selectEl.innerHTML = allCategories.map(cat => 
-      `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`
-    ).join('') + `<option value="custom">➕ Add New Category...</option>`;
-
-    if (selectedCat && allCategories.includes(selectedCat)) {
-      selectEl.value = selectedCat;
-      customInput.classList.add('hidden');
-      customInput.value = '';
-    } else if (selectedCat) {
-      selectEl.value = 'custom';
-      customInput.classList.remove('hidden');
-      customInput.value = selectedCat;
-    } else {
-      selectEl.selectedIndex = 0;
-      customInput.classList.add('hidden');
-      customInput.value = '';
-    }
-  }
-
-  function handleCategoryDropdownChange(val) {
-    const customInput = document.getElementById('modal-category-custom');
-    if (val === 'custom') {
-      customInput.classList.remove('hidden');
-      customInput.focus();
-      customInput.value = '';
-    } else {
-      customInput.classList.add('hidden');
-      customInput.value = '';
-    }
-  }
-
-  function toggleCustomCategoryInput() {
-    const selectEl = document.getElementById('modal-category-select');
-    const customInput = document.getElementById('modal-category-custom');
-    selectEl.value = 'custom';
-    customInput.classList.remove('hidden');
-    customInput.focus();
-  }
-
-  // --- MODAL MANAGEMENT (ADD & EDIT) ---
+  // --- RECIPE MODAL (CREATE / EDIT) ---
   function openRecipeModal() {
-    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
-    document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-recipe-id').value = '';
-    
-    populateModalCategoryDropdown();
-    document.getElementById('recipe-modal').classList.remove('hidden');
-  }
-
-  function openEditRecipeModal() {
-    if (!activeSelectedItem) return;
-    document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
-    document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
-    
-    document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
-    document.getElementById('modal-name').value = activeSelectedItem.name;
-    document.getElementById('modal-icon').value = activeSelectedItem.icon;
-    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
-    
-    populateModalCategoryDropdown(activeSelectedItem.category);
-    
-    document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
-    document.getElementById('modal-img').value = activeSelectedItem.img;
-
+    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
+    document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
+    populateModalCategories();
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
@@ -819,45 +788,53 @@
     document.getElementById('recipe-modal').classList.add('hidden');
   }
 
-  function handleSaveModalRecipe(e) {
-    e.preventDefault();
+  function populateModalCategories(selected = '') {
+    const select = document.getElementById('modal-category-select');
+    const cats = [...new Set(foodDatabase.map(i => i.category))];
+    select.innerHTML = cats.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c.toUpperCase()}</option>`).join('') + `<option value="custom">Other / Custom...</option>`;
+  }
 
-    const recipeId = document.getElementById('modal-recipe-id').value;
+  function handleCategoryDropdownChange(val) {
+    const customInput = document.getElementById('modal-category-custom');
+    if (val === 'custom') {
+      customInput.classList.remove('hidden');
+      customInput.required = true;
+    } else {
+      customInput.classList.add('hidden');
+      customInput.required = false;
+      customInput.value = '';
+    }
+  }
+
+  function toggleCustomCategoryInput() {
+    const select = document.getElementById('modal-category-select');
+    select.value = 'custom';
+    handleCategoryDropdownChange('custom');
+  }
+
+  function handleSaveModalRecipe(event) {
+    event.preventDefault();
+    const idField = document.getElementById('modal-recipe-id').value;
     const name = document.getElementById('modal-name').value.trim();
     const icon = document.getElementById('modal-icon').value.trim();
     const mealType = document.getElementById('modal-meal-type').value;
     
-    // Resolve category from dropdown or custom text input
-    const selectEl = document.getElementById('modal-category-select');
-    const customInput = document.getElementById('modal-category-custom');
-    let category = selectEl.value;
+    let category = document.getElementById('modal-category-select').value;
     if (category === 'custom') {
-      category = customInput.value.trim().toLowerCase();
+      category = document.getElementById('modal-category-custom').value.trim().toLowerCase();
     }
-    if (!category) category = 'general';
 
-    const ingredients = document.getElementById('modal-ingredients').value.split(',').map(i => i.trim()).filter(Boolean);
+    const ingredients = document.getElementById('modal-ingredients').value.split(',').map(s => s.trim()).filter(Boolean);
     const img = document.getElementById('modal-img').value.trim();
 
-    if (recipeId) {
-      // Edit Mode
-      const index = foodDatabase.findIndex(i => i.id === recipeId);
-      if (index !== -1) {
-        foodDatabase[index] = {
-          ...foodDatabase[index],
-          name,
-          icon,
-          mealTypes: [mealType],
-          category,
-          ingredients,
-          img
-        };
-        activeSelectedItem = foodDatabase[index];
+    if (idField) {
+      const idx = foodDatabase.findIndex(i => i.id === idField);
+      if (idx > -1) {
+        foodDatabase[idx] = { ...foodDatabase[idx], name, icon, mealTypes: [mealType], category, ingredients, img };
       }
     } else {
-      // Create Mode
       const newRecipe = {
-        id: 'custom_' + Date.now(),
+        id: 'cust_' + Date.now(),
         name,
         icon,
         mealTypes: [mealType],
@@ -868,41 +845,36 @@
         saucePairing: 'House Sauce'
       };
       foodDatabase.push(newRecipe);
-      activeSelectedItem = newRecipe;
       gainXP(25);
     }
 
     saveFoodDatabase();
     closeRecipeModal();
-    selectMealUnit(mealType);
-    selectFoodItem(activeSelectedItem.id);
     renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
   }
 
-  // --- DELETE RECIPE FUNCTIONALITY ---
+  function openEditRecipeModal() {
+    if (!activeSelectedItem) return;
+    document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
+    document.getElementById('modal-name').value = activeSelectedItem.name;
+    document.getElementById('modal-icon').value = activeSelectedItem.icon;
+    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
+    populateModalCategories(activeSelectedItem.category);
+    document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
+    document.getElementById('modal-img').value = activeSelectedItem.img;
+    document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
+    document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
+    document.getElementById('recipe-modal').classList.remove('hidden');
+  }
+
   function deleteSelectedRecipe() {
     if (!activeSelectedItem) return;
-
-    if (confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your vault?`)) {
-      const idToDelete = activeSelectedItem.id;
-      foodDatabase = foodDatabase.filter(i => i.id !== idToDelete);
+    if (confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your Vault?`)) {
+      foodDatabase = foodDatabase.filter(i => i.id !== activeSelectedItem.id);
       saveFoodDatabase();
-
       activeSelectedItem = null;
-      document.getElementById('detail-category').innerText = 'Select an Item';
-      document.getElementById('detail-title').innerHTML = `<span>🎒 Inventory Empty</span>`;
-      document.getElementById('detail-img-container').innerHTML = `<span class="text-slate-400 text-xs italic">No item selected</span>`;
-      document.getElementById('detail-ingredients').innerHTML = `<li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>`;
-      document.getElementById('detail-drink').innerText = 'None';
-      document.getElementById('detail-sauce').innerText = 'None';
-      document.getElementById('detail-actions').className = 'hidden gap-1.5';
-
-      const eatBtn = document.getElementById('eat-btn');
-      eatBtn.disabled = true;
-      eatBtn.className = 'mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed';
-
       renderSubcategories();
       renderFoodGrid();
       updateCharacterSelectView();
