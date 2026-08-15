@@ -753,25 +753,87 @@
     gainXP(10);
   }
 
-  // --- PANTRY RECIPE MATCHER STUBS ---
+  // --- FULLY IMPLEMENTED: VAULT RECIPE MATCHER ---
   function matchCustomRecipe() {
     const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
     const output = document.getElementById('custom-recipe-output');
+    
     if (checked.length === 0) {
       output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
       return;
     }
-    output.innerHTML = `<p class="text-emerald-800 font-bold">Checked: ${checked.join(', ')}</p><p class="text-xs text-slate-600">Matching algorithm active! (Hook up to your recipe database query as needed)</p>`;
+
+    // Find recipes where at least one checked ingredient is included in the recipe's ingredients list
+    const matchedRecipes = foodDatabase.filter(recipe => {
+      return recipe.ingredients.some(ing => 
+        checked.some(c => ing.toLowerCase().includes(c))
+      );
+    });
+
+    if (matchedRecipes.length === 0) {
+      output.innerHTML = `<p class="text-xs text-slate-600">No vault recipes match your selected ingredients (${checked.join(', ')}).</p>`;
+      return;
+    }
+
+    output.innerHTML = `
+      <p class="text-xs font-bold text-emerald-800 mb-2">Found ${matchedRecipes.length} matching recipe(s):</p>
+      <div class="space-y-2">
+        ${matchedRecipes.map(r => `
+          <div onclick="selectFoodItem('${r.id}')" class="p-2 bg-emerald-50 rounded-xl border border-emerald-200 cursor-pointer hover:bg-emerald-100 flex items-center gap-2">
+            <span class="text-lg">${r.icon}</span>
+            <div class="text-xs">
+              <span class="font-bold text-slate-800">${r.name}</span>
+              <p class="text-[10px] text-slate-500">${r.ingredients.join(', ')}</p>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    gainXP(5);
   }
 
-  function searchWebRecipes() {
+  // --- FULLY IMPLEMENTED: INTERNET RECIPE FINDER ---
+  async function searchWebRecipes() {
     const checked = Array.from(document.querySelectorAll('.pantry-item:checked')).map(el => el.value);
     const output = document.getElementById('web-recipe-output');
+    
     if (checked.length === 0) {
       output.innerHTML = '<p class="italic text-slate-400">Please check at least one pantry ingredient first!</p>';
       return;
     }
-    output.innerHTML = `<p class="text-sky-800 font-bold">Searching web for: ${checked.join(', ')}...</p>`;
+
+    output.innerHTML = `<p class="text-xs text-sky-800 animate-pulse font-bold">🌐 Searching public recipe database for ${checked.join(', ')}...</p>`;
+
+    try {
+      const queryStr = checked.join(',');
+      const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${encodeURIComponent(checked[0])}`);
+      const data = await response.json();
+
+      if (!data.meals || data.meals.length === 0) {
+        output.innerHTML = `<p class="text-xs text-slate-600">No public recipes found online for "${checked.join(', ')}". Try selecting different ingredients!</p>`;
+        return;
+      }
+
+      // Display up to 3 results from TheMealDB API
+      const meals = data.meals.slice(0, 3);
+      output.innerHTML = `
+        <p class="text-xs font-bold text-sky-800 mb-2">Top Web Matches:</p>
+        <div class="space-y-2">
+          ${meals.map(m => `
+            <div class="p-2 bg-sky-50 rounded-xl border border-sky-200 flex items-center gap-3">
+              <img src="${m.strMealThumb}" class="w-10 h-10 rounded-lg object-cover border border-black shrink-0" />
+              <div class="text-xs flex-1">
+                <span class="font-bold text-slate-800">${m.strMeal}</span>
+                <p class="text-[10px] text-sky-700">Source: TheMealDB</p>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      gainXP(10);
+    } catch (err) {
+      output.innerHTML = `<p class="text-xs text-red-600">⚠️ Failed to connect to recipe API. Please check your internet connection.</p>`;
+    }
   }
 
   // --- RECIPE MODAL (CREATE / EDIT) ---
@@ -866,6 +928,7 @@
     document.getElementById('modal-img').value = activeSelectedItem.img;
     document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
     document.getElementById('modal-submit-btn').innerText = 'Update Recipe';
+    document.getElementById('recipe-modal').classList.add('hidden'); // Fix modal toggle
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
