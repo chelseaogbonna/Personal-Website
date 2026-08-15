@@ -315,7 +315,13 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Category</label>
-          <input type="text" id="modal-category" required placeholder="e.g., sweet, bowls, noodles" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white" />
+          <div class="flex gap-1.5">
+            <select id="modal-category-select" onchange="handleCategoryDropdownChange(this.value)" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white">
+              <!-- Dynamically populated -->
+            </select>
+            <button type="button" onclick="toggleCustomCategoryInput()" title="Add Custom Category" class="bg-purple-100 hover:bg-purple-200 text-purple-900 px-2 py-1 text-xs font-bold rounded-xl border-2 border-black shrink-0">➕</button>
+          </div>
+          <input type="text" id="modal-category-custom" placeholder="Type new category..." class="w-full mt-1.5 bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white hidden" />
         </div>
 
         <div class="sm:col-span-2">
@@ -593,7 +599,6 @@
     document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
     document.getElementById('detail-sauce').innerText = item.saucePairing || 'None';
 
-    // Show edit/delete buttons
     const detailActions = document.getElementById('detail-actions');
     if (detailActions) detailActions.className = 'flex items-center gap-1.5';
 
@@ -733,12 +738,62 @@
     `).join('');
   }
 
+  // --- POPULATE CATEGORY DROPDOWN IN MODAL ---
+  function populateModalCategoryDropdown(selectedCat = '') {
+    const selectEl = document.getElementById('modal-category-select');
+    const customInput = document.getElementById('modal-category-custom');
+    if (!selectEl) return;
+
+    // Get all unique categories currently in the database
+    const allCategories = [...new Set(foodDatabase.map(i => i.category))].sort();
+
+    selectEl.innerHTML = allCategories.map(cat => 
+      `<option value="${cat}">${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>`
+    ).join('') + `<option value="custom">➕ Add New Category...</option>`;
+
+    if (selectedCat && allCategories.includes(selectedCat)) {
+      selectEl.value = selectedCat;
+      customInput.classList.add('hidden');
+      customInput.value = '';
+    } else if (selectedCat) {
+      selectEl.value = 'custom';
+      customInput.classList.remove('hidden');
+      customInput.value = selectedCat;
+    } else {
+      selectEl.selectedIndex = 0;
+      customInput.classList.add('hidden');
+      customInput.value = '';
+    }
+  }
+
+  function handleCategoryDropdownChange(val) {
+    const customInput = document.getElementById('modal-category-custom');
+    if (val === 'custom') {
+      customInput.classList.remove('hidden');
+      customInput.focus();
+      customInput.value = '';
+    } else {
+      customInput.classList.add('hidden');
+      customInput.value = '';
+    }
+  }
+
+  function toggleCustomCategoryInput() {
+    const selectEl = document.getElementById('modal-category-select');
+    const customInput = document.getElementById('modal-category-custom');
+    selectEl.value = 'custom';
+    customInput.classList.remove('hidden');
+    customInput.focus();
+  }
+
   // --- MODAL MANAGEMENT (ADD & EDIT) ---
   function openRecipeModal() {
     document.getElementById('modal-title').innerText = '✨ Add New Recipe';
     document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-recipe-id').value = '';
+    
+    populateModalCategoryDropdown();
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
@@ -751,7 +806,9 @@
     document.getElementById('modal-name').value = activeSelectedItem.name;
     document.getElementById('modal-icon').value = activeSelectedItem.icon;
     document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
-    document.getElementById('modal-category').value = activeSelectedItem.category;
+    
+    populateModalCategoryDropdown(activeSelectedItem.category);
+    
     document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
     document.getElementById('modal-img').value = activeSelectedItem.img;
 
@@ -769,7 +826,16 @@
     const name = document.getElementById('modal-name').value.trim();
     const icon = document.getElementById('modal-icon').value.trim();
     const mealType = document.getElementById('modal-meal-type').value;
-    const category = document.getElementById('modal-category').value.trim().toLowerCase();
+    
+    // Resolve category from dropdown or custom text input
+    const selectEl = document.getElementById('modal-category-select');
+    const customInput = document.getElementById('modal-category-custom');
+    let category = selectEl.value;
+    if (category === 'custom') {
+      category = customInput.value.trim().toLowerCase();
+    }
+    if (!category) category = 'general';
+
     const ingredients = document.getElementById('modal-ingredients').value.split(',').map(i => i.trim()).filter(Boolean);
     const img = document.getElementById('modal-img').value.trim();
 
@@ -824,7 +890,6 @@
       foodDatabase = foodDatabase.filter(i => i.id !== idToDelete);
       saveFoodDatabase();
 
-      // Reset selection view
       activeSelectedItem = null;
       document.getElementById('detail-category').innerText = 'Select an Item';
       document.getElementById('detail-title').innerHTML = `<span>🎒 Inventory Empty</span>`;
