@@ -90,6 +90,9 @@
             <button onclick="toggleSpinFilter('dinner')" id="spin-btn-dinner" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
               🍜 Dinner
             </button>
+            <button onclick="toggleSpinFilter('drinks')" id="spin-btn-drinks" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🧋 Drinks
+            </button>
             <button onclick="toggleSpinFilter('dessert')" id="spin-btn-dessert" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
               🍰 Dessert
             </button>
@@ -112,6 +115,9 @@
           </button>
           <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
             🍜 Dinner
+          </button>
+          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🧋 Drinks
           </button>
           <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
             🍰 Dessert
@@ -326,6 +332,7 @@
             <option value="breakfast">Breakfast</option>
             <option value="lunch">Lunch</option>
             <option value="dinner">Dinner</option>
+            <option value="drinks">Drinks</option>
             <option value="dessert">Dessert</option>
           </select>
         </div>
@@ -475,6 +482,32 @@
       recipeUrl: 'https://www.example.com/birria-tacos'
     },
     {
+      id: 'dr1',
+      name: 'Brown Sugar Boba Milk Tea',
+      icon: '🧋',
+      img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['drinks'],
+      category: 'tea',
+      ingredients: ['Black Tea', 'Tapioca Pearls', 'Milk', 'Brown Sugar'],
+      drinkPairing: 'None',
+      accompanimentType: 'side',
+      accompanimentName: 'Extra Pearls',
+      recipeUrl: ''
+    },
+    {
+      id: 'dr2',
+      name: 'Iced Matcha Latte',
+      icon: '🍵',
+      img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['drinks'],
+      category: 'coffee & tea',
+      ingredients: ['Matcha Powder', 'Milk', 'Vanilla Syrup', 'Ice'],
+      drinkPairing: 'None',
+      accompanimentType: 'side',
+      accompanimentName: 'Vanilla Cold Foam',
+      recipeUrl: ''
+    },
+    {
       id: 'ds1',
       name: 'Strawberry Tanghulu',
       icon: '🍓',
@@ -522,7 +555,7 @@
   let currentSubcategory = 'all';
   let activeSelectedItem = null;
   let characterSelectIndex = 0;
-  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
+  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'drinks', 'dessert'];
   let searchQuery = '';
 
   // --- INITIALIZATION ON LOAD ---
@@ -650,131 +683,107 @@
     const grid = document.getElementById('food-inventory-grid');
     if (!grid) return;
 
-    const items = getActiveCategoryList();
+    const list = getActiveCategoryList();
 
-    if (items.length === 0) {
-      grid.innerHTML = `
-        <div class="col-span-1 sm:col-span-2 text-center py-6 text-slate-400 text-xs italic">
-          No recipes found matching current filters.
-        </div>
-      `;
+    if (list.length === 0) {
+      grid.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-400 italic text-xs">No recipes found in this category.</div>`;
       return;
     }
 
-    grid.innerHTML = items.map(item => {
+    grid.innerHTML = list.map(item => {
       const isSelected = activeSelectedItem && activeSelectedItem.id === item.id;
-      const selectedBorder = isSelected
-        ? 'border-pink-500 ring-2 ring-pink-400 bg-pink-50'
-        : 'border-black bg-white hover:bg-slate-50';
-
+      const borderRing = isSelected ? 'ring-4 ring-pink-500 bg-pink-50' : 'bg-white hover:bg-pink-50';
       return `
-        <div
-          onclick="selectFoodItem('${item.id}')"
-          class="p-2.5 border-2 rounded-xl cursor-pointer transition-all ${selectedBorder} flex items-center gap-3 relative group"
-        >
-          <img
-            src="${item.img}"
-            alt="${item.name}"
-            class="w-12 h-12 rounded-lg border border-black object-cover shrink-0"
-          />
-          <div class="overflow-hidden flex-1">
-            <h4 class="font-bold text-xs truncate text-slate-800">
-              ${item.icon} ${item.name}
-            </h4>
-            <p class="text-[10px] text-slate-500 truncate">
-              ${item.ingredients.join(', ')}
-            </p>
+        <div onclick="selectFoodItem('${item.id}')" class="cursor-pointer border-2 border-black rounded-2xl p-2.5 flex items-center gap-3 transition-all ${borderRing} pixel-shadow-sm">
+          <div class="w-12 h-12 rounded-xl border-2 border-black overflow-hidden shrink-0 bg-pink-100 flex items-center justify-center text-xl">
+            ${item.icon || '🍱'}
+          </div>
+          <div class="overflow-hidden">
+            <span class="text-[9px] font-bold text-pink-600 uppercase tracking-wider">${item.category}</span>
+            <h4 class="text-xs font-bold text-slate-800 truncate">${item.name}</h4>
+            <p class="text-[10px] text-slate-500 truncate">${item.ingredients.slice(0, 2).join(', ')}...</p>
           </div>
         </div>
       `;
     }).join('');
-  }  
-  
-  // --- SELECT FOOD ITEM FOR DETAILS ---
+  }
+
+  // --- SELECT FOOD ITEM (INVENTORY VIEW) ---
   function selectFoodItem(id) {
     const item = foodDatabase.find(i => i.id === id);
     if (!item) return;
-
     activeSelectedItem = item;
 
-    document.getElementById('detail-category').innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
-    document.getElementById('detail-title').innerHTML = `<span>${item.icon} ${item.name}</span>`;
+    document.getElementById('detail-category').innerText = `${item.mealTypes.join(', ').toUpperCase()} • ${item.category.toUpperCase()}`;
     
-    // Render Recipe Link if present
+    const imgContainer = document.getElementById('detail-img-container');
+    imgContainer.innerHTML = `<img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" />`;
+
+    document.getElementById('detail-title').innerHTML = `<span>${item.icon || '🍱'}</span> <span>${item.name}</span>`;
+
     const linkContainer = document.getElementById('detail-link-container');
-    if (item.recipeUrl && item.recipeUrl.trim() !== '') {
-      linkContainer.innerHTML = `<a href="${item.recipeUrl}" target="_blank" class="bg-sky-400 hover:bg-sky-500 text-white font-bold px-2.5 py-1 text-[10px] rounded-xl border border-black pixel-shadow-sm inline-flex items-center gap-1">🔗 Link</a>`;
+    if (item.recipeUrl) {
+      linkContainer.innerHTML = `<a href="${item.recipeUrl}" target="_blank" class="bg-sky-400 hover:bg-sky-500 text-white font-bold px-2 py-1 text-[10px] rounded-xl border border-black pixel-shadow-sm">🔗 Link</a>`;
     } else {
       linkContainer.innerHTML = '';
     }
 
-    document.getElementById('detail-img-container').innerHTML = `
-      <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" />
-    `;
-
-    const ingredientsUl = document.getElementById('detail-ingredients');
-    ingredientsUl.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
+    const ingList = document.getElementById('detail-ingredients');
+    ingList.innerHTML = item.ingredients.map(ing => `<li>${ing}</li>`).join('');
 
     document.getElementById('detail-drink').innerText = item.drinkPairing || 'None';
     
-    // Accompaniment logic (Sauce vs Side Dish)
-    const accomType = item.accompanimentType === 'side' ? 'Side Dish' : 'Sauce';
-    const accomIcon = accomType === 'Side Dish' ? '🍟' : '🥣';
-    document.getElementById('detail-accompaniment-label').innerHTML = `${accomIcon} <strong>${accomType}:</strong>`;
-    document.getElementById('detail-accompaniment').innerText = item.accompanimentName || 'None';
+    const accLabel = document.getElementById('detail-accompaniment-label');
+    const accVal = document.getElementById('detail-accompaniment');
+    if (item.accompanimentType === 'sauce') {
+      accLabel.innerText = '🥣 Sauce:';
+    } else {
+      accLabel.innerText = '🍟 Side:';
+    }
+    accVal.innerText = item.accompanimentName || 'None';
 
     const eatBtn = document.getElementById('eat-btn');
     eatBtn.disabled = false;
     eatBtn.className = 'mt-3 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-pointer';
 
-    document.getElementById('detail-actions').classList.remove('hidden');
-    document.getElementById('detail-actions').classList.add('flex');
-
+    document.getElementById('detail-actions').style.display = 'flex';
     renderFoodGrid();
   }
 
-  // --- CONSUME FOOD ITEM (+XP) ---
+  // --- CONSUME FOOD ---
   function consumeSelectedFood() {
     if (!activeSelectedItem) return;
     gainXP(15);
-    alert(`😋 You enjoyed ${activeSelectedItem.icon} ${activeSelectedItem.name}! +15 XP`);
+    alert(`😋 You enjoyed ${activeSelectedItem.name}! +15 XP gained.`);
   }
 
   // --- CHARACTER SELECT CAROUSEL ---
   function updateCharacterSelectView() {
     const list = getActiveCategoryList();
     const counter = document.getElementById('character-select-counter');
-    const imgContainer = document.getElementById('character-select-img');
-    const tag = document.getElementById('character-select-tag');
-    const title = document.getElementById('character-select-title');
-    const ingredients = document.getElementById('character-select-ingredients');
+    const imgDiv = document.getElementById('character-select-img');
+    const tagSpan = document.getElementById('character-select-tag');
+    const titleH3 = document.getElementById('character-select-title');
+    const pIng = document.getElementById('character-select-ingredients');
 
     if (list.length === 0) {
-      if (counter) counter.innerText = `DISH 0 / 0`;
-      if (imgContainer) imgContainer.innerHTML = `<span class="text-xs text-purple-400">None</span>`;
-      if (tag) tag.innerText = currentMealUnit;
-      if (title) title.innerText = 'No Dishes Available';
-      if (ingredients) ingredients.innerText = 'Ingredients: N/A';
+      counter.innerText = `DISH 0 / 0`;
+      imgDiv.innerHTML = `<span class="text-2xl">❌</span>`;
+      tagSpan.innerText = currentMealUnit.toUpperCase();
+      titleH3.innerText = 'No Dishes Available';
+      pIng.innerText = 'Ingredients: None';
       return;
     }
 
     if (characterSelectIndex >= list.length) characterSelectIndex = 0;
     if (characterSelectIndex < 0) characterSelectIndex = list.length - 1;
 
-    const item = list[characterSelectIndex];
-
-    if (counter) counter.innerText = `DISH ${characterSelectIndex + 1} / ${list.length}`;
-    if (imgContainer) {
-      imgContainer.innerHTML = `<img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover" />`;
-    }
-    if (tag) tag.innerText = `${item.mealTypes.join(', ')} • ${item.category}`;
-    if (title) title.innerText = `${item.icon} ${item.name}`;
-    if (ingredients) ingredients.innerText = `Ingredients: ${item.ingredients.join(', ')}`;
-  }
-
-  function nextCharacterSelect() {
-    characterSelectIndex++;
-    updateCharacterSelectView();
+    const currentItem = list[characterSelectIndex];
+    counter.innerText = `DISH ${characterSelectIndex + 1} / ${list.length}`;
+    imgDiv.innerHTML = `<img src="${currentItem.img}" alt="${currentItem.name}" class="w-full h-full object-cover" />`;
+    tagSpan.innerText = `${currentItem.mealTypes.join(', ')} • ${currentItem.category}`;
+    titleH3.innerText = `${currentItem.icon || '🍱'} ${currentItem.name}`;
+    pIng.innerText = `Ingredients: ${currentItem.ingredients.join(', ')}`;
   }
 
   function prevCharacterSelect() {
@@ -782,11 +791,20 @@
     updateCharacterSelectView();
   }
 
-  // --- RANDOM SPINNER FUNCTION ---
+  function nextCharacterSelect() {
+    characterSelectIndex++;
+    updateCharacterSelectView();
+  }
+
+  // --- SPINNER POOL TOGGLES ---
   function toggleSpinFilter(meal) {
     const idx = activeSpinFilters.indexOf(meal);
     const btn = document.getElementById(`spin-btn-${meal}`);
     if (idx > -1) {
+      if (activeSpinFilters.length === 1) {
+        alert("You must keep at least one spin pool active!");
+        return;
+      }
       activeSpinFilters.splice(idx, 1);
       btn.className = 'spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-slate-200 text-slate-500 transition-all';
     } else {
@@ -796,69 +814,56 @@
   }
 
   function spinRandomMeal() {
-    const eligiblePool = foodDatabase.filter(i => i.mealTypes.some(m => activeSpinFilters.includes(m)));
-    if (eligiblePool.length === 0) {
-      alert('⚠️ No meals found in your active spin pool! Select at least one meal filter.');
+    const pool = foodDatabase.filter(item => item.mealTypes.some(m => activeSpinFilters.includes(m)));
+    if (pool.length === 0) {
+      alert("No dishes match your active spin filters!");
       return;
     }
-
-    const randomItem = eligiblePool[Math.floor(Math.random() * eligiblePool.length)];
-    selectMealUnit(randomItem.mealTypes[0]);
-    currentSubcategory = 'all';
-    renderSubcategories();
-    renderFoodGrid();
-
+    const rand = pool[Math.floor(Math.random() * pool.length)];
+    selectMealUnit(rand.mealTypes[0]);
+    
+    // Find index in active category list and select
     const list = getActiveCategoryList();
-    const foundIdx = list.findIndex(i => i.id === randomItem.id);
-    if (foundIdx > -1) {
-      characterSelectIndex = foundIdx;
+    const index = list.findIndex(i => i.id === rand.id);
+    if (index !== -1) {
+      characterSelectIndex = index;
       updateCharacterSelectView();
     }
-    selectFoodItem(randomItem.id);
+    selectFoodItem(rand.id);
     gainXP(10);
-    alert(`🎰 Slot Machine landed on: ${randomItem.icon} ${randomItem.name}! (+10 XP)`);
+    alert(`🎰 Spin Result: ${rand.name}! +10 XP gained.`);
   }
 
-  // --- RECIPE MODAL HANDLING (ADD / EDIT) ---
-  function populateCategoryDropdown(selectedCat = '') {
-    const select = document.getElementById('modal-category-select');
-    const allCategories = [...new Set(foodDatabase.map(i => i.category))];
-    if (!allCategories.includes('sandwiches')) allCategories.push('sandwiches');
-    if (!allCategories.includes('wraps')) allCategories.push('wraps');
-
-    select.innerHTML = allCategories.map(cat => `
-      <option value="${cat}" ${cat === selectedCat ? 'selected' : ''}>${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
-    `).join('');
-  }
-
-  function openRecipeModal() {
-    document.getElementById('modal-title').innerText = '✨ Add New Recipe';
-    document.getElementById('modal-recipe-id').value = '';
-    document.getElementById('recipe-modal-form').reset();
-    document.getElementById('modal-category-custom').classList.add('hidden');
+  // --- RECIPE MODAL (CREATE / EDIT) ---
+  function openRecipeModal(editId = null) {
+    const modal = document.getElementById('recipe-modal');
+    modal.classList.remove('hidden');
     populateCategoryDropdown();
-    document.getElementById('recipe-modal').classList.remove('hidden');
-  }
 
-  function openEditRecipeModal() {
-    if (!activeSelectedItem) return;
-    document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
-    document.getElementById('modal-recipe-id').value = activeSelectedItem.id;
-    document.getElementById('modal-name').value = activeSelectedItem.name;
-    document.getElementById('modal-icon').value = activeSelectedItem.icon;
-    document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
-    
-    populateCategoryDropdown(activeSelectedItem.category);
-    document.getElementById('modal-category-custom').classList.add('hidden');
-
-    document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
-    document.getElementById('modal-drink').value = activeSelectedItem.drinkPairing || '';
-    document.getElementById('modal-accompaniment-type').value = activeSelectedItem.accompanimentType || 'sauce';
-    document.getElementById('modal-accompaniment-name').value = activeSelectedItem.accompanimentName || '';
-    document.getElementById('modal-img').value = activeSelectedItem.img;
-    document.getElementById('modal-recipe-url').value = activeSelectedItem.recipeUrl || '';
-
-    document.getElementById('recipe-modal').classList.remove('hidden');
+    if (editId) {
+      document.getElementById('modal-title').innerText = '✏️ Edit Recipe';
+      document.getElementById('modal-submit-btn').innerText = 'Update Recipe (+10 XP)';
+      const item = foodDatabase.find(i => i.id === editId);
+      if (item) {
+        document.getElementById('modal-recipe-id').value = item.id;
+        document.getElementById('modal-name').value = item.name;
+        document.getElementById('modal-icon').value = item.icon || '';
+        document.getElementById('modal-meal-type').value = item.mealTypes[0] || 'breakfast';
+        document.getElementById('modal-category-select').value = item.category;
+        document.getElementById('modal-ingredients').value = item.ingredients.join(', ');
+        document.getElementById('modal-drink').value = item.drinkPairing || '';
+        document.getElementById('modal-accompaniment-type').value = item.accompanimentType || 'sauce';
+        document.getElementById('modal-accompaniment-name').value = item.accompanimentName || '';
+        document.getElementById('modal-img').value = item.img || '';
+        document.getElementById('modal-recipe-url').value = item.recipeUrl || '';
+      }
+    } else {
+      document.getElementById('modal-title').innerText = '✨ Add New Recipe';
+      document.getElementById('modal-submit-btn').innerText = 'Save Recipe (+25 XP)';
+      document.getElementById('recipe-modal-form').reset();
+      document.getElementById('modal-recipe-id').value = '';
+      document.getElementById('modal-category-custom').classList.add('hidden');
+    }
   }
 
   function closeRecipeModal() {
@@ -866,68 +871,69 @@
     document.getElementById('recipe-modal-form').reset();
   }
 
+  function populateCategoryDropdown() {
+    const select = document.getElementById('modal-category-select');
+    const categories = [...new Set(foodDatabase.map(i => i.category))];
+    select.innerHTML = categories.map(c => `<option value="${c}">${c.toUpperCase()}</option>`).join('') + `<option value="other">Other (Custom)</option>`;
+  }
+
   function handleCategoryDropdownChange(val) {
     const customInput = document.getElementById('modal-category-custom');
-    if (val === 'custom') {
+    if (val === 'other') {
       customInput.classList.remove('hidden');
-      customInput.focus();
+      customInput.required = true;
     } else {
       customInput.classList.add('hidden');
+      customInput.required = false;
     }
   }
 
   function toggleCustomCategoryInput() {
     const select = document.getElementById('modal-category-select');
-    const customInput = document.getElementById('modal-category-custom');
-    select.value = 'custom';
-    customInput.classList.remove('hidden');
-    customInput.focus();
+    select.value = 'other';
+    handleCategoryDropdownChange('other');
+    document.getElementById('modal-category-custom').focus();
   }
 
   function handleSaveModalRecipe(event) {
     event.preventDefault();
-    const recipeId = document.getElementById('modal-recipe-id').value;
+    const editId = document.getElementById('modal-recipe-id').value;
     const name = document.getElementById('modal-name').value.trim();
     const icon = document.getElementById('modal-icon').value.trim();
     const mealType = document.getElementById('modal-meal-type').value;
     
     let category = document.getElementById('modal-category-select').value;
-    if (category === 'custom') {
-      category = document.getElementById('modal-category-custom').value.trim().toLowerCase() || 'general';
+    if (category === 'other') {
+      category = document.getElementById('modal-category-custom').value.trim().toLowerCase();
     }
 
-    const ingredientsRaw = document.getElementById('modal-ingredients').value;
-    const ingredients = ingredientsRaw.split(',').map(i => i.trim()).filter(i => i.length > 0);
+    const ingredients = document.getElementById('modal-ingredients').value.split(',').map(s => s.trim()).filter(Boolean);
     const drinkPairing = document.getElementById('modal-drink').value.trim();
     const accompanimentType = document.getElementById('modal-accompaniment-type').value;
     const accompanimentName = document.getElementById('modal-accompaniment-name').value.trim();
     const img = document.getElementById('modal-img').value.trim();
     const recipeUrl = document.getElementById('modal-recipe-url').value.trim();
 
-    if (recipeId) {
-      // Edit existing
-      const index = foodDatabase.findIndex(i => i.id === recipeId);
-      if (index > -1) {
-        foodDatabase[index] = {
-          ...foodDatabase[index],
-          name,
-          icon,
-          mealTypes: [mealType],
-          category,
-          ingredients,
-          drinkPairing,
-          accompanimentType,
-          accompanimentName,
-          img,
-          recipeUrl
-        };
-        activeSelectedItem = foodDatabase[index];
+    if (editId) {
+      const item = foodDatabase.find(i => i.id === editId);
+      if (item) {
+        item.name = name;
+        item.icon = icon;
+        if (!item.mealTypes.includes(mealType)) item.mealTypes.push(mealType);
+        item.category = category;
+        item.ingredients = ingredients;
+        item.drinkPairing = drinkPairing;
+        item.accompanimentType = accompanimentType;
+        item.accompanimentName = accompanimentName;
+        item.img = img;
+        item.recipeUrl = recipeUrl;
       }
-      alert('✅ Recipe updated successfully!');
+      gainXP(10);
+      alert('Recipe updated successfully!');
     } else {
-      // Create new
-      const newRecipe = {
-        id: 'rec_' + Date.now(),
+      const newId = 'r_' + Date.now();
+      const newItem = {
+        id: newId,
         name,
         icon,
         mealTypes: [mealType],
@@ -939,49 +945,54 @@
         img,
         recipeUrl
       };
-      foodDatabase.push(newRecipe);
-      activeSelectedItem = newRecipe;
+      foodDatabase.push(newItem);
       gainXP(25);
-      alert('🎉 New recipe added to Vault! (+25 XP)');
+      alert('New recipe successfully added to the vault!');
     }
 
     saveFoodDatabase();
     closeRecipeModal();
-    selectMealUnit(mealType);
-    selectFoodItem(activeSelectedItem.id);
+    selectMealUnit(currentMealUnit);
+    renderSubcategories();
+    renderFoodGrid();
+    updateCharacterSelectView();
+  }
+
+  function openEditRecipeModal() {
+    if (!activeSelectedItem) return;
+    openRecipeModal(activeSelectedItem.id);
   }
 
   function deleteSelectedRecipe() {
     if (!activeSelectedItem) return;
-    if (confirm(`Are you sure you want to delete ${activeSelectedItem.name}?`)) {
+    if (confirm(`Are you sure you want to delete "${activeSelectedItem.name}" from your vault?`)) {
       foodDatabase = foodDatabase.filter(i => i.id !== activeSelectedItem.id);
       saveFoodDatabase();
       activeSelectedItem = null;
       
+      // Reset Detail View
       document.getElementById('detail-category').innerText = 'Select an Item';
-      document.getElementById('detail-title').innerHTML = `<span>🎒 Inventory Empty</span>`;
+      document.getElementById('detail-img-container').innerHTML = '<span class="text-slate-400 text-xs italic">No item selected</span>';
+      document.getElementById('detail-title').innerHTML = '<span>🎒 Inventory Empty</span>';
       document.getElementById('detail-link-container').innerHTML = '';
-      document.getElementById('detail-img-container').innerHTML = `<span class="text-slate-400 text-xs italic">No item selected</span>`;
-      document.getElementById('detail-ingredients').innerHTML = `<li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>`;
+      document.getElementById('detail-ingredients').innerHTML = '<li class="list-none text-slate-400 italic text-[11px]">Click any food item to inspect stats.</li>';
       document.getElementById('detail-drink').innerText = 'None';
       document.getElementById('detail-accompaniment').innerText = 'None';
-      document.getElementById('detail-actions').classList.remove('flex');
-      document.getElementById('detail-actions').classList.add('hidden');
-      
-      const eatBtn = document.getElementById('eat-btn');
-      eatBtn.disabled = true;
-      eatBtn.className = 'mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed';
+      document.getElementById('eat-btn').disabled = true;
+      document.getElementById('eat-btn').className = 'mt-3 w-full bg-slate-300 text-slate-500 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-all cursor-not-allowed';
+      document.getElementById('detail-actions').style.display = 'none';
 
       renderSubcategories();
       renderFoodGrid();
       updateCharacterSelectView();
+      alert('Recipe deleted.');
     }
   }
 
-  // --- PANTRY MATCHING STATIONS ---
+  // --- PANTRY MATCHERS ---
   function getSelectedPantryIngredients() {
     const checkboxes = document.querySelectorAll('.pantry-item:checked');
-    return Array.from(checkboxes).map(cb => cb.value);
+    return Array.from(checkboxes).map(cb => cb.value.toLowerCase());
   }
 
   function matchCustomRecipe() {
@@ -989,24 +1000,30 @@
     const output = document.getElementById('custom-recipe-output');
 
     if (selected.length === 0) {
-      output.innerHTML = `<p class="italic text-amber-600">Please check at least one pantry ingredient above first!</p>`;
+      output.innerHTML = `<p class="italic text-amber-600">Please check at least one pantry ingredient above!</p>`;
       return;
     }
 
-    const matches = foodDatabase.filter(recipe => {
-      const recipeIngsLower = recipe.ingredients.map(i => i.toLowerCase());
-      return selected.some(sel => recipeIngsLower.some(ing => ing.includes(sel)));
-    });
+    // Match if any ingredient overlaps or subset
+    const matches = foodDatabase.filter(item => 
+      item.ingredients.some(ing => selected.includes(ing.toLowerCase()))
+    );
 
     if (matches.length === 0) {
-      output.innerHTML = `<p class="italic text-slate-500">No vault recipes match your selected pantry ingredients.</p>`;
+      output.innerHTML = `<p class="italic text-slate-500">No matching vault recipes found for these ingredients.</p>`;
       return;
     }
 
     output.innerHTML = matches.map(m => `
-      <div onclick="selectFoodItem('${m.id}')" class="p-2 bg-emerald-50 border border-emerald-200 rounded-xl cursor-pointer hover:bg-emerald-100 flex items-center justify-between">
-        <span class="font-bold text-xs">${m.icon} ${m.name}</span>
-        <span class="text-[10px] text-emerald-700 bg-emerald-200 px-2 py-0.5 rounded-lg">${m.category}</span>
+      <div onclick="selectFoodItem('${m.id}')" class="p-2.5 bg-emerald-50 hover:bg-emerald-100 border-2 border-black rounded-xl cursor-pointer flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">${m.icon || '🍱'}</span>
+          <div>
+            <h5 class="text-xs font-bold text-slate-800">${m.name}</h5>
+            <p class="text-[10px] text-emerald-800">Ingredients: ${m.ingredients.join(', ')}</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-emerald-700 bg-white px-2 py-1 rounded border border-black">View ➔</span>
       </div>
     `).join('');
   }
@@ -1016,19 +1033,33 @@
     const output = document.getElementById('web-recipe-output');
 
     if (selected.length === 0) {
-      output.innerHTML = `<p class="italic text-sky-600">Please check at least one pantry ingredient above first!</p>`;
+      output.innerHTML = `<p class="italic text-sky-600">Please check at least one pantry ingredient above!</p>`;
       return;
     }
 
-    const query = selected.join('+');
-    output.innerHTML = `
-      <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl space-y-2">
-        <p class="text-xs font-bold text-sky-900">🌐 Web search generated for: <span class="underline">${selected.join(', ')}</span></p>
-        <a href="https://www.google.com/search?q=recipes+with+${query}" target="_blank" class="block text-center bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-3 text-xs rounded-xl border border-black pixel-shadow-sm">
-          Search Google Recipes 🔍
-        </a>
+    const queryStr = selected.join(' ');
+    const mockWebResults = [
+      {
+        title: `Easy 15-Minute ${selected[0].toUpperCase()} Bowl`,
+        source: 'TastyVault Recipes',
+        url: `https://www.google.com/search?q=${encodeURIComponent(queryStr + ' easy recipe')}`
+      },
+      {
+        title: `Gourmet Home Cooking with ${selected[0].toUpperCase()}`,
+        source: 'PixelChef Network',
+        url: `https://www.google.com/search?q=${encodeURIComponent(queryStr + ' gourmet recipe')}`
+      }
+    ];
+
+    output.innerHTML = mockWebResults.map(r => `
+      <div class="p-2.5 bg-sky-50 hover:bg-sky-100 border-2 border-black rounded-xl flex items-center justify-between mb-2">
+        <div>
+          <h5 class="text-xs font-bold text-slate-800">${r.title}</h5>
+          <p class="text-[10px] text-sky-700">Source: ${r.source}</p>
+        </div>
+        <a href="${r.url}" target="_blank" class="text-xs font-bold text-sky-700 bg-white px-2 py-1 rounded border border-black hover:bg-sky-50">Search ↗</a>
       </div>
-    `;
+    `).join('');
   }
 </script>
 </body>
