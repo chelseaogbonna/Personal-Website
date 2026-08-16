@@ -41,70 +41,39 @@
     </div>
   </header>
 
-  <!-- NAVIGATION TABS WITH DROPDOWNS -->
+  <!-- NAVIGATION TABS WITH DROPDOWN -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      
-      <!-- Food Quest Dropdown -->
-      <div class="relative group">
-        <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-1 w-full">
-          🍱 Food Quest <span class="text-xs ml-1">▼</span>
-        </a>
-        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-pink-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
-          <a href="food.html#recipes" class="block w-full bg-white hover:bg-pink-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            📖 Recipe Book
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🍱 Food Quest
+      </a>
+      <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
+        🛠️ Wishlist Labs
+      </a>
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🪡 Stitch Guild
+      </a>
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        👗 Style Closet
+      </a>
+
+      <!-- + MORE DROPDOWN MENU -->
+      <div class="relative group col-span-2 md:col-span-1">
+        <button class="w-full bg-violet-400 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-2">
+          <span>✨ More</span>
+          <span class="text-xs transition-transform group-hover:rotate-180">▼</span>
+        </button>
+
+        <!-- Dropdown Card -->
+        <div class="absolute right-0 left-0 md:left-auto md:w-56 mt-2 hidden group-hover:flex flex-col bg-amber-100 border-3 border-black rounded-2xl p-2 pixel-shadow-lg z-50 space-y-1">
+          <a href="locs.html" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-800 hover:bg-yellow-300 rounded-xl border border-transparent hover:border-black transition-all">
+            👑 Loc Vault
           </a>
-          <a href="food.html#pantry" class="block w-full bg-white hover:bg-pink-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            🧺 Pantry Stock
+          <a href="nails.html" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-800 hover:bg-pink-300 rounded-xl border border-transparent hover:border-black transition-all">
+            💅 Nails Vault
           </a>
         </div>
       </div>
-
-      <!-- Wishlist Labs Dropdown (Active) -->
-      <div class="relative group">
-        <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black flex items-center justify-center gap-1 w-full">
-          🛠️ Wishlist Labs <span class="text-xs ml-1">▼</span>
-        </a>
-        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-cyan-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
-          <a href="#page-build" class="block w-full bg-white hover:bg-cyan-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            🚀 Featured Showcase
-          </a>
-          <a href="#full-projects-grid" class="block w-full bg-white hover:bg-cyan-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            📂 All Blueprints
-          </a>
-        </div>
-      </div>
-
-      <!-- Stitch Guild Dropdown -->
-      <div class="relative group">
-        <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-1 w-full">
-          🪡 Stitch Guild <span class="text-xs ml-1">▼</span>
-        </a>
-        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-emerald-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
-          <a href="sewing.html#patterns" class="block w-full bg-white hover:bg-emerald-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            📐 Patterns Archive
-          </a>
-          <a href="sewing.html#fabrics" class="block w-full bg-white hover:bg-emerald-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            🧵 Fabric Stash
-          </a>
-        </div>
-      </div>
-
-      <!-- Style Closet Dropdown -->
-      <div class="relative group">
-        <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-1 w-full">
-          👗 Style Closet <span class="text-xs ml-1">▼</span>
-        </a>
-        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-fuchsia-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
-          <a href="outfits.html#lookbook" class="block w-full bg-white hover:bg-fuchsia-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            📸 Lookbook
-          </a>
-          <a href="outfits.html#wishlist" class="block w-full bg-white hover:bg-fuchsia-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
-            🛍️ Wardrobe Wishlist
-          </a>
-        </div>
-      </div>
-
     </div>
   </nav>
 
@@ -316,7 +285,6 @@
 
     // --- DEFAULT PROJECTS DATABASE ---
     const defaultProjects = [
-      // ⚡ ELECTRONICS (4)
       {
         id: 'proj1',
         title: 'Custom Mechanical Keyboard',
@@ -353,8 +321,6 @@
         description: 'Assemble an analog-style VU meter setup with customizable RGB backlight rings.',
         status: 'incomplete'
       },
-
-      // 🏠 APARTMENT (3)
       {
         id: 'proj5',
         title: 'Floating Wood Bookshelf',
@@ -382,8 +348,6 @@
         description: 'Install motion-activated warm LED strip lighting under bed frame for night navigation.',
         status: 'incomplete'
       },
-
-      // ✨ ACCESSORIES (3)
       {
         id: 'proj8',
         title: 'Hand-Crafted Leather Keyring',
@@ -423,7 +387,6 @@
     let searchQuery = '';
     let currentProjectIndex = 0;
 
-    // Load saved statuses from localStorage
     function loadSavedStatuses() {
       const saved = JSON.parse(localStorage.getItem('wishlistLabStatuses')) || {};
       buildProjects.forEach(p => {
@@ -441,21 +404,18 @@
       localStorage.setItem('wishlistLabStatuses', JSON.stringify(savedMap));
     }
 
-    // Difficulty Badges
     function getDifficultyBadge(diff) {
       if (diff === 'EASY') return 'bg-emerald-300 text-slate-900';
       if (diff === 'MEDIUM') return 'bg-amber-300 text-slate-900';
       return 'bg-rose-400 text-white';
     }
 
-    // Select Dropdown Styling
     function getStatusStyles(status) {
       if (status === 'completed') return 'bg-emerald-500 text-white border-black';
       if (status === 'in-progress') return 'bg-amber-400 text-slate-900 border-black';
       return 'bg-slate-100 text-slate-700 border-black';
     }
 
-    // Filter Logic
     function getFilteredProjects() {
       return buildProjects.filter(p => {
         const matchesCat = currentCategory === 'all' || p.category === currentCategory;
@@ -469,7 +429,6 @@
       });
     }
 
-    // Main Render Function
     function renderViews() {
       const filtered = getFilteredProjects();
       document.getElementById('project-count').innerText = filtered.length;
@@ -478,7 +437,6 @@
       renderFullGridList(filtered);
     }
 
-    // 1. RENDER FEATURED TURNTABLE STAGE
     function renderTurntableStage(filtered) {
       const card = document.getElementById('project-select-card');
       const dotsContainer = document.getElementById('carousel-dots');
@@ -536,7 +494,6 @@
       `).join('');
     }
 
-    // 2. RENDER FULL BLUEPRINT GRID LIST
     function renderFullGridList(filtered) {
       const grid = document.getElementById('full-projects-grid');
 
@@ -638,7 +595,6 @@
       renderViews();
     }
 
-    // --- MODAL HANDLERS ---
     function openModal() {
       document.getElementById('add-modal').classList.remove('hidden');
     }
@@ -680,7 +636,6 @@
       closeModal();
     }
 
-    // Keyboard Navigation
     document.addEventListener('keydown', (e) => {
       if (document.getElementById('add-modal').classList.contains('hidden')) {
         if (e.key === 'ArrowLeft') prevProject();
@@ -688,7 +643,6 @@
       }
     });
 
-    // Initialize Page
     loadSavedStatuses();
     updateHUD();
     renderViews();
