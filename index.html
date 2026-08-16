@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Fun Arcade Hub 🎮</title>
+  <title>MY SECRET LAIR ⚡</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -15,13 +15,15 @@
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
-  <!-- HUD / TOP BAR -->
+  <!-- GLOBAL HUD / HEADER -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
     <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <span class="text-3xl animate-bounce">⚡</span>
         <div>
-          <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
+          <button onclick="switchTab('food')" class="text-left focus:outline-none">
+            <h1 class="text-2xl font-bold tracking-wider hover:text-yellow-300 transition-colors">MY SECRET LAIR</h1>
+          </button>
           <p class="text-xs text-purple-200">Player 1: Ready</p>
         </div>
       </div>
@@ -39,99 +41,284 @@
     </div>
   </header>
 
-  <!-- MAIN CONTAINER HUB -->
-  <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
-    
-    <!-- WELCOME HERO CARD -->
-    <div class="bg-white border-4 border-black rounded-3xl p-8 pixel-shadow-lg text-center">
-      <h2 class="text-3xl font-black mb-2 text-purple-900">Welcome to HQ 👾</h2>
-      <p class="text-slate-600 mb-6 text-sm">Select any room above to jump into that section!</p>
-      <a href="food.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
-        Enter Lair 🚀
-      </a>
+  <!-- SPA NAVIGATION TABS -->
+  <nav class="max-w-5xl mx-auto my-6 px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <button id="nav-food" onclick="switchTab('food')" class="nav-btn bg-pink-400 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🍱 Food Quest
+      </button>
+      <button id="nav-build" onclick="switchTab('build')" class="nav-btn bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🛠️ Wishlist Labs
+      </button>
+      <button id="nav-sewing" onclick="switchTab('sewing')" class="nav-btn bg-emerald-400 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        🪡 Stitch Guild
+      </button>
+      <button id="nav-outfits" onclick="switchTab('outfits')" class="nav-btn bg-fuchsia-400 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+        👗 Style Closet
+      </button>
     </div>
+  </nav>
 
-    <!-- ROOM SELECTOR GRID -->
-    <div class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg text-center">
-      <h2 class="text-2xl md:text-3xl font-black text-purple-900 mb-1">SELECT A QUEST ROOM 🕹️</h2>
-      <p class="text-slate-600 text-sm mb-6">Choose a category below to explore logs, ideas, and builds.</p>
+  <!-- MAIN DYNAMIC CONTENT CONTAINER -->
+  <main class="max-w-5xl mx-auto px-4 space-y-6">
 
-      <!-- CATEGORY CARDS GRID -->
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 text-left">
-        
-        <!-- 1. Food Quest -->
-        <a href="food.html" class="group bg-pink-300 hover:bg-pink-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">🍱</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Food Quest</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Recipes & bites</p>
-        </a>
-
-                <!-- 2. Wishlist Labs -->
-        <a href="build.html" class="group bg-cyan-300 hover:bg-cyan-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">🛠️</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Wishlist Labs</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Builds & custom gear</p>
-        </a>
-
-
-        <!-- 3. Stitch Guild -->
-        <a href="sewing.html" class="group bg-emerald-300 hover:bg-emerald-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">🪡</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Stitch Guild</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Sewing & DIY crafts</p>
-        </a>
-
-         <!-- 4. Style Closet -->
-        <a href="outfits.html" class="group bg-fuchsia-300 hover:bg-fuchsia-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">👗</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Style Closet</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Outfits & lookbooks</p>
-        </a>
-
-        <!-- 5. Loc Studio -->
-        <a href="locs.html" class="group bg-amber-300 hover:bg-amber-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">👑</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Loc Studio</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Styles & maintenance</p>
-        </a>
-        
-        <!-- 6. Nails Vault -->
-        <a href="nails.html" class="group bg-rose-300 hover:bg-rose-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">💅</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Nails Vault</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Sets, art & inspo</p>
-        </a>
+    <section id="app-view-container" class="border-4 border-black rounded-3xl p-6 pixel-shadow-lg transition-colors duration-200">
       
-
-        <!-- 7. Media Den -->
-        <a href="media.html" class="group bg-violet-300 hover:bg-violet-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">🎧</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Media Den</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Music, games & reads</p>
-        </a>
-
-        <!-- 8. Arcade Gallery -->
-        <a href="scrapbook.html" class="group bg-teal-300 hover:bg-teal-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">✨</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Arcade Gallery</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Random snapshots</p>
-        </a>
-
-        <!-- Health & Cycle Lab -->
-        <a href="health.html" class="group bg-rose-300 hover:bg-rose-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
-          <div class="text-3xl mb-2">💖</div>
-          <h3 class="font-bold text-lg leading-tight text-black">Health & Cycle Lab</h3>
-          <p class="text-xs text-slate-800 mt-1 font-medium">Cycle syncing & fitness</p>
-        </a>
-
+      <!-- View Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 id="view-title" class="text-2xl font-bold flex items-center gap-2">
+            Loading Log...
+          </h2>
+          <p id="view-subtitle" class="text-xs font-semibold mt-0.5">Explore featured projects or search the list below.</p>
+        </div>
+        <div class="flex items-center gap-2 self-start md:self-auto">
+          <button onclick="openModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all whitespace-nowrap active:translate-y-0.5">
+            ➕ New Quest
+          </button>
+          <span class="bg-white/80 text-slate-900 px-3 py-1.5 rounded-xl border-2 border-black font-bold text-xs pixel-shadow-sm">
+            ⭐ +25 XP per completed item
+          </span>
+        </div>
       </div>
-    </div>
+
+      <!-- Filters & Search Bar -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 mb-6">
+        
+        <!-- Category Filter Buttons -->
+        <div id="category-filter-bar" class="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
+          <!-- Dynamic Category Filters Injected Here -->
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative min-w-[200px]">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-xs">🔍</span>
+          <input 
+            type="text" 
+            id="search-input" 
+            oninput="handleSearch()" 
+            placeholder="Search quests or tags..." 
+            class="w-full pl-8 pr-3 py-1.5 bg-white text-xs font-bold text-slate-800 rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-purple-400 pixel-shadow-sm placeholder:text-slate-400"
+          />
+        </div>
+      </div>
+
+      <!-- 1. FEATURED SHOWCASE STAGE -->
+      <div class="bg-white rounded-3xl border-4 border-black p-6 pixel-shadow mb-8">
+        <h3 class="text-sm font-extrabold text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <span>🚀</span> Featured Quest Showcase
+        </h3>
+        
+        <div class="relative flex items-center justify-between min-h-[320px] gap-2 sm:gap-4">
+          <button onclick="prevProject()" class="z-10 bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold p-3 sm:p-4 rounded-2xl border-3 border-black pixel-shadow text-xl sm:text-2xl transition-transform active:translate-y-1 shrink-0">
+            ◀
+          </button>
+
+          <div id="project-select-card" class="w-full max-w-lg mx-auto flex flex-col items-center text-center">
+            <!-- Dynamic Stage Card Injected Here -->
+          </div>
+
+          <button onclick="nextProject()" class="z-10 bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold p-3 sm:p-4 rounded-2xl border-3 border-black pixel-shadow text-xl sm:text-2xl transition-transform active:translate-y-1 shrink-0">
+            ▶
+          </button>
+        </div>
+
+        <div id="carousel-dots" class="flex items-center justify-center gap-2 mt-4 pt-4 border-t-2 border-slate-100"></div>
+      </div>
+
+      <!-- 2. FULL BLUEPRINT GRID LIST -->
+      <div>
+        <div class="flex items-center justify-between mb-4">
+          <h3 id="list-header-count" class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            📂 Quest Catalog (0)
+          </h3>
+        </div>
+
+        <div id="full-projects-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Dynamic Grid Injected Here -->
+        </div>
+      </div>
+
+    </section>
+
   </main>
 
+  <!-- ADD QUEST MODAL -->
+  <div id="add-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 max-w-md w-full pixel-shadow-lg relative">
+      
+      <div class="flex items-center justify-between mb-4 border-b-2 border-black pb-2">
+        <h3 class="text-xl font-bold text-slate-900">🛠️ New Log Entry</h3>
+        <button onclick="closeModal()" class="text-slate-800 hover:text-black font-extrabold text-lg px-2">✕</button>
+      </div>
+
+      <form id="new-project-form" onsubmit="handleAddProject(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Title</label>
+          <input type="text" id="modal-title" required placeholder="e.g. Handmade Ramen / Custom Desk" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Guild Section</label>
+            <select id="modal-tab-select" onchange="updateModalCategoryOptions(this.value)" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
+              <option value="food">🍱 Food Quest</option>
+              <option value="build">🛠️ Wishlist Labs</option>
+              <option value="sewing">🪡 Stitch Guild</option>
+              <option value="outfits">👗 Style Closet</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Category</label>
+            <select id="modal-category" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
+              <!-- Dynamically Populated -->
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Difficulty</label>
+            <select id="modal-difficulty" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
+              <option value="EASY">EASY</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="HARD">HARD</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Image URL (Optional)</label>
+            <input type="url" id="modal-img" placeholder="https://..." class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Description</label>
+          <textarea id="modal-desc" rows="2" required placeholder="Details about this project..." class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm resize-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-100 text-slate-800 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">
+            Cancel
+          </button>
+          <button type="submit" class="px-4 py-2 bg-emerald-400 hover:bg-emerald-500 text-slate-900 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">
+            Save Entry
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
   <script>
+    // --- APP METADATA CONFIGURATION ---
+    const TAB_CONFIG = {
+      food: {
+        title: "🍱 Food Quest Journal",
+        subtitle: "Log your culinary experiments, recipes, and dining spots.",
+        bgColor: "bg-pink-200",
+        textColor: "text-pink-950",
+        btnColor: "bg-pink-500",
+        activeRing: "ring-4 ring-black",
+        categories: [
+          { id: 'all', name: 'All' },
+          { id: 'recipes', name: '🍜 Recipes' },
+          { id: 'baking', name: '🥐 Baking' },
+          { id: 'restaurants', name: '📍 Spots to Try' }
+        ]
+      },
+      build: {
+        title: "🛠️ Wishlist Labs Blueprint Log",
+        subtitle: "Hardware builds, apartment upgrades, and custom lab projects.",
+        bgColor: "bg-cyan-200",
+        textColor: "text-cyan-950",
+        btnColor: "bg-cyan-500",
+        activeRing: "ring-4 ring-black",
+        categories: [
+          { id: 'all', name: 'All' },
+          { id: 'electronics', name: '⚡ Electronics' },
+          { id: 'apartment', name: '🏠 Apartment' },
+          { id: 'accessories', name: '✨ Accessories' }
+        ]
+      },
+      sewing: {
+        title: "🪡 Stitch Guild Pattern Vault",
+        subtitle: "Garment construction, embroidery experiments, and textile projects.",
+        bgColor: "bg-emerald-200",
+        textColor: "text-emerald-950",
+        btnColor: "bg-emerald-500",
+        activeRing: "ring-4 ring-black",
+        categories: [
+          { id: 'all', name: 'All' },
+          { id: 'garments', name: '👗 Garments' },
+          { id: 'embroidery', name: '🧵 Embroidery' },
+          { id: 'upcycle', name: '♻️ Upcycling' }
+        ]
+      },
+      outfits: {
+        title: "👗 Style Closet Lookbook",
+        subtitle: "Curated outfit pairings, style moodboards, and wardrobe planning.",
+        bgColor: "bg-fuchsia-200",
+        textColor: "text-fuchsia-950",
+        btnColor: "bg-fuchsia-500",
+        activeRing: "ring-4 ring-black",
+        categories: [
+          { id: 'all', name: 'All' },
+          { id: 'casual', name: '☕ Casual' },
+          { id: 'formal', name: '✨ Formal' },
+          { id: 'techwear', name: '🎧 Streetwear' }
+        ]
+      }
+    };
+
+    // --- DEFAULT DATABASE SEEDS ---
+    const defaultProjects = [
+      // 🛠️ BUILD LABS
+      { id: 'b1', tab: 'build', title: 'Custom Mechanical Keyboard', category: 'electronics', difficulty: 'HARD', img: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400&auto=format&fit=crop&q=80', description: 'Solder custom switches, hand-lube stabilizers, and add a custom hot-swappable keycap set.', status: 'incomplete' },
+      { id: 'b2', tab: 'build', title: 'Interactive Desk LED Matrix', category: 'electronics', difficulty: 'EASY', img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&auto=format&fit=crop&q=80', description: 'Program a WS2812B pixel display powered by ESP32 for custom desk animations.', status: 'incomplete' },
+      { id: 'b3', tab: 'build', title: 'Floating Wood Bookshelf', category: 'apartment', difficulty: 'EASY', img: 'https://images.unsplash.com/photo-1594620302200-9a762144a957?w=400&auto=format&fit=crop&q=80', description: 'Mount minimalist hardwood floating shelves with hidden steel support brackets.', status: 'incomplete' },
+      
+      // 🍱 FOOD QUEST
+      { id: 'f1', tab: 'food', title: '72-Hour Tonkotsu Ramen', category: 'recipes', difficulty: 'HARD', img: 'https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=400&auto=format&fit=crop&q=80', description: 'Simmer pork bones for rich broth, prepare aroma oil, and make handmade alkali noodles.', status: 'incomplete' },
+      { id: 'f2', tab: 'food', title: 'Sourdough Country Loaf', category: 'baking', difficulty: 'MEDIUM', img: 'https://images.unsplash.com/photo-1585478259715-876acc5be8eb?w=400&auto=format&fit=crop&q=80', description: 'Master high hydration dough folding, bench resting, and Dutch oven baking.', status: 'incomplete' },
+
+      // 🪡 STITCH GUILD
+      { id: 's1', tab: 'sewing', title: 'Lined Canvas Tote Bag', category: 'garments', difficulty: 'EASY', img: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&auto=format&fit=crop&q=80', description: 'Construct a heavy-duty canvas tote featuring boxed corners and inner drop pockets.', status: 'incomplete' },
+
+      // 👗 STYLE CLOSET
+      { id: 'o1', tab: 'outfits', title: 'Cyberpunk Techwear Layering', category: 'techwear', difficulty: 'MEDIUM', img: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&auto=format&fit=crop&q=80', description: 'Tactical cargo runner setup paired with waterproof outer shells and modular straps.', status: 'incomplete' }
+    ];
+
+    // --- STATE MANAGEMENT ---
+    let currentTab = 'build';
+    let currentCategory = 'all';
+    let searchQuery = '';
+    let currentProjectIndex = 0;
+
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
 
+    function loadAllData() {
+      const savedCustom = JSON.parse(localStorage.getItem('secretLairCustomProjects')) || [];
+      return [...defaultProjects, ...savedCustom];
+    }
+
+    let allProjects = loadAllData();
+
+    function loadSavedStatuses() {
+      const saved = JSON.parse(localStorage.getItem('secretLairStatuses')) || {};
+      allProjects.forEach(p => {
+        if (saved[p.id]) p.status = saved[p.id];
+      });
+    }
+
+    function saveStatuses() {
+      const savedMap = {};
+      allProjects.forEach(p => savedMap[p.id] = p.status);
+      localStorage.setItem('secretLairStatuses', JSON.stringify(savedMap));
+    }
+
+    // --- HUD FUNCTIONS ---
     function updateHUD() {
       document.getElementById('player-xp').innerText = xp;
       document.getElementById('player-lvl').innerText = level;
@@ -140,7 +327,334 @@
       localStorage.setItem('playerLvl', level);
     }
 
+    function gainXP(amount) {
+      xp += amount;
+      if (xp >= 100) {
+        level += Math.floor(xp / 100);
+        xp = xp % 100;
+        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
+      }
+      updateHUD();
+    }
+
+    function revokeXP(amount) {
+      xp -= amount;
+      if (xp < 0) {
+        if (level > 1) {
+          level -= 1;
+          xp = 100 + xp;
+        } else {
+          xp = 0;
+        }
+      }
+      updateHUD();
+    }
+
+    // --- TAB CONTROLLER ---
+    function switchTab(tabKey) {
+      if (!TAB_CONFIG[tabKey]) return;
+      currentTab = tabKey;
+      currentCategory = 'all';
+      searchQuery = '';
+      currentProjectIndex = 0;
+
+      const input = document.getElementById('search-input');
+      if (input) input.value = '';
+
+      // Update Nav Button Styles
+      Object.keys(TAB_CONFIG).forEach(key => {
+        const btn = document.getElementById(`nav-${key}`);
+        if (btn) {
+          if (key === currentTab) {
+            btn.classList.add('ring-4', 'ring-black');
+          } else {
+            btn.classList.remove('ring-4', 'ring-black');
+          }
+        }
+      });
+
+      // Update Container Styling
+      const container = document.getElementById('app-view-container');
+      container.className = `${TAB_CONFIG[tabKey].bgColor} border-4 border-black rounded-3xl p-6 pixel-shadow-lg transition-colors duration-200`;
+
+      // Update Titles
+      const titleEl = document.getElementById('view-title');
+      titleEl.innerText = TAB_CONFIG[tabKey].title;
+      titleEl.className = `text-2xl font-bold flex items-center gap-2 ${TAB_CONFIG[tabKey].textColor}`;
+      
+      document.getElementById('view-subtitle').innerText = TAB_CONFIG[tabKey].subtitle;
+
+      renderCategoryFilterBar();
+      renderViews();
+    }
+
+    function renderCategoryFilterBar() {
+      const filterBar = document.getElementById('category-filter-bar');
+      const cats = TAB_CONFIG[currentTab].categories;
+
+      filterBar.innerHTML = cats.map(c => `
+        <button 
+          onclick="filterCategory('${c.id}')" 
+          class="cat-btn px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black ${currentCategory === c.id ? 'bg-black text-white' : 'bg-white text-slate-800'} pixel-shadow-sm transition-all whitespace-nowrap"
+          data-cat="${c.id}"
+        >
+          ${c.name}
+        </button>
+      `).join('');
+    }
+
+    function filterCategory(catId) {
+      currentCategory = catId;
+      currentProjectIndex = 0;
+      renderCategoryFilterBar();
+      renderViews();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('search-input').value;
+      currentProjectIndex = 0;
+      renderViews();
+    }
+
+    // --- DATA FILTERING ---
+    function getFilteredProjects() {
+      return allProjects.filter(p => {
+        const matchesTab = p.tab === currentTab;
+        const matchesCat = currentCategory === 'all' || p.category === currentCategory;
+        const q = searchQuery.toLowerCase().trim();
+        const matchesQuery = q === '' || 
+          p.title.toLowerCase().includes(q) || 
+          p.description.toLowerCase().includes(q) ||
+          p.difficulty.toLowerCase().includes(q);
+
+        return matchesTab && matchesCat && matchesQuery;
+      });
+    }
+
+    // --- UI RENDERING ---
+    function getDifficultyBadge(diff) {
+      if (diff === 'EASY') return 'bg-emerald-300 text-slate-900';
+      if (diff === 'MEDIUM') return 'bg-amber-300 text-slate-900';
+      return 'bg-rose-400 text-white';
+    }
+
+    function getStatusStyles(status) {
+      if (status === 'completed') return 'bg-emerald-500 text-white border-black';
+      if (status === 'in-progress') return 'bg-amber-400 text-slate-900 border-black';
+      return 'bg-slate-100 text-slate-700 border-black';
+    }
+
+    function renderViews() {
+      const filtered = getFilteredProjects();
+      document.getElementById('list-header-count').innerText = `📂 Quest Catalog (${filtered.length})`;
+
+      renderTurntableStage(filtered);
+      renderFullGridList(filtered);
+    }
+
+    function renderTurntableStage(filtered) {
+      const card = document.getElementById('project-select-card');
+      const dotsContainer = document.getElementById('carousel-dots');
+
+      if (filtered.length === 0) {
+        card.innerHTML = `
+          <div class="py-10">
+            <span class="text-4xl block mb-2">🔍</span>
+            <p class="font-bold text-slate-500 text-sm">No items found matching criteria.</p>
+          </div>
+        `;
+        dotsContainer.innerHTML = '';
+        return;
+      }
+
+      if (currentProjectIndex >= filtered.length) currentProjectIndex = 0;
+      const p = filtered[currentProjectIndex];
+
+      card.innerHTML = `
+        <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl border-4 border-black overflow-hidden mb-3 pixel-shadow bg-slate-100 shrink-0">
+          <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
+          <div class="absolute top-2 left-2 flex items-center gap-1.5 flex-wrap">
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
+              ${p.difficulty}
+            </span>
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black bg-white text-slate-800 uppercase">
+              ${p.category}
+            </span>
+          </div>
+        </div>
+
+        <h3 class="font-extrabold text-lg sm:text-xl text-slate-900 mb-1 leading-snug">${p.title}</h3>
+        <p class="text-xs text-slate-600 max-w-md mb-3 leading-relaxed">${p.description}</p>
+
+        <div class="w-full max-w-xs">
+          <select 
+            onchange="handleStatusChange('${p.id}', this.value)" 
+            class="w-full font-bold text-xs py-2 px-3 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
+          >
+            <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ Incomplete</option>
+            <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ In Progress</option>
+            <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Completed</option>
+          </select>
+        </div>
+      `;
+
+      dotsContainer.innerHTML = filtered.map((_, idx) => `
+        <button 
+          onclick="setProjectIndex(${idx})" 
+          class="h-3 rounded-full transition-all border border-black ${idx === currentProjectIndex ? 'w-8 bg-slate-900' : 'w-3 bg-slate-300 hover:bg-slate-400'}"
+        ></button>
+      `).join('');
+    }
+
+    function renderFullGridList(filtered) {
+      const grid = document.getElementById('full-projects-grid');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full bg-white p-8 rounded-2xl border-2 border-black text-center">
+            <p class="text-sm font-bold text-slate-500">No items available in this view.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-white rounded-2xl border-3 border-black p-4 pixel-shadow flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div class="relative w-full sm:w-28 h-28 rounded-xl border-2 border-black overflow-hidden shrink-0 bg-slate-100">
+            <img src="${p.img}" alt="${p.title}" class="w-full h-full object-cover" />
+          </div>
+
+          <div class="flex-1 min-w-0 w-full">
+            <div class="flex items-center gap-1.5 mb-1 flex-wrap">
+              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black uppercase ${getDifficultyBadge(p.difficulty)}">
+                ${p.difficulty}
+              </span>
+              <span class="text-[9px] font-extrabold px-1.5 py-0.5 rounded border border-black bg-slate-100 text-slate-800 uppercase">
+                ${p.category}
+              </span>
+            </div>
+
+            <h4 class="font-extrabold text-base text-slate-900 truncate mb-1">${p.title}</h4>
+            <p class="text-xs text-slate-600 line-clamp-2 mb-3 leading-relaxed">${p.description}</p>
+
+            <select 
+              onchange="handleStatusChange('${p.id}', this.value)" 
+              class="w-full font-bold text-xs py-1.5 px-2.5 rounded-xl border-2 cursor-pointer focus:outline-none pixel-shadow-sm transition-all ${getStatusStyles(p.status)}"
+            >
+              <option value="incomplete" class="bg-white text-slate-800" ${p.status === 'incomplete' ? 'selected' : ''}>❌ Incomplete</option>
+              <option value="in-progress" class="bg-white text-slate-800" ${p.status === 'in-progress' ? 'selected' : ''}>⏳ In Progress</option>
+              <option value="completed" class="bg-white text-slate-800" ${p.status === 'completed' ? 'selected' : ''}>🎉 Completed</option>
+            </select>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function prevProject() {
+      const filtered = getFilteredProjects();
+      if (filtered.length === 0) return;
+      currentProjectIndex = (currentProjectIndex - 1 + filtered.length) % filtered.length;
+      renderViews();
+    }
+
+    function nextProject() {
+      const filtered = getFilteredProjects();
+      if (filtered.length === 0) return;
+      currentProjectIndex = (currentProjectIndex + 1) % filtered.length;
+      renderViews();
+    }
+
+    function setProjectIndex(idx) {
+      currentProjectIndex = idx;
+      renderViews();
+    }
+
+    function handleStatusChange(id, newStatus) {
+      const proj = allProjects.find(p => p.id === id);
+      if (!proj) return;
+
+      const oldStatus = proj.status;
+      proj.status = newStatus;
+
+      if (oldStatus !== 'completed' && newStatus === 'completed') gainXP(25);
+      else if (oldStatus === 'completed' && newStatus !== 'completed') revokeXP(25);
+
+      saveStatuses();
+      renderViews();
+    }
+
+    // --- MODAL CONTROLLER ---
+    function openModal() {
+      document.getElementById('modal-tab-select').value = currentTab;
+      updateModalCategoryOptions(currentTab);
+      document.getElementById('add-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('add-modal').classList.add('hidden');
+      document.getElementById('new-project-form').reset();
+    }
+
+    function updateModalCategoryOptions(tabKey) {
+      const catSelect = document.getElementById('modal-category');
+      const options = TAB_CONFIG[tabKey].categories.filter(c => c.id !== 'all');
+
+      catSelect.innerHTML = options.map(c => `
+        <option value="${c.id}">${c.name}</option>
+      `).join('');
+    }
+
+    function handleAddProject(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('modal-title').value;
+      const targetTab = document.getElementById('modal-tab-select').value;
+      const category = document.getElementById('modal-category').value;
+      const difficulty = document.getElementById('modal-difficulty').value;
+      const imgInput = document.getElementById('modal-img').value;
+      const description = document.getElementById('modal-desc').value;
+
+      const defaultPlaceholder = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&auto=format&fit=crop&q=80';
+
+      const newProj = {
+        id: 'custom_' + Date.now(),
+        tab: targetTab,
+        title: title,
+        category: category,
+        difficulty: difficulty,
+        img: imgInput.trim() !== '' ? imgInput : defaultPlaceholder,
+        description: description,
+        status: 'incomplete'
+      };
+
+      const savedCustom = JSON.parse(localStorage.getItem('secretLairCustomProjects')) || [];
+      savedCustom.push(newProj);
+      localStorage.setItem('secretLairCustomProjects', JSON.stringify(savedCustom));
+
+      allProjects = loadAllData();
+      loadSavedStatuses();
+
+      if (targetTab !== currentTab) {
+        switchTab(targetTab);
+      } else {
+        renderViews();
+      }
+
+      closeModal();
+    }
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (document.getElementById('add-modal').classList.contains('hidden')) {
+        if (e.key === 'ArrowLeft') prevProject();
+        if (e.key === 'ArrowRight') nextProject();
+      }
+    });
+
+    // --- INITIALIZATION ---
+    loadSavedStatuses();
     updateHUD();
+    switchTab('build');
   </script>
 </body>
 </html>
