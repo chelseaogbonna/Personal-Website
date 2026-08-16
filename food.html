@@ -93,6 +93,9 @@
             <button onclick="toggleSpinFilter('dessert')" id="spin-btn-dessert" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
               🍰 Dessert
             </button>
+            <button onclick="toggleSpinFilter('drinks')" id="spin-btn-drinks" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🧋 Drinks
+            </button>
           </div>
           <button onclick="spinRandomMeal()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
             Spin Meal (+10 XP)
@@ -115,6 +118,9 @@
           </button>
           <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
             🍰 Dessert
+          </button>
+          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🧋 Drinks
           </button>
         </div>
 
@@ -327,6 +333,7 @@
             <option value="lunch">Lunch</option>
             <option value="dinner">Dinner</option>
             <option value="dessert">Dessert</option>
+            <option value="drinks">Drinks</option>
           </select>
         </div>
 
@@ -486,7 +493,20 @@
       accompanimentType: 'sauce',
       accompanimentName: 'Sugar Glaze',
       recipeUrl: ''
-    }
+    },
+    {
+      id: 'dr1',
+      name: 'Brown Sugar Boba Milk Tea',
+      icon: '🧋',
+      img: 'https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=700&auto=format&fit=crop&q=60',
+      mealTypes: ['drinks'],
+      category: 'tea',
+      ingredients: ['Black Tea', 'Tapioca Pearls', 'Milk', 'Brown Sugar'],
+      drinkPairing: 'None',
+      accompanimentType: 'side',
+      accompanimentName: 'Extra Pearls',
+      recipeUrl: ''
+    },
   ];
 
   // --- LOCALSTORAGE DATABASE INITIALIZATION ---
@@ -522,7 +542,7 @@
   let currentSubcategory = 'all';
   let activeSelectedItem = null;
   let characterSelectIndex = 0;
-  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert'];
+  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert', 'drinks'];
   let searchQuery = '';
 
   // --- INITIALIZATION ON LOAD ---
