@@ -45,45 +45,10 @@
     </div>
   </header>
 
-  <!-- EXPANDED SCROLLABLE NAVIGATION BAR -->
+  <!-- DYNAMIC EXPANDED SCROLLABLE NAVIGATION BAR -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-2 pt-1">
-      
-      <!-- Food Quest -->
-      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
-        🍱 Food Quest
-      </a>
-
-      <!-- Wishlist Labs (ACTIVE PAGE) -->
-      <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm ring-4 ring-black">
-        🛠️ Wishlist Labs
-      </a>
-
-      <!-- Stitch Guild -->
-      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
-        🪡 Stitch Guild
-      </a>
-
-      <!-- Style Closet -->
-      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
-        👗 Style Closet
-      </a>
-
-      <!-- Body & Cycle Sync -->
-      <a href="health.html" class="nav-btn bg-rose-400 hover:bg-rose-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
-        💖 Body & Cycle Sync
-      </a>
-
-      <!-- Locs Vault -->
-      <a href="locs.html" class="nav-btn bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
-        👑 Locs Vault
-      </a>
-
-      <!-- Nail Studio -->
-      <a href="nails.html" class="nav-btn bg-purple-400 hover:bg-purple-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
-        💅 Nail Studio
-      </a>
-
+    <div id="main-navigation" class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-2 pt-1">
+      <!-- Dynamic Nav Links Injected Here via JavaScript -->
     </div>
   </nav>
 
@@ -96,7 +61,7 @@
       <!-- Header Bar -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-cyan-900 flex items-center gap-2">
+          <h2 class="text-2xl font-bold text-cyan-950 flex items-center gap-2">
             🛠️ Wishlist Labs Blueprint Log
           </h2>
           <p class="text-xs text-cyan-800 font-semibold mt-0.5">Explore featured lab projects or scroll down to view the complete blueprint list.</p>
@@ -258,6 +223,40 @@
   </div>
 
   <script>
+    // =========================================================================
+    // DYNAMIC NAVIGATION CONFIGURATION
+    // Simply add, remove, or modify items in this array to update the nav.
+    // =========================================================================
+    const navItems = [
+      { name: "🍱 Food Quest", href: "food.html", bg: "bg-pink-400 hover:bg-pink-500" },
+      { name: "🛠️ Wishlist Labs", href: "build.html", bg: "bg-cyan-500 hover:bg-cyan-600" },
+      { name: "🪡 Stitch Guild", href: "sewing.html", bg: "bg-emerald-400 hover:bg-emerald-500" },
+      { name: "👗 Style Closet", href: "outfits.html", bg: "bg-fuchsia-400 hover:bg-fuchsia-500" },
+      { name: "💖 Body & Cycle Sync", href: "health.html", bg: "bg-rose-400 hover:bg-rose-500" },
+      { name: "👑 Locs Vault", href: "locs.html", bg: "bg-amber-500 hover:bg-amber-600" },
+      { name: "💅 Nail Studio", href: "nails.html", bg: "bg-purple-400 hover:bg-purple-500" }
+    ];
+
+    function renderNavigation() {
+      const navContainer = document.getElementById('main-navigation');
+      const currentPage = window.location.pathname.split('/').pop() || 'build.html'; // Default fallback
+
+      navContainer.innerHTML = navItems.map(item => {
+        const isActive = currentPage === item.href || (currentPage === '' && item.href === 'build.html');
+        
+        // Active links receive a distinct yellow background, white text, and ring indicator
+        const baseClasses = "nav-btn font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm";
+        const activeClasses = "bg-cyan-500 text-white ring-4 ring-black";
+        const inactiveClasses = `${item.bg} text-white`;
+
+        return `
+          <a href="${item.href}" class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}">
+            ${item.name}
+          </a>
+        `;
+      }).join('');
+    }
+
     // --- HUD XP SYSTEM ---
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
@@ -667,7 +666,8 @@
       }
     });
 
-    // Initialize Page
+    // Initialize Page & Dynamic Nav
+    renderNavigation();
     loadSavedStatuses();
     updateHUD();
     renderViews();
