@@ -12,7 +12,6 @@
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
     
-    /* Hide scrollbar for clean horizontal nav scrolling */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
@@ -45,10 +44,26 @@
     </div>
   </header>
 
-  <!-- DYNAMIC EXPANDED SCROLLABLE NAVIGATION BAR -->
-  <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div id="main-navigation" class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-2 pt-1">
-      <!-- Dynamic Nav Links Injected Here via JavaScript -->
+  <!-- COMPACT SCALABLE NAVIGATION -->
+  <nav class="max-w-5xl mx-auto my-4 px-4 relative z-40">
+    <div class="bg-purple-900/10 p-2 rounded-2xl border-3 border-black pixel-shadow flex items-center justify-between gap-2">
+      <!-- Scrollable Main Track for Pinned/Primary Pages -->
+      <div id="primary-nav" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        <!-- Main Links Injected via JS -->
+      </div>
+
+      <!-- "+ More Pages" Dynamic Dropdown -->
+      <div id="more-nav-container" class="relative shrink-0 hidden">
+        <button onclick="toggleMoreMenu()" class="bg-yellow-400 hover:bg-yellow-500 text-black font-extrabold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-xs flex items-center gap-1.5 transition-all active:translate-y-0.5">
+          <span>🎮 More Pages</span>
+          <span id="more-chevron" class="text-[10px] transition-transform">▼</span>
+        </button>
+
+        <!-- Dropdown Menu Box -->
+        <div id="more-dropdown" class="absolute right-0 mt-2 w-52 bg-white border-3 border-black rounded-2xl p-2 pixel-shadow-lg hidden flex-col gap-1.5 z-50">
+          <!-- Overflow Nav Links Injected via JS -->
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -224,30 +239,39 @@
 
   <script>
     // =========================================================================
-    // DYNAMIC NAVIGATION CONFIGURATION
-    // Simply add, remove, or modify items in this array to update the nav.
+    // EASY EXTENDABLE NAVIGATION CONFIGURATION
+    // Set pinned: true to show directly on the main bar.
+    // Set pinned: false (or omit pinned) to place it in the "More Pages" dropdown!
     // =========================================================================
     const navItems = [
-      { name: "🍱 Food Quest", href: "food.html", bg: "bg-pink-400 hover:bg-pink-500" },
-      { name: "🛠️ Wishlist Labs", href: "build.html", bg: "bg-cyan-500 hover:bg-cyan-600" },
-      { name: "🪡 Stitch Guild", href: "sewing.html", bg: "bg-emerald-400 hover:bg-emerald-500" },
-      { name: "👗 Style Closet", href: "outfits.html", bg: "bg-fuchsia-400 hover:bg-fuchsia-500" },
-      { name: "💖 Body & Cycle Sync", href: "health.html", bg: "bg-rose-400 hover:bg-rose-500" },
-      { name: "👑 Locs Vault", href: "locs.html", bg: "bg-amber-500 hover:bg-amber-600" },
-      { name: "💅 Nail Studio", href: "nails.html", bg: "bg-purple-400 hover:bg-purple-500" }
+      { name: "🍱 Food Quest", href: "food.html", bg: "bg-pink-400 hover:bg-pink-500", pinned: true },
+      { name: "🛠️ Wishlist Labs", href: "build.html", bg: "bg-cyan-500 hover:bg-cyan-600", pinned: true },
+      { name: "🪡 Stitch Guild", href: "sewing.html", bg: "bg-emerald-400 hover:bg-emerald-500", pinned: true },
+      { name: "👗 Style Closet", href: "outfits.html", bg: "bg-fuchsia-400 hover:bg-fuchsia-500", pinned: true },
+      
+      // Secondary/Extra pages (Auto-placed into the "More Pages" dropdown)
+      { name: "💖 Body & Cycle Sync", href: "health.html", bg: "bg-rose-400 hover:bg-rose-500", pinned: false },
+      { name: "👑 Locs Vault", href: "locs.html", bg: "bg-amber-500 hover:bg-amber-600", pinned: false },
+      { name: "💅 Nail Studio", href: "nails.html", bg: "bg-purple-400 hover:bg-purple-500", pinned: false }
     ];
 
     function renderNavigation() {
-      const navContainer = document.getElementById('main-navigation');
-      const currentPage = window.location.pathname.split('/').pop() || 'build.html'; // Default fallback
+      const primaryContainer = document.getElementById('primary-nav');
+      const moreContainer = document.getElementById('more-nav-container');
+      const dropdownContainer = document.getElementById('more-dropdown');
+      
+      const currentPage = window.location.pathname.split('/').pop() || 'build.html';
 
-      navContainer.innerHTML = navItems.map(item => {
+      const pinnedItems = navItems.filter(item => item.pinned !== false);
+      const dropdownItems = navItems.filter(item => item.pinned === false);
+
+      // Render Pinned Links
+      primaryContainer.innerHTML = pinnedItems.map(item => {
         const isActive = currentPage === item.href || (currentPage === '' && item.href === 'build.html');
         
-        // Active links receive a distinct yellow background, white text, and ring indicator
-        const baseClasses = "nav-btn font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm";
-        const activeClasses = "bg-cyan-500 text-white ring-4 ring-black";
-        const inactiveClasses = `${item.bg} text-white`;
+        const baseClasses = "font-bold py-1.5 px-3.5 rounded-xl border-2 border-black pixel-shadow-sm whitespace-nowrap transition-all text-xs flex items-center gap-1 shrink-0 active:translate-y-0.5";
+        const activeClasses = "bg-yellow-400 text-slate-900 ring-2 ring-black font-extrabold";
+        const inactiveClasses = `${item.bg} text-white hover:brightness-105`;
 
         return `
           <a href="${item.href}" class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}">
@@ -255,7 +279,54 @@
           </a>
         `;
       }).join('');
+
+      // Render Dropdown Links if any exist
+      if (dropdownItems.length > 0) {
+        moreContainer.classList.remove('hidden');
+        dropdownContainer.innerHTML = dropdownItems.map(item => {
+          const isActive = currentPage === item.href;
+          
+          const baseClasses = "font-bold p-2 rounded-xl border-2 border-black text-xs transition-all flex items-center justify-between";
+          const activeClasses = "bg-yellow-400 text-slate-900 font-extrabold";
+          const inactiveClasses = `${item.bg} text-white hover:brightness-105`;
+
+          return `
+            <a href="${item.href}" class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}">
+              <span>${item.name}</span>
+              ${isActive ? '<span>👈</span>' : ''}
+            </a>
+          `;
+        }).join('');
+      } else {
+        moreContainer.classList.add('hidden');
+      }
     }
+
+    function toggleMoreMenu() {
+      const dropdown = document.getElementById('more-dropdown');
+      const chevron = document.getElementById('more-chevron');
+      const isHidden = dropdown.classList.contains('hidden');
+      
+      if (isHidden) {
+        dropdown.classList.remove('hidden');
+        dropdown.classList.add('flex');
+        chevron.style.transform = 'rotate(180deg)';
+      } else {
+        dropdown.classList.add('hidden');
+        dropdown.classList.remove('flex');
+        chevron.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      const container = document.getElementById('more-nav-container');
+      if (container && !container.contains(e.target)) {
+        document.getElementById('more-dropdown').classList.add('hidden');
+        document.getElementById('more-dropdown').classList.remove('flex');
+        document.getElementById('more-chevron').style.transform = 'rotate(0deg)';
+      }
+    });
 
     // --- HUD XP SYSTEM ---
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
@@ -294,7 +365,6 @@
 
     // --- DEFAULT PROJECTS DATABASE ---
     const defaultProjects = [
-      // ⚡ ELECTRONICS (4)
       {
         id: 'proj1',
         title: 'Custom Mechanical Keyboard',
@@ -331,8 +401,6 @@
         description: 'Assemble an analog-style VU meter setup with customizable RGB backlight rings.',
         status: 'incomplete'
       },
-
-      // 🏠 APARTMENT (3)
       {
         id: 'proj5',
         title: 'Floating Wood Bookshelf',
@@ -360,8 +428,6 @@
         description: 'Install motion-activated warm LED strip lighting under bed frame for night navigation.',
         status: 'incomplete'
       },
-
-      // ✨ ACCESSORIES (3)
       {
         id: 'proj8',
         title: 'Hand-Crafted Leather Keyring',
@@ -401,7 +467,6 @@
     let searchQuery = '';
     let currentProjectIndex = 0;
 
-    // Load saved statuses from localStorage
     function loadSavedStatuses() {
       const saved = JSON.parse(localStorage.getItem('wishlistLabStatuses')) || {};
       buildProjects.forEach(p => {
@@ -419,21 +484,18 @@
       localStorage.setItem('wishlistLabStatuses', JSON.stringify(savedMap));
     }
 
-    // Difficulty Badges
     function getDifficultyBadge(diff) {
       if (diff === 'EASY') return 'bg-emerald-300 text-slate-900';
       if (diff === 'MEDIUM') return 'bg-amber-300 text-slate-900';
       return 'bg-rose-400 text-white';
     }
 
-    // Select Dropdown Styling
     function getStatusStyles(status) {
       if (status === 'completed') return 'bg-emerald-500 text-white border-black';
       if (status === 'in-progress') return 'bg-amber-400 text-slate-900 border-black';
       return 'bg-slate-100 text-slate-700 border-black';
     }
 
-    // Filter Logic
     function getFilteredProjects() {
       return buildProjects.filter(p => {
         const matchesCat = currentCategory === 'all' || p.category === currentCategory;
@@ -447,7 +509,6 @@
       });
     }
 
-    // Main Render Function
     function renderViews() {
       const filtered = getFilteredProjects();
       document.getElementById('project-count').innerText = filtered.length;
@@ -456,7 +517,6 @@
       renderFullGridList(filtered);
     }
 
-    // 1. RENDER FEATURED TURNTABLE STAGE
     function renderTurntableStage(filtered) {
       const card = document.getElementById('project-select-card');
       const dotsContainer = document.getElementById('carousel-dots');
@@ -514,7 +574,6 @@
       `).join('');
     }
 
-    // 2. RENDER FULL BLUEPRINT GRID LIST
     function renderFullGridList(filtered) {
       const grid = document.getElementById('full-projects-grid');
 
