@@ -11,6 +11,10 @@
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+    
+    /* Hide scrollbar for clean horizontal nav scrolling */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
@@ -41,21 +45,45 @@
     </div>
   </header>
 
-  <!-- NAVIGATION TABS -->
+  <!-- EXPANDED SCROLLABLE NAVIGATION BAR -->
   <nav class="max-w-5xl mx-auto my-6 px-4">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+    <div class="flex items-center gap-2.5 overflow-x-auto no-scrollbar pb-2 pt-1">
+      
+      <!-- Food Quest -->
+      <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
         🍱 Food Quest
       </a>
-      <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">
+
+      <!-- Wishlist Labs (ACTIVE PAGE) -->
+      <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm ring-4 ring-black">
         🛠️ Wishlist Labs
       </a>
-      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+
+      <!-- Stitch Guild -->
+      <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
         🪡 Stitch Guild
       </a>
-      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
+
+      <!-- Style Closet -->
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
         👗 Style Closet
       </a>
+
+      <!-- Body & Cycle Sync -->
+      <a href="health.html" class="nav-btn bg-rose-400 hover:bg-rose-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
+        💖 Body & Cycle Sync
+      </a>
+
+      <!-- Locs Vault -->
+      <a href="locs.html" class="nav-btn bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
+        👑 Locs Vault
+      </a>
+
+      <!-- Nail Studio -->
+      <a href="nails.html" class="nav-btn bg-purple-400 hover:bg-purple-500 text-white font-bold py-2.5 px-4 rounded-2xl border-2 border-black pixel-shadow whitespace-nowrap transition-transform active:translate-y-1 text-xs sm:text-sm">
+        💅 Nail Studio
+      </a>
+
     </div>
   </nav>
 
