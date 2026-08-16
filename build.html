@@ -11,9 +11,6 @@
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
-    
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
@@ -44,25 +41,67 @@
     </div>
   </header>
 
-  <!-- FULL-SIZED SCALABLE NAVIGATION -->
-  <nav class="max-w-5xl mx-auto my-6 px-4 relative z-40">
-    <div class="bg-purple-900/10 p-3 rounded-3xl border-4 border-black pixel-shadow flex items-center justify-between gap-3">
+  <!-- NAVIGATION TABS WITH DROPDOWNS -->
+  <nav class="max-w-5xl mx-auto my-6 px-4">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
       
-      <!-- Primary Nav Track (Full-Sized Chunky Buttons) -->
-      <div id="primary-nav" class="flex items-center gap-3 overflow-x-auto no-scrollbar py-1">
-        <!-- Main Chunky Links Injected via JS -->
+      <!-- Food Quest Dropdown -->
+      <div class="relative group">
+        <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-1 w-full">
+          🍱 Food Quest <span class="text-xs ml-1">▼</span>
+        </a>
+        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-pink-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
+          <a href="food.html#recipes" class="block w-full bg-white hover:bg-pink-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            📖 Recipe Book
+          </a>
+          <a href="food.html#pantry" class="block w-full bg-white hover:bg-pink-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            🧺 Pantry Stock
+          </a>
+        </div>
       </div>
 
-      <!-- "+ More Pages" Dropdown Button -->
-      <div id="more-nav-container" class="relative shrink-0 hidden">
-        <button onclick="toggleMoreMenu()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-extrabold px-4 py-2.5 rounded-2xl border-3 border-black pixel-shadow-sm text-sm flex items-center gap-2 transition-all active:translate-y-0.5 whitespace-nowrap">
-          <span>🎮 More Pages</span>
-          <span id="more-chevron" class="text-xs transition-transform duration-200">▼</span>
-        </button>
+      <!-- Wishlist Labs Dropdown (Active) -->
+      <div class="relative group">
+        <a href="build.html" class="nav-btn bg-cyan-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black flex items-center justify-center gap-1 w-full">
+          🛠️ Wishlist Labs <span class="text-xs ml-1">▼</span>
+        </a>
+        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-cyan-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
+          <a href="#page-build" class="block w-full bg-white hover:bg-cyan-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            🚀 Featured Showcase
+          </a>
+          <a href="#full-projects-grid" class="block w-full bg-white hover:bg-cyan-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            📂 All Blueprints
+          </a>
+        </div>
+      </div>
 
-        <!-- Dynamic Dropdown Menu Box -->
-        <div id="more-dropdown" class="absolute right-0 mt-3 w-60 bg-white border-4 border-black rounded-3xl p-2.5 pixel-shadow-lg hidden flex-col gap-2 z-50">
-          <!-- Overflow Nav Links Injected via JS -->
+      <!-- Stitch Guild Dropdown -->
+      <div class="relative group">
+        <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-1 w-full">
+          🪡 Stitch Guild <span class="text-xs ml-1">▼</span>
+        </a>
+        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-emerald-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
+          <a href="sewing.html#patterns" class="block w-full bg-white hover:bg-emerald-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            📐 Patterns Archive
+          </a>
+          <a href="sewing.html#fabrics" class="block w-full bg-white hover:bg-emerald-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            🧵 Fabric Stash
+          </a>
+        </div>
+      </div>
+
+      <!-- Style Closet Dropdown -->
+      <div class="relative group">
+        <a href="outfits.html" class="nav-btn bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-1 w-full">
+          👗 Style Closet <span class="text-xs ml-1">▼</span>
+        </a>
+        <div class="absolute left-0 right-0 top-full mt-2 hidden group-hover:flex group-focus-within:flex flex-col gap-1.5 bg-fuchsia-200 border-3 border-black p-2 rounded-2xl pixel-shadow z-40">
+          <a href="outfits.html#lookbook" class="block w-full bg-white hover:bg-fuchsia-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            📸 Lookbook
+          </a>
+          <a href="outfits.html#wishlist" class="block w-full bg-white hover:bg-fuchsia-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border-2 border-black transition-colors">
+            🛍️ Wardrobe Wishlist
+          </a>
         </div>
       </div>
 
@@ -78,7 +117,7 @@
       <!-- Header Bar -->
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-cyan-950 flex items-center gap-2">
+          <h2 class="text-2xl font-bold text-cyan-900 flex items-center gap-2">
             🛠️ Wishlist Labs Blueprint Log
           </h2>
           <p class="text-xs text-cyan-800 font-semibold mt-0.5">Explore featured lab projects or scroll down to view the complete blueprint list.</p>
@@ -240,96 +279,6 @@
   </div>
 
   <script>
-    // =========================================================================
-    // EXTENDABLE NAVIGATION CONFIGURATION
-    // Set pinned: true for your main chunky bar buttons.
-    // Set pinned: false to put them in the "+ More Pages" dropdown!
-    // =========================================================================
-    const navItems = [
-      { name: "🍱 Food Quest", href: "food.html", bg: "bg-pink-400 hover:bg-pink-500", pinned: true },
-      { name: "🛠️ Wishlist Labs", href: "build.html", bg: "bg-cyan-500 hover:bg-cyan-600", pinned: true },
-      { name: "🪡 Stitch Guild", href: "sewing.html", bg: "bg-emerald-400 hover:bg-emerald-500", pinned: true },
-      { name: "👗 Style Closet", href: "outfits.html", bg: "bg-fuchsia-400 hover:bg-fuchsia-500", pinned: true },
-      
-      // Secondary pages (Will cleanly render inside the dropdown menu)
-      { name: "💖 Body & Cycle Sync", href: "health.html", bg: "bg-rose-400 hover:bg-rose-500", pinned: false },
-      { name: "👑 Locs Vault", href: "locs.html", bg: "bg-amber-500 hover:bg-amber-600", pinned: false },
-      { name: "💅 Nail Studio", href: "nails.html", bg: "bg-purple-400 hover:bg-purple-500", pinned: false }
-    ];
-
-    function renderNavigation() {
-      const primaryContainer = document.getElementById('primary-nav');
-      const moreContainer = document.getElementById('more-nav-container');
-      const dropdownContainer = document.getElementById('more-dropdown');
-      
-      const currentPage = window.location.pathname.split('/').pop() || 'build.html';
-
-      const pinnedItems = navItems.filter(item => item.pinned !== false);
-      const dropdownItems = navItems.filter(item => item.pinned === false);
-
-      // Render Primary Bulky Links
-      primaryContainer.innerHTML = pinnedItems.map(item => {
-        const isActive = currentPage === item.href || (currentPage === '' && item.href === 'build.html');
-        
-        const baseClasses = "font-extrabold py-2.5 px-4 rounded-2xl border-3 border-black pixel-shadow-sm whitespace-nowrap transition-all text-sm shrink-0 active:translate-y-0.5";
-        const activeClasses = "bg-yellow-400 text-slate-900 ring-4 ring-black/20";
-        const inactiveClasses = `${item.bg} text-white hover:brightness-105`;
-
-        return `
-          <a href="${item.href}" class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}">
-            ${item.name}
-          </a>
-        `;
-      }).join('');
-
-      // Render Dropdown Links if any exist
-      if (dropdownItems.length > 0) {
-        moreContainer.classList.remove('hidden');
-        dropdownContainer.innerHTML = dropdownItems.map(item => {
-          const isActive = currentPage === item.href;
-          
-          const baseClasses = "font-bold p-2.5 rounded-2xl border-3 border-black text-xs transition-all flex items-center justify-between";
-          const activeClasses = "bg-yellow-400 text-slate-900 font-extrabold pixel-shadow-sm";
-          const inactiveClasses = `${item.bg} text-white hover:brightness-105`;
-
-          return `
-            <a href="${item.href}" class="${baseClasses} ${isActive ? activeClasses : inactiveClasses}">
-              <span>${item.name}</span>
-              ${isActive ? '<span>👈</span>' : ''}
-            </a>
-          `;
-        }).join('');
-      } else {
-        moreContainer.classList.add('hidden');
-      }
-    }
-
-    function toggleMoreMenu() {
-      const dropdown = document.getElementById('more-dropdown');
-      const chevron = document.getElementById('more-chevron');
-      const isHidden = dropdown.classList.contains('hidden');
-      
-      if (isHidden) {
-        dropdown.classList.remove('hidden');
-        dropdown.classList.add('flex');
-        chevron.style.transform = 'rotate(180deg)';
-      } else {
-        dropdown.classList.add('hidden');
-        dropdown.classList.remove('flex');
-        chevron.style.transform = 'rotate(0deg)';
-      }
-    }
-
-    // Close menu when clicking outside
-    document.addEventListener('click', (e) => {
-      const container = document.getElementById('more-nav-container');
-      if (container && !container.contains(e.target)) {
-        document.getElementById('more-dropdown').classList.add('hidden');
-        document.getElementById('more-dropdown').classList.remove('flex');
-        document.getElementById('more-chevron').style.transform = 'rotate(0deg)';
-      }
-    });
-
     // --- HUD XP SYSTEM ---
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
@@ -367,6 +316,7 @@
 
     // --- DEFAULT PROJECTS DATABASE ---
     const defaultProjects = [
+      // ⚡ ELECTRONICS (4)
       {
         id: 'proj1',
         title: 'Custom Mechanical Keyboard',
@@ -403,6 +353,8 @@
         description: 'Assemble an analog-style VU meter setup with customizable RGB backlight rings.',
         status: 'incomplete'
       },
+
+      // 🏠 APARTMENT (3)
       {
         id: 'proj5',
         title: 'Floating Wood Bookshelf',
@@ -430,6 +382,8 @@
         description: 'Install motion-activated warm LED strip lighting under bed frame for night navigation.',
         status: 'incomplete'
       },
+
+      // ✨ ACCESSORIES (3)
       {
         id: 'proj8',
         title: 'Hand-Crafted Leather Keyring',
@@ -469,6 +423,7 @@
     let searchQuery = '';
     let currentProjectIndex = 0;
 
+    // Load saved statuses from localStorage
     function loadSavedStatuses() {
       const saved = JSON.parse(localStorage.getItem('wishlistLabStatuses')) || {};
       buildProjects.forEach(p => {
@@ -486,18 +441,21 @@
       localStorage.setItem('wishlistLabStatuses', JSON.stringify(savedMap));
     }
 
+    // Difficulty Badges
     function getDifficultyBadge(diff) {
       if (diff === 'EASY') return 'bg-emerald-300 text-slate-900';
       if (diff === 'MEDIUM') return 'bg-amber-300 text-slate-900';
       return 'bg-rose-400 text-white';
     }
 
+    // Select Dropdown Styling
     function getStatusStyles(status) {
       if (status === 'completed') return 'bg-emerald-500 text-white border-black';
       if (status === 'in-progress') return 'bg-amber-400 text-slate-900 border-black';
       return 'bg-slate-100 text-slate-700 border-black';
     }
 
+    // Filter Logic
     function getFilteredProjects() {
       return buildProjects.filter(p => {
         const matchesCat = currentCategory === 'all' || p.category === currentCategory;
@@ -511,6 +469,7 @@
       });
     }
 
+    // Main Render Function
     function renderViews() {
       const filtered = getFilteredProjects();
       document.getElementById('project-count').innerText = filtered.length;
@@ -519,6 +478,7 @@
       renderFullGridList(filtered);
     }
 
+    // 1. RENDER FEATURED TURNTABLE STAGE
     function renderTurntableStage(filtered) {
       const card = document.getElementById('project-select-card');
       const dotsContainer = document.getElementById('carousel-dots');
@@ -576,6 +536,7 @@
       `).join('');
     }
 
+    // 2. RENDER FULL BLUEPRINT GRID LIST
     function renderFullGridList(filtered) {
       const grid = document.getElementById('full-projects-grid');
 
@@ -727,8 +688,7 @@
       }
     });
 
-    // Initialize Page & Dynamic Nav
-    renderNavigation();
+    // Initialize Page
     loadSavedStatuses();
     updateHUD();
     renderViews();
