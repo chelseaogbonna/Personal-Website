@@ -119,6 +119,9 @@
           <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
             🧋 Drinks
           </button>
+          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow">
+            🍿 Snacks
+          </button>
         </div>
 
         <!-- Search Input -->
@@ -331,6 +334,7 @@
             <option value="dinner">Dinner</option>
             <option value="dessert">Dessert</option>
             <option value="drinks">Drinks</option>
+            <option value="snacks">Snacks</option>
           </select>
         </div>
 
@@ -504,6 +508,19 @@
       accompanimentName: 'Extra Pearls',
       recipeUrl: ''
     },
+      {
+      id: 'sn1',
+      name: 'Bananas and Peanuts',
+      icon: '🧋',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-_3wRz-02qD54rh4qEt3A6_8bQvY_zdtt739sVWwKKQ&s=10',
+      mealTypes: ['snacks'],
+      category: 'tea',
+      ingredients: ['Bananas', 'Peanuts'],
+      drinkPairing: 'Water',
+      accompanimentType: 'side',
+      accompanimentName: 'Extra Pearls',
+      recipeUrl: ''
+    },
   ];
 
   // --- LOCALSTORAGE DATABASE INITIALIZATION ---
@@ -539,7 +556,7 @@
   let currentSubcategory = 'all';
   let activeSelectedItem = null;
   let characterSelectIndex = 0;
-  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert', 'drinks'];
+  let activeSpinFilters = ['breakfast', 'lunch', 'dinner', 'dessert', 'drinks', 'snacks'];
   let searchQuery = '';
 
   // --- INITIALIZATION ON LOAD ---
