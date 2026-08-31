@@ -45,10 +45,47 @@
     <!-- WELCOME HERO CARD -->
     <div class="bg-white border-4 border-black rounded-3xl p-8 pixel-shadow-lg text-center">
       <h2 class="text-3xl font-black mb-2 text-purple-900">Welcome to HQ 👾</h2>
-      <p class="text-slate-600 mb-6 text-sm">Select any room above to jump into that section!</p>
+      <p class="text-slate-600 mb-6 text-sm">Select any room below to jump into that section!</p>
       <a href="food.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
         Enter Lair 🚀
       </a>
+    </div>
+
+    <!-- DAILY QUEST BOARD (TO-DO LIST) -->
+    <div class="bg-sky-200 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b-2 border-sky-400 pb-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-black text-sky-900">📋 DAILY QUEST BOARD</h2>
+          <p class="text-xs text-sky-800">Resets every 24h. Toggle the lock icon 🔒 to keep tasks across resets!</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="clearCompletedTasks()" class="bg-rose-400 hover:bg-rose-500 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+            🧹 Clear Done
+          </button>
+          <button onclick="emergencyClearAllTasks()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow transition-transform active:translate-y-1" title="Emergency: Clear all tasks instantly">
+            🚨 Emergency Clear
+          </button>
+        </div>
+      </div>
+
+      <!-- Add Task Form -->
+      <form onsubmit="handleAddTask(event)" class="flex flex-col sm:flex-row gap-2 mb-6">
+        <input 
+          type="text" 
+          id="new-task-input" 
+          required 
+          placeholder="✍️ Add a new quest or task..." 
+          class="flex-1 bg-white px-4 py-2.5 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500 placeholder-slate-400"
+        />
+        <button type="submit" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2.5 px-5 text-xs rounded-xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+          Add Quest (+5 XP)
+        </button>
+      </form>
+
+      <!-- Task Items Container -->
+      <div id="task-list-container" class="space-y-3">
+        <!-- Rendered via JS -->
+      </div>
     </div>
 
     <!-- ROOM SELECTOR GRID -->
@@ -66,13 +103,12 @@
           <p class="text-xs text-slate-800 mt-1 font-medium">Recipes & bites</p>
         </a>
 
-                <!-- 2. Wishlist Labs -->
+        <!-- 2. Wishlist Labs -->
         <a href="build.html" class="group bg-cyan-300 hover:bg-cyan-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
           <div class="text-3xl mb-2">🛠️</div>
           <h3 class="font-bold text-lg leading-tight text-black">Wishlist Labs</h3>
           <p class="text-xs text-slate-800 mt-1 font-medium">Builds & custom gear</p>
         </a>
-
 
         <!-- 3. Stitch Guild -->
         <a href="sewing.html" class="group bg-emerald-300 hover:bg-emerald-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
@@ -81,7 +117,7 @@
           <p class="text-xs text-slate-800 mt-1 font-medium">Sewing & DIY crafts</p>
         </a>
 
-         <!-- 4. Style Closet -->
+        <!-- 4. Style Closet -->
         <a href="outfits.html" class="group bg-fuchsia-300 hover:bg-fuchsia-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
           <div class="text-3xl mb-2">👗</div>
           <h3 class="font-bold text-lg leading-tight text-black">Style Closet</h3>
@@ -101,7 +137,6 @@
           <h3 class="font-bold text-lg leading-tight text-black">Nails Vault</h3>
           <p class="text-xs text-slate-800 mt-1 font-medium">Sets, art & inspo</p>
         </a>
-      
 
         <!-- 7. Media Den -->
         <a href="media.html" class="group bg-violet-300 hover:bg-violet-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
@@ -129,6 +164,7 @@
   </main>
 
   <script>
+    // --- HUD XP SYSTEM ---
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
 
@@ -140,7 +176,167 @@
       localStorage.setItem('playerLvl', level);
     }
 
+    function gainXP(amount) {
+      xp += amount;
+      if (xp >= 100) {
+        level += Math.floor(xp / 100);
+        xp = xp % 100;
+        alert(`🎉 LEVEL UP! You reached Level ${level}! 🎉`);
+      }
+      updateHUD();
+    }
+
+    // --- TO-DO LIST (DAILY QUEST BOARD) SYSTEM ---
+    let tasks = loadTasks();
+
+    function loadTasks() {
+      const savedTasks = localStorage.getItem('arcadeQuestTasks');
+      const lastResetDate = localStorage.getItem('arcadeQuestLastReset');
+      const todayStr = new Date().toDateString();
+
+      let parsedTasks = [];
+      if (savedTasks) {
+        try { parsedTasks = JSON.parse(savedTasks); } catch (e) { parsedTasks = []; }
+      }
+
+      // Check 24-hour / Daily reset logic
+      if (lastResetDate !== todayStr) {
+        // Keep only locked tasks or uncompleted ones if desired, but user requested: 
+        // "reset every 24 hours unless i explicitly need it to still be there" -> Locked tasks stay!
+        parsedTasks = parsedTasks.filter(task => task.isLocked);
+        localStorage.setItem('arcadeQuestLastReset', todayStr);
+        saveTasks(parsedTasks);
+      }
+
+      return parsedTasks.length > 0 ? parsedTasks : [
+        { id: 't_1', text: 'Drink 8 glasses of water 💧', completed: false, isLocked: true },
+        { id: 't_2', text: 'Check daily food vault recipes 🍱', completed: false, isLocked: false }
+      ];
+    }
+
+    function saveTasks(tasksToSave) {
+      localStorage.setItem('arcadeQuestTasks', JSON.stringify(tasksToSave));
+    }
+
+    function renderTasks() {
+      const container = document.getElementById('task-list-container');
+      if (!container) return;
+
+      if (tasks.length === 0) {
+        container.innerHTML = `<div class="bg-white p-4 rounded-2xl border-2 border-black text-center text-xs text-slate-400 italic">No quests on the board. Add one above!</div>`;
+        return;
+      }
+
+      container.innerHTML = tasks.map(task => `
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 flex-1">
+            <input 
+              type="checkbox" 
+              ${task.completed ? 'checked' : ''} 
+              onchange="toggleTaskComplete('${task.id}')"
+              class="w-5 h-5 accent-sky-500 rounded cursor-pointer"
+            />
+            <span 
+              onclick="inlineEditTask('${task.id}')"
+              title="Click to edit task"
+              class="text-xs font-bold cursor-pointer flex-1 ${task.completed ? 'line-through text-slate-400' : 'text-slate-800'}"
+            >${task.text}</span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button 
+              onclick="toggleTaskLock('${task.id}')" 
+              title="${task.isLocked ? 'Locked (Persists through 24h reset)' : 'Unlocked (Resets every 24h)'}" 
+              class="px-2 py-1 text-xs font-bold rounded-lg border border-black ${task.isLocked ? 'bg-amber-300 text-amber-950' : 'bg-slate-100 text-slate-400'}">
+              ${task.isLocked ? '🔒 Locked' : '🔓 Unlocked'}
+            </button>
+            <button 
+              onclick="deleteTask('${task.id}')" 
+              title="Delete Task" 
+              class="bg-rose-200 hover:bg-rose-300 text-rose-900 font-bold px-2 py-1 text-xs rounded-lg border border-black">
+              🗑️
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleAddTask(event) {
+      event.preventDefault();
+      const input = document.getElementById('new-task-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const newTask = {
+        id: 't_' + Date.now(),
+        text,
+        completed: false,
+        isLocked: false
+      };
+
+      tasks.push(newTask);
+      saveTasks(tasks);
+      input.value = '';
+      renderTasks();
+      gainXP(5);
+    }
+
+    function toggleTaskComplete(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        saveTasks(tasks);
+        renderTasks();
+        if (task.completed) {
+          gainXP(10);
+        }
+      }
+    }
+
+    function toggleTaskLock(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.isLocked = !task.isLocked;
+        saveTasks(tasks);
+        renderTasks();
+      }
+    }
+
+    function inlineEditTask(id) {
+      const task = tasks.find(t => t.id === id);
+      if (!task) return;
+      const newText = prompt("Edit your quest task:", task.text);
+      if (newText !== null && newText.trim() !== '') {
+        task.text = newText.trim();
+        saveTasks(tasks);
+        renderTasks();
+      }
+    }
+
+    function deleteTask(id) {
+      tasks = tasks.filter(t => t.id !== id);
+      saveTasks(tasks);
+      renderTasks();
+    }
+
+    function clearCompletedTasks() {
+      tasks = tasks.filter(t => !t.completed);
+      saveTasks(tasks);
+      renderTasks();
+    }
+
+    function emergencyClearAllTasks() {
+      if (confirm("🚨 EMERGENCY CLEAR: Are you sure you want to wipe ALL tasks from your Daily Quest Board instantly?")) {
+        tasks = [];
+        saveTasks(tasks);
+        renderTasks();
+        alert("Board successfully cleared.");
+      }
+    }
+
+    // Initialize HUD and Quest Board on load
     updateHUD();
+    renderTasks();
   </script>
 </body>
 </html>
