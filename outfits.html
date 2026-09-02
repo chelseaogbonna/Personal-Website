@@ -65,10 +65,10 @@
           <h2 class="text-2xl font-bold text-fuchsia-950 flex items-center gap-2">
             📸 Photorealistic AI Try-On Studio
           </h2>
-          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Upload your body photo, select garments from your closet, and render your look!</p>
+          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Upload your body photo, select garments, shoes & accessories from your rack, and render!</p>
         </div>
         <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
-          ➕ Add Garment
+          ➕ Add Wardrobe Item
         </button>
       </div>
 
@@ -100,16 +100,18 @@
           <div>
             <div class="flex items-center justify-between mb-3 border-b-2 border-black pb-2">
               <h3 class="text-xs font-extrabold text-slate-800 uppercase flex items-center gap-1">
-                2. Select Garments
+                2. Select Items
               </h3>
               <select id="rack-filter" onchange="renderRack()" class="text-xs font-bold bg-yellow-200 border-2 border-black rounded-lg px-2 py-1">
-                <option value="all">All</option>
-                <option value="top">Tops</option>
-                <option value="bottom">Bottoms</option>
+                <option value="all">All Items</option>
+                <option value="top">👚 Tops</option>
+                <option value="bottom">👖 Bottoms</option>
+                <option value="shoes">👠 Shoes</option>
+                <option value="accessories">👜 Accessories</option>
               </select>
             </div>
 
-            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[220px] overflow-y-auto p-1 mb-3">
+            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[200px] overflow-y-auto p-1 mb-3">
               </div>
           </div>
 
@@ -121,6 +123,14 @@
             <div class="flex justify-between items-center">
               <span>Bottom: <span id="sel-bottom-name" class="text-fuchsia-700">None</span></span>
               <span id="sel-bottom-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>Shoes: <span id="sel-shoes-name" class="text-fuchsia-700">None</span></span>
+              <span id="sel-shoes-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span>Acc: <span id="sel-acc-name" class="text-fuchsia-700">None</span></span>
+              <span id="sel-acc-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
             </div>
           </div>
         </div>
@@ -156,10 +166,19 @@
     </section>
 
     <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex items-center justify-between mb-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
         <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
           📂 Wardrobe Vault (<span id="total-inventory-count">0</span>)
         </h3>
+        <div class="flex items-center gap-2">
+          <select id="vault-filter" onchange="renderInventoryGrid()" class="text-xs font-bold bg-yellow-200 border-2 border-black rounded-xl px-3 py-1.5 pixel-shadow-sm">
+            <option value="all">All Items</option>
+            <option value="top">👚 Tops</option>
+            <option value="bottom">👖 Bottoms</option>
+            <option value="shoes">👠 Shoes</option>
+            <option value="accessories">👜 Accessories</option>
+          </select>
+        </div>
       </div>
       <div id="inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         </div>
@@ -169,9 +188,9 @@
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 border-b-2 border-black pb-3">
         <div>
           <h2 class="text-2xl font-bold text-amber-950 flex items-center gap-2">
-            🎨 Color Palette & Styling Carousel
+            🎨 Color Palette Carousel
           </h2>
-          <p class="text-xs text-amber-900 font-semibold mt-0.5">Left: Styling Look Inspiration | Right: Dynamic Maximized Color Bars</p>
+          <p class="text-xs text-amber-900 font-semibold mt-0.5">Left: Styling Look Inspiration | Right: Maximized Color Bars with Heavy Borders</p>
         </div>
         <button onclick="openPaletteModal()" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
           ➕ Add Palette
@@ -198,6 +217,20 @@
       </div>
     </section>
 
+    <section class="bg-yellow-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4 border-b-2 border-black pb-3">
+        <div>
+          <h2 class="text-2xl font-bold text-amber-950 flex items-center gap-2">
+            🏛️ Color Palettes Vault (<span id="total-palettes-count">0</span>)
+          </h2>
+          <p class="text-xs text-amber-900 font-semibold mt-0.5">Browse and manage your full library of saved custom color palettes.</p>
+        </div>
+      </div>
+
+      <div id="palette-vault-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        </div>
+    </section>
+
   </main>
 
   <div id="palette-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
@@ -211,11 +244,11 @@
         
         <div>
           <label class="block text-xs font-bold text-slate-800 mb-1">Palette Title / Vibe</label>
-          <input type="text" id="palette-title" required placeholder="e.g. 669BBC Denim & Cream Combo" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+          <input type="text" id="palette-title" required placeholder="e.g. 669BBC Denim & Gold Accent Vibe" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-800 mb-2">Palette Colors (Enter 1 to 4 Hex Codes or Pick Colors)</label>
+          <label class="block text-xs font-bold text-slate-800 mb-2">Palette Colors (Pick or Type 1 to 4 Colors)</label>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
             <div>
               <input type="color" id="c1-picker" value="#669BBC" onchange="syncColorInput('c1', this.value)" class="w-full h-8 cursor-pointer rounded-lg border-2 border-black" />
@@ -259,7 +292,7 @@
         <input type="hidden" id="edit-item-id" />
         <div>
           <label class="block text-xs font-bold text-slate-800 mb-1">Item Name</label>
-          <input type="text" id="item-name" required placeholder="e.g. Yellow Plaid Blazer" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+          <input type="text" id="item-name" required placeholder="e.g. White Leather Sneakers" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -267,11 +300,13 @@
             <select id="item-category" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
               <option value="top">👚 Top / Jacket</option>
               <option value="bottom">👖 Bottom / Skirt</option>
+              <option value="shoes">👠 Shoes</option>
+              <option value="accessories">👜 Accessories / Jewelry</option>
             </select>
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-800 mb-1">Primary Color</label>
-            <input type="text" id="item-color" required placeholder="e.g. #669BBC or Blue" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white" />
+            <input type="text" id="item-color" required placeholder="e.g. #669BBC or White" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white" />
           </div>
         </div>
         <div>
@@ -328,7 +363,9 @@
     const defaultWardrobe = [
       { id: 'w1', name: '669BBC Denim Jacket', category: 'top', color: '#669BBC', img: 'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=300&auto=format&fit=crop&q=80' },
       { id: 'w2', name: 'Cream Knit Sweater', category: 'top', color: '#FDF0D5', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w3', name: 'Crimson Mini Skirt', category: 'bottom', color: '#C1121F', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=300&auto=format&fit=crop&q=80' }
+      { id: 'w3', name: 'Crimson Mini Skirt', category: 'bottom', color: '#C1121F', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w4', name: 'Chunky White Boots', category: 'shoes', color: '#FFFFFF', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w5', name: 'Gold Layered Chain', category: 'accessories', color: '#FFD700', img: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&auto=format&fit=crop&q=80' }
     ];
 
     let palettes = JSON.parse(localStorage.getItem('stylePalettes')) || defaultPalettes;
@@ -338,11 +375,13 @@
     let activePaletteIndex = 0;
     let selectedTopId = null;
     let selectedBottomId = null;
+    let selectedShoesId = null;
+    let selectedAccId = null;
 
     function savePalettes() { localStorage.setItem('stylePalettes', JSON.stringify(palettes)); }
     function saveWardrobe() { localStorage.setItem('styleWardrobe', JSON.stringify(wardrobe)); }
 
-    // RENDER COLOR PALETTE CAROUSEL (SPLIT 2-COLUMN VIEW)
+    // RENDER COLOR PALETTE CAROUSEL
     function renderPaletteCarousel() {
       const card = document.getElementById('palette-slide-card');
       const counter = document.getElementById('palette-counter');
@@ -350,6 +389,7 @@
       if (palettes.length === 0) {
         card.innerHTML = `<div class="col-span-12 text-center p-8 font-bold text-slate-500">No color palettes added yet! Click "Add Palette" above to create one.</div>`;
         counter.innerText = '0 of 0';
+        renderPaletteVault();
         return;
       }
 
@@ -360,10 +400,10 @@
       const validColors = pal.colors.filter(c => c && c.trim() !== '');
 
       card.innerHTML = `
-        <div class="md:col-span-5 relative w-full h-[300px] bg-slate-100 rounded-2xl border-3 border-black overflow-hidden pixel-shadow-sm">
+        <div class="md:col-span-5 relative w-full h-[300px] bg-slate-100 rounded-2xl border-4 border-black overflow-hidden pixel-shadow-sm">
           ${pal.inspImg ? `
             <img src="${pal.inspImg}" class="w-full h-full object-cover" />
-            <span class="absolute bottom-2 left-2 bg-black/80 text-yellow-300 text-[10px] font-extrabold px-2 py-1 rounded-lg border border-yellow-300">
+            <span class="absolute bottom-2 left-2 bg-black/80 text-yellow-300 text-[10px] font-extrabold px-2 py-1 rounded-lg border-2 border-yellow-300">
               📸 Style Inspiration
             </span>
           ` : `
@@ -386,7 +426,7 @@
 
             <div class="flex h-28 w-full rounded-2xl border-4 border-black overflow-hidden pixel-shadow mb-4">
               ${validColors.map(c => `
-                <div class="flex-1 h-full relative group cursor-pointer transition-all hover:flex-[1.5]" style="background-color: ${c}">
+                <div class="flex-1 h-full relative group cursor-pointer transition-all border-r-2 last:border-r-0 border-black hover:flex-[1.5]" style="background-color: ${c}">
                   <span class="opacity-0 group-hover:opacity-100 absolute inset-0 flex items-center justify-center text-xs font-mono font-extrabold bg-black/70 text-white transition-opacity">
                     ${c.toUpperCase()}
                   </span>
@@ -409,6 +449,7 @@
       `;
 
       counter.innerText = `Palette ${activePaletteIndex + 1} of ${palettes.length}`;
+      renderPaletteVault();
     }
 
     function nextPaletteSlide() {
@@ -419,6 +460,48 @@
     function prevPaletteSlide() {
       activePaletteIndex = (activePaletteIndex - 1 + palettes.length) % palettes.length;
       renderPaletteCarousel();
+    }
+
+    // RENDER COLOR PALETTES VAULT
+    function renderPaletteVault() {
+      const grid = document.getElementById('palette-vault-grid');
+      document.getElementById('total-palettes-count').innerText = palettes.length;
+
+      grid.innerHTML = palettes.map(pal => {
+        const validColors = pal.colors.filter(c => c && c.trim() !== '');
+        return `
+          <div class="bg-white rounded-2xl border-4 border-black p-4 pixel-shadow flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-2 border-b-2 border-black pb-2">
+                <h4 class="font-extrabold text-xs text-slate-900 truncate">${pal.title}</h4>
+                <div class="flex gap-1">
+                  <button onclick="editPalette('${pal.id}')" class="text-[10px] bg-cyan-300 hover:bg-cyan-400 font-bold px-2 py-0.5 rounded border border-black">✏️</button>
+                  <button onclick="deletePalette('${pal.id}')" class="text-[10px] bg-rose-400 hover:bg-rose-500 text-white font-bold px-2 py-0.5 rounded border border-black">✕</button>
+                </div>
+              </div>
+
+              <div class="flex h-12 w-full rounded-xl border-3 border-black overflow-hidden pixel-shadow-sm mb-2">
+                ${validColors.map(c => `
+                  <div class="flex-1 h-full relative group cursor-pointer border-r border-black last:border-r-0" style="background-color: ${c}">
+                    <span class="opacity-0 group-hover:opacity-100 absolute inset-0 flex items-center justify-center text-[8px] font-mono font-extrabold bg-black/70 text-white transition-opacity">${c.toUpperCase()}</span>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="flex flex-wrap gap-1">
+                ${validColors.map(c => `<span class="text-[9px] font-mono font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-400">${c.toUpperCase()}</span>`).join('')}
+              </div>
+            </div>
+
+            ${pal.inspImg ? `
+              <div class="relative w-full h-28 bg-slate-100 rounded-xl border-2 border-black overflow-hidden">
+                <img src="${pal.inspImg}" class="w-full h-full object-cover" />
+                <span class="absolute bottom-1 right-1 bg-black/80 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">Look Ref</span>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
     }
 
     // PALETTE MODAL HELPERS
@@ -514,7 +597,7 @@
       const filtered = wardrobe.filter(i => filter === 'all' || i.category === filter);
 
       rack.innerHTML = filtered.map(item => {
-        const isSelected = item.id === selectedTopId || item.id === selectedBottomId;
+        const isSelected = item.id === selectedTopId || item.id === selectedBottomId || item.id === selectedShoesId || item.id === selectedAccId;
         return `
           <div onclick="toggleGarmentSelection('${item.id}')" class="bg-slate-50 border-2 border-black rounded-xl p-2 cursor-pointer hover:bg-yellow-200 transition-all flex flex-col items-center text-center pixel-shadow-sm ${isSelected ? 'ring-2 ring-fuchsia-500 bg-yellow-200' : ''}">
             <img src="${item.img}" class="w-10 h-10 object-cover rounded-lg border border-black mb-1" />
@@ -534,9 +617,13 @@
 
       if (item.category === 'top') { selectedTopId = selectedTopId === itemId ? null : itemId; }
       else if (item.category === 'bottom') { selectedBottomId = selectedBottomId === itemId ? null : itemId; }
+      else if (item.category === 'shoes') { selectedShoesId = selectedShoesId === itemId ? null : itemId; }
+      else if (item.category === 'accessories') { selectedAccId = selectedAccId === itemId ? null : itemId; }
 
       const topItem = wardrobe.find(i => i.id === selectedTopId);
       const bottomItem = wardrobe.find(i => i.id === selectedBottomId);
+      const shoesItem = wardrobe.find(i => i.id === selectedShoesId);
+      const accItem = wardrobe.find(i => i.id === selectedAccId);
 
       document.getElementById('sel-top-name').innerText = topItem ? topItem.name : 'None';
       document.getElementById('sel-top-color').innerText = topItem ? topItem.color : '--';
@@ -544,13 +631,19 @@
       document.getElementById('sel-bottom-name').innerText = bottomItem ? bottomItem.name : 'None';
       document.getElementById('sel-bottom-color').innerText = bottomItem ? bottomItem.color : '--';
 
+      document.getElementById('sel-shoes-name').innerText = shoesItem ? shoesItem.name : 'None';
+      document.getElementById('sel-shoes-color').innerText = shoesItem ? shoesItem.color : '--';
+
+      document.getElementById('sel-acc-name').innerText = accItem ? accItem.name : 'None';
+      document.getElementById('sel-acc-color').innerText = accItem ? accItem.color : '--';
+
       renderRack();
     }
 
     // AI TRY-ON
     async function triggerAITryOn() {
       if (!userPhotoDataUrl) { alert('Please upload a body photo first!'); return; }
-      if (!selectedTopId && !selectedBottomId) { alert('Please select at least one garment from your rack!'); return; }
+      if (!selectedTopId && !selectedBottomId && !selectedShoesId && !selectedAccId) { alert('Please select at least one garment or accessory from your rack!'); return; }
 
       const spinner = document.getElementById('ai-loading-spinner');
       const resultImg = document.getElementById('ai-rendered-result');
@@ -573,8 +666,11 @@
 
     // INVENTORY CRUD
     function renderInventoryGrid() {
+      const vaultFilter = document.getElementById('vault-filter').value;
       const grid = document.getElementById('inventory-grid');
-      grid.innerHTML = wardrobe.map(item => `
+      const filtered = wardrobe.filter(i => vaultFilter === 'all' || i.category === vaultFilter);
+
+      grid.innerHTML = filtered.map(item => `
         <div class="bg-slate-50 rounded-2xl border-2 border-black p-3 pixel-shadow flex items-center justify-between gap-3">
           <img src="${item.img}" class="w-12 h-12 object-cover rounded-xl border border-black shrink-0" />
           <div class="flex-1 min-w-0">
