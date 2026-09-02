@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Studio & Color Matcher 👗</title>
+  <title>AI Studio & Visual Color Lab 👗</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -23,7 +23,7 @@
           <a href="index.html" class="hover:text-yellow-300 transition-colors">
             <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
           </a>
-          <p class="text-xs text-purple-200">Player 1: Photoreal Try-On & Color Matrix</p>
+          <p class="text-xs text-purple-200">Player 1: AI Try-On & Visual Color Palette Lab</p>
         </div>
       </div>
 
@@ -59,25 +59,37 @@
 
   <main class="max-w-6xl mx-auto px-4 space-y-6">
 
+    <section class="bg-amber-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-2xl font-bold text-amber-950 flex items-center gap-2">
+            🎨 Color Palette Visualizer & Styling Inspiration
+          </h2>
+          <p class="text-xs text-amber-900 font-semibold mt-0.5">Mix up to 4 custom colors (Hex codes like #669BBC) and upload outfit references to see how they look styled!</p>
+        </div>
+        <button onclick="openPaletteModal()" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
+          ➕ Create Color Palette
+        </button>
+      </div>
+
+      <div id="palette-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        </div>
+    </section>
+
     <section class="bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
           <h2 class="text-2xl font-bold text-fuchsia-950 flex items-center gap-2">
             📸 Photorealistic AI Try-On Studio
           </h2>
-          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Upload your body photo, pick a garment, test color synergy, and render realistic outfits!</p>
+          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Upload your body photo, select garments from your closet, and render your look!</p>
         </div>
-        <div class="flex gap-2">
-          <button onclick="openRuleModal()" class="bg-purple-300 hover:bg-purple-400 text-slate-900 font-bold px-3 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
-            🎨 Add Color Rule
-          </button>
-          <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
-            ➕ Add Garment
-          </button>
-        </div>
+        <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
+          ➕ Add Garment
+        </button>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         <div class="lg:col-span-4 bg-white p-4 rounded-3xl border-4 border-black pixel-shadow flex flex-col justify-between">
           <div>
@@ -85,12 +97,12 @@
               1. Your Full-Body Photo
             </h3>
             
-            <div id="user-photo-preview-container" class="relative w-full h-[280px] bg-slate-100 border-2 border-dashed border-slate-400 rounded-2xl flex flex-col items-center justify-center overflow-hidden mb-3">
+            <div id="user-photo-preview-container" class="relative w-full h-[260px] bg-slate-100 border-2 border-dashed border-slate-400 rounded-2xl flex flex-col items-center justify-center overflow-hidden mb-3">
               <img id="user-photo-preview" src="" class="w-full h-full object-cover hidden" />
               <div id="user-photo-placeholder" class="text-center p-4">
                 <span class="text-4xl mb-2 block">🧍‍♀️</span>
                 <p class="text-xs font-bold text-slate-600">No photo uploaded</p>
-                <p class="text-[10px] text-slate-400 mt-1">Upload a clear, front-facing full-body photo for AI rendering.</p>
+                <p class="text-[10px] text-slate-400 mt-1">Upload a clear front-facing body photo.</p>
               </div>
             </div>
             
@@ -105,7 +117,7 @@
           <div>
             <div class="flex items-center justify-between mb-3 border-b-2 border-black pb-2">
               <h3 class="text-xs font-extrabold text-slate-800 uppercase flex items-center gap-1">
-                2. Select Garments & Color Match
+                2. Select Garments
               </h3>
               <select id="rack-filter" onchange="renderRack()" class="text-xs font-bold bg-yellow-200 border-2 border-black rounded-lg px-2 py-1">
                 <option value="all">All</option>
@@ -114,21 +126,17 @@
               </select>
             </div>
 
-            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[180px] overflow-y-auto p-1 mb-3">
+            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[220px] overflow-y-auto p-1 mb-3">
               </div>
-
-            <div id="match-verdict" class="p-3 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-2">
-              Select items to test color scheme...
-            </div>
           </div>
 
           <div id="selected-garments-summary" class="p-2 bg-pink-100 rounded-2xl border-2 border-black text-xs font-bold space-y-1">
             <div class="flex justify-between items-center">
-              <span>Selected Top: <span id="sel-top-name" class="text-fuchsia-700">None</span></span>
+              <span>Top: <span id="sel-top-name" class="text-fuchsia-700">None</span></span>
               <span id="sel-top-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
             </div>
             <div class="flex justify-between items-center">
-              <span>Selected Bottom: <span id="sel-bottom-name" class="text-fuchsia-700">None</span></span>
+              <span>Bottom: <span id="sel-bottom-name" class="text-fuchsia-700">None</span></span>
               <span id="sel-bottom-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
             </div>
           </div>
@@ -146,12 +154,12 @@
               <div id="ai-render-placeholder" class="text-center p-4">
                 <span class="text-4xl mb-2 block">✨</span>
                 <p class="text-xs font-bold text-purple-200">Ready to Generate</p>
-                <p class="text-[10px] text-purple-300 mt-1">Upload a photo, pick clothes, and render!</p>
+                <p class="text-[10px] text-purple-300 mt-1">Upload photo, pick clothes, & render!</p>
               </div>
 
               <div id="ai-loading-spinner" class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center space-y-3 hidden">
                 <div class="w-10 h-10 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-xs font-bold text-yellow-300 animate-pulse">Fitting Fabric to Body...</p>
+                <p class="text-xs font-bold text-yellow-300 animate-pulse">Rendering Fabric to Body...</p>
               </div>
             </div>
           </div>
@@ -161,19 +169,6 @@
           </button>
         </div>
 
-      </div>
-
-      <div class="bg-white p-6 rounded-3xl border-4 border-black pixel-shadow">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-extrabold text-slate-800 uppercase flex items-center gap-2">
-            🎨 Color Match Rules ("Blue & Pink go together")
-          </h3>
-          <button onclick="openRuleModal()" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm">
-            ➕ Add New Color Combo
-          </button>
-        </div>
-        <div id="color-rules-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          </div>
       </div>
     </section>
 
@@ -188,6 +183,55 @@
     </section>
 
   </main>
+
+  <div id="palette-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-amber-100 border-4 border-black rounded-3xl p-6 max-w-lg w-full pixel-shadow-lg relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 border-b-2 border-black pb-2">
+        <h3 id="modal-palette-title" class="text-xl font-bold text-amber-950">🎨 Create Color Palette</h3>
+        <button onclick="closePaletteModal()" class="text-slate-800 hover:text-black font-extrabold text-lg px-2">✕</button>
+      </div>
+      <form id="palette-form" onsubmit="handleSavePalette(event)" class="space-y-4">
+        <input type="hidden" id="edit-palette-id" />
+        
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Palette Title / Vibe</label>
+          <input type="text" id="palette-title" required placeholder="e.g. 669BBC Navy & Pastel Blue Vibe" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-2">Palette Swatches (Pick 2 to 4 Colors)</label>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div>
+              <input type="color" id="c1-picker" value="#669BBC" onchange="syncColorInput('c1', this.value)" class="w-full h-8 cursor-pointer rounded-lg border-2 border-black" />
+              <input type="text" id="c1-hex" value="#669BBC" onkeyup="syncColorPicker('c1', this.value)" class="w-full mt-1 text-[10px] text-center font-mono font-bold rounded-lg border border-black p-1" />
+            </div>
+            <div>
+              <input type="color" id="c2-picker" value="#FDF0D5" onchange="syncColorInput('c2', this.value)" class="w-full h-8 cursor-pointer rounded-lg border-2 border-black" />
+              <input type="text" id="c2-hex" value="#FDF0D5" onkeyup="syncColorPicker('c2', this.value)" class="w-full mt-1 text-[10px] text-center font-mono font-bold rounded-lg border border-black p-1" />
+            </div>
+            <div>
+              <input type="color" id="c3-picker" value="#C1121F" onchange="syncColorInput('c3', this.value)" class="w-full h-8 cursor-pointer rounded-lg border-2 border-black" />
+              <input type="text" id="c3-hex" value="#C1121F" onkeyup="syncColorPicker('c3', this.value)" class="w-full mt-1 text-[10px] text-center font-mono font-bold rounded-lg border border-black p-1" />
+            </div>
+            <div>
+              <input type="color" id="c4-picker" value="#780000" onchange="syncColorInput('c4', this.value)" class="w-full h-8 cursor-pointer rounded-lg border-2 border-black" />
+              <input type="text" id="c4-hex" value="#780000" onkeyup="syncColorPicker('c4', this.value)" class="w-full mt-1 text-[10px] text-center font-mono font-bold rounded-lg border border-black p-1" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Inspiration / Styling Photo URL</label>
+          <input type="url" id="palette-insp-img" placeholder="https://... (Photo of someone wearing these colors)" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+        </div>
+
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closePaletteModal()" class="px-4 py-2 bg-white text-slate-800 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-fuchsia-400 hover:bg-fuchsia-500 text-white text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Save Palette</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <div id="item-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
     <div class="bg-fuchsia-200 border-4 border-black rounded-3xl p-6 max-w-md w-full pixel-shadow-lg relative">
@@ -206,20 +250,12 @@
             <label class="block text-xs font-bold text-slate-800 mb-1">Category</label>
             <select id="item-category" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
               <option value="top">👚 Top / Jacket</option>
-              <option value="bottom">👖 Bottom / Skirt</option>
+              <option value="bottom">JB Bottom / Skirt</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-800 mb-1">Color</label>
-            <select id="item-color" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
-              <option value="Yellow">Yellow</option>
-              <option value="Blue">Blue</option>
-              <option value="Pink">Pink</option>
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Green">Green</option>
-              <option value="Purple">Purple</option>
-            </select>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Primary Color</label>
+            <input type="text" id="item-color" required placeholder="e.g. #669BBC or Blue" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white" />
           </div>
         </div>
         <div>
@@ -229,52 +265,6 @@
         <div class="flex items-center justify-end gap-2 pt-2">
           <button type="button" onclick="closeItemModal()" class="px-4 py-2 bg-white text-slate-800 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Cancel</button>
           <button type="submit" class="px-4 py-2 bg-emerald-400 hover:bg-emerald-500 text-slate-900 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Save Item</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div id="rule-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
-    <div class="bg-amber-100 border-4 border-black rounded-3xl p-6 max-w-md w-full pixel-shadow-lg relative">
-      <div class="flex items-center justify-between mb-4 border-b-2 border-black pb-2">
-        <h3 id="modal-rule-title" class="text-xl font-bold text-amber-950">🎨 Add Color Match Rule</h3>
-        <button onclick="closeRuleModal()" class="text-slate-800 hover:text-black font-extrabold text-lg px-2">✕</button>
-      </div>
-      <form id="rule-form" onsubmit="handleSaveRule(event)" class="space-y-3">
-        <input type="hidden" id="edit-rule-id" />
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-slate-800 mb-1">Color A</label>
-            <select id="rule-color-a" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
-              <option value="Blue">Blue</option>
-              <option value="Pink">Pink</option>
-              <option value="Yellow">Yellow</option>
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Green">Green</option>
-              <option value="Purple">Purple</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-800 mb-1">Color B</label>
-            <select id="rule-color-b" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
-              <option value="Pink">Pink</option>
-              <option value="Blue">Blue</option>
-              <option value="Yellow">Yellow</option>
-              <option value="Black">Black</option>
-              <option value="White">White</option>
-              <option value="Green">Green</option>
-              <option value="Purple">Purple</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-800 mb-1">Styling Note / Vibe</label>
-          <input type="text" id="rule-note" required placeholder="e.g. Iconic Y2K Pastel Dream!" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
-        </div>
-        <div class="flex items-center justify-end gap-2 pt-2">
-          <button type="button" onclick="closeRuleModal()" class="px-4 py-2 bg-white text-slate-800 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Cancel</button>
-          <button type="submit" class="px-4 py-2 bg-fuchsia-400 hover:bg-fuchsia-500 text-white text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Save Rule</button>
         </div>
       </form>
     </div>
@@ -303,35 +293,136 @@
       updateHUD();
     }
 
-    // --- DEFAULT WARDROBE & COLOR RULES DATABASE ---
+    // --- DEFAULTS ---
+    const defaultPalettes = [
+      {
+        id: 'pal1',
+        title: 'Denim 669BBC & Cream Combo',
+        colors: ['#669BBC', '#FDF0D5', '#C1121F', '#780000'],
+        inspImg: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=400&auto=format&fit=crop&q=80'
+      },
+      {
+        id: 'pal2',
+        title: 'Pastel Y2K Dream',
+        colors: ['#FFC6FF', '#BDB2FF', '#A0C4FF', '#CAFFBF'],
+        inspImg: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=400&auto=format&fit=crop&q=80'
+      }
+    ];
+
     const defaultWardrobe = [
-      { id: 'w1', name: 'Yellow Plaid Blazer', category: 'top', color: 'Yellow', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w2', name: 'Baby Blue Crop Cardigan', category: 'top', color: 'Blue', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w3', name: 'Yellow Pleated Mini Skirt', category: 'bottom', color: 'Yellow', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w4', name: 'Pink Denim Skirt', category: 'bottom', color: 'Pink', img: 'https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=300&auto=format&fit=crop&q=80' }
+      { id: 'w1', name: '669BBC Denim Jacket', category: 'top', color: '#669BBC', img: 'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w2', name: 'Cream Knit Sweater', category: 'top', color: '#FDF0D5', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w3', name: 'Crimson Mini Skirt', category: 'bottom', color: '#C1121F', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=300&auto=format&fit=crop&q=80' }
     ];
 
-    const defaultColorRules = [
-      { id: 'r1', colorA: 'Blue', colorB: 'Pink', note: 'Iconic Pastel Match! Pure 90s Magic.' },
-      { id: 'r2', colorA: 'Yellow', colorB: 'Black', note: 'High Voltage Contrast Statement!' },
-      { id: 'r3', colorA: 'White', colorB: 'Yellow', note: 'Clean Cher Horowitz Monochromatic Glow.' }
-    ];
-
+    let palettes = JSON.parse(localStorage.getItem('stylePalettes')) || defaultPalettes;
     let wardrobe = JSON.parse(localStorage.getItem('styleWardrobe')) || defaultWardrobe;
-    let colorRules = JSON.parse(localStorage.getItem('styleColorRules')) || defaultColorRules;
     let userPhotoDataUrl = localStorage.getItem('userBodyPhoto') || null;
 
     let selectedTopId = null;
     let selectedBottomId = null;
 
+    function savePalettes() { localStorage.setItem('stylePalettes', JSON.stringify(palettes)); }
     function saveWardrobe() { localStorage.setItem('styleWardrobe', JSON.stringify(wardrobe)); }
-    function saveRules() { localStorage.setItem('styleColorRules', JSON.stringify(colorRules)); }
+
+    // RENDER VISUAL COLOR PALETTES
+    function renderPalettes() {
+      const grid = document.getElementById('palette-grid');
+      grid.innerHTML = palettes.map(pal => `
+        <div class="bg-white rounded-2xl border-2 border-black p-3 pixel-shadow flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-extrabold text-xs text-slate-900">${pal.title}</h4>
+              <div class="flex gap-1">
+                <button onclick="editPalette('${pal.id}')" class="text-[10px] bg-cyan-300 hover:bg-cyan-400 font-bold px-2 py-0.5 rounded border border-black">✏️</button>
+                <button onclick="deletePalette('${pal.id}')" class="text-[10px] bg-rose-400 hover:bg-rose-500 text-white font-bold px-2 py-0.5 rounded border border-black">✕</button>
+              </div>
+            </div>
+
+            <div class="flex h-10 w-full rounded-xl border-2 border-black overflow-hidden pixel-shadow-sm mb-2">
+              ${pal.colors.map(c => `
+                <div class="flex-1 h-full relative group cursor-pointer" style="background-color: ${c}">
+                  <span class="opacity-0 group-hover:opacity-100 absolute inset-0 flex items-center justify-center text-[8px] font-mono font-extrabold bg-black/60 text-white transition-opacity">${c}</span>
+                </div>
+              `).join('')}
+            </div>
+            
+            <div class="flex gap-1">
+              ${pal.colors.map(c => `<span class="text-[9px] font-mono font-bold bg-slate-100 px-1 rounded border border-slate-300">${c}</span>`).join('')}
+            </div>
+          </div>
+
+          ${pal.inspImg ? `
+            <div class="relative w-full h-36 bg-slate-100 rounded-xl border border-black overflow-hidden">
+              <img src="${pal.inspImg}" class="w-full h-full object-cover" />
+              <span class="absolute bottom-1 right-1 bg-black/70 text-white text-[8px] font-bold px-1.5 py-0.5 rounded">Outfit Look</span>
+            </div>
+          ` : ''}
+        </div>
+      `).join('');
+    }
+
+    // PALETTE FORM MODAL HELPERS
+    function syncColorInput(prefix, val) { document.getElementById(`${prefix}-hex`).value = val.toUpperCase(); }
+    function syncColorPicker(prefix, val) { if (/^#[0-9A-F]{6}$/i.test(val)) document.getElementById(`${prefix}-picker`).value = val; }
+
+    function openPaletteModal() { document.getElementById('palette-modal').classList.remove('hidden'); }
+    function closePaletteModal() { 
+      document.getElementById('palette-modal').classList.add('hidden');
+      document.getElementById('palette-form').reset();
+      document.getElementById('edit-palette-id').value = '';
+    }
+
+    function handleSavePalette(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-palette-id').value;
+      const title = document.getElementById('palette-title').value;
+      const colors = [
+        document.getElementById('c1-hex').value,
+        document.getElementById('c2-hex').value,
+        document.getElementById('c3-hex').value,
+        document.getElementById('c4-hex').value
+      ];
+      const inspImg = document.getElementById('palette-insp-img').value;
+
+      if (id) {
+        const pal = palettes.find(p => p.id === id);
+        if (pal) { pal.title = title; pal.colors = colors; pal.inspImg = inspImg; }
+      } else {
+        palettes.push({ id: 'pal_' + Date.now(), title, colors, inspImg });
+      }
+
+      savePalettes();
+      renderPalettes();
+      closePaletteModal();
+    }
+
+    function editPalette(id) {
+      const pal = palettes.find(p => p.id === id);
+      if (!pal) return;
+      document.getElementById('edit-palette-id').value = pal.id;
+      document.getElementById('palette-title').value = pal.title;
+      
+      if (pal.colors[0]) { document.getElementById('c1-hex').value = pal.colors[0]; syncColorPicker('c1', pal.colors[0]); }
+      if (pal.colors[1]) { document.getElementById('c2-hex').value = pal.colors[1]; syncColorPicker('c2', pal.colors[1]); }
+      if (pal.colors[2]) { document.getElementById('c3-hex').value = pal.colors[2]; syncColorPicker('c3', pal.colors[2]); }
+      if (pal.colors[3]) { document.getElementById('c4-hex').value = pal.colors[3]; syncColorPicker('c4', pal.colors[3]); }
+      
+      document.getElementById('palette-insp-img').value = pal.inspImg || '';
+      document.getElementById('modal-palette-title').innerText = '✏️ Edit Color Palette';
+      openPaletteModal();
+    }
+
+    function deletePalette(id) {
+      palettes = palettes.filter(p => p.id !== id);
+      savePalettes();
+      renderPalettes();
+    }
 
     // USER PHOTO UPLOAD
     function handleUserPhotoUpload(event) {
       const file = event.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(e) {
         userPhotoDataUrl = e.target.result;
@@ -351,7 +442,7 @@
       }
     }
 
-    // RACK & GARMENT SELECTION
+    // RACK & GARMENTS
     function renderRack() {
       const filter = document.getElementById('rack-filter').value;
       const rack = document.getElementById('rack-list');
@@ -370,19 +461,14 @@
 
       document.getElementById('total-inventory-count').innerText = wardrobe.length;
       renderInventoryGrid();
-      renderRulesList();
-      evaluateColorMatch();
     }
 
     function toggleGarmentSelection(itemId) {
       const item = wardrobe.find(i => i.id === itemId);
       if (!item) return;
 
-      if (item.category === 'top') {
-        selectedTopId = selectedTopId === itemId ? null : itemId;
-      } else if (item.category === 'bottom') {
-        selectedBottomId = selectedBottomId === itemId ? null : itemId;
-      }
+      if (item.category === 'top') { selectedTopId = selectedTopId === itemId ? null : itemId; }
+      else if (item.category === 'bottom') { selectedBottomId = selectedBottomId === itemId ? null : itemId; }
 
       const topItem = wardrobe.find(i => i.id === selectedTopId);
       const bottomItem = wardrobe.find(i => i.id === selectedBottomId);
@@ -396,45 +482,7 @@
       renderRack();
     }
 
-    // COLOR MATCH VERDICT ENGINE
-    function evaluateColorMatch() {
-      const verdictEl = document.getElementById('match-verdict');
-      const topItem = wardrobe.find(i => i.id === selectedTopId);
-      const bottomItem = wardrobe.find(i => i.id === selectedBottomId);
-
-      if (!topItem && !bottomItem) {
-        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
-        verdictEl.innerHTML = ` Select clothes to test color scheme...`;
-        return;
-      }
-
-      if (!topItem || !bottomItem) {
-        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-cyan-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
-        verdictEl.innerHTML = ` Pick a top AND a bottom to evaluate full color synergy!`;
-        return;
-      }
-
-      const colorA = topItem.color;
-      const colorB = bottomItem.color;
-
-      const rule = colorRules.find(r => 
-        (r.colorA === colorA && r.colorB === colorB) || 
-        (r.colorA === colorB && r.colorB === colorA)
-      );
-
-      if (colorA === colorB) {
-        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-emerald-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
-        verdictEl.innerHTML = `🔥 <strong>MONOCHROME WIN!</strong> ${colorA} on ${colorB} is pure fashion perfection.`;
-      } else if (rule) {
-        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-pink-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
-        verdictEl.innerHTML = `✨ <strong>SCHEME APPROVED!</strong> ${colorA} + ${colorB}: ${rule.note}`;
-      } else {
-        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-amber-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
-        verdictEl.innerHTML = `🤔 <strong>EXPERIMENTAL COMBO:</strong> ${colorA} + ${colorB}. Add a rule below if you love this vibe!`;
-      }
-    }
-
-    // AI TRY-ON FETCH
+    // AI TRY-ON
     async function triggerAITryOn() {
       if (!userPhotoDataUrl) { alert('Please upload a body photo first!'); return; }
       if (!selectedTopId && !selectedBottomId) { alert('Please select at least one garment from your rack!'); return; }
@@ -445,16 +493,11 @@
 
       spinner.classList.remove('hidden');
 
-      // PLACEHOLDER API ROUTE
-      const API_KEY = "YOUR_API_KEY_HERE"; 
-
       try {
         await new Promise(resolve => setTimeout(resolve, 2500));
-        
         resultImg.src = userPhotoDataUrl; 
         resultImg.classList.remove('hidden');
         placeholder.classList.add('hidden');
-
         gainXP(20);
       } catch (error) {
         console.error("AI Generation Error:", error);
@@ -463,67 +506,7 @@
       }
     }
 
-    // COLOR RULES CRUD MANAGEMENT
-    function renderRulesList() {
-      const list = document.getElementById('color-rules-list');
-      list.innerHTML = colorRules.map(rule => `
-        <div class="bg-amber-50 p-3 rounded-2xl border-2 border-black pixel-shadow-sm flex items-center justify-between gap-2">
-          <div class="min-w-0 flex-1">
-            <div class="text-xs font-extrabold text-slate-900">${rule.colorA} + ${rule.colorB}</div>
-            <div class="text-[10px] text-slate-600 font-semibold truncate">${rule.note}</div>
-          </div>
-          <div class="flex gap-1 shrink-0">
-            <button onclick="editRule('${rule.id}')" class="text-[10px] bg-cyan-300 hover:bg-cyan-400 font-bold px-2 py-1 rounded border border-black">✏️</button>
-            <button onclick="deleteRule('${rule.id}')" class="text-[10px] bg-rose-400 hover:bg-rose-500 text-white font-bold px-2 py-1 rounded border border-black">✕</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openRuleModal() { document.getElementById('rule-modal').classList.remove('hidden'); }
-    function closeRuleModal() { 
-      document.getElementById('rule-modal').classList.add('hidden');
-      document.getElementById('rule-form').reset();
-      document.getElementById('edit-rule-id').value = '';
-    }
-
-    function handleSaveRule(e) {
-      e.preventDefault();
-      const id = document.getElementById('edit-rule-id').value;
-      const colorA = document.getElementById('rule-color-a').value;
-      const colorB = document.getElementById('rule-color-b').value;
-      const note = document.getElementById('rule-note').value;
-
-      if (id) {
-        const rule = colorRules.find(r => r.id === id);
-        if (rule) { rule.colorA = colorA; rule.colorB = colorB; rule.note = note; }
-      } else {
-        colorRules.push({ id: 'r_' + Date.now(), colorA, colorB, note });
-      }
-
-      saveRules();
-      renderRack();
-      closeRuleModal();
-    }
-
-    function editRule(id) {
-      const rule = colorRules.find(r => r.id === id);
-      if (!rule) return;
-      document.getElementById('edit-rule-id').value = rule.id;
-      document.getElementById('rule-color-a').value = rule.colorA;
-      document.getElementById('rule-color-b').value = rule.colorB;
-      document.getElementById('rule-note').value = rule.note;
-      document.getElementById('modal-rule-title').innerText = '✏️ Edit Color Match Rule';
-      openRuleModal();
-    }
-
-    function deleteRule(id) {
-      colorRules = colorRules.filter(r => r.id !== id);
-      saveRules();
-      renderRack();
-    }
-
-    // INVENTORY CRUD MANAGEMENT
+    // INVENTORY CRUD
     function renderInventoryGrid() {
       const grid = document.getElementById('inventory-grid');
       grid.innerHTML = wardrobe.map(item => `
@@ -599,6 +582,7 @@
 
     // Init
     updateHUD();
+    renderPalettes();
     renderUserPhoto();
     renderRack();
   </script>
