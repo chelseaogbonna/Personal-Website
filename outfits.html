@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Virtual Try-On Studio 👗</title>
+  <title>AI Studio & Color Matcher 👗</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -23,7 +23,7 @@
           <a href="index.html" class="hover:text-yellow-300 transition-colors">
             <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
           </a>
-          <p class="text-xs text-purple-200">Player 1: AI Photoreal Try-On Studio</p>
+          <p class="text-xs text-purple-200">Player 1: Photoreal Try-On & Color Matrix</p>
         </div>
       </div>
 
@@ -44,7 +44,7 @@
       <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">🍱 Food Quest</a>
       <a href="build.html" class="nav-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">🛠️ Wishlist Labs</a>
       <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">🪡 Stitch Guild</a>
-      <a href="outfits.html" class="nav-btn bg-fuchsia-400 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">👗 AI Studio</a>
+      <a href="outfits.html" class="nav-btn bg-fuchsia-400 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">👗 Style Studio</a>
       <div class="relative group col-span-2 md:col-span-1">
         <button class="w-full bg-violet-400 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-2">
           <span>✨ More</span><span class="text-xs">▼</span>
@@ -65,14 +65,19 @@
           <h2 class="text-2xl font-bold text-fuchsia-950 flex items-center gap-2">
             📸 Photorealistic AI Try-On Studio
           </h2>
-          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Upload your photo, select clothing items from your vault, and render realistic outfits onto your body!</p>
+          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Upload your body photo, pick a garment, test color synergy, and render realistic outfits!</p>
         </div>
-        <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
-          ➕ Add New Garment
-        </button>
+        <div class="flex gap-2">
+          <button onclick="openRuleModal()" class="bg-purple-300 hover:bg-purple-400 text-slate-900 font-bold px-3 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
+            🎨 Add Color Rule
+          </button>
+          <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all">
+            ➕ Add Garment
+          </button>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
 
         <div class="lg:col-span-4 bg-white p-4 rounded-3xl border-4 border-black pixel-shadow flex flex-col justify-between">
           <div>
@@ -80,12 +85,12 @@
               1. Your Full-Body Photo
             </h3>
             
-            <div id="user-photo-preview-container" class="relative w-full h-[320px] bg-slate-100 border-2 border-dashed border-slate-400 rounded-2xl flex flex-col items-center justify-center overflow-hidden mb-3">
+            <div id="user-photo-preview-container" class="relative w-full h-[280px] bg-slate-100 border-2 border-dashed border-slate-400 rounded-2xl flex flex-col items-center justify-center overflow-hidden mb-3">
               <img id="user-photo-preview" src="" class="w-full h-full object-cover hidden" />
               <div id="user-photo-placeholder" class="text-center p-4">
                 <span class="text-4xl mb-2 block">🧍‍♀️</span>
                 <p class="text-xs font-bold text-slate-600">No photo uploaded</p>
-                <p class="text-[10px] text-slate-400 mt-1">Upload a clear, front-facing full-body photo for best AI rendering results.</p>
+                <p class="text-[10px] text-slate-400 mt-1">Upload a clear, front-facing full-body photo for AI rendering.</p>
               </div>
             </div>
             
@@ -100,7 +105,7 @@
           <div>
             <div class="flex items-center justify-between mb-3 border-b-2 border-black pb-2">
               <h3 class="text-xs font-extrabold text-slate-800 uppercase flex items-center gap-1">
-                2. Select Garment
+                2. Select Garments & Color Match
               </h3>
               <select id="rack-filter" onchange="renderRack()" class="text-xs font-bold bg-yellow-200 border-2 border-black rounded-lg px-2 py-1">
                 <option value="all">All</option>
@@ -109,38 +114,44 @@
               </select>
             </div>
 
-            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[300px] overflow-y-auto p-1">
+            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[180px] overflow-y-auto p-1 mb-3">
               </div>
+
+            <div id="match-verdict" class="p-3 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-2">
+              Select items to test color scheme...
+            </div>
           </div>
 
-          <div id="selected-garment-card" class="mt-3 p-2 bg-pink-100 rounded-2xl border-2 border-black flex items-center gap-2 hidden">
-            <img id="selected-garment-img" src="" class="w-10 h-10 object-cover rounded-lg border border-black" />
-            <div class="flex-1 min-w-0">
-              <p id="selected-garment-name" class="text-xs font-bold truncate">Item Name</p>
-              <p id="selected-garment-cat" class="text-[9px] font-bold text-slate-600 uppercase">Top</p>
+          <div id="selected-garments-summary" class="p-2 bg-pink-100 rounded-2xl border-2 border-black text-xs font-bold space-y-1">
+            <div class="flex justify-between items-center">
+              <span>Selected Top: <span id="sel-top-name" class="text-fuchsia-700">None</span></span>
+              <span id="sel-top-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
             </div>
-            <button onclick="clearSelectedGarment()" class="text-xs font-bold px-2 text-rose-500">✕</button>
+            <div class="flex justify-between items-center">
+              <span>Selected Bottom: <span id="sel-bottom-name" class="text-fuchsia-700">None</span></span>
+              <span id="sel-bottom-color" class="text-[9px] bg-white px-1.5 py-0.5 rounded border border-black">--</span>
+            </div>
           </div>
         </div>
 
-        <div class="lg:col-span-4 bg-purple-900 p-4 rounded-3xl border-4 border-black pixel-shadow flex flex-col justify-between relative overflow-hidden min-h-[400px]">
+        <div class="lg:col-span-4 bg-purple-900 p-4 rounded-3xl border-4 border-black pixel-shadow flex flex-col justify-between relative overflow-hidden min-h-[380px]">
           <div>
             <h3 class="text-xs font-extrabold text-yellow-300 uppercase mb-3 border-b-2 border-purple-400 pb-2 flex items-center gap-1">
               3. AI Virtual Try-On Render
             </h3>
 
-            <div id="ai-render-stage" class="relative w-full h-[300px] bg-purple-950 rounded-2xl border-2 border-purple-400/40 flex flex-col items-center justify-center overflow-hidden">
+            <div id="ai-render-stage" class="relative w-full h-[260px] bg-purple-950 rounded-2xl border-2 border-purple-400/40 flex flex-col items-center justify-center overflow-hidden">
               <img id="ai-rendered-result" src="" class="w-full h-full object-cover hidden" />
               
               <div id="ai-render-placeholder" class="text-center p-4">
                 <span class="text-4xl mb-2 block">✨</span>
                 <p class="text-xs font-bold text-purple-200">Ready to Generate</p>
-                <p class="text-[10px] text-purple-300 mt-1">Upload a photo, select a garment, and hit generate!</p>
+                <p class="text-[10px] text-purple-300 mt-1">Upload a photo, pick clothes, and render!</p>
               </div>
 
               <div id="ai-loading-spinner" class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center space-y-3 hidden">
                 <div class="w-10 h-10 border-4 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-                <p class="text-xs font-bold text-yellow-300 animate-pulse">Rendering Fabric to Body...</p>
+                <p class="text-xs font-bold text-yellow-300 animate-pulse">Fitting Fabric to Body...</p>
               </div>
             </div>
           </div>
@@ -151,12 +162,25 @@
         </div>
 
       </div>
+
+      <div class="bg-white p-6 rounded-3xl border-4 border-black pixel-shadow">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-sm font-extrabold text-slate-800 uppercase flex items-center gap-2">
+            🎨 Color Match Rules ("Blue & Pink go together")
+          </h3>
+          <button onclick="openRuleModal()" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm">
+            ➕ Add New Color Combo
+          </button>
+        </div>
+        <div id="color-rules-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          </div>
+      </div>
     </section>
 
     <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
-          📂 Closet Item Vault (<span id="total-inventory-count">0</span>)
+          📂 Wardrobe Vault (<span id="total-inventory-count">0</span>)
         </h3>
       </div>
       <div id="inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -193,6 +217,8 @@
               <option value="Pink">Pink</option>
               <option value="Black">Black</option>
               <option value="White">White</option>
+              <option value="Green">Green</option>
+              <option value="Purple">Purple</option>
             </select>
           </div>
         </div>
@@ -203,6 +229,52 @@
         <div class="flex items-center justify-end gap-2 pt-2">
           <button type="button" onclick="closeItemModal()" class="px-4 py-2 bg-white text-slate-800 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Cancel</button>
           <button type="submit" class="px-4 py-2 bg-emerald-400 hover:bg-emerald-500 text-slate-900 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Save Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="rule-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-amber-100 border-4 border-black rounded-3xl p-6 max-w-md w-full pixel-shadow-lg relative">
+      <div class="flex items-center justify-between mb-4 border-b-2 border-black pb-2">
+        <h3 id="modal-rule-title" class="text-xl font-bold text-amber-950">🎨 Add Color Match Rule</h3>
+        <button onclick="closeRuleModal()" class="text-slate-800 hover:text-black font-extrabold text-lg px-2">✕</button>
+      </div>
+      <form id="rule-form" onsubmit="handleSaveRule(event)" class="space-y-3">
+        <input type="hidden" id="edit-rule-id" />
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Color A</label>
+            <select id="rule-color-a" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
+              <option value="Blue">Blue</option>
+              <option value="Pink">Pink</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Green">Green</option>
+              <option value="Purple">Purple</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-800 mb-1">Color B</label>
+            <select id="rule-color-b" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white">
+              <option value="Pink">Pink</option>
+              <option value="Blue">Blue</option>
+              <option value="Yellow">Yellow</option>
+              <option value="Black">Black</option>
+              <option value="White">White</option>
+              <option value="Green">Green</option>
+              <option value="Purple">Purple</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Styling Note / Vibe</label>
+          <input type="text" id="rule-note" required placeholder="e.g. Iconic Y2K Pastel Dream!" class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
+        </div>
+        <div class="flex items-center justify-end gap-2 pt-2">
+          <button type="button" onclick="closeRuleModal()" class="px-4 py-2 bg-white text-slate-800 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Cancel</button>
+          <button type="submit" class="px-4 py-2 bg-fuchsia-400 hover:bg-fuchsia-500 text-white text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm">Save Rule</button>
         </div>
       </form>
     </div>
@@ -231,7 +303,7 @@
       updateHUD();
     }
 
-    // --- DEFAULT WARDROBE DATABASE ---
+    // --- DEFAULT WARDROBE & COLOR RULES DATABASE ---
     const defaultWardrobe = [
       { id: 'w1', name: 'Yellow Plaid Blazer', category: 'top', color: 'Yellow', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&auto=format&fit=crop&q=80' },
       { id: 'w2', name: 'Baby Blue Crop Cardigan', category: 'top', color: 'Blue', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&auto=format&fit=crop&q=80' },
@@ -239,11 +311,21 @@
       { id: 'w4', name: 'Pink Denim Skirt', category: 'bottom', color: 'Pink', img: 'https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=300&auto=format&fit=crop&q=80' }
     ];
 
+    const defaultColorRules = [
+      { id: 'r1', colorA: 'Blue', colorB: 'Pink', note: 'Iconic Pastel Match! Pure 90s Magic.' },
+      { id: 'r2', colorA: 'Yellow', colorB: 'Black', note: 'High Voltage Contrast Statement!' },
+      { id: 'r3', colorA: 'White', colorB: 'Yellow', note: 'Clean Cher Horowitz Monochromatic Glow.' }
+    ];
+
     let wardrobe = JSON.parse(localStorage.getItem('styleWardrobe')) || defaultWardrobe;
+    let colorRules = JSON.parse(localStorage.getItem('styleColorRules')) || defaultColorRules;
     let userPhotoDataUrl = localStorage.getItem('userBodyPhoto') || null;
-    let selectedGarmentId = null;
+
+    let selectedTopId = null;
+    let selectedBottomId = null;
 
     function saveWardrobe() { localStorage.setItem('styleWardrobe', JSON.stringify(wardrobe)); }
+    function saveRules() { localStorage.setItem('styleColorRules', JSON.stringify(colorRules)); }
 
     // USER PHOTO UPLOAD
     function handleUserPhotoUpload(event) {
@@ -275,102 +357,173 @@
       const rack = document.getElementById('rack-list');
       const filtered = wardrobe.filter(i => filter === 'all' || i.category === filter);
 
-      rack.innerHTML = filtered.map(item => `
-        <div onclick="selectGarmentForTryOn('${item.id}')" class="bg-slate-50 border-2 border-black rounded-xl p-2 cursor-pointer hover:bg-yellow-200 transition-all flex flex-col items-center text-center pixel-shadow-sm ${selectedGarmentId === item.id ? 'ring-2 ring-fuchsia-500 bg-yellow-200' : ''}">
-          <img src="${item.img}" class="w-12 h-12 object-cover rounded-lg border border-black mb-1" />
-          <span class="text-[10px] font-extrabold text-slate-900 truncate w-full">${item.name}</span>
-        </div>
-      `).join('');
+      rack.innerHTML = filtered.map(item => {
+        const isSelected = item.id === selectedTopId || item.id === selectedBottomId;
+        return `
+          <div onclick="toggleGarmentSelection('${item.id}')" class="bg-slate-50 border-2 border-black rounded-xl p-2 cursor-pointer hover:bg-yellow-200 transition-all flex flex-col items-center text-center pixel-shadow-sm ${isSelected ? 'ring-2 ring-fuchsia-500 bg-yellow-200' : ''}">
+            <img src="${item.img}" class="w-10 h-10 object-cover rounded-lg border border-black mb-1" />
+            <span class="text-[10px] font-extrabold text-slate-900 truncate w-full">${item.name}</span>
+            <span class="text-[8px] font-extrabold px-1 rounded border border-black bg-white mt-0.5">${item.color}</span>
+          </div>
+        `;
+      }).join('');
 
       document.getElementById('total-inventory-count').innerText = wardrobe.length;
       renderInventoryGrid();
+      renderRulesList();
+      evaluateColorMatch();
     }
 
-    function selectGarmentForTryOn(itemId) {
-      selectedGarmentId = itemId;
+    function toggleGarmentSelection(itemId) {
       const item = wardrobe.find(i => i.id === itemId);
       if (!item) return;
 
-      document.getElementById('selected-garment-card').classList.remove('hidden');
-      document.getElementById('selected-garment-img').src = item.img;
-      document.getElementById('selected-garment-name').innerText = item.name;
-      document.getElementById('selected-garment-cat').innerText = item.category;
+      if (item.category === 'top') {
+        selectedTopId = selectedTopId === itemId ? null : itemId;
+      } else if (item.category === 'bottom') {
+        selectedBottomId = selectedBottomId === itemId ? null : itemId;
+      }
+
+      const topItem = wardrobe.find(i => i.id === selectedTopId);
+      const bottomItem = wardrobe.find(i => i.id === selectedBottomId);
+
+      document.getElementById('sel-top-name').innerText = topItem ? topItem.name : 'None';
+      document.getElementById('sel-top-color').innerText = topItem ? topItem.color : '--';
+
+      document.getElementById('sel-bottom-name').innerText = bottomItem ? bottomItem.name : 'None';
+      document.getElementById('sel-bottom-color').innerText = bottomItem ? bottomItem.color : '--';
 
       renderRack();
     }
 
-    function clearSelectedGarment() {
-      selectedGarmentId = null;
-      document.getElementById('selected-garment-card').classList.add('hidden');
-      renderRack();
+    // COLOR MATCH VERDICT ENGINE
+    function evaluateColorMatch() {
+      const verdictEl = document.getElementById('match-verdict');
+      const topItem = wardrobe.find(i => i.id === selectedTopId);
+      const bottomItem = wardrobe.find(i => i.id === selectedBottomId);
+
+      if (!topItem && !bottomItem) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
+        verdictEl.innerHTML = ` Select clothes to test color scheme...`;
+        return;
+      }
+
+      if (!topItem || !bottomItem) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-cyan-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
+        verdictEl.innerHTML = ` Pick a top AND a bottom to evaluate full color synergy!`;
+        return;
+      }
+
+      const colorA = topItem.color;
+      const colorB = bottomItem.color;
+
+      const rule = colorRules.find(r => 
+        (r.colorA === colorA && r.colorB === colorB) || 
+        (r.colorA === colorB && r.colorB === colorA)
+      );
+
+      if (colorA === colorB) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-emerald-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
+        verdictEl.innerHTML = `🔥 <strong>MONOCHROME WIN!</strong> ${colorA} on ${colorB} is pure fashion perfection.`;
+      } else if (rule) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-pink-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
+        verdictEl.innerHTML = `✨ <strong>SCHEME APPROVED!</strong> ${colorA} + ${colorB}: ${rule.note}`;
+      } else {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-amber-200 text-xs font-bold text-slate-900 leading-relaxed mb-2";
+        verdictEl.innerHTML = `🤔 <strong>EXPERIMENTAL COMBO:</strong> ${colorA} + ${colorB}. Add a rule below if you love this vibe!`;
+      }
     }
 
-    // --- AI TRY-ON GENERATION FUNCTION (WITH API PLACEHOLDERS) ---
+    // AI TRY-ON FETCH
     async function triggerAITryOn() {
-      if (!userPhotoDataUrl) {
-        alert('Please upload a body photo first!');
-        return;
-      }
-      if (!selectedGarmentId) {
-        alert('Please select a garment from your rack!');
-        return;
-      }
+      if (!userPhotoDataUrl) { alert('Please upload a body photo first!'); return; }
+      if (!selectedTopId && !selectedBottomId) { alert('Please select at least one garment from your rack!'); return; }
 
-      const selectedGarment = wardrobe.find(i => i.id === selectedGarmentId);
       const spinner = document.getElementById('ai-loading-spinner');
       const resultImg = document.getElementById('ai-rendered-result');
       const placeholder = document.getElementById('ai-render-placeholder');
 
       spinner.classList.remove('hidden');
 
-      // =========================================================================
-      // INSTRUCTIONS FOR CONNECTING YOUR REAL AI VIRTUAL TRY-ON API (e.g., Fashn.ai / IDM-VTON)
-      // 1. Get an API key from an AI Virtual Try-On provider (like fashn.ai or replicate.com).
-      // 2. Replace 'YOUR_API_KEY_HERE' below with your actual API key.
-      // 3. Uncomment the fetch call below and update payload keys to match provider docs.
-      // =========================================================================
-
+      // PLACEHOLDER API ROUTE
       const API_KEY = "YOUR_API_KEY_HERE"; 
-      
+
       try {
-        /*
-        // EXAMPLE API FETCH STRUCTURE:
-        const response = await fetch("https://api.fashn.ai/v1/run", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model_image: userPhotoDataUrl, // Your uploaded body photo
-            garment_image: selectedGarment.img, // Flat photo of clothing item
-            category: selectedGarment.category === 'top' ? 'tops' : 'bottoms'
-          })
-        });
-        const data = await response.json();
-        const generatedImageUrl = data.output[0];
-        */
-
-        // SIMULATED AI LATENCY & RENDER (REPLACE THIS MOCK TIMEOUT WITH REAL FETCH ABOVE)
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 2500));
         
-        // Mock result fallback: Displays full user photo with simulated filter effect
-        const generatedImageUrl = userPhotoDataUrl; 
-
-        resultImg.src = generatedImageUrl;
+        resultImg.src = userPhotoDataUrl; 
         resultImg.classList.remove('hidden');
         placeholder.classList.add('hidden');
 
         gainXP(20);
       } catch (error) {
         console.error("AI Generation Error:", error);
-        alert("Failed to render AI Try-On. Check API key and logs.");
       } finally {
         spinner.classList.add('hidden');
       }
     }
 
-    // INVENTORY CRUD
+    // COLOR RULES CRUD MANAGEMENT
+    function renderRulesList() {
+      const list = document.getElementById('color-rules-list');
+      list.innerHTML = colorRules.map(rule => `
+        <div class="bg-amber-50 p-3 rounded-2xl border-2 border-black pixel-shadow-sm flex items-center justify-between gap-2">
+          <div class="min-w-0 flex-1">
+            <div class="text-xs font-extrabold text-slate-900">${rule.colorA} + ${rule.colorB}</div>
+            <div class="text-[10px] text-slate-600 font-semibold truncate">${rule.note}</div>
+          </div>
+          <div class="flex gap-1 shrink-0">
+            <button onclick="editRule('${rule.id}')" class="text-[10px] bg-cyan-300 hover:bg-cyan-400 font-bold px-2 py-1 rounded border border-black">✏️</button>
+            <button onclick="deleteRule('${rule.id}')" class="text-[10px] bg-rose-400 hover:bg-rose-500 text-white font-bold px-2 py-1 rounded border border-black">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openRuleModal() { document.getElementById('rule-modal').classList.remove('hidden'); }
+    function closeRuleModal() { 
+      document.getElementById('rule-modal').classList.add('hidden');
+      document.getElementById('rule-form').reset();
+      document.getElementById('edit-rule-id').value = '';
+    }
+
+    function handleSaveRule(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-rule-id').value;
+      const colorA = document.getElementById('rule-color-a').value;
+      const colorB = document.getElementById('rule-color-b').value;
+      const note = document.getElementById('rule-note').value;
+
+      if (id) {
+        const rule = colorRules.find(r => r.id === id);
+        if (rule) { rule.colorA = colorA; rule.colorB = colorB; rule.note = note; }
+      } else {
+        colorRules.push({ id: 'r_' + Date.now(), colorA, colorB, note });
+      }
+
+      saveRules();
+      renderRack();
+      closeRuleModal();
+    }
+
+    function editRule(id) {
+      const rule = colorRules.find(r => r.id === id);
+      if (!rule) return;
+      document.getElementById('edit-rule-id').value = rule.id;
+      document.getElementById('rule-color-a').value = rule.colorA;
+      document.getElementById('rule-color-b').value = rule.colorB;
+      document.getElementById('rule-note').value = rule.note;
+      document.getElementById('modal-rule-title').innerText = '✏️ Edit Color Match Rule';
+      openRuleModal();
+    }
+
+    function deleteRule(id) {
+      colorRules = colorRules.filter(r => r.id !== id);
+      saveRules();
+      renderRack();
+    }
+
+    // INVENTORY CRUD MANAGEMENT
     function renderInventoryGrid() {
       const grid = document.getElementById('inventory-grid');
       grid.innerHTML = wardrobe.map(item => `
