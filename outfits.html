@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Style Closet & Color Matcher 👗</title>
+  <title>Cher's Digital Closet 👗</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
@@ -11,20 +11,34 @@
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+    
+    /* CRT Monitor Frame Lines */
+    .crt-screen {
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+      background-size: 100% 3px, 6px 100%;
+    }
+    .draggable-garment {
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+    }
+    .draggable-garment:active {
+      cursor: grabbing;
+    }
   </style>
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
 
   <!-- HUD / TOP BAR -->
   <header class="bg-purple-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-4">
       <div class="flex items-center gap-3">
         <span class="text-3xl animate-bounce">⚡</span>
         <div>
           <a href="index.html" class="hover:text-yellow-300 transition-colors">
             <h1 class="text-2xl font-bold tracking-wider">MY SECRET LAIR</h1>
           </a>
-          <p class="text-xs text-purple-200">Player 1: Ready</p>
+          <p class="text-xs text-purple-200">Player 1: Cher Horowitz Mode</p>
         </div>
       </div>
 
@@ -42,7 +56,7 @@
   </header>
 
   <!-- NAVIGATION TABS -->
-  <nav class="max-w-5xl mx-auto my-6 px-4">
+  <nav class="max-w-6xl mx-auto my-6 px-4">
     <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
       <a href="food.html" class="nav-btn bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">
         🍱 Food Quest
@@ -57,7 +71,6 @@
         👗 Style Closet
       </a>
 
-      <!-- + MORE DROPDOWN MENU -->
       <div class="relative group col-span-2 md:col-span-1">
         <button class="w-full bg-violet-400 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-2">
           <span>✨ More</span>
@@ -75,90 +88,151 @@
     </div>
   </nav>
 
-  <!-- MAIN CLOSET CONTAINER -->
-  <main class="max-w-5xl mx-auto px-4 space-y-6">
+  <!-- MAIN CLOSET STUDIO -->
+  <main class="max-w-6xl mx-auto px-4 space-y-6">
 
-    <!-- CLUELESS OUTFIT MATCHING ENGINE -->
+    <!-- 90S CRT VIRTUAL CLOSET CANVAS ENGINE -->
     <section class="bg-fuchsia-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
         <div>
           <h2 class="text-2xl font-bold text-fuchsia-950 flex items-center gap-2">
-            📟 Cher's Wardrobe Matcher 3000
+            🖥️ Wardrobe Matrix 2000
           </h2>
-          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Mix, match, and test color harmony before stepping out!</p>
+          <p class="text-xs text-fuchsia-900 font-semibold mt-0.5">Drag & drop garments onto the mannequin, adjust layer order, and test color synergy!</p>
         </div>
-        <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all active:translate-y-0.5">
-          ➕ Add Wardrobe Item
-        </button>
+        <div class="flex gap-2">
+          <button onclick="clearCanvas()" class="bg-rose-400 hover:bg-rose-500 text-white font-bold px-3 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all active:translate-y-0.5">
+            🧹 Clear Stage
+          </button>
+          <button onclick="openItemModal()" class="bg-yellow-400 hover:bg-yellow-500 text-slate-900 font-bold px-4 py-2 rounded-xl border-2 border-black text-xs pixel-shadow-sm transition-all active:translate-y-0.5">
+            ➕ Add Garment
+          </button>
+        </div>
       </div>
 
-      <!-- DIGITAL STYLING DISK STAGE -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-3xl border-4 border-black pixel-shadow mb-6">
+      <!-- MAIN WORKSPACE: MANNEQUIN CANVAS + SELECTION PANELS -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Left: Outfit Selector Carousel Deck -->
-        <div class="space-y-4">
-          <!-- Top Slot -->
-          <div class="bg-pink-100 p-3 rounded-2xl border-2 border-black flex items-center justify-between gap-3">
-            <button onclick="cycleCategory('top', -1)" class="bg-yellow-400 font-bold px-3 py-1 rounded-xl border-2 border-black text-xs">◀</button>
-            <div id="slot-top" class="flex items-center gap-3 text-center flex-1 justify-center min-h-[60px]"></div>
-            <button onclick="cycleCategory('top', 1)" class="bg-yellow-400 font-bold px-3 py-1 rounded-xl border-2 border-black text-xs">▶</button>
-          </div>
-
-          <!-- Bottom Slot -->
-          <div class="bg-cyan-100 p-3 rounded-2xl border-2 border-black flex items-center justify-between gap-3">
-            <button onclick="cycleCategory('bottom', -1)" class="bg-yellow-400 font-bold px-3 py-1 rounded-xl border-2 border-black text-xs">◀</button>
-            <div id="slot-bottom" class="flex items-center gap-3 text-center flex-1 justify-center min-h-[60px]"></div>
-            <button onclick="cycleCategory('bottom', 1)" class="bg-yellow-400 font-bold px-3 py-1 rounded-xl border-2 border-black text-xs">▶</button>
-          </div>
-
-          <!-- Shoes Slot -->
-          <div class="bg-purple-100 p-3 rounded-2xl border-2 border-black flex items-center justify-between gap-3">
-            <button onclick="cycleCategory('shoes', -1)" class="bg-yellow-400 font-bold px-3 py-1 rounded-xl border-2 border-black text-xs">◀</button>
-            <div id="slot-shoes" class="flex items-center gap-3 text-center flex-1 justify-center min-h-[60px]"></div>
-            <button onclick="cycleCategory('shoes', 1)" class="bg-yellow-400 font-bold px-3 py-1 rounded-xl border-2 border-black text-xs">▶</button>
-          </div>
-        </div>
-
-        <!-- Right: Color Matcher AI & Outfit Tester -->
-        <div class="bg-slate-50 p-5 rounded-2xl border-3 border-black flex flex-col justify-between">
+        <!-- LEFT: GARMENT SELECTOR RACK (4 COLS) -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-3xl border-4 border-black pixel-shadow flex flex-col justify-between">
           <div>
-            <h3 class="text-sm font-extrabold text-slate-800 uppercase mb-2 flex items-center gap-2">
-              <span>🎨</span> Color Compatibility Scanner
-            </h3>
-            <div id="match-verdict" class="p-4 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-4">
-              Select items to test harmony...
+            <div class="flex items-center justify-between mb-3 border-b-2 border-black pb-2">
+              <h3 class="text-sm font-extrabold text-slate-800 uppercase flex items-center gap-1">
+                👕 Wardrobe Rack
+              </h3>
+              <select id="rack-filter" onchange="renderRack()" class="text-xs font-bold bg-yellow-200 border-2 border-black rounded-lg px-2 py-1">
+                <option value="all">All Items</option>
+                <option value="top">Tops</option>
+                <option value="bottom">Bottoms</option>
+                <option value="shoes">Shoes</option>
+                <option value="accessory">Accessories</option>
+              </select>
+            </div>
+            
+            <div id="rack-list" class="grid grid-cols-2 gap-2 max-h-[380px] overflow-y-auto p-1">
+              <!-- Rack Items Injected via JS -->
             </div>
           </div>
 
-          <button onclick="testOutfitMatch()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-black font-extrabold py-3 rounded-xl border-2 border-black pixel-shadow text-xs uppercase tracking-wider transition-all active:translate-y-1">
-            ✨ RUN COLOR HARMONY TEST (+10 XP)
-          </button>
+          <div class="mt-4 pt-3 border-t-2 border-black bg-pink-50 p-3 rounded-2xl border-2 border-black">
+            <h4 class="text-xs font-extrabold text-slate-900 mb-1">💡 Styling Controls</h4>
+            <p class="text-[10px] text-slate-600 font-medium leading-relaxed">
+              Click a garment on the mannequin to select it. Use <strong>Layer Up/Down</strong> to tuck shirts or move jackets over skirts!
+            </p>
+          </div>
         </div>
-      </div>
 
-      <!-- CUSTOM COLOR PALETTE CREATOR -->
-      <div class="bg-white p-6 rounded-3xl border-4 border-black pixel-shadow">
-        <div class="flex items-center justify-between mb-4">
-          <h3 class="text-sm font-extrabold text-slate-800 uppercase flex items-center gap-2">
-            <span>🎨</span> Custom Color Match Rules
-          </h3>
-          <button onclick="openRuleModal()" class="bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm">
-            ➕ Add Color Combo Rule
-          </button>
+        <!-- CENTER: MANNEQUIN CANVAS STAGE (5 COLS) -->
+        <div class="lg:col-span-5 bg-purple-900 p-4 rounded-3xl border-4 border-black pixel-shadow crt-screen relative flex flex-col items-center justify-center min-h-[460px] overflow-hidden">
+          
+          <div class="absolute top-3 left-3 bg-black/70 text-yellow-300 border border-yellow-400 text-[10px] font-mono px-2 py-1 rounded">
+            MANNEQUIN_CANVAS_V2.1
+          </div>
+
+          <!-- THE MANNEQUIN SILHOUETTE STAGE -->
+          <div id="mannequin-stage" class="relative w-[280px] h-[400px] bg-purple-950/40 rounded-2xl border-2 border-purple-500/30 flex items-center justify-center overflow-hidden">
+            <!-- Realistic Mannequin Silhouette SVG -->
+            <svg class="w-full h-full opacity-30 pointer-events-none" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Head -->
+              <circle cx="100" cy="45" r="22" stroke="#E9D5FF" stroke-width="3" />
+              <!-- Neck -->
+              <path d="M93 67 L93 80 L107 80 L107 67" stroke="#E9D5FF" stroke-width="3" />
+              <!-- Shoulders & Torso -->
+              <path d="M60 95 C60 95, 80 82, 100 82 C120 82, 140 95, 140 95 L128 170 C128 170, 115 190, 100 190 C85 190, 72 170, 72 170 L60 95 Z" stroke="#E9D5FF" stroke-width="3" />
+              <!-- Hips -->
+              <path d="M72 170 C72 170, 80 220, 100 220 C120 220, 128 170, 128 170 Z" stroke="#E9D5FF" stroke-width="3" />
+              <!-- Legs -->
+              <path d="M85 220 L80 350 M115 220 L120 350" stroke="#E9D5FF" stroke-width="3" stroke-linecap="round" />
+            </svg>
+
+            <!-- Dynamic Dragged Garments Layers Container -->
+            <div id="canvas-layers" class="absolute inset-0"></div>
+          </div>
+
+          <!-- CANVAS CONTROLS BAR -->
+          <div id="selected-garment-controls" class="absolute bottom-3 inset-x-3 bg-white/95 border-2 border-black rounded-xl p-2 flex items-center justify-between text-xs font-bold gap-1 hidden pixel-shadow-sm">
+            <span class="text-[10px] text-purple-900 truncate max-w-[90px]" id="selected-item-label">Item</span>
+            <div class="flex items-center gap-1">
+              <button onclick="adjustZIndex(1)" class="bg-yellow-300 hover:bg-yellow-400 px-2 py-0.5 rounded border border-black text-[10px]">⬆️ Layer Up</button>
+              <button onclick="adjustZIndex(-1)" class="bg-yellow-300 hover:bg-yellow-400 px-2 py-0.5 rounded border border-black text-[10px]">⬇️ Layer Down</button>
+              <button onclick="scaleActiveItem(1.1)" class="bg-cyan-300 hover:bg-cyan-400 px-1.5 py-0.5 rounded border border-black text-[10px]">+</button>
+              <button onclick="scaleActiveItem(0.9)" class="bg-cyan-300 hover:bg-cyan-400 px-1.5 py-0.5 rounded border border-black text-[10px]">-</button>
+              <button onclick="removeSelectedGarment()" class="bg-rose-400 text-white px-2 py-0.5 rounded border border-black text-[10px]">✕</button>
+            </div>
+          </div>
         </div>
-        <div id="color-rules-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-          <!-- Dynamic Color Rules Injected Here -->
+
+        <!-- RIGHT: COLOR MATCH & LOOKBOOK SAVER (3 COLS) -->
+        <div class="lg:col-span-3 space-y-4 flex flex-col justify-between">
+          <div class="bg-slate-50 p-4 rounded-3xl border-4 border-black pixel-shadow">
+            <h3 class="text-xs font-extrabold text-slate-800 uppercase mb-2 flex items-center gap-1">
+              🎨 Color Synergy Check
+            </h3>
+            <div id="match-verdict" class="p-3 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-3">
+              Add garments to the stage to test color harmony...
+            </div>
+            <button onclick="testOutfitMatch()" class="w-full bg-emerald-400 hover:bg-emerald-500 text-black font-extrabold py-2.5 rounded-xl border-2 border-black pixel-shadow text-xs uppercase tracking-wider transition-all active:translate-y-0.5">
+              ✨ ANALYZE COLOR (+10 XP)
+            </button>
+          </div>
+
+          <!-- OUTFIT LOOKBOOK SAVER -->
+          <div class="bg-amber-100 p-4 rounded-3xl border-4 border-black pixel-shadow space-y-2">
+            <h3 class="text-xs font-extrabold text-amber-950 uppercase flex items-center gap-1">
+              📸 Save Look to Book
+            </h3>
+            <input type="text" id="outfit-title" placeholder="e.g. Monday High School Chic" class="w-full px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm bg-white" />
+            <button onclick="saveCurrentOutfit()" class="w-full bg-fuchsia-400 hover:bg-fuchsia-500 text-white font-extrabold py-2 rounded-xl border-2 border-black pixel-shadow text-xs uppercase transition-all active:translate-y-0.5">
+              💾 Save Outfit Look
+            </button>
+          </div>
         </div>
+
       </div>
     </section>
 
-    <!-- FULL INVENTORY MANAGEMENT (CRUD) -->
+    <!-- SAVED LOOKBOOK GALLERY -->
     <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
       <h3 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-        📂 Wardrobe Vault (<span id="total-inventory-count">0</span>)
+        📖 Saved Outfit Lookbook (<span id="saved-outfits-count">0</span>)
       </h3>
+      <div id="lookbook-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <!-- Dynamic Lookbook Cards Injected Here -->
+      </div>
+    </section>
+
+    <!-- FULL WARDROBE VAULT (CRUD LIST) -->
+    <section class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+          📂 Closet Item Vault (<span id="total-inventory-count">0</span>)
+        </h3>
+        <button onclick="openRuleModal()" class="bg-purple-300 hover:bg-purple-400 text-slate-900 font-bold px-3 py-1.5 rounded-xl border-2 border-black text-xs pixel-shadow-sm">
+          🎨 Add Color Rule
+        </button>
+      </div>
       <div id="inventory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <!-- Dynamic Wardrobe Cards Injected Here -->
+        <!-- Dynamic Item Cards Injected Here -->
       </div>
     </section>
 
@@ -184,6 +258,7 @@
               <option value="top">👚 Top</option>
               <option value="bottom">👖 Bottom</option>
               <option value="shoes">👠 Shoes</option>
+              <option value="accessory">🕶️ Accessory</option>
             </select>
           </div>
           <div>
@@ -200,7 +275,7 @@
           </div>
         </div>
         <div>
-          <label class="block text-xs font-bold text-slate-800 mb-1">Image URL (Optional)</label>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Transparent Image URL (PNG Preferred)</label>
           <input type="url" id="item-img" placeholder="https://..." class="w-full px-3 py-2 text-xs font-bold rounded-xl border-2 border-black focus:outline-none pixel-shadow-sm" />
         </div>
         <div class="flex items-center justify-end gap-2 pt-2">
@@ -282,12 +357,12 @@
 
     // --- DEFAULT WARDROBE DATABASE ---
     const defaultWardrobe = [
-      { id: 'w1', name: 'Yellow Plaid Blazer', category: 'top', color: 'Yellow', img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w2', name: 'Baby Blue Crop Cardigan', category: 'top', color: 'Blue', img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w3', name: 'Plaid Pleated Mini Skirt', category: 'bottom', color: 'Yellow', img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w4', name: 'Bubblegum Pink Denim Skirt', category: 'bottom', color: 'Pink', img: 'https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w5', name: 'White Mary Jane Platforms', category: 'shoes', color: 'White', img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=80' },
-      { id: 'w6', name: 'Chunky Black Combat Boots', category: 'shoes', color: 'Black', img: 'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=300&auto=format&fit=crop&q=80' }
+      { id: 'w1', name: 'Yellow Plaid Jacket', category: 'top', color: 'Yellow', defaultX: 60, defaultY: 75, width: 160, zIndex: 10, img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w2', name: 'Baby Blue Knit Crop', category: 'top', color: 'Blue', defaultX: 75, defaultY: 85, width: 130, zIndex: 5, img: 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w3', name: 'Yellow Pleated Mini', category: 'bottom', color: 'Yellow', defaultX: 80, defaultY: 160, width: 120, zIndex: 4, img: 'https://images.unsplash.com/photo-1583496661160-fb5886a0afe1?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w4', name: 'Pink Denim Skirt', category: 'bottom', color: 'Pink', defaultX: 80, defaultY: 160, width: 120, zIndex: 4, img: 'https://images.unsplash.com/photo-1577900232427-18219b9166a0?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w5', name: 'White Mary Janes', category: 'shoes', color: 'White', defaultX: 85, defaultY: 310, width: 110, zIndex: 2, img: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=300&auto=format&fit=crop&q=80' },
+      { id: 'w6', name: 'Chunky Black Boots', category: 'shoes', color: 'Black', defaultX: 85, defaultY: 310, width: 110, zIndex: 2, img: 'https://images.unsplash.com/photo-1520639888713-7851133b1ed0?w=300&auto=format&fit=crop&q=80' }
     ];
 
     const defaultColorRules = [
@@ -296,94 +371,283 @@
       { id: 'r3', colorA: 'White', colorB: 'Yellow', note: 'Clean Cher Horowitz Monochromatic Glow.' }
     ];
 
-    // Load State
     let wardrobe = JSON.parse(localStorage.getItem('styleWardrobe')) || defaultWardrobe;
     let colorRules = JSON.parse(localStorage.getItem('styleColorRules')) || defaultColorRules;
+    let savedOutfits = JSON.parse(localStorage.getItem('styleSavedOutfits')) || [];
 
-    let selectedTopIdx = 0;
-    let selectedBottomIdx = 0;
-    let selectedShoesIdx = 0;
+    // ACTIVE STAGE STATE
+    let activeCanvasGarments = []; 
+    let activeSelectedId = null;
 
     function saveWardrobe() { localStorage.setItem('styleWardrobe', JSON.stringify(wardrobe)); }
     function saveRules() { localStorage.setItem('styleColorRules', JSON.stringify(colorRules)); }
+    function saveOutfits() { localStorage.setItem('styleSavedOutfits', JSON.stringify(savedOutfits)); }
 
-    // RENDER DISK STAGE
-    function renderDeck() {
-      const tops = wardrobe.filter(i => i.category === 'top');
-      const bottoms = wardrobe.filter(i => i.category === 'bottom');
-      const shoes = wardrobe.filter(i => i.category === 'shoes');
+    // RENDER RACK & VAULT
+    function renderRack() {
+      const filter = document.getElementById('rack-filter').value;
+      const rack = document.getElementById('rack-list');
+      const filtered = wardrobe.filter(i => filter === 'all' || i.category === filter);
 
-      renderSlot('slot-top', tops[selectedTopIdx], 'No Tops');
-      renderSlot('slot-bottom', bottoms[selectedBottomIdx], 'No Bottoms');
-      renderSlot('slot-shoes', shoes[selectedShoesIdx], 'No Shoes');
+      rack.innerHTML = filtered.map(item => `
+        <div onclick="addGarmentToStage('${item.id}')" class="bg-slate-50 border-2 border-black rounded-xl p-2 cursor-pointer hover:bg-yellow-200 transition-all flex flex-col items-center text-center pixel-shadow-sm group">
+          <img src="${item.img}" class="w-14 h-14 object-cover rounded-lg border border-black mb-1 group-hover:scale-105 transition-transform" />
+          <span class="text-[10px] font-extrabold text-slate-900 leading-tight truncate w-full">${item.name}</span>
+          <span class="text-[8px] font-bold px-1 rounded bg-white border border-black mt-1">${item.color}</span>
+        </div>
+      `).join('');
 
       document.getElementById('total-inventory-count').innerText = wardrobe.length;
       renderInventoryGrid();
-      renderRulesList();
+      renderLookbook();
     }
 
-    function renderSlot(elementId, item, emptyMsg) {
-      const el = document.getElementById(elementId);
-      if (!item) {
-        el.innerHTML = `<span class="text-xs font-bold text-slate-400">${emptyMsg}</span>`;
+    // CANVAS ENGINE: ADD GARMENT TO MANNEQUIN STAGE
+    function addGarmentToStage(itemId) {
+      const item = wardrobe.find(i => i.id === itemId);
+      if (!item) return;
+
+      // Check if already on stage
+      const existing = activeCanvasGarments.find(g => g.itemId === itemId);
+      if (existing) {
+        selectGarment(existing.canvasId);
         return;
       }
-      el.innerHTML = `
-        <img src="${item.img}" class="w-12 h-12 object-cover rounded-xl border border-black" />
-        <div class="text-left">
-          <div class="text-xs font-extrabold text-slate-900">${item.name}</div>
-          <span class="text-[10px] font-extrabold px-2 py-0.5 rounded border border-black bg-white">${item.color}</span>
-        </div>
-      `;
+
+      const canvasGarment = {
+        canvasId: 'c_' + Date.now() + Math.random().toString(36).substring(2, 4),
+        itemId: item.id,
+        name: item.name,
+        category: item.category,
+        color: item.color,
+        img: item.img,
+        x: item.defaultX || 80,
+        y: item.defaultY || 100,
+        width: item.width || 130,
+        zIndex: item.zIndex || 5
+      };
+
+      activeCanvasGarments.push(canvasGarment);
+      renderCanvasLayers();
+      selectGarment(canvasGarment.canvasId);
     }
 
-    function cycleCategory(cat, dir) {
-      const items = wardrobe.filter(i => i.category === cat);
-      if (items.length === 0) return;
-      if (cat === 'top') selectedTopIdx = (selectedTopIdx + dir + items.length) % items.length;
-      if (cat === 'bottom') selectedBottomIdx = (selectedBottomIdx + dir + items.length) % items.length;
-      if (cat === 'shoes') selectedShoesIdx = (selectedShoesIdx + dir + items.length) % items.length;
-      renderDeck();
+    function renderCanvasLayers() {
+      const layersContainer = document.getElementById('canvas-layers');
+      layersContainer.innerHTML = '';
+
+      activeCanvasGarments.forEach(g => {
+        const el = document.createElement('div');
+        el.id = g.canvasId;
+        el.className = `draggable-garment absolute ${activeSelectedId === g.canvasId ? 'ring-2 ring-yellow-300 ring-offset-2 ring-offset-black rounded-lg' : ''}`;
+        el.style.left = `${g.x}px`;
+        el.style.top = `${g.y}px`;
+        el.style.width = `${g.width}px`;
+        el.style.zIndex = g.zIndex;
+
+        el.innerHTML = `<img src="${g.img}" class="w-full h-auto object-contain pointer-events-none filter drop-shadow-md" />`;
+
+        // Selection & Drag Events
+        el.addEventListener('mousedown', (e) => startDrag(e, g));
+        el.addEventListener('touchstart', (e) => startDrag(e, g), { passive: false });
+
+        layersContainer.appendChild(el);
+      });
+    }
+
+    // DRAG AND DROP HANDLER
+    function startDrag(e, garment) {
+      e.stopPropagation();
+      selectGarment(garment.canvasId);
+
+      const stage = document.getElementById('mannequin-stage');
+      const rect = stage.getBoundingClientRect();
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      const offsetX = clientX - (rect.left + garment.x);
+      const offsetY = clientY - (rect.top + garment.y);
+
+      function onMove(moveEvent) {
+        const moveX = moveEvent.touches ? moveEvent.touches[0].clientX : moveEvent.clientX;
+        const moveY = moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY;
+
+        let newX = moveX - rect.left - offsetX;
+        let newY = moveY - rect.top - offsetY;
+
+        // Boundaries check
+        newX = Math.max(-20, Math.min(newX, rect.width - garment.width + 20));
+        newY = Math.max(-20, Math.min(newY, rect.height - 40));
+
+        garment.x = newX;
+        garment.y = newY;
+
+        const el = document.getElementById(garment.canvasId);
+        if (el) {
+          el.style.left = `${newX}px`;
+          el.style.top = `${newY}px`;
+        }
+      }
+
+      function stopDrag() {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', stopDrag);
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('touchend', stopDrag);
+      }
+
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', stopDrag);
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', stopDrag);
+    }
+
+    function selectGarment(canvasId) {
+      activeSelectedId = canvasId;
+      const garment = activeCanvasGarments.find(g => g.canvasId === canvasId);
+      const controls = document.getElementById('selected-garment-controls');
+
+      if (garment) {
+        controls.classList.remove('hidden');
+        document.getElementById('selected-item-label').innerText = garment.name;
+      } else {
+        controls.classList.add('hidden');
+      }
+
+      renderCanvasLayers();
+    }
+
+    function adjustZIndex(delta) {
+      const g = activeCanvasGarments.find(g => g.canvasId === activeSelectedId);
+      if (!g) return;
+      g.zIndex = Math.max(1, g.zIndex + delta);
+      renderCanvasLayers();
+    }
+
+    function scaleActiveItem(factor) {
+      const g = activeCanvasGarments.find(g => g.canvasId === activeSelectedId);
+      if (!g) return;
+      g.width = Math.max(60, Math.min(220, Math.round(g.width * factor)));
+      renderCanvasLayers();
+    }
+
+    function removeSelectedGarment() {
+      activeCanvasGarments = activeCanvasGarments.filter(g => g.canvasId !== activeSelectedId);
+      activeSelectedId = null;
+      document.getElementById('selected-garment-controls').classList.add('hidden');
+      renderCanvasLayers();
+    }
+
+    function clearCanvas() {
+      activeCanvasGarments = [];
+      activeSelectedId = null;
+      document.getElementById('selected-garment-controls').classList.add('hidden');
+      renderCanvasLayers();
     }
 
     // COLOR HARMONY TEST
     function testOutfitMatch() {
-      const tops = wardrobe.filter(i => i.category === 'top');
-      const bottoms = wardrobe.filter(i => i.category === 'bottom');
-      const top = tops[selectedTopIdx];
-      const bottom = bottoms[selectedBottomIdx];
-
-      if (!top || !bottom) return;
-
       const verdictEl = document.getElementById('match-verdict');
-      const colorA = top.color;
-      const colorB = bottom.color;
 
-      const match = colorRules.find(r => 
-        (r.colorA === colorA && r.colorB === colorB) || 
-        (r.colorA === colorB && r.colorB === colorA)
-      );
+      if (activeCanvasGarments.length < 2) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-yellow-200 text-xs font-bold text-slate-900 leading-relaxed mb-3";
+        verdictEl.innerHTML = `⚠️ <strong>ADD MORE ITEMS:</strong> Place at least two garments on the mannequin stage to test harmony!`;
+        return;
+      }
 
-      if (colorA === colorB) {
-        verdictEl.className = "p-4 rounded-xl border-2 border-black bg-emerald-200 text-xs font-bold text-slate-900 leading-relaxed mb-4";
-        verdictEl.innerHTML = `🔥 <strong>PERFECT MONOCHROME!</strong> ${colorA} on ${colorB} is a total fashion victory.`;
-      } else if (match) {
-        verdictEl.className = "p-4 rounded-xl border-2 border-black bg-pink-200 text-xs font-bold text-slate-900 leading-relaxed mb-4";
-        verdictEl.innerHTML = `✨ <strong>MATCH APPROVED!</strong> ${colorA} + ${colorB}: ${match.note}`;
+      const colors = [...new Set(activeCanvasGarments.map(g => g.color))];
+      
+      let matchedRule = null;
+      for (let i = 0; i < colors.length; i++) {
+        for (let j = i + 1; j < colors.length; j++) {
+          const r = colorRules.find(rule => 
+            (rule.colorA === colors[i] && rule.colorB === colors[j]) || 
+            (rule.colorA === colors[j] && rule.colorB === colors[i])
+          );
+          if (r) { matchedRule = r; break; }
+        }
+      }
+
+      if (colors.length === 1) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-emerald-200 text-xs font-bold text-slate-900 leading-relaxed mb-3";
+        verdictEl.innerHTML = `🔥 <strong>PERFECT MONOCHROME!</strong> All ${colors[0]} layering is pure fashion excellence.`;
+      } else if (matchedRule) {
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-pink-200 text-xs font-bold text-slate-900 leading-relaxed mb-3";
+        verdictEl.innerHTML = `✨ <strong>MATCH APPROVED!</strong> ${matchedRule.colorA} + ${matchedRule.colorB}: ${matchedRule.note}`;
       } else {
-        verdictEl.className = "p-4 rounded-xl border-2 border-black bg-amber-200 text-xs font-bold text-slate-900 leading-relaxed mb-4";
-        verdictEl.innerHTML = `🤔 <strong>EXPERIMENTAL COMBO:</strong> ${colorA} + ${colorB}. Add a color rule if you love this vibe!`;
+        verdictEl.className = "p-3 rounded-xl border-2 border-black bg-amber-200 text-xs font-bold text-slate-900 leading-relaxed mb-3";
+        verdictEl.innerHTML = `🤔 <strong>EXPERIMENTAL LOOK:</strong> Unique color blend! Add a rule if this is your signature style.`;
       }
 
       gainXP(10);
     }
 
-    // RENDER INVENTORY GRID (CRUD LIST)
+    // SAVE OUTFIT LOOKBOOK
+    function saveCurrentOutfit() {
+      const titleInput = document.getElementById('outfit-title');
+      const title = titleInput.value.trim() || 'Untitled Cher Fit';
+
+      if (activeCanvasGarments.length === 0) {
+        alert('Dress the mannequin before saving!');
+        return;
+      }
+
+      savedOutfits.unshift({
+        id: 'outfit_' + Date.now(),
+        title,
+        garments: JSON.parse(JSON.stringify(activeCanvasGarments))
+      });
+
+      saveOutfits();
+      renderLookbook();
+      titleInput.value = '';
+      gainXP(15);
+      alert(`📸 Saved "${title}" to your Lookbook! (+15 XP)`);
+    }
+
+    function renderLookbook() {
+      const grid = document.getElementById('lookbook-grid');
+      document.getElementById('saved-outfits-count').innerText = savedOutfits.length;
+
+      grid.innerHTML = savedOutfits.map(outfit => `
+        <div class="bg-purple-50 rounded-2xl border-2 border-black p-4 pixel-shadow flex flex-col justify-between">
+          <div>
+            <h4 class="font-extrabold text-xs text-purple-950 mb-2 truncate">${outfit.title}</h4>
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-2">
+              ${outfit.garments.map(g => `
+                <img src="${g.img}" class="w-10 h-10 object-cover rounded-lg border border-black bg-white shrink-0" title="${g.name}" />
+              `).join('')}
+            </div>
+          </div>
+          <div class="flex justify-between items-center mt-3 pt-2 border-t border-purple-200">
+            <button onclick="loadOutfitToCanvas('${outfit.id}')" class="text-[10px] bg-yellow-300 hover:bg-yellow-400 font-extrabold px-3 py-1 rounded-lg border border-black">👗 Load Outfit</button>
+            <button onclick="deleteOutfit('${outfit.id}')" class="text-[10px] bg-rose-400 hover:bg-rose-500 text-white font-extrabold px-2 py-1 rounded-lg border border-black">✕</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function loadOutfitToCanvas(outfitId) {
+      const outfit = savedOutfits.find(o => o.id === outfitId);
+      if (!outfit) return;
+      activeCanvasGarments = JSON.parse(JSON.stringify(outfit.garments));
+      activeSelectedId = null;
+      renderCanvasLayers();
+    }
+
+    function deleteOutfit(outfitId) {
+      savedOutfits = savedOutfits.filter(o => o.id !== outfitId);
+      saveOutfits();
+      renderLookbook();
+    }
+
+    // INVENTORY CRUD
     function renderInventoryGrid() {
       const grid = document.getElementById('inventory-grid');
       grid.innerHTML = wardrobe.map(item => `
         <div class="bg-slate-50 rounded-2xl border-2 border-black p-3 pixel-shadow flex items-center justify-between gap-3">
-          <img src="${item.img}" class="w-14 h-14 object-cover rounded-xl border border-black shrink-0" />
+          <img src="${item.img}" class="w-12 h-12 object-cover rounded-xl border border-black shrink-0" />
           <div class="flex-1 min-w-0">
             <h4 class="font-extrabold text-xs text-slate-900 truncate">${item.name}</h4>
             <div class="flex items-center gap-1.5 mt-1">
@@ -399,21 +663,7 @@
       `).join('');
     }
 
-    // RENDER COLOR RULES
-    function renderRulesList() {
-      const list = document.getElementById('color-rules-list');
-      list.innerHTML = colorRules.map(rule => `
-        <div class="bg-amber-50 p-3 rounded-2xl border-2 border-black pixel-shadow-sm flex items-center justify-between gap-2">
-          <div>
-            <div class="text-xs font-extrabold text-slate-900">${rule.colorA} + ${rule.colorB}</div>
-            <div class="text-[10px] text-slate-600 font-semibold">${rule.note}</div>
-          </div>
-          <button onclick="deleteRule('${rule.id}')" class="text-[10px] bg-rose-400 text-white font-bold px-2 py-1 rounded border border-black">✕</button>
-        </div>
-      `).join('');
-    }
-
-    // MODAL & CRUD HANDLERS
+    // MODAL HANDLERS
     function openItemModal() { document.getElementById('item-modal').classList.remove('hidden'); }
     function closeItemModal() { 
       document.getElementById('item-modal').classList.add('hidden');
@@ -446,12 +696,13 @@
         wardrobe.push({
           id: 'w_' + Date.now(),
           name, category, color,
+          defaultX: 80, defaultY: 100, width: 130, zIndex: 5,
           img: imgInput.trim() !== '' ? imgInput : defaultPlaceholder
         });
       }
 
       saveWardrobe();
-      renderDeck();
+      renderRack();
       closeItemModal();
     }
 
@@ -470,7 +721,7 @@
     function deleteItem(id) {
       wardrobe = wardrobe.filter(i => i.id !== id);
       saveWardrobe();
-      renderDeck();
+      renderRack();
     }
 
     function handleSaveRule(e) {
@@ -482,19 +733,13 @@
         note: document.getElementById('rule-note').value
       });
       saveRules();
-      renderDeck();
       closeRuleModal();
-    }
-
-    function deleteRule(id) {
-      colorRules = colorRules.filter(r => r.id !== id);
-      saveRules();
-      renderDeck();
     }
 
     // Initialize
     updateHUD();
-    renderDeck();
+    renderRack();
+    renderCanvasLayers();
   </script>
 </body>
 </html>
