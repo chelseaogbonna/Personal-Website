@@ -11,6 +11,7 @@
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+    .border-3 { border-width: 3px; }
   </style>
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
@@ -45,13 +46,14 @@
       <a href="build.html" class="nav-btn bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">🛠️ Wishlist Labs</a>
       <a href="sewing.html" class="nav-btn bg-emerald-400 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1">🪡 Stitch Guild</a>
       <a href="outfits.html" class="nav-btn bg-fuchsia-400 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 ring-4 ring-black">👗 Style Studio</a>
-      <div class="relative group col-span-2 md:col-span-1">
-        <button class="w-full bg-violet-400 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-2">
+      
+      <div class="relative col-span-2 md:col-span-1">
+        <button onclick="toggleMoreMenu(event)" class="w-full bg-violet-400 hover:bg-violet-500 text-white font-bold py-3 px-4 rounded-2xl border-2 border-black pixel-shadow text-center transition-transform active:translate-y-1 flex items-center justify-center gap-2">
           <span>✨ More</span><span class="text-xs">▼</span>
         </button>
-        <div class="absolute right-0 left-0 md:left-auto md:w-56 mt-2 hidden group-hover:flex flex-col bg-amber-100 border-3 border-black rounded-2xl p-2 pixel-shadow-lg z-50 space-y-1">
-          <a href="locs.html" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-800 hover:bg-yellow-300 rounded-xl border border-transparent hover:border-black">👑 Loc Vault</a>
-          <a href="nails.html" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-800 hover:bg-pink-300 rounded-xl border border-transparent hover:border-black">💅 Nails Vault</a>
+        <div id="more-dropdown-menu" class="absolute right-0 left-0 md:left-auto md:w-56 mt-2 hidden flex-col bg-amber-100 border-3 border-black rounded-2xl p-2 pixel-shadow-lg z-50 space-y-1">
+          <a href="locs.html" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-800 hover:bg-yellow-300 rounded-xl border border-transparent hover:border-black transition-colors">👑 Loc Vault</a>
+          <a href="nails.html" class="flex items-center gap-2 px-3 py-2 text-xs font-bold text-slate-800 hover:bg-pink-300 rounded-xl border border-transparent hover:border-black transition-colors">💅 Nails Vault</a>
         </div>
       </div>
     </div>
@@ -322,6 +324,25 @@
   </div>
 
   <script>
+    // --- DROPDOWN TOGGLE FOR MORE BUTTON ---
+    function toggleMoreMenu(event) {
+      event.stopPropagation();
+      const menu = document.getElementById('more-dropdown-menu');
+      if (menu) {
+        menu.classList.toggle('hidden');
+        menu.classList.toggle('flex');
+      }
+    }
+
+    // Close the More menu if user clicks anywhere else
+    window.addEventListener('click', function(e) {
+      const menu = document.getElementById('more-dropdown-menu');
+      if (menu && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+      }
+    });
+
     // --- HUD XP SYSTEM ---
     let xp = parseInt(localStorage.getItem('playerXP')) || 0;
     let level = parseInt(localStorage.getItem('playerLvl')) || 1;
@@ -659,7 +680,7 @@
         gainXP(20);
       } catch (error) {
         console.error("AI Generation Error:", error);
-      } finally {
+      } font-bold {
         spinner.classList.add('hidden');
       }
     }
