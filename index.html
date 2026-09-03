@@ -38,14 +38,17 @@
   </header>
 
   <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
-    
+
     <div class="bg-white border-4 border-black rounded-3xl p-8 pixel-shadow-lg text-center relative overflow-hidden">
       <div class="absolute -right-6 -bottom-6 text-8xl opacity-10 select-none">🕹️</div>
       <h2 class="text-3xl font-black mb-2 text-purple-900">Welcome to HQ 👾</h2>
-      <p class="text-slate-600 mb-6 text-sm">Clear your daily quests to level up, or select a quest room below to dive in!</p>
+      <p class="text-slate-600 mb-6 text-sm">Clear your daily quests, track your gear wishlist, or select a quest room below!</p>
       <div class="flex flex-wrap justify-center gap-3">
         <a href="#quest-board" class="inline-block bg-sky-400 hover:bg-sky-500 text-slate-900 font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1 text-sm">
           📋 Go to Quest Board
+        </a>
+        <a href="#wishlist-section" class="inline-block bg-pink-400 hover:bg-pink-500 text-slate-900 font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1 text-sm">
+          🎁 Loot Wishlist
         </a>
         <a href="food.html" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-2xl border-2 border-black pixel-shadow transition-transform active:translate-y-1 text-sm">
           Enter Lair 🚀
@@ -55,6 +58,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
+      <!-- DAILY QUEST BOARD -->
       <div id="quest-board" class="lg:col-span-1 bg-sky-200 border-4 border-black rounded-3xl p-5 md:p-6 pixel-shadow-lg flex flex-col justify-between">
         <div>
           <div class="flex items-center justify-between gap-2 mb-4 border-b-2 border-sky-400 pb-3">
@@ -86,7 +90,7 @@
           </form>
 
           <div id="task-list-container" class="space-y-2.5 max-h-[350px] overflow-y-auto pr-1">
-            </div>
+          </div>
         </div>
 
         <div class="mt-4 pt-3 border-t-2 border-sky-400 text-center text-[10px] text-sky-900 font-bold">
@@ -94,12 +98,13 @@
         </div>
       </div>
 
+      <!-- QUEST ROOMS SELECTOR -->
       <div class="lg:col-span-2 bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg">
         <h2 class="text-2xl md:text-3xl font-black text-purple-900 mb-1">SELECT A QUEST ROOM 🕹️</h2>
         <p class="text-slate-600 text-sm mb-6">Choose a category below to explore logs, ideas, and builds.</p>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-left">
-          
+
           <a href="food.html" class="group bg-pink-300 hover:bg-pink-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
             <div class="text-3xl mb-2">🍱</div>
             <h3 class="font-bold text-base leading-tight text-black">Food Quest</h3>
@@ -129,7 +134,7 @@
             <h3 class="font-bold text-base leading-tight text-black">Loc Studio</h3>
             <p class="text-[11px] text-slate-800 mt-1 font-medium">Styles & maintenance</p>
           </a>
-          
+
           <a href="nails.html" class="group bg-rose-300 hover:bg-rose-400 p-4 rounded-2xl border-2 border-black pixel-shadow transition-all hover:-translate-y-1">
             <div class="text-3xl mb-2">💅</div>
             <h3 class="font-bold text-base leading-tight text-black">Nails Vault</h3>
@@ -158,6 +163,49 @@
       </div>
 
     </div>
+
+    <!-- NEW: LOOT WISHLIST SECTION -->
+    <div id="wishlist-section" class="bg-pink-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow-lg">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b-2 border-pink-300 pb-4">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-black text-pink-900">🎁 LOOT WISHLIST</h2>
+          <p class="text-xs text-pink-800 font-medium">Save gear, treats, and items you're hunting for!</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold bg-white px-3 py-1 rounded-xl border-2 border-black pixel-shadow-sm">
+            Total Items: <span id="wishlist-count">0</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Add Wishlist Form -->
+      <form onsubmit="handleAddToWishlist(event)" class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-6">
+        <input 
+          type="text" 
+          id="wishlist-name" 
+          required 
+          placeholder="🏷️ Item name (e.g., Mechanical Keyboard)..." 
+          class="sm:col-span-2 bg-white px-3 py-2.5 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
+        />
+        <select 
+          id="wishlist-priority" 
+          class="bg-white px-3 py-2.5 text-xs font-bold rounded-xl border-2 border-black pixel-shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500"
+        >
+          <option value="🔥 High Priority">🔥 High Priority</option>
+          <option value="⭐ Medium" selected>⭐ Medium</option>
+          <option value="💤 Someday">💤 Someday</option>
+        </select>
+        <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-4 py-2.5 text-xs rounded-xl border-2 border-black pixel-shadow transition-transform active:translate-y-1">
+          + Add Loot
+        </button>
+      </form>
+
+      <!-- Wishlist Grid Container -->
+      <div id="wishlist-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Dynamic wishlist items render here -->
+      </div>
+    </div>
+
   </main>
 
   <script>
@@ -196,7 +244,6 @@
         try { parsedTasks = JSON.parse(savedTasks); } catch (e) { parsedTasks = []; }
       }
 
-      // Check 24-hour / Daily reset logic (Keeps locked tasks)
       if (lastResetDate !== todayStr) {
         parsedTasks = parsedTasks.filter(task => task.isLocked);
         localStorage.setItem('arcadeQuestLastReset', todayStr);
@@ -329,9 +376,83 @@
       }
     }
 
-    // Initialize HUD and Quest Board on load
+    // --- WISHLIST SYSTEM ---
+    let wishlist = loadWishlist();
+
+    function loadWishlist() {
+      const saved = localStorage.getItem('arcadeWishlist');
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) { return []; }
+      }
+      return [
+        { id: 'w_1', name: 'Pink Wireless Controller 🎮', priority: '🔥 High Priority' },
+        { id: 'w_2', name: 'Cozy Oversized Hoodie 🧥', priority: '⭐ Medium' }
+      ];
+    }
+
+    function saveWishlist(listToSave) {
+      localStorage.setItem('arcadeWishlist', JSON.stringify(listToSave));
+    }
+
+    function renderWishlist() {
+      const container = document.getElementById('wishlist-container');
+      const countEl = document.getElementById('wishlist-count');
+      if (!container) return;
+
+      countEl.innerText = wishlist.length;
+
+      if (wishlist.length === 0) {
+        container.innerHTML = `<div class="col-span-full bg-white p-4 rounded-2xl border-2 border-black text-center text-xs text-slate-400 italic">Your wishlist is empty. Add some loot above!</div>`;
+        return;
+      }
+
+      container.innerHTML = wishlist.map(item => `
+        <div class="bg-white p-3 rounded-2xl border-2 border-black pixel-shadow-sm flex flex-col justify-between gap-2">
+          <div>
+            <div class="text-[10px] font-bold text-pink-600 mb-0.5">${item.priority}</div>
+            <div class="text-xs font-bold text-slate-800">${item.name}</div>
+          </div>
+          <div class="flex items-center justify-end gap-1 pt-2 border-t border-slate-100">
+            <button onclick="deleteWishlistItem('${item.id}')" class="bg-rose-200 hover:bg-rose-300 text-rose-900 font-bold px-2 py-0.5 text-[10px] rounded-lg border border-black">
+              🗑️ Remove
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function handleAddToWishlist(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('wishlist-name');
+      const prioritySelect = document.getElementById('wishlist-priority');
+      
+      const name = nameInput.value.trim();
+      const priority = prioritySelect.value;
+      if (!name) return;
+
+      const newItem = {
+        id: 'w_' + Date.now(),
+        name,
+        priority
+      };
+
+      wishlist.push(newItem);
+      saveWishlist(wishlist);
+      nameInput.value = '';
+      renderWishlist();
+      gainXP(5); // Rewards 5 XP for adding to wishlist!
+    }
+
+    function deleteWishlistItem(id) {
+      wishlist = wishlist.filter(i => i.id !== id);
+      saveWishlist(wishlist);
+      renderWishlist();
+    }
+
+    // Initialize HUD, Quest Board, and Wishlist on load
     updateHUD();
     renderTasks();
+    renderWishlist();
   </script>
 </body>
 </html>
