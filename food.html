@@ -100,32 +100,32 @@
         </div>
       </div>
 
-      <!-- Meal Unit Selection (3x3 Grid) + Search & Add Button -->
+      <!-- Meal Unit Selection (Enlarged 2x3 Grid) + Search & Add Button -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
-        <!-- 3x3 Grid for Meal Units -->
-        <div class="grid grid-cols-3 gap-2">
-          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs">
+        <!-- Enlarged Meal Units Grid (2 columns on mobile, 3 on desktop with bigger buttons & text) -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 flex-1">
+          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all">
             🍳 Breakfast
           </button>
-          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs">
+          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all">
             🥗 Lunch
           </button>
-          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs">
+          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all">
             🍜 Dinner
           </button>
-          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs">
+          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all">
             🍰 Dessert
           </button>
-          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs">
+          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all">
             🧋 Drinks
           </button>
-          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs">
+          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all">
             🍿 Snacks
           </button>
         </div>
 
         <!-- Search Input & Add New Recipe Button underneath -->
-        <div class="flex flex-col gap-2 w-full sm:w-64">
+        <div class="flex flex-col gap-2 w-full sm:w-64 shrink-0">
           <div class="relative w-full">
             <input 
               type="text" 
@@ -625,11 +625,11 @@
     if (searchInput) searchInput.value = '';
 
     document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs';
+      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all';
     });
     const activeTab = document.getElementById(`tab-${unit}`);
     if (activeTab) {
-      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs';
+      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-4 px-4 rounded-2xl border-2 border-black pixel-shadow text-center text-sm md:text-base hover:scale-105 transition-all';
     }
 
     renderSubcategories();
@@ -810,11 +810,21 @@
   function nextCharacterSelect() {
     characterSelectIndex++;
     updateCharacterSelectView();
+    // Also sync and display in details view & highlight in grid
+    const list = getActiveCategoryList();
+    if (list[characterSelectIndex]) {
+      selectFoodItem(list[characterSelectIndex].id);
+    }
   }
 
   function prevCharacterSelect() {
     characterSelectIndex--;
     updateCharacterSelectView();
+    // Also sync and display in details view & highlight in grid
+    const list = getActiveCategoryList();
+    if (list[characterSelectIndex]) {
+      selectFoodItem(list[characterSelectIndex].id);
+    }
   }
 
   // --- RANDOM SPINNER FUNCTION ---
@@ -1009,10 +1019,10 @@
     }
   }
 
-  // --- PANTRY MATCHING STATIONS ---
+  // --- PANTRY MATCHING STATIONS (FIXED & ROBUST) ---
   function getSelectedPantryIngredients() {
     const checkboxes = document.querySelectorAll('.pantry-item:checked');
-    return Array.from(checkboxes).map(cb => cb.value);
+    return Array.from(checkboxes).map(cb => cb.value.trim().toLowerCase());
   }
 
   function matchCustomRecipe() {
@@ -1024,16 +1034,16 @@
       return;
     }
 
-    // Match recipes where ALL required ingredients are present in selected pantry items
+    // Fixed Matching Logic: Matches recipes where ANY selected pantry ingredient is contained in the recipe's ingredients list
     const matches = foodDatabase.filter(recipe => {
       const recipeIngsLower = recipe.ingredients.map(i => i.toLowerCase());
-      return recipeIngsLower.every(ing => 
+      return recipeIngsLower.some(ing => 
         selected.some(sel => ing.includes(sel) || sel.includes(ing))
       );
     });
 
     if (matches.length === 0) {
-      output.innerHTML = `<p class="italic text-slate-500">No vault recipes match all of your selected pantry ingredients.</p>`;
+      output.innerHTML = `<p class="italic text-slate-500">No vault recipes match your selected pantry ingredients.</p>`;
       return;
     }
 
