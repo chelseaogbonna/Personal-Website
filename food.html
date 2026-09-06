@@ -18,6 +18,16 @@
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 0px;
     }
+
+    /* ============================================================
+       MEAL CATEGORY BUTTON SIZE — edit the numbers below to resize
+       the 6 buttons (Breakfast, Lunch, Dinner, Dessert, Drinks, Snacks).
+       Their size will stay fixed no matter which one is clicked.
+       ============================================================ */
+    .meal-unit-btn {
+      width: 110px;   /* <-- change this number to make buttons wider/narrower */
+      height: 48px;   /* <-- change this number to make buttons taller/shorter */
+    }
   </style>
 </head>
 <body class="bg-yellow-100 text-slate-800 min-h-screen pb-12">
@@ -103,23 +113,23 @@
       <!-- Meal Unit Selection (Medium Sized Grid) + Search & Add Button -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
         <!-- Medium Sized Meal Units Grid (Compact padding and text) -->
-        <div class="grid grid-cols-2 sm:flex flex-wrap gap-2 flex-1">
-          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-1 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+        <div class="grid grid-cols-3 gap-2 justify-items-center flex-1">
+          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn flex items-center justify-center bg-pink-500 text-white font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
             🍳 Breakfast
           </button>
-          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
             🥗 Lunch
           </button>
-          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
             🍜 Dinner
           </button>
-          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
             🍰 Dessert
           </button>
-          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
             🧋 Drinks
           </button>
-          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
             🍿 Snacks
           </button>
         </div>
@@ -634,11 +644,11 @@
     if (searchInput) searchInput.value = '';
 
     document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
+      btn.className = 'meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
     });
     const activeTab = document.getElementById(`tab-${unit}`);
     if (activeTab) {
-      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
+      activeTab.className = 'meal-unit-btn flex items-center justify-center bg-pink-500 text-white font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
     }
 
     renderSubcategories();
@@ -756,11 +766,11 @@
       
       // Update Tab Styles
       document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-        btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
+        btn.className = 'meal-unit-btn flex items-center justify-center bg-white hover:bg-pink-100 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
       });
       const activeTab = document.getElementById(`tab-${currentMealUnit}`);
       if (activeTab) {
-        activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
+        activeTab.className = 'meal-unit-btn flex items-center justify-center bg-pink-500 text-white font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
       }
       renderSubcategories();
       renderFoodGrid();
