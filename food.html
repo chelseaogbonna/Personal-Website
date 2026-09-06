@@ -526,7 +526,7 @@
       icon: '🍌',
       img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-_3wRz-02qD54rh4qEt3A6_8bQvY_zdtt739sVWwKKQ&s=10',
       mealTypes: ['snacks'],
-      category: 'snacks',
+      category: 'all',
       ingredients: ['Bananas', 'Peanuts'],
       drinkPairing: 'Water',
       accompanimentType: 'side',
@@ -930,17 +930,19 @@
   // --- RECIPE MODAL HANDLING (ADD / EDIT) ---
   function populateCategoryDropdown(selectedCat = '') {
     const select = document.getElementById('modal-category-select');
-    // Extract unique categories, but filter out 'all' so it never populates as a selectable modal option
-    const allCategories = [...new Set(foodDatabase.map(i => i.category))].filter(cat => cat !== 'all');
+    
+    // Get unique categories, explicitly keeping 'all' at the very beginning
+    const rawCategories = [...new Set(foodDatabase.map(i => i.category))];
+    const allCategories = ['all', ...rawCategories.filter(c => c !== 'all')];
     
     if (!allCategories.includes('sandwiches')) allCategories.push('sandwiches');
     if (!allCategories.includes('wraps')) allCategories.push('wraps');
 
     select.innerHTML = `
-      <option value="custom">➕ Add Custom Category...</option>
       ${allCategories.map(cat => `
         <option value="${cat}" ${cat === selectedCat ? 'selected' : ''}>${cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
       `).join('')}
+      <option value="custom">➕ Add Custom Category...</option>
     `;
   }
 
@@ -949,7 +951,7 @@
     document.getElementById('modal-recipe-id').value = '';
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-category-custom').classList.add('hidden');
-    populateCategoryDropdown('');
+    populateCategoryDropdown('all');
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
@@ -998,7 +1000,7 @@
     
     let category = document.getElementById('modal-category-select').value;
     if (category === 'custom') {
-      category = document.getElementById('modal-category-custom').value.trim().toLowerCase() || 'sandwiches';
+      category = document.getElementById('modal-category-custom').value.trim().toLowerCase() || 'all';
     }
 
     const ingredientsRaw = document.getElementById('modal-ingredients').value;
