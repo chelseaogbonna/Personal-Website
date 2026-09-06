@@ -67,14 +67,14 @@
   </nav>
 
   <!-- MAIN CONTAINER -->
-  <main class="max-w-5xl mx-auto px-4 space-y-8">
+  <main class="max-w-5xl mx-auto px-4 space-y-6">
 
-    <!-- MEAL UNITS & INVENTORY EXPLORER -->
-    <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+    <!-- RECTANGLE 1: MEAL CATEGORIES & SPIN POOL -->
+    <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg mb-12">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault & Item Inventory</h2>
-          <p class="text-xs text-pink-800">Browse items by category or toggle meals to spin!</p>
+          <h2 class="text-2xl font-bold text-pink-900">🍱 Meal Vault Categories</h2>
+          <p class="text-xs text-pink-800">Browse categories or toggle meals to spin!</p>
         </div>
         
         <!-- MULTI-TOGGLE RANDOM SPINNER CONTROL PANEL -->
@@ -100,31 +100,43 @@
         </div>
       </div>
 
-      <!-- Meal Unit Selection (Medium Sized Grid) + Search & Add Button -->
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
-        <!-- Medium Sized Meal Units Grid (Compact padding and text) -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 flex-1">
-          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
-            🍳 Breakfast
-          </button>
-          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
-            🥗 Lunch
-          </button>
-          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
-            🍜 Dinner
-          </button>
-          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
-            🍰 Dessert
-          </button>
-          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
-            🧋 Drinks
-          </button>
-          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
-            🍿 Snacks
-          </button>
+      <!-- Medium Sized Meal Units Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+        <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
+          🍳 Breakfast
+        </button>
+        <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
+          🥗 Lunch
+        </button>
+        <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
+          🍜 Dinner
+        </button>
+        <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
+          🍰 Dessert
+        </button>
+        <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
+          🧋 Drinks
+        </button>
+        <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-sm hover:scale-105 transition-all">
+          🍿 Snacks
+        </button>
+      </div>
+      
+      <!-- Sub-Category Filter -->
+      <div id="subcategory-bar" class="flex flex-wrap gap-2 bg-white/60 p-3 rounded-2xl border-2 border-black">
+        <!-- Dynamic Subcategory Pills -->
+      </div>
+    </section>
+
+    <!-- RECTANGLE 2: SEARCH RECIPES & INVENTORY EXPLORER -->
+    <section class="bg-pink-200 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-bold text-pink-900">🔍 Search & Recipe Inventory</h2>
+          <p class="text-xs text-pink-800">Search recipes or manage your items below.</p>
         </div>
 
-        <!-- Search Input & Add New Recipe Button underneath -->
+        <!-- Search Input & Add New Recipe Button -->
         <div class="flex flex-col gap-2 w-full sm:w-64 shrink-0">
           <div class="relative w-full">
             <input 
@@ -139,11 +151,6 @@
             ✨ Add New Recipe
           </button>
         </div>
-      </div>
-      
-      <!-- Sub-Category Filter -->
-      <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
-        <!-- Dynamic Subcategory Pills -->
       </div>
 
       <!-- CHARACTER SELECT DISH CAROUSEL SECTION -->
