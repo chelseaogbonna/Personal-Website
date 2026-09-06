@@ -667,7 +667,8 @@
     let list = foodDatabase.filter(item => item.mealTypes.includes(currentMealUnit));
     
     if (currentSubcategory !== 'all') {
-      list = list.filter(item => item.category === currentSubcategory || item.category === 'all');
+      // Fix: Strictly match the subcategory without pulling in generic 'all' items when a specific subcategory is chosen
+      list = list.filter(item => item.category === currentSubcategory);
     }
 
     if (searchQuery !== '') {
@@ -686,11 +687,11 @@
     if (!subBar) return;
 
     const currentMealItems = foodDatabase.filter(i => i.mealTypes.includes(currentMealUnit));
-    // Filter out any existing 'all' strings from the raw category list to avoid duplicates
-    const rawCategories = [...new Set(currentMealItems.map(i => i.category))].filter(c => c !== 'all');
+    // Filter out any existing 'all' strings or empty/blank values from the raw category list to avoid duplicates and blank spaces
+    const rawCategories = [...new Set(currentMealItems.map(i => i.category))].filter(c => c && c.trim() !== '' && c !== 'all');
     const categories = ['all', ...rawCategories];
 
-    subBar.innerHTML = categories.link ? '' : categories.map(cat => {
+    subBar.innerHTML = categories.map(cat => {
       const isSelected = currentSubcategory === cat;
       const bgStyle = isSelected ? 'bg-purple-600 text-white' : 'bg-white hover:bg-pink-100 text-slate-700';
       return `<button onclick="setSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-xl border border-black transition-all ${bgStyle}">
@@ -698,7 +699,6 @@
       </button>`;
     }).join('');
   }
-
 
   function setSubcategory(cat) {
     currentSubcategory = cat;
@@ -934,8 +934,8 @@
   function populateCategoryDropdown(selectedCat = '') {
     const select = document.getElementById('modal-category-select');
     
-    // Get unique categories, explicitly keeping 'all' at the very beginning
-    const rawCategories = [...new Set(foodDatabase.map(i => i.category))];
+    // Get unique categories, explicitly filtering out empty values and keeping 'all' at the very beginning
+    const rawCategories = [...new Set(foodDatabase.map(i => i.category))].filter(c => c && c.trim() !== '');
     const allCategories = ['all', ...rawCategories.filter(c => c !== 'all')];
     
     if (!allCategories.includes('sandwiches')) allCategories.push('sandwiches');
