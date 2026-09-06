@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Loc Studio 👑</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet" >
   <style>
     body {
       font-family: 'Fredoka', cursive, sans-serif;
@@ -56,12 +52,7 @@
   ========================================================== -->
   <header class="bg-amber-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
     <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
-
-```
-  <a
-    href="index.html"
-    class="flex items-center gap-2 bg-amber-700 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold hover:bg-amber-800 transition"
-  >
+  <a href="index.html" class="flex items-center gap-2 bg-amber-700 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold hover:bg-amber-800 transition" >
     ⬅️ Main Lair
   </a>
   <h1 class="text-xl md:text-2xl font-bold tracking-wider">
@@ -78,394 +69,206 @@
     </div>
   </div>
 </div>
-```
   </header>
   <main class="max-w-6xl mx-auto px-4 mt-8 space-y-8">
-```
 <!-- =========================================================
      STYLE CAROUSEL
 ========================================================== -->
 <section class="bg-amber-50 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-
     <div>
       <h2 class="text-2xl font-black text-amber-900">
         ✨ Loc Style Carousel & Difficulty Index
       </h2>
-
       <p class="text-xs text-slate-600">
         Browse your hairstyle inspos categorized by complexity level!
       </p>
     </div>
-
     <div class="flex items-center gap-2">
-
-      <button
-        onclick="openStyleModal()"
-        class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition"
-      >
+      <button onclick="openStyleModal()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition" >
         ➕ Add New Style
       </button>
-
-      <div
-        id="carousel-counter"
-        class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm"
-      >
+      <div id="carousel-counter" class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm" >
         STYLE 1 / 4
       </div>
-
     </div>
-
   </div>
-
-
   <div class="bg-amber-100 border-2 border-black rounded-2xl p-4 md:p-6 pixel-shadow-sm">
-
     <div class="grid md:grid-cols-2 gap-6 items-center">
-
       <div class="h-64 md:h-72 bg-amber-200 rounded-xl border-2 border-black overflow-hidden relative">
-
-        <img
-          id="carousel-img"
-          src=""
-          alt="Loc Inspo"
-          class="w-full h-full object-cover"
-        >
-
+        <img id="carousel-img" src="" alt="Loc Inspo" class="w-full h-full object-cover" >
         <div class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md border border-black">
           📸 Inspo Reference Photo
         </div>
-
       </div>
-
-
       <div class="space-y-3 flex flex-col justify-between h-full">
-
         <div>
-
           <div class="flex flex-wrap items-center gap-2 mb-2">
-
-            <span
-              id="carousel-badge"
-              class="text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider"
-            >
+            <span id="carousel-badge" class="text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider" >
               Easy
             </span>
-
-            <span
-              id="carousel-tag"
-              class="text-[10px] bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full border border-black font-bold"
-            >
+            <span id="carousel-tag" class="text-[10px] bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full border border-black font-bold" >
               Retwist Style
             </span>
-
           </div>
-
-          <h3
-            id="carousel-title"
-            class="text-2xl font-black text-amber-950"
-          >
+          <h3 id="carousel-title" class="text-2xl font-black text-amber-950" >
             Two-Strand Twists
           </h3>
-
-          <p
-            id="carousel-desc"
-            class="text-xs text-slate-700 mt-2 leading-relaxed"
-          >
+          <p id="carousel-desc" class="text-xs text-slate-700 mt-2 leading-relaxed" >
             Classic and low-tension style.
           </p>
-
           <div id="carousel-link-container" class="mt-3"></div>
-
         </div>
-
-
         <div class="flex items-center gap-3 pt-4 border-t-2 border-amber-200">
-
-          <button
-            onclick="prevStyle()"
-            class="flex-1 bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-          >
+          <button onclick="prevStyle()" class="flex-1 bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition" >
             ◀ PREV STYLE
           </button>
-
-          <button
-            onclick="nextStyle()"
-            class="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-          >
+          <button onclick="nextStyle()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition" >
             NEXT STYLE ▶
           </button>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- =========================================================
      STYLE DIRECTORY
 ========================================================== -->
 <section class="bg-emerald-100 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-
     <div>
       <h2 class="text-2xl font-black text-emerald-950">
         📋 All Loc Styles Directory
       </h2>
-
       <p class="text-xs text-emerald-900">
         Your personal hairstyle catalogue.
       </p>
     </div>
-
-
     <div class="flex flex-wrap gap-1.5" id="filter-container">
-
-      <button
-        onclick="filterStyles('All')"
-        id="filter-All"
-        class="bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
-      >
+      <button onclick="filterStyles('All')" id="filter-All" class="bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition" >
         All
       </button>
-
-      <button
-        onclick="filterStyles('Easy')"
-        id="filter-Easy"
-        class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
-      >
+      <button onclick="filterStyles('Easy')" id="filter-Easy" class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition" >
         Easy
       </button>
-
-      <button
-        onclick="filterStyles('Medium')"
-        id="filter-Medium"
-        class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
-      >
+      <button onclick="filterStyles('Medium')" id="filter-Medium" class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition" >
         Medium
       </button>
-
-      <button
-        onclick="filterStyles('Hard')"
-        id="filter-Hard"
-        class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
-      >
+      <button onclick="filterStyles('Hard')" id="filter-Hard" class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition" >
         Hard
       </button>
-
     </div>
-
   </div>
-
-
   <div class="relative mb-5">
-
     <span class="absolute inset-y-0 left-0 flex items-center pl-3">
       🔍
     </span>
-
-    <input
-      id="style-search"
-      oninput="renderStylesDirectory()"
-      type="text"
-      placeholder="Search styles, tags, or difficulty..."
-      class="w-full pl-9 pr-3 py-2 bg-white text-xs font-bold rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-emerald-400"
-    >
-
+    <input id="style-search" oninput="renderStylesDirectory()" type="text" placeholder="Search styles, tags, or difficulty..." class="w-full pl-9 pr-3 py-2 bg-white text-xs font-bold rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-emerald-400" >
   </div>
-
-
-  <div
-    id="styles-directory-grid"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
-  ></div>
-
+  <div id="styles-directory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3" ></div>
 </section>
-
-
 <!-- =========================================================
      LOC GALLERY
 ========================================================== -->
 <section class="bg-fuchsia-100 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-
     <div>
       <h2 class="text-2xl font-black text-fuchsia-950">
         📸 My Loc Gallery & Evolution
       </h2>
-
       <p class="text-xs text-fuchsia-900">
         A visual timeline of the crown.
       </p>
     </div>
-
-    <button
-      onclick="openGalleryModal()"
-      class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-    >
+    <button onclick="openGalleryModal()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition" >
       ➕ Add Gallery Photo (+15 XP)
     </button>
-
   </div>
-
-
-  <div
-    id="loc-gallery-grid"
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
-  ></div>
-
+  <div id="loc-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" ></div>
 </section>
-
-
 <!-- =========================================================
      MILESTONES
 ========================================================== -->
 <section class="bg-indigo-100 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-
     <div>
       <h2 class="text-2xl font-black text-indigo-950">
         🌱 Loc Journey Milestones
       </h2>
-
       <p class="text-xs text-indigo-900">
         Track key length checks, budding phases, and maturity stages.
       </p>
     </div>
-
-    <button
-      onclick="addMilestone()"
-      class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition"
-    >
+    <button onclick="addMilestone()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition" >
       ➕ Log Milestone (+25 XP)
     </button>
-
   </div>
-
-
-  <div
-    id="milestones-grid"
-    class="grid grid-cols-1 sm:grid-cols-3 gap-3"
-  >
-
+  <div id="milestones-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3" >
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
         MONTH 6
       </span>
-
       <h4 class="font-bold text-sm text-slate-900 mt-2">
         Budding Phase Started
       </h4>
-
       <p class="text-xs text-slate-600 mt-1">
         Locs starting to tangle and lock up internally at the roots.
       </p>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
         MONTH 12
       </span>
-
       <h4 class="font-bold text-sm text-slate-900 mt-2">
         Shoulder Length Drop
       </h4>
-
       <p class="text-xs text-slate-600 mt-1">
         Gravity taking over, locs starting to hang downward nicely.
       </p>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
         GOAL
       </span>
-
       <h4 class="font-bold text-sm text-slate-900 mt-2">
         Mid-Back Length Maturity
       </h4>
-
       <p class="text-xs text-slate-600 mt-1">
         Ultimate long-term loc growth target.
       </p>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- =========================================================
      CARE CALENDAR
 ========================================================== -->
 <section class="bg-violet-100 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-
     <div>
       <h2 class="text-2xl font-black text-violet-950">
         📅 Loc Care Calendar
       </h2>
-
       <p class="text-xs text-violet-900">
         Keep your wash days, retwists, and progress checks organized.
       </p>
     </div>
-
-    <button
-      onclick="addCalendarEvent()"
-      class="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-    >
+    <button onclick="addCalendarEvent()" class="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition" >
       ➕ Add Care Event
     </button>
-
   </div>
-
-
   <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
     <div class="flex items-center justify-between mb-4">
-
-      <button
-        onclick="changeMonth(-1)"
-        class="bg-violet-200 border-2 border-black rounded-lg px-3 py-1 font-bold"
-      >
+      <button onclick="changeMonth(-1)" class="bg-violet-200 border-2 border-black rounded-lg px-3 py-1 font-bold" >
         ◀
       </button>
-
       <h3 id="calendar-title" class="font-black text-lg">
         September 2026
       </h3>
-
-      <button
-        onclick="changeMonth(1)"
-        class="bg-violet-200 border-2 border-black rounded-lg px-3 py-1 font-bold"
-      >
+      <button onclick="changeMonth(1)" class="bg-violet-200 border-2 border-black rounded-lg px-3 py-1 font-bold" >
         ▶
       </button>
-
     </div>
-
-
     <div class="grid grid-cols-7 gap-1 text-center mb-1">
-
       <span class="text-[9px] font-black">SUN</span>
       <span class="text-[9px] font-black">MON</span>
       <span class="text-[9px] font-black">TUE</span>
@@ -473,254 +276,154 @@
       <span class="text-[9px] font-black">THU</span>
       <span class="text-[9px] font-black">FRI</span>
       <span class="text-[9px] font-black">SAT</span>
-
     </div>
-
-
-    <div
-      id="calendar-grid"
-      class="grid grid-cols-7 gap-1"
-    ></div>
-
+    <div id="calendar-grid" class="grid grid-cols-7 gap-1" ></div>
   </div>
-
 </section>
-
-
 <!-- =========================================================
      WASH DAY
 ========================================================== -->
 <section class="bg-sky-100 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-
     <div>
       <h2 class="text-2xl font-black text-sky-950">
         🚿 Wash Hair Day Protocol
       </h2>
-
       <p class="text-xs text-sky-800">
         Step-by-step checklist to keep your scalp clean and locs thriving.
       </p>
     </div>
-
-    <button
-      onclick="completeWashDay()"
-      class="bg-sky-400 hover:bg-sky-500 text-black font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition"
-    >
+    <button onclick="completeWashDay()" class="bg-sky-400 hover:bg-sky-500 text-black font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition" >
       ✅ Complete Wash Day (+15 XP)
     </button>
-
   </div>
-
-
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
         STEP 1
       </span>
-
       <h4 class="font-bold text-sm mt-2">
         Scalp Massage & Clarify
       </h4>
-
       <p class="text-[11px] text-slate-600 mt-1">
         Use residue-free clarifying shampoo to lift buildup from roots.
       </p>
-
       <span class="text-2xl block mt-3 text-right">
         💆🏾‍♀️
       </span>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
         STEP 2
       </span>
-
       <h4 class="font-bold text-sm mt-2">
         ACV Rinse
       </h4>
-
       <p class="text-[11px] text-slate-600 mt-1">
         Optional rinse for buildup and mineral residue.
       </p>
-
       <span class="text-2xl block mt-3 text-right">
         🌿
       </span>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
         STEP 3
       </span>
-
       <h4 class="font-bold text-sm mt-2">
         Hydration Mist
       </h4>
-
       <p class="text-[11px] text-slate-600 mt-1">
         Lightly hydrate locs while damp.
       </p>
-
       <span class="text-2xl block mt-3 text-right">
         💧
       </span>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
         STEP 4
       </span>
-
       <h4 class="font-bold text-sm mt-2">
         Seal & Dry
       </h4>
-
       <p class="text-[11px] text-slate-600 mt-1">
         Dry thoroughly and use lightweight products as desired.
       </p>
-
       <span class="text-2xl block mt-3 text-right">
         ☀️
       </span>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- =========================================================
      PRODUCTS
 ========================================================== -->
 <section class="bg-emerald-100 section-card p-6 md:p-8">
-
   <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-
     <div>
       <h2 class="text-2xl font-black text-emerald-950">
         🧪 Products Used Vault
       </h2>
-
       <p class="text-xs text-emerald-800">
         Your holy grail products for retwists, moisture, and scalp care.
       </p>
     </div>
-
-    <button
-      onclick="addProduct()"
-      class="bg-white hover:bg-emerald-50 text-emerald-950 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-    >
+    <button onclick="addProduct()" class="bg-white hover:bg-emerald-50 text-emerald-950 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition" >
       ➕ Add Product
     </button>
-
   </div>
-
-
-  <div
-    id="product-grid"
-    class="grid grid-cols-1 sm:grid-cols-3 gap-4"
-  >
-
+  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4" >
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <div class="flex items-center gap-3 mb-2">
-
         <span class="text-2xl">🌱</span>
-
         <div>
-
           <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
             SCALP CARE
           </span>
-
           <h4 class="font-bold text-sm">
             Rosewater & Aloe Mist
           </h4>
-
         </div>
-
       </div>
-
       <p class="text-xs text-slate-600">
         Lightweight hydration mist.
       </p>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <div class="flex items-center gap-3 mb-2">
-
         <span class="text-2xl">🍯</span>
-
         <div>
-
           <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-bold border border-black">
             RETWIST GEL
           </span>
-
           <h4 class="font-bold text-sm">
             Aloe Vera / Flaxseed Gel
           </h4>
-
         </div>
-
       </div>
-
       <p class="text-xs text-slate-600">
         Light holding gel for styling.
       </p>
-
     </div>
-
-
     <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-
       <div class="flex items-center gap-3 mb-2">
-
         <span class="text-2xl">💧</span>
-
         <div>
-
           <span class="text-[9px] bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded font-bold border border-black">
             SEALANT OIL
           </span>
-
           <h4 class="font-bold text-sm">
             Jojoba & Peppermint Oil
           </h4>
-
         </div>
-
       </div>
-
       <p class="text-xs text-slate-600">
         Lightweight oil for sealing moisture.
       </p>
-
     </div>
-
   </div>
-
 </section>
-
-
 <!-- =========================================================
      WEEKLY BOUNTIES
 ========================================================== -->
@@ -738,13 +441,8 @@
       🏆
     </span>
   </div>
-
-
   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-    <button
-      onclick="completeBounty(this, 15)"
-      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
-    >
+    <button onclick="completeBounty(this, 15)" class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition" >
       <div class="flex items-center gap-3">
         <span class="text-2xl">
           🚿
@@ -762,11 +460,7 @@
         +15 XP
       </span>
     </button>
-    
-    <button
-      onclick="completeBounty(this, 15)"
-      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
-    >
+    <button onclick="completeBounty(this, 15)" class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition" >
       <div class="flex items-center gap-3">
         <span class="text-2xl">
           📸
@@ -780,355 +474,169 @@
           </p>
         </div>
       </div>
-
       <span class="font-black text-amber-600">
         +15 XP
       </span>
-
     </button>
-
-
-    <button
-      onclick="completeBounty(this, 25)"
-      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
-    >
-
+    <button onclick="completeBounty(this, 25)" class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition" >
       <div class="flex items-center gap-3">
-
         <span class="text-2xl">
           📏
         </span>
-
         <div>
           <h4 class="font-bold text-sm">
             Log Length Measurement
           </h4>
-
           <p class="text-[10px] text-slate-500">
             Track your growth.
           </p>
         </div>
-
       </div>
-
       <span class="font-black text-amber-600">
         +25 XP
       </span>
-
     </button>
-
-
-    <button
-      onclick="completeBounty(this, 25)"
-      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
-    >
-
+    <button onclick="completeBounty(this, 25)" class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition" >
       <div class="flex items-center gap-3">
-
         <span class="text-2xl">
           🔄
         </span>
-
         <div>
           <h4 class="font-bold text-sm">
             Complete Retwist
           </h4>
-
           <p class="text-[10px] text-slate-500">
             Refresh the style.
           </p>
         </div>
-
       </div>
-
       <span class="font-black text-amber-600">
         +25 XP
       </span>
-
     </button>
-
   </div>
-
 </section>
-```
-
   </main>
-
   <!-- =========================================================
        STYLE MODAL
   ========================================================== -->
-
-  <div
-    id="style-modal"
-    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
-  >
-
-```
+  <div id="style-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" >
 <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
-
-  <button
-    onclick="closeStyleModal()"
-    class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl"
-  >
+  <button onclick="closeStyleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl" >
     ✕
   </button>
-
   <h3 class="text-xl font-black text-amber-900 mb-1">
     ✨ Add New Loc Style Inspo
   </h3>
-
   <p class="text-xs text-slate-600 mb-4">
     Add a hairstyle, reference photo, and tutorial link.
   </p>
-
-
   <form onsubmit="handleSaveNewStyle(event)" class="space-y-3">
-
-    <input
-      type="text"
-      id="new-style-title"
-      required
-      placeholder="Style Name"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
-    <select
-      id="new-style-difficulty"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
+    <input type="text" id="new-style-title" required placeholder="Style Name" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
+    <select id="new-style-difficulty" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
       <option value="Easy">Easy</option>
       <option value="Medium">Medium</option>
       <option value="Hard">Hard</option>
     </select>
-
-    <input
-      type="text"
-      id="new-style-tag"
-      required
-      placeholder="Category / Tag"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
-    <textarea
-      id="new-style-desc"
-      required
-      placeholder="Description"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black h-20"
-    ></textarea>
-
-    <input
-      type="url"
-      id="new-style-img"
-      required
-      placeholder="Image URL"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
-    <input
-      type="url"
-      id="new-style-link"
-      placeholder="Tutorial Link (Optional)"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
+    <input type="text" id="new-style-tag" required placeholder="Category / Tag" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
+    <textarea id="new-style-desc" required placeholder="Description" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black h-20" ></textarea>
+    <input type="url" id="new-style-img" required placeholder="Image URL" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
+    <input type="url" id="new-style-link" placeholder="Tutorial Link (Optional)" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
     <div class="flex gap-2 pt-2">
-
-      <button
-        type="button"
-        onclick="closeStyleModal()"
-        class="w-1/3 bg-slate-200 text-slate-800 font-bold py-2 text-xs rounded-xl border-2 border-black"
-      >
+      <button type="button" onclick="closeStyleModal()" class="w-1/3 bg-slate-200 text-slate-800 font-bold py-2 text-xs rounded-xl border-2 border-black" >
         Cancel
       </button>
-
-      <button
-        type="submit"
-        class="w-2/3 bg-amber-500 text-black font-bold py-2 text-xs rounded-xl border-2 border-black pixel-shadow-sm"
-      >
+      <button type="submit" class="w-2/3 bg-amber-500 text-black font-bold py-2 text-xs rounded-xl border-2 border-black pixel-shadow-sm" >
         Save Style (+20 XP)
       </button>
-
     </div>
-
   </form>
-
 </div>
-```
-
   </div>
-
   <!-- =========================================================
        GALLERY MODAL
   ========================================================== -->
-
-  <div
-    id="gallery-modal"
-    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
-  >
-
-```
+  <div id="gallery-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" >
 <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
-
-  <button
-    onclick="closeGalleryModal()"
-    class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl"
-  >
+  <button onclick="closeGalleryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl" >
     ✕
   </button>
-
   <h3 class="text-xl font-black text-fuchsia-950 mb-1">
     📸 Add Completed Gallery Photo
   </h3>
-
   <p class="text-xs text-slate-600 mb-4">
     Showcase a completed hairstyle or loc milestone.
   </p>
-
-
   <form onsubmit="handleSaveGalleryPhoto(event)" class="space-y-3">
-
-    <input
-      type="text"
-      id="new-gallery-title"
-      required
-      placeholder="Look Title / Date"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
-    <input
-      type="url"
-      id="new-gallery-img"
-      required
-      placeholder="Photo URL"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
-    <input
-      type="text"
-      id="new-gallery-notes"
-      placeholder="Notes / Products Used"
-      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
-    >
-
+    <input type="text" id="new-gallery-title" required placeholder="Look Title / Date" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
+    <input type="url" id="new-gallery-img" required placeholder="Photo URL" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
+    <input type="text" id="new-gallery-notes" placeholder="Notes / Products Used" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black" >
     <div class="flex gap-2 pt-2">
-
-      <button
-        type="button"
-        onclick="closeGalleryModal()"
-        class="w-1/3 bg-slate-200 font-bold py-2 text-xs rounded-xl border-2 border-black"
-      >
+      <button type="button" onclick="closeGalleryModal()" class="w-1/3 bg-slate-200 font-bold py-2 text-xs rounded-xl border-2 border-black" >
         Cancel
       </button>
-
-      <button
-        type="submit"
-        class="w-2/3 bg-fuchsia-500 text-white font-bold py-2 text-xs rounded-xl border-2 border-black pixel-shadow-sm"
-      >
+      <button type="submit" class="w-2/3 bg-fuchsia-500 text-white font-bold py-2 text-xs rounded-xl border-2 border-black pixel-shadow-sm" >
         Post Photo (+15 XP)
       </button>
-
     </div>
-
   </form>
-
 </div>
-```
-
   </div>
-
   <!-- =========================================================
        DAY DETAIL MODAL
   ========================================================== -->
-
-  <div
-    id="day-detail-modal"
-    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
-  >
-
+  <div id="day-detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" >
     <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
-
-      <button
-        onclick="closeDayDetail()"
-        class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl"
-      >
+      <button onclick="closeDayDetail()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl" >
         ✕
       </button>
-
       <h3 id="day-detail-title" class="text-xl font-black text-violet-950 mb-1">
         Day
       </h3>
-
       <p class="text-xs text-slate-600 mb-4">
         Everything logged for this day.
       </p>
-
       <div id="day-detail-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
-
-      <button
-        onclick="addNoteToActiveDay()"
-        class="w-full mt-4 bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-      >
+      <button onclick="addNoteToActiveDay()" class="w-full mt-4 bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition" >
         ➕ Add Note to This Day
       </button>
-
     </div>
-
   </div>
-
   <!-- =========================================================
        JAVASCRIPT
   ========================================================== -->
-
   <script>
-
     /* =========================================================
        XP SYSTEM
     ========================================================== */
-
     function gainXP(amount) {
-
       let xp =
         (parseInt(localStorage.getItem('locXP')) || 0) + amount;
-
       let lvl =
         parseInt(localStorage.getItem('locLvl')) || 1;
-
       while (xp >= 100) {
         xp -= 100;
         lvl++;
         alert('🎉 LEVEL UP! Welcome to Level ' + lvl + '!');
       }
-
       localStorage.setItem('locXP', xp);
       localStorage.setItem('locLvl', lvl);
-
       updateXPDisplay();
     }
-
-
     function updateXPDisplay() {
-
       const xp =
         parseInt(localStorage.getItem('locXP')) || 0;
-
       const lvl =
         parseInt(localStorage.getItem('locLvl')) || 1;
-
       const lvlEl = document.getElementById('player-lvl');
       if (lvlEl) lvlEl.innerText = lvl;
-
       const xpEl = document.getElementById('hud-xp');
       if (xpEl) xpEl.innerText = xp;
-
       const xpLabelEl = document.getElementById('xp-label');
       if (xpLabelEl) xpLabelEl.innerText = xp + ' / 100 XP';
-
       const xpBarEl = document.getElementById('xp-bar');
       if (xpBarEl) xpBarEl.style.width = xp + '%';
-
-
       let title = 'Budding 🌱';
-
       if (lvl >= 5) {
         title = 'Loc Legend ✨';
       } else if (lvl >= 4) {
@@ -1138,18 +646,13 @@
       } else if (lvl >= 2) {
         title = 'Rooted 🌿';
       }
-
       const levelTitleEl = document.getElementById('level-title');
       if (levelTitleEl) levelTitleEl.innerText = title;
     }
-
-
     /* =========================================================
        DEFAULT STYLES
     ========================================================== */
-
     const defaultStyles = [
-
       {
         title: 'Two-Strand Twists',
         difficulty: 'Easy',
@@ -1158,7 +661,6 @@
         img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60',
         link: 'https://www.youtube.com'
       },
-
       {
         title: 'Barrel Twists & Curls',
         difficulty: 'Medium',
@@ -1167,7 +669,6 @@
         img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&auto=format&fit=crop&q=60',
         link: ''
       },
-
       {
         title: 'Loc Petals / Knots',
         difficulty: 'Medium',
@@ -1176,7 +677,6 @@
         img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700&auto=format&fit=crop&q=60',
         link: ''
       },
-
       {
         title: 'Intricate Interlocked Updo',
         difficulty: 'Hard',
@@ -1185,257 +685,156 @@
         img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=60',
         link: ''
       }
-
     ];
-
-
     let locStyles =
       JSON.parse(localStorage.getItem('locStudioStyles')) ||
       defaultStyles;
-
     let currentStyleIndex = 0;
     let activeFilter = 'All';
-
-
     /* =========================================================
        CAROUSEL
     ========================================================== */
-
     function updateCarousel() {
-
       if (!locStyles.length) return;
-
       if (currentStyleIndex >= locStyles.length)
         currentStyleIndex = 0;
-
       if (currentStyleIndex < 0)
         currentStyleIndex = locStyles.length - 1;
-
-
       const style =
         locStyles[currentStyleIndex];
-
-
       document.getElementById(
         'carousel-counter'
       ).innerText =
         `STYLE ${currentStyleIndex + 1} / ${locStyles.length}`;
-
-
       document.getElementById(
         'carousel-title'
       ).innerText =
         style.title;
-
-
       document.getElementById(
         'carousel-desc'
       ).innerText =
         style.desc;
-
-
       document.getElementById(
         'carousel-tag'
       ).innerText =
         style.tag;
-
-
       document.getElementById(
         'carousel-img'
       ).src =
         style.img;
-
-
       const badge =
         document.getElementById(
           'carousel-badge'
         );
-
-
       badge.innerText =
         style.difficulty;
-
-
       if (style.difficulty === 'Easy') {
-
         badge.className =
           'text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
-
       } else if (style.difficulty === 'Medium') {
-
         badge.className =
           'text-[10px] bg-amber-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
-
       } else {
-
         badge.className =
           'text-[10px] bg-rose-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
-
       }
-
-
       const linkContainer =
         document.getElementById(
           'carousel-link-container'
         );
-
-
       if (
         style.link &&
         style.link.trim() !== ''
       ) {
-
         linkContainer.innerHTML = `
-          <a
-            href="${style.link}"
-            target="_blank"
-            class="inline-flex items-center gap-1 bg-sky-300 hover:bg-sky-400 text-slate-900 font-bold px-3 py-1 rounded-xl border border-black text-xs pixel-shadow-sm"
-          >
+          <a href="${style.link}" target="_blank" class="inline-flex items-center gap-1 bg-sky-300 hover:bg-sky-400 text-slate-900 font-bold px-3 py-1 rounded-xl border border-black text-xs pixel-shadow-sm" >
             🔗 Reference Link / Tutorial
           </a>
         `;
-
       } else {
-
         linkContainer.innerHTML = '';
-
       }
-
     }
-
-
     function nextStyle() {
-
       currentStyleIndex =
         (currentStyleIndex + 1) %
         locStyles.length;
-
       updateCarousel();
-
     }
-
-
     function prevStyle() {
-
       currentStyleIndex =
         (currentStyleIndex - 1 + locStyles.length) %
         locStyles.length;
-
       updateCarousel();
-
     }
-
-
     function jumpToStyle(index) {
-
       currentStyleIndex = index;
-
       updateCarousel();
-
       window.scrollTo({
         top: 0,
         behavior: 'smooth'
       });
-
     }
-
-
     /* =========================================================
        STYLE DIRECTORY
     ========================================================== */
-
     function filterStyles(difficulty) {
-
       activeFilter = difficulty;
-
-
       ['All', 'Easy', 'Medium', 'Hard']
         .forEach(cat => {
-
           const btn =
             document.getElementById(
               `filter-${cat}`
             );
-
-
           if (cat === difficulty) {
-
             btn.className =
               'bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition';
-
           } else {
-
             btn.className =
               'bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition';
-
           }
-
         });
-
-
       renderStylesDirectory();
-
     }
-
-
     function renderStylesDirectory() {
-
       const grid =
         document.getElementById(
           'styles-directory-grid'
         );
-
-
       const search =
         document.getElementById(
           'style-search'
         ).value
           .toLowerCase()
           .trim();
-
-
       let filteredStyles =
         activeFilter === 'All'
           ? locStyles
           : locStyles.filter(
               s => s.difficulty === activeFilter
             );
-
-
       if (search) {
-
         filteredStyles =
           filteredStyles.filter(style =>
             `${style.title} ${style.tag} ${style.difficulty}`
               .toLowerCase()
               .includes(search)
           );
-
       }
-
-
       if (!filteredStyles.length) {
-
         grid.innerHTML = `
           <div class="col-span-full text-center py-8 text-xs text-slate-500">
             No styles found.
           </div>
         `;
-
         return;
-
       }
-
-
       grid.innerHTML =
         filteredStyles.map(style => {
-
           const originalIndex =
             locStyles.findIndex(
               s => s.title === style.title
             );
-
-
           let diffColor =
             style.difficulty === 'Easy'
               ? 'bg-emerald-200 text-emerald-900'
@@ -1443,19 +842,11 @@
                 ? 'bg-amber-200 text-amber-900'
                 : 'bg-rose-200 text-rose-900';
           return `
-            <div
-              onclick="jumpToStyle(${originalIndex})"
-              class="bg-white border-2 border-black rounded-2xl p-3 cursor-pointer hover:bg-emerald-50 transition pixel-shadow-sm flex gap-3 items-center"
-            >
-              <img
-                src="${style.img}"
-                class="w-14 h-14 rounded-xl border border-black object-cover shrink-0"
-              >
+            <div onclick="jumpToStyle(${originalIndex})" class="bg-white border-2 border-black rounded-2xl p-3 cursor-pointer hover:bg-emerald-50 transition pixel-shadow-sm flex gap-3 items-center" >
+              <img src="${style.img}" class="w-14 h-14 rounded-xl border border-black object-cover shrink-0" >
               <div class="overflow-hidden flex-1">
                 <div class="flex items-center gap-2 mb-1">
-                  <span
-                    class="text-[9px] px-2 py-0.5 rounded font-bold border border-black ${diffColor}"
-                  >
+                  <span class="text-[9px] px-2 py-0.5 rounded font-bold border border-black ${diffColor}" >
                     ${style.difficulty}
                   </span>
                   <span class="text-[9px] text-slate-500 truncate">
@@ -1473,7 +864,6 @@
     /* =========================================================
        GALLERY
     ========================================================== */
-
     const defaultGallery = [
       {
         title: 'Fresh Retwist & Two-Strands',
@@ -1489,24 +879,16 @@
     let locGallery =
       JSON.parse(localStorage.getItem('locStudioGallery')) ||
       defaultGallery;
-
-
     function renderGallery() {
       const grid =
         document.getElementById(
           'loc-gallery-grid'
         );
-
-
       grid.innerHTML =
         locGallery.map(item => `
           <div class="bg-white border-2 border-black rounded-2xl p-3 pixel-shadow-sm">
             <div class="h-48 rounded-xl border-2 border-black overflow-hidden mb-3">
-              <img
-                src="${item.img}"
-                alt="${item.title}"
-                class="w-full h-full object-cover"
-              >
+              <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover" >
             </div>
             <h4 class="font-bold text-sm text-slate-900">
               ${item.title}
@@ -1516,55 +898,38 @@
             </p>
           </div>
         `).join('');
-
     }
     function openGalleryModal() {
       document
         .getElementById('gallery-modal')
         .classList.remove('hidden');
-
     }
-
-
     function closeGalleryModal() {
       document
         .getElementById('gallery-modal')
         .classList.add('hidden');
-
     }
     function handleSaveGalleryPhoto(e) {
       e.preventDefault();
-
-
       const newPhoto = {
-
         title:
           document.getElementById(
             'new-gallery-title'
           ).value.trim(),
-
         img:
           document.getElementById(
             'new-gallery-img'
           ).value.trim(),
-
         notes:
           document.getElementById(
             'new-gallery-notes'
           ).value.trim()
-
       };
-
-
       locGallery.push(newPhoto);
-
-
       localStorage.setItem(
         'locStudioGallery',
         JSON.stringify(locGallery)
       );
-
-
       logCalendarEvent(todayKey(), {
         type: 'photo',
         icon: '📸',
@@ -1572,98 +937,62 @@
         img: newPhoto.img,
         notes: newPhoto.notes
       });
-
-
       closeGalleryModal();
-
       renderGallery();
-
       gainXP(15);
-
       alert(
         '📸 Gallery photo posted! +15 XP'
       );
-
     }
-
-
     /* =========================================================
        MILESTONES
     ========================================================== */
-
     function addMilestone() {
-
       const name =
         prompt(
           'Enter new loc milestone:'
         );
-
       if (!name) return;
-
-
       const desc =
         prompt(
           'Brief notes on this milestone:'
         );
-
-
       const grid =
         document.getElementById(
           'milestones-grid'
         );
-
-
       const div =
         document.createElement('div');
-
-
       div.className =
         'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
-
-
       div.innerHTML = `
-
         <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
           ACHIEVED
         </span>
-
         <h4 class="font-bold text-sm text-slate-900 mt-2">
           ${name}
         </h4>
-
         <p class="text-xs text-slate-600 mt-1">
           ${desc || 'Milestone logged successfully.'}
         </p>
-
       `;
-
-
       grid.prepend(div);
-
       gainXP(25);
-
       alert(
         '🌱 Milestone logged! +25 XP'
       );
-
     }
-
-
     /* =========================================================
        CALENDAR
     ========================================================== */
-
     let calendarDate =
       new Date();
-
-
     let calendarEvents =
       JSON.parse(
         localStorage.getItem(
           'locCalendarEvents'
         )
       ) || {};
-
     // Migrate any old-format entries (a single plain string per day)
     // into the new format: an array of entry objects per day.
     Object.keys(calendarEvents).forEach(key => {
@@ -1673,47 +1002,32 @@
         ];
       }
     });
-
-
     function todayKey() {
       const now = new Date();
       return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
     }
-
-
     // Central place any feature (wash day, gallery photo, manual note, etc.)
     // uses to make something show up on the calendar.
     // entry: { type, icon, label, img (optional), notes (optional) }
     function logCalendarEvent(key, entry) {
-
       if (!calendarEvents[key]) {
         calendarEvents[key] = [];
       }
-
       calendarEvents[key].push({
         ...entry,
         time: new Date().toISOString()
       });
-
       localStorage.setItem(
         'locCalendarEvents',
         JSON.stringify(calendarEvents)
       );
-
       renderCalendar();
-
     }
-
-
     function renderCalendar() {
-
       const year =
         calendarDate.getFullYear();
-
       const month =
         calendarDate.getMonth();
-
-
       const title =
         calendarDate.toLocaleString(
           'default',
@@ -1722,8 +1036,6 @@
             year: 'numeric'
           }
         );
-
-
       document.getElementById(
         'calendar-title'
       ).innerText = title;
@@ -1751,7 +1063,6 @@
       ) {
         grid.innerHTML +=
           '<div></div>';
-
       }
       for (
         let day = 1;
@@ -1763,15 +1074,10 @@
         const entries =
           calendarEvents[key] || [];
         grid.innerHTML += `
-          <button
-            onclick="viewDayDetail('${key}')"
-            class="calendar-day bg-violet-50 hover:bg-violet-200 border border-black rounded-lg p-1 text-left transition"
-          >
-
+          <button onclick="viewDayDetail('${key}')" class="calendar-day bg-violet-50 hover:bg-violet-200 border border-black rounded-lg p-1 text-left transition" >
             <span class="text-[10px] font-black">
               ${day}
             </span>
-
             ${
               entries.length
                 ? `
@@ -1782,73 +1088,45 @@
                 `
                 : ''
             }
-
           </button>
-
         `;
-
       }
-
     }
-
-
     function changeMonth(direction) {
-
       calendarDate.setMonth(
         calendarDate.getMonth() + direction
       );
-
       renderCalendar();
-
     }
-
-
     function addCalendarEvent() {
-
       const date =
         prompt(
           'Enter date (YYYY-M-D):'
         );
-
       if (!date) return;
-
-
       const event =
         prompt(
           'Care event:',
           '🚿 Wash Day'
         );
-
       if (!event) return;
-
-
       logCalendarEvent(date, {
         type: 'note',
         icon: '📝',
         label: event
       });
-
       gainXP(5);
-
       alert(
         '📅 Care event added! +5 XP'
       );
-
     }
-
-
     let activeDayKey = null;
-
     function viewDayDetail(key) {
-
       activeDayKey = key;
-
       const entries = calendarEvents[key] || [];
       const list = document.getElementById('day-detail-list');
-
       document.getElementById('day-detail-title').innerText =
         'Day ' + key.split('-')[2] + ' — ' + calendarDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-
       list.innerHTML = entries.length
         ? entries.map((e, i) => `
             <div class="bg-violet-50 border-2 border-black rounded-xl p-3 flex gap-3 items-start">
@@ -1869,163 +1147,106 @@
             </div>
           `).join('')
         : `<p class="text-xs text-slate-500">Nothing logged on this day yet.</p>`;
-
       document
         .getElementById('day-detail-modal')
         .classList.remove('hidden');
-
     }
-
-
     function closeDayDetail() {
       document
         .getElementById('day-detail-modal')
         .classList.add('hidden');
     }
-
-
     function addNoteToActiveDay() {
-
       const event =
         prompt(
           'What is happening on this day?',
           '🚿 Wash Day'
         );
-
       if (!event) return;
-
       logCalendarEvent(activeDayKey, {
         type: 'note',
         icon: '📝',
         label: event
       });
-
       viewDayDetail(activeDayKey);
-
     }
-
-
     /* =========================================================
        WASH DAY
     ========================================================== */
-
     function completeWashDay() {
-
       gainXP(15);
-
       logCalendarEvent(todayKey(), {
         type: 'wash',
         icon: '🚿',
         label: 'Wash Day Completed'
       });
-
       alert(
         '🧼 Wash Day Completed! +15 XP'
       );
-
     }
-
-
     /* =========================================================
        PRODUCTS
     ========================================================== */
-
     function addProduct() {
-
       const name =
         prompt(
           'Product name:'
         );
-
       if (!name) return;
-
-
       const category =
         prompt(
           'Category:',
           'HAIR CARE'
         );
-
-
       const notes =
         prompt(
           'Notes:'
         );
-
-
       const grid =
         document.getElementById(
           'product-grid'
         );
-
-
       const div =
         document.createElement(
           'div'
         );
-
-
       div.className =
         'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
-
-
       div.innerHTML = `
-
         <div class="flex items-center gap-3 mb-2">
-
           <span class="text-2xl">
             🧴
           </span>
-
           <div>
-
             <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
               ${category || 'HAIR CARE'}
             </span>
-
             <h4 class="font-bold text-sm">
               ${name}
             </h4>
-
           </div>
-
         </div>
-
         <p class="text-xs text-slate-600">
           ${notes || 'New product added to the vault.'}
         </p>
-
       `;
-
-
       grid.appendChild(div);
-
       gainXP(10);
-
       alert(
         '🧪 Product added! +10 XP'
       );
-
     }
-
-
     /* =========================================================
        BOUNTIES
     ========================================================== */
-
     function completeBounty(button, amount) {
-
       if (
         button.dataset.completed === 'true'
       ) {
         return;
       }
-
-
       button.dataset.completed =
         'true';
-
-
       button.classList.add(
         'completed'
       );
@@ -2034,20 +1255,15 @@
         '<span class="text-xl">✅</span>'
       );
       gainXP(amount);
-
       alert(
         '🏆 Bounty complete! +' +
         amount +
         ' XP'
       );
-
     }
-
-
     /* =========================================================
        STYLE MODAL
     ========================================================== */
-
     function openStyleModal() {
       document
         .getElementById('style-modal')
@@ -2093,7 +1309,6 @@
         'locStudioStyles',
         JSON.stringify(locStyles)
       );
-      
       closeStyleModal();
       renderStylesDirectory();
       currentStyleIndex =
@@ -2103,13 +1318,10 @@
       alert(
         '✨ New style added to vault! +20 XP'
       );
-
     }
-
     /* =========================================================
        INITIALIZE
     ========================================================== */
-
     updateXPDisplay();
     updateCarousel();
     renderStylesDirectory();
