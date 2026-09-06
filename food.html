@@ -102,28 +102,27 @@
 
       <!-- Meal Unit Selection (Medium Sized Grid) + Search & Add Button -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-        <!-- Meal Unit Selection (Fixed 3x3 or Grid Container) -->
+        <!-- Meal Unit Selection Grid -->
         <div class="grid grid-cols-3 items-center gap-2 flex-1">
-          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn w-full bg-pink-500 text-white font-bold py-2 px-2 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn w-full h-12 bg-pink-500 text-white font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍳 Breakfast
           </button>
-          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-2 px-2 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn w-full h-12 bg-white hover:bg-pink-100 text-slate-800 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🥗 Lunch
           </button>
-          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-2 px-2 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn w-full h-12 bg-white hover:bg-pink-100 text-slate-800 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍜 Dinner
           </button>
-          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-2 px-2 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn w-full h-12 bg-white hover:bg-pink-100 text-slate-800 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍰 Dessert
           </button>
-          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-2 px-2 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn w-full h-12 bg-white hover:bg-pink-100 text-slate-800 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🧋 Drinks
           </button>
-          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-2 px-2 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn w-full h-12 bg-white hover:bg-pink-100 text-slate-800 font-bold rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍿 Snacks
           </button>
         </div>
-
 
         <!-- Search Input & Add New Recipe Button underneath -->
         <div class="flex flex-col gap-2 w-full sm:w-64 shrink-0">
@@ -568,6 +567,7 @@
     renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
+    updateMealTabStyles();
     // Default select first item if available
     const initialList = getActiveCategoryList();
     if (initialList.length > 0) {
@@ -624,6 +624,18 @@
     }
   }
 
+  // --- UNIFIED MEAL TAB STYLING HELPER ---
+  function updateMealTabStyles() {
+    const baseClasses = 'meal-unit-btn w-full h-12 rounded-xl border-2 border-black pixel-shadow text-center text-xs font-bold flex items-center justify-center hover:scale-105 transition-all';
+    const activeClasses = 'bg-pink-500 text-white';
+    const inactiveClasses = 'bg-white hover:bg-pink-100 text-slate-800';
+
+    document.querySelectorAll('.meal-unit-btn').forEach(btn => {
+      const isSelected = btn.id === `tab-${currentMealUnit}`;
+      btn.className = `${baseClasses} ${isSelected ? activeClasses : inactiveClasses}`;
+    });
+  }
+
   // --- MEAL TAB SELECTION ---
   function selectMealUnit(unit) {
     currentMealUnit = unit;
@@ -634,14 +646,7 @@
     const searchInput = document.getElementById('recipe-search-input');
     if (searchInput) searchInput.value = '';
 
-    document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-      btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
-    });
-    const activeTab = document.getElementById(`tab-${unit}`);
-    if (activeTab) {
-      activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
-    }
-
+    updateMealTabStyles();
     renderSubcategories();
     renderFoodGrid();
     updateCharacterSelectView();
@@ -755,14 +760,7 @@
       currentMealUnit = item.mealTypes[0];
       currentSubcategory = 'all';
       
-      // Update Tab Styles
-      document.querySelectorAll('.meal-unit-btn').forEach(btn => {
-        btn.className = 'meal-unit-btn bg-white hover:bg-pink-100 font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
-      });
-      const activeTab = document.getElementById(`tab-${currentMealUnit}`);
-      if (activeTab) {
-        activeTab.className = 'meal-unit-btn bg-pink-500 text-white font-bold py-1 px-1 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all';
-      }
+      updateMealTabStyles();
       renderSubcategories();
       renderFoodGrid();
     }
@@ -863,7 +861,6 @@
   function nextCharacterSelect() {
     characterSelectIndex++;
     updateCharacterSelectView();
-    // Also sync and display in details view & highlight in grid
     const list = getActiveCategoryList();
     if (list[characterSelectIndex]) {
       selectFoodItem(list[characterSelectIndex].id);
@@ -873,7 +870,6 @@
   function prevCharacterSelect() {
     characterSelectIndex--;
     updateCharacterSelectView();
-    // Also sync and display in details view & highlight in grid
     const list = getActiveCategoryList();
     if (list[characterSelectIndex]) {
       selectFoodItem(list[characterSelectIndex].id);
