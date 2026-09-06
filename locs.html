@@ -37,8 +37,13 @@
           <h2 class="text-2xl font-black text-amber-900">✨ Loc Style Carousel & Difficulty Index</h2>
           <p class="text-xs text-slate-600">Browse your hairstyle inspos categorized by complexity level!</p>
         </div>
-        <div id="carousel-counter" class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm">
-          STYLE 1 / 4
+        <div class="flex items-center gap-2">
+          <button onclick="openStyleModal()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">
+            ➕ Add New Style
+          </button>
+          <div id="carousel-counter" class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm">
+            STYLE 1 / 4
+          </div>
         </div>
       </div>
 
@@ -46,23 +51,26 @@
       <div class="bg-amber-50 border-2 border-black rounded-2xl p-4 md:p-6 pixel-shadow-sm relative">
         <div class="grid md:grid-cols-2 gap-6 items-center">
           
-          <!-- Image Box (Inspo photo of user/style) -->
+          <!-- Image Box (Inspo photo) -->
           <div class="h-64 md:h-72 bg-amber-200 rounded-xl border-2 border-black overflow-hidden relative group">
-            <img id="carousel-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60" alt="Loc Inspo" class="w-full h-full object-cover">
+            <img id="carousel-img" src="" alt="Loc Inspo" class="w-full h-full object-cover">
             <div class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md border border-black">
-              📸 Inspo / Me Doing It
+              📸 Inspo Reference Photo
             </div>
           </div>
 
           <!-- Style Details -->
           <div class="space-y-3 flex flex-col justify-between h-full">
             <div>
-              <div class="flex items-center gap-2 mb-2">
+              <div class="flex flex-wrap items-center gap-2 mb-2">
                 <span id="carousel-badge" class="text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider">Easy</span>
                 <span id="carousel-tag" class="text-[10px] bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full border border-black font-bold">Retwist Style</span>
               </div>
               <h3 id="carousel-title" class="text-2xl font-black text-amber-950">Two-Strand Twists</h3>
-              <p id="carousel-desc" class="text-xs text-slate-700 mt-2 leading-relaxed">Classic and low-tension style. Great for letting down or putting into a high ponytail. Lasts for weeks with proper misting.</p>
+              <p id="carousel-desc" class="text-xs text-slate-700 mt-2 leading-relaxed">Classic and low-tension style.</p>
+              
+              <!-- Reference Link Container -->
+              <div id="carousel-link-container" class="mt-3"></div>
             </div>
 
             <!-- Carousel Controls -->
@@ -77,6 +85,34 @@
           </div>
 
         </div>
+      </div>
+    </div>
+
+    <!-- STYLES DIRECTORY LIST -->
+    <div class="bg-amber-50 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
+      <div class="mb-4">
+        <h2 class="text-2xl font-black text-amber-900">📋 All Loc Styles Directory</h2>
+        <p class="text-xs text-slate-600">Click any card to instantly jump to it in the carousel above.</p>
+      </div>
+      <div id="styles-directory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- LOC GALLERY (THINGS I HAVE DONE) -->
+    <div class="bg-fuchsia-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-black text-fuchsia-950">📸 My Loc Gallery & Completed Looks</h2>
+          <p class="text-xs text-fuchsia-900">Pictures of you doing your own hairstyles and completed milestones!</p>
+        </div>
+        <button onclick="openGalleryModal()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition">
+          ➕ Add Gallery Photo (+15 XP)
+        </button>
+      </div>
+
+      <div id="loc-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <!-- Injected via JS -->
       </div>
     </div>
 
@@ -176,6 +212,78 @@
 
   </main>
 
+  <!-- ADD STYLE MODAL -->
+  <div id="style-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
+      <button onclick="closeStyleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
+      <h3 class="text-xl font-black text-amber-900 mb-1">✨ Add New Loc Style Inspo</h3>
+      <p class="text-xs text-slate-600 mb-4">Add a hairstyle, reference photo, and tutorial link.</p>
+      
+      <form onsubmit="handleSaveNewStyle(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Style Name</label>
+          <input type="text" id="new-style-title" required placeholder="e.g., Butterfly Locs" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Difficulty Level</label>
+          <select id="new-style-difficulty" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none">
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Category Tag</label>
+          <input type="text" id="new-style-tag" required placeholder="e.g., Protective Style" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Description</label>
+          <textarea id="new-style-desc" required placeholder="Brief breakdown of the style..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none h-20"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Reference Photo URL</label>
+          <input type="url" id="new-style-img" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Reference / Tutorial Link (Optional)</label>
+          <input type="url" id="new-style-link" placeholder="https://youtube.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeStyleModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black transition">Cancel</button>
+          <button type="submit" class="w-2/3 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">Save Style (+20 XP)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADD GALLERY PHOTO MODAL -->
+  <div id="gallery-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
+      <button onclick="closeGalleryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
+      <h3 class="text-xl font-black text-fuchsia-950 mb-1">📸 Add Completed Gallery Photo</h3>
+      <p class="text-xs text-slate-600 mb-4">Showcase a picture of you doing or wearing the hairstyle!</p>
+      
+      <form onsubmit="handleSaveGalleryPhoto(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Look Title / Date</label>
+          <input type="text" id="new- gallery-title" required placeholder="e.g., Fresh Retwist - June 2026" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Photo URL (Picture of you)</label>
+          <input type="url" id="new-gallery-img" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Notes / Products Used</label>
+          <input type="text" id="new-gallery-notes" placeholder="e.g., Used aloe gel and rosewater mist" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="button" onclick="closeGalleryModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black transition">Cancel</button>
+          <button type="submit" class="w-2/3 bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">Post Photo (+15 XP)</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // --- HUD XP SYSTEM ---
     function gainXP(amount) {
@@ -188,56 +296,85 @@
     }
     document.getElementById('player-lvl').innerText = localStorage.getItem('playerLvl') || 1;
 
-    // --- CAROUSEL DATA & LOGIC ---
-    const locStyles = [
+    // --- DEFAULT DATA & LOCALSTORAGE ---
+    const defaultStyles = [
       {
         title: "Two-Strand Twists",
         difficulty: "Easy",
-        badgeColor: "bg-emerald-300 text-black",
         tag: "Low Tension Style",
         desc: "Classic and low-tension style. Great for letting down or putting into a high ponytail. Lasts for weeks with proper misting.",
-        img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60"
+        img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60",
+        link: "https://www.youtube.com"
       },
       {
         title: "Barrel Twists & Curls",
         difficulty: "Medium",
-        badgeColor: "bg-amber-300 text-black",
         tag: "Retwist Style",
         desc: "Clean retwist braided into twin cornrow barrels across the scalp with bouncy curly ends. Perfect for events!",
-        img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&auto=format&fit=crop&q=60"
+        img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&auto=format&fit=crop&q=60",
+        link: ""
       },
       {
         title: "Loc Petals / Knots",
         difficulty: "Medium",
-        badgeColor: "bg-amber-300 text-black",
         tag: "Updo Style",
         desc: "Sculptural looped petals pinned securely around the crown. Gives an elegant, crown-like regal silhouette.",
-        img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700&auto=format&fit=crop&q=60"
+        img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700&auto=format&fit=crop&q=60",
+        link: ""
       },
       {
         title: "Intricate Interlocked Updo",
         difficulty: "Hard",
-        badgeColor: "bg-rose-300 text-black",
         tag: "Advanced Styling",
         desc: "Complex basket-weave interlocking pattern pinning all locs into a high structural crown. Takes patience but holds for weeks.",
-        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=60"
+        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=60",
+        link: ""
       }
     ];
 
+    const defaultGallery = [
+      {
+        title: "Fresh Retwist & Two-Strands",
+        img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700&auto=format&fit=crop&q=60",
+        notes: "Self-retwist day! Used flaxseed gel."
+      },
+      {
+        title: "Barrel Braids Half Up",
+        img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=700&auto=format&fit=crop&q=60",
+        notes: "Did this style for a weekend trip."
+      }
+    ];
+
+    let locStyles = JSON.parse(localStorage.getItem('locStudioStyles')) || defaultStyles;
+    let locGallery = JSON.parse(localStorage.getItem('locStudioGallery')) || defaultGallery;
     let currentStyleIndex = 0;
 
+    // --- CAROUSEL LOGIC ---
     function updateCarousel() {
+      if (locStyles.length === 0) return;
+      if (currentStyleIndex >= locStyles.length) currentStyleIndex = 0;
+      if (currentStyleIndex < 0) currentStyleIndex = locStyles.length - 1;
+
       const style = locStyles[currentStyleIndex];
       document.getElementById('carousel-counter').innerText = `STYLE ${currentStyleIndex + 1} / ${locStyles.length}`;
       document.getElementById('carousel-title').innerText = style.title;
       document.getElementById('carousel-desc').innerText = style.desc;
       document.getElementById('carousel-tag').innerText = style.tag;
+      document.getElementById('carousel-img').src = style.img;
       
       const badge = document.getElementById('carousel-badge');
       badge.innerText = style.difficulty;
-      badge.className = `text-[10px] px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider ${style.badgeColor}`;
       
-      document.getElementById('carousel-img').src = style.img;
+      if (style.difficulty === 'Easy') badge.className = 'text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+      else if (style.difficulty === 'Medium') badge.className = 'text-[10px] bg-amber-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+      else badge.className = 'text-[10px] bg-rose-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+
+      const linkContainer = document.getElementById('carousel-link-container');
+      if (style.link && style.link.trim() !== '') {
+        linkContainer.innerHTML = `<a href="${style.link}" target="_blank" class="inline-flex items-center gap-1 bg-sky-300 hover:bg-sky-400 text-slate-900 font-bold px-3 py-1 rounded-xl border border-black text-xs pixel-shadow-sm">🔗 Reference Link / Tutorial</a>`;
+      } else {
+        linkContainer.innerHTML = '';
+      }
     }
 
     function nextStyle() {
@@ -249,6 +386,95 @@
       currentStyleIndex = (currentStyleIndex - 1 + locStyles.length) % locStyles.length;
       updateCarousel();
     }
+
+    function jumpToStyle(index) {
+      currentStyleIndex = index;
+      updateCarousel();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- RENDER DIRECTORY LIST ---
+    function renderStylesDirectory() {
+      const grid = document.getElementById('styles-directory-grid');
+      grid.innerHTML = locStyles.map((style, idx) => {
+        let diffColor = style.difficulty === 'Easy' ? 'bg-emerald-200 text-emerald-900' : (style.difficulty === 'Medium' ? 'bg-amber-200 text-amber-900' : 'bg-rose-200 text-rose-900');
+        return `
+          <div onclick="jumpToStyle(${idx})" class="bg-white border-2 border-black rounded-2xl p-3 cursor-pointer hover:bg-amber-100 transition pixel-shadow-sm flex gap-3 items-center">
+            <img src="${style.img}" class="w-14 h-14 rounded-xl border border-black object-cover shrink-0" />
+            <div class="overflow-hidden flex-1">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[9px] px-2 py-0.5 rounded font-bold border border-black ${diffColor}">${style.difficulty}</span>
+                <span class="text-[9px] text-slate-500 truncate">${style.tag}</span>
+              </div>
+              <h4 class="font-bold text-xs truncate text-slate-900">${style.title}</h4>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- RENDER GALLERY ---
+    function renderGallery() {
+      const grid = document.getElementById('loc-gallery-grid');
+      grid.innerHTML = locGallery.map(item => `
+        <div class="bg-white border-2 border-black rounded-2xl p-3 pixel-shadow-sm flex flex-col justify-between">
+          <div class="h-48 rounded-xl border-2 border-black overflow-hidden mb-3">
+            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
+          </div>
+          <div>
+            <h4 class="font-bold text-sm text-slate-900">${item.title}</h4>
+            <p class="text-xs text-slate-600 mt-1">📝 ${item.notes || 'Completed hairstyle'}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- MODAL CONTROLS ---
+    function openStyleModal() { document.getElementById('style-modal').classList.remove('hidden'); }
+    function closeStyleModal() { document.getElementById('style-modal').classList.add('hidden'); }
+
+    function openGalleryModal() { document.getElementById('gallery-modal').classList.remove('hidden'); }
+    function closeGalleryModal() { document.getElementById('gallery-modal').classList.add('hidden'); }
+
+    function handleSaveNewStyle(e) {
+      e.preventDefault();
+      const newStyle = {
+        title: document.getElementById('new-style-title').value.trim(),
+        difficulty: document.getElementById('new-style-difficulty').value,
+        tag: document.getElementById('new-style-tag').value.trim(),
+        desc: document.getElementById('new-style-desc').value.trim(),
+        img: document.getElementById('new-style-img').value.trim(),
+        link: document.getElementById('new-style-link').value.trim()
+      };
+      locStyles.push(newStyle);
+      localStorage.setItem('locStudioStyles', JSON.stringify(locStyles));
+      closeStyleModal();
+      renderStylesDirectory();
+      currentStyleIndex = locStyles.length - 1;
+      updateCarousel();
+      gainXP(20);
+      alert('✨ New style added to vault! +20 XP');
+    }
+
+    function handleSaveGalleryPhoto(e) {
+      e.preventDefault();
+      const newPhoto = {
+        title: document.getElementById('new-gallery-title').value.trim(),
+        img: document.getElementById('new-gallery-img').value.trim(),
+        notes: document.getElementById('new-gallery-notes').value.trim()
+      };
+      locGallery.push(newPhoto);
+      localStorage.setItem('locStudioGallery', JSON.stringify(locGallery));
+      closeGalleryModal();
+      renderGallery();
+      gainXP(15);
+      alert('📸 Gallery photo posted! +15 XP');
+    }
+
+    // Initial render
+    updateCarousel();
+    renderStylesDirectory();
+    renderGallery();
   </script>
 </body>
 </html>
