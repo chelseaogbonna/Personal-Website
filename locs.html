@@ -10,6 +10,7 @@
     body { font-family: 'Fredoka', cursive, sans-serif; }
     .pixel-shadow { box-shadow: 4px 4px 0px #000; }
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
+    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
   </style>
 </head>
 <body class="bg-amber-100 text-slate-800 min-h-screen pb-12">
@@ -27,38 +28,156 @@
     </div>
   </header>
 
-  <main class="max-w-5xl mx-auto px-4 mt-8">
+  <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
+    
+    <!-- STYLES CAROUSEL SECTION -->
     <div class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
       <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
         <div>
-          <h2 class="text-2xl font-black text-amber-900">Styles & Retwist Journal</h2>
-          <p class="text-xs text-slate-600">Document styles, maintenance routine, and hair journey milestones.</p>
+          <h2 class="text-2xl font-black text-amber-900">✨ Loc Style Carousel & Difficulty Index</h2>
+          <p class="text-xs text-slate-600">Browse your hairstyle inspos categorized by complexity level!</p>
         </div>
-        <button onclick="gainXP(20)" class="bg-amber-400 hover:bg-amber-500 text-black font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition">
-          + Log Maintenance (+20 XP)
-        </button>
+        <div id="carousel-counter" class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm">
+          STYLE 1 / 4
+        </div>
       </div>
 
-      <!-- CARDS -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div class="bg-amber-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="h-32 bg-amber-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center text-3xl">🌀</div>
-          <span class="text-[10px] bg-amber-300 text-black px-2 py-0.5 rounded-full border border-black font-bold">FAVORITE STYLE</span>
-          <h3 class="font-bold text-lg mt-1">Barrel Twists & Curls</h3>
-          <p class="text-xs text-slate-600">Clean retwist into twin barrel braids with curly ends.</p>
-        </div>
+      <!-- Carousel Frame -->
+      <div class="bg-amber-50 border-2 border-black rounded-2xl p-4 md:p-6 pixel-shadow-sm relative">
+        <div class="grid md:grid-cols-2 gap-6 items-center">
+          
+          <!-- Image Box (Inspo photo of user/style) -->
+          <div class="h-64 md:h-72 bg-amber-200 rounded-xl border-2 border-black overflow-hidden relative group">
+            <img id="carousel-img" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60" alt="Loc Inspo" class="w-full h-full object-cover">
+            <div class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md border border-black">
+              📸 Inspo / Me Doing It
+            </div>
+          </div>
 
-        <div class="bg-amber-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="h-32 bg-yellow-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center text-3xl">🌿</div>
-          <span class="text-[10px] bg-green-300 text-black px-2 py-0.5 rounded-full border border-black font-bold">ROUTINE</span>
-          <h3 class="font-bold text-lg mt-1">Hydration & Oil Blend</h3>
-          <p class="text-xs text-slate-600">Rosewater mist + lightweight jojoba oil every 2 days.</p>
+          <!-- Style Details -->
+          <div class="space-y-3 flex flex-col justify-between h-full">
+            <div>
+              <div class="flex items-center gap-2 mb-2">
+                <span id="carousel-badge" class="text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider">Easy</span>
+                <span id="carousel-tag" class="text-[10px] bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full border border-black font-bold">Retwist Style</span>
+              </div>
+              <h3 id="carousel-title" class="text-2xl font-black text-amber-950">Two-Strand Twists</h3>
+              <p id="carousel-desc" class="text-xs text-slate-700 mt-2 leading-relaxed">Classic and low-tension style. Great for letting down or putting into a high ponytail. Lasts for weeks with proper misting.</p>
+            </div>
+
+            <!-- Carousel Controls -->
+            <div class="flex items-center gap-3 pt-4 border-t-2 border-amber-200">
+              <button onclick="prevStyle()" class="flex-1 bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition active:translate-y-0.5">
+                ◀ PREV STYLE
+              </button>
+              <button onclick="nextStyle()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition active:translate-y-0.5">
+                NEXT STYLE ▶
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- WASH HAIR DAY PROTOCOL -->
+    <div class="bg-sky-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-2xl font-black text-sky-900">🚿 Wash Hair Day Protocol</h2>
+          <p class="text-xs text-sky-800">Step-by-step checklist to keep your scalp clean and locs thriving.</p>
+        </div>
+        <button onclick="gainXP(15); alert('🧼 Wash Day Completed! +15 XP');" class="bg-sky-400 hover:bg-sky-500 text-black font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition">
+          ✅ Complete Wash Day (+15 XP)
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 1</span>
+            <h4 class="font-bold text-sm mt-2 text-slate-900">Scalp Massage & Clarify</h4>
+            <p class="text-[11px] text-slate-600 mt-1">Use residue-free clarifying shampoo to lift buildup from roots.</p>
+          </div>
+          <span class="text-2xl mt-3 text-right">💆🏾‍♀️</span>
+        </div>
+
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 2</span>
+            <h4 class="font-bold text-sm mt-2 text-slate-900">ACV Rinse (Optional)</h4>
+            <p class="text-[11px] text-slate-600 mt-1">Apple cider vinegar rinse to dissolve deep lint and hard water minerals.</p>
+          </div>
+          <span class="text-2xl mt-3 text-right">🌿</span>
+        </div>
+
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 3</span>
+            <h4 class="font-bold text-sm mt-2 text-slate-900">Hydration Mist</h4>
+            <p class="text-[11px] text-slate-600 mt-1">Saturate locs with rosewater or herbal tea infusion while damp.</p>
+          </div>
+          <span class="text-2xl mt-3 text-right">💧</span>
+        </div>
+
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
+          <div>
+            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 4</span>
+            <h4 class="font-bold text-sm mt-2 text-slate-900">Seal & Dry</h4>
+            <p class="text-[11px] text-slate-600 mt-1">Lock in moisture with lightweight oil blend and sit under dryer.</p>
+          </div>
+          <span class="text-2xl mt-3 text-right">☀️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRODUCTS USED VAULT -->
+    <div class="bg-emerald-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
+      <div class="mb-6">
+        <h2 class="text-2xl font-black text-emerald-900">🧪 Products Used Vault</h2>
+        <p class="text-xs text-emerald-800">Your holy grail products for retwists, moisture, and scalp care.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl">🌱</span>
+            <div>
+              <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">SCALP CARE</span>
+              <h4 class="font-bold text-sm text-slate-900">Rosewater & Aloe Mist</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">Daily hydration spray to keep locs smelling fresh and feeling soft without heavy buildup.</p>
+        </div>
+
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl">🍯</span>
+            <div>
+              <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-bold border border-black">RETWIST GEL</span>
+              <h4 class="font-bold text-sm text-slate-900">Aloe Vera / Flaxseed Gel</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">Natural plant-based holding gel that provides a clean hold without flaking or stiffness.</p>
+        </div>
+
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-2xl">💧</span>
+            <div>
+              <span class="text-[9px] bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded font-bold border border-black">SEALANT OIL</span>
+              <h4 class="font-bold text-sm text-slate-900">Jojoba & Peppermint Oil</h4>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">Lightweight oil blend mimicking natural scalp sebum to seal moisture and stimulate growth.</p>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <script>
+    // --- HUD XP SYSTEM ---
     function gainXP(amount) {
       let xp = (parseInt(localStorage.getItem('playerXP')) || 0) + amount;
       let lvl = parseInt(localStorage.getItem('playerLvl')) || 1;
@@ -68,6 +187,68 @@
       document.getElementById('player-lvl').innerText = lvl;
     }
     document.getElementById('player-lvl').innerText = localStorage.getItem('playerLvl') || 1;
+
+    // --- CAROUSEL DATA & LOGIC ---
+    const locStyles = [
+      {
+        title: "Two-Strand Twists",
+        difficulty: "Easy",
+        badgeColor: "bg-emerald-300 text-black",
+        tag: "Low Tension Style",
+        desc: "Classic and low-tension style. Great for letting down or putting into a high ponytail. Lasts for weeks with proper misting.",
+        img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60"
+      },
+      {
+        title: "Barrel Twists & Curls",
+        difficulty: "Medium",
+        badgeColor: "bg-amber-300 text-black",
+        tag: "Retwist Style",
+        desc: "Clean retwist braided into twin cornrow barrels across the scalp with bouncy curly ends. Perfect for events!",
+        img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&auto=format&fit=crop&q=60"
+      },
+      {
+        title: "Loc Petals / Knots",
+        difficulty: "Medium",
+        badgeColor: "bg-amber-300 text-black",
+        tag: "Updo Style",
+        desc: "Sculptural looped petals pinned securely around the crown. Gives an elegant, crown-like regal silhouette.",
+        img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700&auto=format&fit=crop&q=60"
+      },
+      {
+        title: "Intricate Interlocked Updo",
+        difficulty: "Hard",
+        badgeColor: "bg-rose-300 text-black",
+        tag: "Advanced Styling",
+        desc: "Complex basket-weave interlocking pattern pinning all locs into a high structural crown. Takes patience but holds for weeks.",
+        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=60"
+      }
+    ];
+
+    let currentStyleIndex = 0;
+
+    function updateCarousel() {
+      const style = locStyles[currentStyleIndex];
+      document.getElementById('carousel-counter').innerText = `STYLE ${currentStyleIndex + 1} / ${locStyles.length}`;
+      document.getElementById('carousel-title').innerText = style.title;
+      document.getElementById('carousel-desc').innerText = style.desc;
+      document.getElementById('carousel-tag').innerText = style.tag;
+      
+      const badge = document.getElementById('carousel-badge');
+      badge.innerText = style.difficulty;
+      badge.className = `text-[10px] px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider ${style.badgeColor}`;
+      
+      document.getElementById('carousel-img').src = style.img;
+    }
+
+    function nextStyle() {
+      currentStyleIndex = (currentStyleIndex + 1) % locStyles.length;
+      updateCarousel();
+    }
+
+    function prevStyle() {
+      currentStyleIndex = (currentStyleIndex - 1 + locStyles.length) % locStyles.length;
+      updateCarousel();
+    }
   </script>
 </body>
 </html>
