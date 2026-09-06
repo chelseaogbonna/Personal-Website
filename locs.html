@@ -203,41 +203,7 @@
       ➕ Log Milestone (+25 XP)
     </button>
   </div>
-  <div id="milestones-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3" >
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
-        MONTH 6
-      </span>
-      <h4 class="font-bold text-sm text-slate-900 mt-2">
-        Budding Phase Started
-      </h4>
-      <p class="text-xs text-slate-600 mt-1">
-        Locs starting to tangle and lock up internally at the roots.
-      </p>
-    </div>
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
-        MONTH 12
-      </span>
-      <h4 class="font-bold text-sm text-slate-900 mt-2">
-        Shoulder Length Drop
-      </h4>
-      <p class="text-xs text-slate-600 mt-1">
-        Gravity taking over, locs starting to hang downward nicely.
-      </p>
-    </div>
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
-        GOAL
-      </span>
-      <h4 class="font-bold text-sm text-slate-900 mt-2">
-        Mid-Back Length Maturity
-      </h4>
-      <p class="text-xs text-slate-600 mt-1">
-        Ultimate long-term loc growth target.
-      </p>
-    </div>
-  </div>
+  <div id="milestones-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-3" ></div>
 </section>
 <!-- =========================================================
      CARE CALENDAR
@@ -373,56 +339,7 @@
       ➕ Add Product
     </button>
   </div>
-  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4" >
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <div class="flex items-center gap-3 mb-2">
-        <span class="text-2xl">🌱</span>
-        <div>
-          <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
-            SCALP CARE
-          </span>
-          <h4 class="font-bold text-sm">
-            Rosewater & Aloe Mist
-          </h4>
-        </div>
-      </div>
-      <p class="text-xs text-slate-600">
-        Lightweight hydration mist.
-      </p>
-    </div>
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <div class="flex items-center gap-3 mb-2">
-        <span class="text-2xl">🍯</span>
-        <div>
-          <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-bold border border-black">
-            RETWIST GEL
-          </span>
-          <h4 class="font-bold text-sm">
-            Aloe Vera / Flaxseed Gel
-          </h4>
-        </div>
-      </div>
-      <p class="text-xs text-slate-600">
-        Light holding gel for styling.
-      </p>
-    </div>
-    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <div class="flex items-center gap-3 mb-2">
-        <span class="text-2xl">💧</span>
-        <div>
-          <span class="text-[9px] bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded font-bold border border-black">
-            SEALANT OIL
-          </span>
-          <h4 class="font-bold text-sm">
-            Jojoba & Peppermint Oil
-          </h4>
-        </div>
-      </div>
-      <p class="text-xs text-slate-600">
-        Lightweight oil for sealing moisture.
-      </p>
-    </div>
-  </div>
+  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4" ></div>
 </section>
 <!-- =========================================================
      WEEKLY BOUNTIES
@@ -857,9 +774,50 @@
                   ${style.title}
                 </h4>
               </div>
+              <div class="flex flex-col gap-1 shrink-0">
+                <button onclick="event.stopPropagation(); editStyle(${originalIndex})" class="text-xs bg-white hover:bg-amber-100 border-2 border-black rounded-lg px-2 py-1" title="Edit">✏️</button>
+                <button onclick="event.stopPropagation(); deleteStyle(${originalIndex})" class="text-xs bg-white hover:bg-red-100 border-2 border-black rounded-lg px-2 py-1" title="Delete">🗑️</button>
+              </div>
             </div>
           `;
         }).join('');
+    }
+    function editStyle(index) {
+      const style = locStyles[index];
+      const title = prompt('Style title:', style.title);
+      if (title === null || !title.trim()) return;
+      const difficulty = prompt('Difficulty (Easy / Medium / Hard):', style.difficulty);
+      if (difficulty === null || !['Easy', 'Medium', 'Hard'].includes(difficulty.trim())) {
+        if (difficulty !== null) alert('Please enter exactly: Easy, Medium, or Hard.');
+        if (difficulty === null) return;
+      }
+      const tag = prompt('Tag / category:', style.tag);
+      if (tag === null) return;
+      const desc = prompt('Description:', style.desc);
+      if (desc === null) return;
+      const img = prompt('Photo URL:', style.img);
+      if (img === null || !img.trim()) return;
+      const link = prompt('Reference link (optional):', style.link || '');
+      if (link === null) return;
+      locStyles[index] = {
+        title: title.trim(),
+        difficulty: ['Easy', 'Medium', 'Hard'].includes(difficulty.trim()) ? difficulty.trim() : style.difficulty,
+        tag: tag.trim(),
+        desc: desc.trim(),
+        img: img.trim(),
+        link: link.trim()
+      };
+      localStorage.setItem('locStudioStyles', JSON.stringify(locStyles));
+      renderStylesDirectory();
+      updateCarousel();
+    }
+    function deleteStyle(index) {
+      if (!confirm('Delete this style?')) return;
+      locStyles.splice(index, 1);
+      localStorage.setItem('locStudioStyles', JSON.stringify(locStyles));
+      if (currentStyleIndex >= locStyles.length) currentStyleIndex = Math.max(0, locStyles.length - 1);
+      renderStylesDirectory();
+      updateCarousel();
     }
     /* =========================================================
        GALLERY
@@ -885,19 +843,43 @@
           'loc-gallery-grid'
         );
       grid.innerHTML =
-        locGallery.map(item => `
+        locGallery.map((item, i) => `
           <div class="bg-white border-2 border-black rounded-2xl p-3 pixel-shadow-sm">
             <div class="h-48 rounded-xl border-2 border-black overflow-hidden mb-3">
               <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover" >
             </div>
-            <h4 class="font-bold text-sm text-slate-900">
-              ${item.title}
-            </h4>
+            <div class="flex items-start justify-between gap-2">
+              <h4 class="font-bold text-sm text-slate-900">
+                ${item.title}
+              </h4>
+              <div class="flex gap-1 shrink-0">
+                <button onclick="editGalleryPhoto(${i})" class="text-xs bg-white hover:bg-fuchsia-100 border-2 border-black rounded-lg px-2 py-1" title="Edit">✏️</button>
+                <button onclick="deleteGalleryPhoto(${i})" class="text-xs bg-white hover:bg-red-100 border-2 border-black rounded-lg px-2 py-1" title="Delete">🗑️</button>
+              </div>
+            </div>
             <p class="text-xs text-slate-600 mt-1">
               📝 ${item.notes || 'Completed hairstyle'}
             </p>
           </div>
         `).join('');
+    }
+    function editGalleryPhoto(index) {
+      const item = locGallery[index];
+      const title = prompt('Photo title:', item.title);
+      if (title === null || !title.trim()) return;
+      const img = prompt('Photo URL:', item.img);
+      if (img === null || !img.trim()) return;
+      const notes = prompt('Notes:', item.notes || '');
+      if (notes === null) return;
+      locGallery[index] = { title: title.trim(), img: img.trim(), notes: notes.trim() };
+      localStorage.setItem('locStudioGallery', JSON.stringify(locGallery));
+      renderGallery();
+    }
+    function deleteGalleryPhoto(index) {
+      if (!confirm('Delete this gallery photo?')) return;
+      locGallery.splice(index, 1);
+      localStorage.setItem('locStudioGallery', JSON.stringify(locGallery));
+      renderGallery();
     }
     function openGalleryModal() {
       document
@@ -947,40 +929,93 @@
     /* =========================================================
        MILESTONES
     ========================================================== */
+    const defaultMilestones = [
+      {
+        badge: 'MONTH 6',
+        title: 'Budding Phase Started',
+        desc: 'Locs starting to tangle and lock up internally at the roots.'
+      },
+      {
+        badge: 'MONTH 12',
+        title: 'Shoulder Length Drop',
+        desc: 'Gravity taking over, locs starting to hang downward nicely.'
+      },
+      {
+        badge: 'GOAL',
+        title: 'Mid-Back Length Maturity',
+        desc: 'Ultimate long-term loc growth target.'
+      }
+    ];
+    let milestones =
+      JSON.parse(localStorage.getItem('locMilestones')) ||
+      defaultMilestones;
+    function renderMilestones() {
+      const grid = document.getElementById('milestones-grid');
+      grid.innerHTML = milestones.map((m, i) => `
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+          <div class="flex items-start justify-between gap-2">
+            <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
+              ${m.badge}
+            </span>
+            <div class="flex gap-1 shrink-0">
+              <button onclick="editMilestone(${i})" class="text-xs bg-white hover:bg-indigo-100 border-2 border-black rounded-lg px-2 py-1" title="Edit">✏️</button>
+              <button onclick="deleteMilestone(${i})" class="text-xs bg-white hover:bg-red-100 border-2 border-black rounded-lg px-2 py-1" title="Delete">🗑️</button>
+            </div>
+          </div>
+          <h4 class="font-bold text-sm text-slate-900 mt-2">
+            ${m.title}
+          </h4>
+          <p class="text-xs text-slate-600 mt-1">
+            ${m.desc}
+          </p>
+        </div>
+      `).join('');
+    }
     function addMilestone() {
-      const name =
+      const badge =
+        prompt(
+          'Badge label (e.g. MONTH 6, GOAL):',
+          'ACHIEVED'
+        );
+      if (badge === null) return;
+      const title =
         prompt(
           'Enter new loc milestone:'
         );
-      if (!name) return;
+      if (!title) return;
       const desc =
         prompt(
           'Brief notes on this milestone:'
         );
-      const grid =
-        document.getElementById(
-          'milestones-grid'
-        );
-      const div =
-        document.createElement('div');
-      div.className =
-        'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
-      div.innerHTML = `
-        <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
-          ACHIEVED
-        </span>
-        <h4 class="font-bold text-sm text-slate-900 mt-2">
-          ${name}
-        </h4>
-        <p class="text-xs text-slate-600 mt-1">
-          ${desc || 'Milestone logged successfully.'}
-        </p>
-      `;
-      grid.prepend(div);
+      milestones.push({
+        badge: (badge || 'ACHIEVED').trim(),
+        title: title.trim(),
+        desc: (desc || 'Milestone logged successfully.').trim()
+      });
+      localStorage.setItem('locMilestones', JSON.stringify(milestones));
+      renderMilestones();
       gainXP(25);
       alert(
         '🌱 Milestone logged! +25 XP'
       );
+    }
+    function editMilestone(index) {
+      const m = milestones[index];
+      const badge = prompt('Badge label:', m.badge);
+      if (badge === null) return;
+      const title = prompt('Milestone title:', m.title);
+      if (title === null || !title.trim()) return;
+      const desc = prompt('Notes:', m.desc);
+      if (desc === null) return;
+      milestones[index] = { badge: badge.trim(), title: title.trim(), desc: desc.trim() };
+      localStorage.setItem('locMilestones', JSON.stringify(milestones));
+      renderMilestones();
+    }
+    function deleteMilestone(index) {
+      if (!confirm('Delete this milestone?')) return;
+      milestones.splice(index, 1);
+      localStorage.setItem('locMilestones', JSON.stringify(milestones));
+      renderMilestones();
     }
     /* =========================================================
        CALENDAR
@@ -1139,10 +1174,14 @@
                   `
                   : `<span class="text-2xl">${e.icon || '📝'}</span>`
               }
-              <div class="min-w-0">
+              <div class="min-w-0 flex-1">
                 <p class="font-bold text-sm break-words">${e.label}</p>
                 ${e.notes ? `<p class="text-xs text-slate-600 mt-0.5 break-words">${e.notes}</p>` : ''}
                 ${e.type === 'photo' && e.img ? `<a href="${e.img}" target="_blank" rel="noopener" class="text-[10px] text-violet-700 underline font-bold">Open photo ↗</a>` : ''}
+              </div>
+              <div class="flex flex-col gap-1 shrink-0">
+                <button onclick="editCalendarEntry('${key}', ${i})" class="text-xs bg-white hover:bg-violet-100 border-2 border-black rounded-lg px-2 py-1" title="Edit">✏️</button>
+                <button onclick="deleteCalendarEntry('${key}', ${i})" class="text-xs bg-white hover:bg-red-100 border-2 border-black rounded-lg px-2 py-1" title="Delete">🗑️</button>
               </div>
             </div>
           `).join('')
@@ -1170,6 +1209,38 @@
       });
       viewDayDetail(activeDayKey);
     }
+    function editCalendarEntry(key, index) {
+      const entry = calendarEvents[key][index];
+      const newLabel = prompt('Edit this entry:', entry.label);
+      if (newLabel === null || !newLabel.trim()) return;
+      entry.label = newLabel.trim();
+      if (entry.type === 'photo') {
+        const newImg = prompt('Photo URL:', entry.img || '');
+        if (newImg === null) return;
+        entry.img = newImg.trim();
+        const newNotes = prompt('Notes:', entry.notes || '');
+        if (newNotes !== null) entry.notes = newNotes.trim();
+      }
+      localStorage.setItem(
+        'locCalendarEvents',
+        JSON.stringify(calendarEvents)
+      );
+      renderCalendar();
+      viewDayDetail(key);
+    }
+    function deleteCalendarEntry(key, index) {
+      if (!confirm('Delete this entry?')) return;
+      calendarEvents[key].splice(index, 1);
+      if (calendarEvents[key].length === 0) {
+        delete calendarEvents[key];
+      }
+      localStorage.setItem(
+        'locCalendarEvents',
+        JSON.stringify(calendarEvents)
+      );
+      renderCalendar();
+      viewDayDetail(key);
+    }
     /* =========================================================
        WASH DAY
     ========================================================== */
@@ -1187,6 +1258,41 @@
     /* =========================================================
        PRODUCTS
     ========================================================== */
+    const defaultProducts = [
+      { icon: '🌱', category: 'SCALP CARE', name: 'Rosewater & Aloe Mist', notes: 'Lightweight hydration mist.' },
+      { icon: '🍯', category: 'RETWIST GEL', name: 'Aloe Vera / Flaxseed Gel', notes: 'Light holding gel for styling.' },
+      { icon: '💧', category: 'SEALANT OIL', name: 'Jojoba & Peppermint Oil', notes: 'Lightweight oil for sealing moisture.' }
+    ];
+    let products =
+      JSON.parse(localStorage.getItem('locProducts')) ||
+      defaultProducts;
+    function renderProducts() {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = products.map((p, i) => `
+        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+          <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">${p.icon || '🧴'}</span>
+              <div>
+                <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
+                  ${p.category}
+                </span>
+                <h4 class="font-bold text-sm">
+                  ${p.name}
+                </h4>
+              </div>
+            </div>
+            <div class="flex gap-1 shrink-0">
+              <button onclick="editProduct(${i})" class="text-xs bg-white hover:bg-emerald-100 border-2 border-black rounded-lg px-2 py-1" title="Edit">✏️</button>
+              <button onclick="deleteProduct(${i})" class="text-xs bg-white hover:bg-red-100 border-2 border-black rounded-lg px-2 py-1" title="Delete">🗑️</button>
+            </div>
+          </div>
+          <p class="text-xs text-slate-600">
+            ${p.notes}
+          </p>
+        </div>
+      `).join('');
+    }
     function addProduct() {
       const name =
         prompt(
@@ -1202,39 +1308,36 @@
         prompt(
           'Notes:'
         );
-      const grid =
-        document.getElementById(
-          'product-grid'
-        );
-      const div =
-        document.createElement(
-          'div'
-        );
-      div.className =
-        'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
-      div.innerHTML = `
-        <div class="flex items-center gap-3 mb-2">
-          <span class="text-2xl">
-            🧴
-          </span>
-          <div>
-            <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
-              ${category || 'HAIR CARE'}
-            </span>
-            <h4 class="font-bold text-sm">
-              ${name}
-            </h4>
-          </div>
-        </div>
-        <p class="text-xs text-slate-600">
-          ${notes || 'New product added to the vault.'}
-        </p>
-      `;
-      grid.appendChild(div);
+      products.push({
+        icon: '🧴',
+        category: (category || 'HAIR CARE').trim(),
+        name: name.trim(),
+        notes: (notes || 'New product added to the vault.').trim()
+      });
+      localStorage.setItem('locProducts', JSON.stringify(products));
+      renderProducts();
       gainXP(10);
       alert(
         '🧪 Product added! +10 XP'
       );
+    }
+    function editProduct(index) {
+      const p = products[index];
+      const name = prompt('Product name:', p.name);
+      if (name === null || !name.trim()) return;
+      const category = prompt('Category:', p.category);
+      if (category === null) return;
+      const notes = prompt('Notes:', p.notes);
+      if (notes === null) return;
+      products[index] = { icon: p.icon || '🧴', name: name.trim(), category: category.trim(), notes: notes.trim() };
+      localStorage.setItem('locProducts', JSON.stringify(products));
+      renderProducts();
+    }
+    function deleteProduct(index) {
+      if (!confirm('Delete this product?')) return;
+      products.splice(index, 1);
+      localStorage.setItem('locProducts', JSON.stringify(products));
+      renderProducts();
     }
     /* =========================================================
        BOUNTIES
@@ -1326,6 +1429,8 @@
     updateCarousel();
     renderStylesDirectory();
     renderGallery();
+    renderMilestones();
+    renderProducts();
     renderCalendar();
   </script>
 </body>
