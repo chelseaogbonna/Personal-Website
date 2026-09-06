@@ -1,570 +1,2387 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Loc Studio 👑</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  >
   <style>
-    body { font-family: 'Fredoka', cursive, sans-serif; }
-    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
-    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
-    .pixel-shadow-lg { box-shadow: 6px 6px 0px #000; }
+    body {
+      font-family: 'Fredoka', cursive, sans-serif;
+    }
+    .pixel-shadow {
+      box-shadow: 4px 4px 0px #000;
+    }
+    .pixel-shadow-sm {
+      box-shadow: 2px 2px 0px #000;
+    }
+    .pixel-shadow-lg {
+      box-shadow: 6px 6px 0px #000;
+    }
+    .section-card {
+      border: 4px solid #000;
+      border-radius: 1.5rem;
+      box-shadow: 6px 6px 0px #000;
+    }
+    .stat-card {
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .stat-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0px #000;
+    }
+    .xp-bar {
+      transition: width 0.4s ease;
+    }
+    .calendar-day {
+      min-height: 62px;
+    }
+    .calendar-day:hover {
+      transform: translateY(-2px);
+    }
+    .completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
   </style>
 </head>
-<body class="bg-amber-100 text-slate-800 min-h-screen pb-12">
-
-  <!-- HUD TOP BAR -->
+<body class="bg-amber-100 text-slate-800 min-h-screen pb-16">
+  <!-- =========================================================
+       HUD TOP BAR
+  ========================================================== -->
   <header class="bg-amber-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 bg-amber-700 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold hover:bg-amber-800 transition">
-        ⬅️ Main Lair
-      </a>
-      <h1 class="text-xl md:text-2xl font-bold tracking-wider">LOC STUDIO 👑</h1>
-      <div class="text-xs font-bold bg-amber-800 px-3 py-1.5 rounded-xl border-2 border-black text-yellow-300">
-        LVL <span id="player-lvl">1</span>
-      </div>
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+
+```
+  <a
+    href="index.html"
+    class="flex items-center gap-2 bg-amber-700 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold hover:bg-amber-800 transition"
+  >
+    ⬅️ Main Lair
+  </a>
+  <h1 class="text-xl md:text-2xl font-bold tracking-wider">
+    LOC STUDIO 👑
+  </h1>
+  <div class="flex items-center gap-2">
+    <div class="hidden sm:block text-xs font-bold bg-amber-800 px-3 py-1.5 rounded-xl border-2 border-black text-yellow-300">
+      XP
+      <span id="hud-xp">0</span>
+      / 100
     </div>
+    <div class="text-xs font-bold bg-amber-800 px-3 py-1.5 rounded-xl border-2 border-black text-yellow-300">
+      LVL <span id="player-lvl">1</span>
+    </div>
+  </div>
+</div>
+```
   </header>
+  <main class="max-w-6xl mx-auto px-4 mt-8 space-y-8">
+```
+<!-- =========================================================
+     LOC DASHBOARD
+========================================================== -->
+<section class="bg-emerald-200 section-card p-5 md:p-6">
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
+    <div>
+      <h2 class="text-2xl font-black text-emerald-950">
+        👑 My Loc Dashboard
+      </h2>
+      <p class="text-xs text-emerald-900">
+        The current state of the crown. Keep it healthy, hydrated, and thriving.
+      </p>
+    </div>
+    <button
+      onclick="editLocStats()"
+      class="bg-white hover:bg-emerald-50 text-emerald-950 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+    >
+      ✏️ Edit Stats
+    </button>
 
-  <main class="max-w-5xl mx-auto px-4 mt-8 space-y-8">
-    
-    <!-- STYLES CAROUSEL SECTION -->
-    <div class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 class="text-2xl font-black text-amber-900">✨ Loc Style Carousel & Difficulty Index</h2>
-          <p class="text-xs text-slate-600">Browse your hairstyle inspos categorized by complexity level!</p>
+  </div>
+
+
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+
+    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+      <span class="text-2xl">🌱</span>
+      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
+        Loc Age
+      </p>
+      <p id="stat-age" class="text-lg font-black">
+        18 Months
+      </p>
+    </div>
+
+    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+      <span class="text-2xl">📏</span>
+      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
+        Length
+      </p>
+      <p id="stat-length" class="text-lg font-black">
+        12.5"
+      </p>
+    </div>
+
+    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+      <span class="text-2xl">🔄</span>
+      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
+        Last Retwist
+      </p>
+      <p id="stat-retwist" class="text-lg font-black">
+        3 weeks
+      </p>
+    </div>
+
+    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+      <span class="text-2xl">💧</span>
+      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
+        Last Wash
+      </p>
+      <p id="stat-wash" class="text-lg font-black">
+        5 days ago
+      </p>
+    </div>
+
+    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+      <span class="text-2xl">🎯</span>
+      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
+        Goal
+      </p>
+      <p id="stat-goal" class="text-lg font-black">
+        Mid-Back
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- XP BAR -->
+  <div class="mt-5 bg-white border-2 border-black rounded-2xl p-4">
+
+    <div class="flex items-center justify-between mb-2">
+
+      <div>
+        <p class="text-xs font-black text-emerald-950">
+          👑 Crown Progress
+        </p>
+
+        <p id="level-title" class="text-[10px] text-slate-500 font-bold">
+          Budding 🌱
+        </p>
+      </div>
+
+      <span id="xp-label" class="text-xs font-black">
+        0 / 100 XP
+      </span>
+
+    </div>
+
+    <div class="h-4 bg-slate-100 border-2 border-black rounded-full overflow-hidden">
+      <div
+        id="xp-bar"
+        class="xp-bar h-full bg-amber-400"
+        style="width: 0%"
+      ></div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     STYLE CAROUSEL
+========================================================== -->
+<section class="bg-amber-50 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+
+    <div>
+      <h2 class="text-2xl font-black text-amber-900">
+        ✨ Loc Style Carousel & Difficulty Index
+      </h2>
+
+      <p class="text-xs text-slate-600">
+        Browse your hairstyle inspos categorized by complexity level!
+      </p>
+    </div>
+
+    <div class="flex items-center gap-2">
+
+      <button
+        onclick="openStyleModal()"
+        class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition"
+      >
+        ➕ Add New Style
+      </button>
+
+      <div
+        id="carousel-counter"
+        class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm"
+      >
+        STYLE 1 / 4
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="bg-amber-100 border-2 border-black rounded-2xl p-4 md:p-6 pixel-shadow-sm">
+
+    <div class="grid md:grid-cols-2 gap-6 items-center">
+
+      <div class="h-64 md:h-72 bg-amber-200 rounded-xl border-2 border-black overflow-hidden relative">
+
+        <img
+          id="carousel-img"
+          src=""
+          alt="Loc Inspo"
+          class="w-full h-full object-cover"
+        >
+
+        <div class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md border border-black">
+          📸 Inspo Reference Photo
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="openStyleModal()" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">
-            ➕ Add New Style
+
+      </div>
+
+
+      <div class="space-y-3 flex flex-col justify-between h-full">
+
+        <div>
+
+          <div class="flex flex-wrap items-center gap-2 mb-2">
+
+            <span
+              id="carousel-badge"
+              class="text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider"
+            >
+              Easy
+            </span>
+
+            <span
+              id="carousel-tag"
+              class="text-[10px] bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full border border-black font-bold"
+            >
+              Retwist Style
+            </span>
+
+          </div>
+
+          <h3
+            id="carousel-title"
+            class="text-2xl font-black text-amber-950"
+          >
+            Two-Strand Twists
+          </h3>
+
+          <p
+            id="carousel-desc"
+            class="text-xs text-slate-700 mt-2 leading-relaxed"
+          >
+            Classic and low-tension style.
+          </p>
+
+          <div id="carousel-link-container" class="mt-3"></div>
+
+        </div>
+
+
+        <div class="flex items-center gap-3 pt-4 border-t-2 border-amber-200">
+
+          <button
+            onclick="prevStyle()"
+            class="flex-1 bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+          >
+            ◀ PREV STYLE
           </button>
-          <div id="carousel-counter" class="bg-amber-200 text-amber-950 font-mono text-xs font-bold px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm">
-            STYLE 1 / 4
-          </div>
-        </div>
-      </div>
 
-      <!-- Carousel Frame -->
-      <div class="bg-amber-50 border-2 border-black rounded-2xl p-4 md:p-6 pixel-shadow-sm relative">
-        <div class="grid md:grid-cols-2 gap-6 items-center">
-          
-          <!-- Image Box (Inspo photo) -->
-          <div class="h-64 md:h-72 bg-amber-200 rounded-xl border-2 border-black overflow-hidden relative group">
-            <img id="carousel-img" src="" alt="Loc Inspo" class="w-full h-full object-cover">
-            <div class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] font-bold px-2 py-1 rounded-md border border-black">
-              📸 Inspo Reference Photo
-            </div>
-          </div>
-
-          <!-- Style Details -->
-          <div class="space-y-3 flex flex-col justify-between h-full">
-            <div>
-              <div class="flex flex-wrap items-center gap-2 mb-2">
-                <span id="carousel-badge" class="text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider">Easy</span>
-                <span id="carousel-tag" class="text-[10px] bg-amber-200 text-amber-900 px-2.5 py-0.5 rounded-full border border-black font-bold">Retwist Style</span>
-              </div>
-              <h3 id="carousel-title" class="text-2xl font-black text-amber-950">Two-Strand Twists</h3>
-              <p id="carousel-desc" class="text-xs text-slate-700 mt-2 leading-relaxed">Classic and low-tension style.</p>
-              
-              <!-- Reference Link Container -->
-              <div id="carousel-link-container" class="mt-3"></div>
-            </div>
-
-            <!-- Carousel Controls -->
-            <div class="flex items-center gap-3 pt-4 border-t-2 border-amber-200">
-              <button onclick="prevStyle()" class="flex-1 bg-amber-200 hover:bg-amber-300 text-amber-950 font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition active:translate-y-0.5">
-                ◀ PREV STYLE
-              </button>
-              <button onclick="nextStyle()" class="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition active:translate-y-0.5">
-                NEXT STYLE ▶
-              </button>
-            </div>
-          </div>
+          <button
+            onclick="nextStyle()"
+            class="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2.5 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+          >
+            NEXT STYLE ▶
+          </button>
 
         </div>
+
       </div>
+
     </div>
 
-    <!-- STYLES DIRECTORY LIST WITH FILTER CHIPS -->
-    <div class="bg-amber-50 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     STYLE DIRECTORY
+========================================================== -->
+<section class="bg-emerald-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+
+    <div>
+      <h2 class="text-2xl font-black text-emerald-950">
+        📋 All Loc Styles Directory
+      </h2>
+
+      <p class="text-xs text-emerald-900">
+        Your personal hairstyle catalogue.
+      </p>
+    </div>
+
+
+    <div class="flex flex-wrap gap-1.5" id="filter-container">
+
+      <button
+        onclick="filterStyles('All')"
+        id="filter-All"
+        class="bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
+      >
+        All
+      </button>
+
+      <button
+        onclick="filterStyles('Easy')"
+        id="filter-Easy"
+        class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
+      >
+        Easy
+      </button>
+
+      <button
+        onclick="filterStyles('Medium')"
+        id="filter-Medium"
+        class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
+      >
+        Medium
+      </button>
+
+      <button
+        onclick="filterStyles('Hard')"
+        id="filter-Hard"
+        class="bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition"
+      >
+        Hard
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="relative mb-5">
+
+    <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+      🔍
+    </span>
+
+    <input
+      id="style-search"
+      oninput="renderStylesDirectory()"
+      type="text"
+      placeholder="Search styles, tags, or difficulty..."
+      class="w-full pl-9 pr-3 py-2 bg-white text-xs font-bold rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-emerald-400"
+    >
+
+  </div>
+
+
+  <div
+    id="styles-directory-grid"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
+  ></div>
+
+</section>
+
+
+<!-- =========================================================
+     GROWTH JOURNAL
+========================================================== -->
+<section class="bg-green-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+
+    <div>
+      <h2 class="text-2xl font-black text-green-950">
+        📈 Loc Growth Journal
+      </h2>
+
+      <p class="text-xs text-green-900">
+        Track length changes and celebrate the growth.
+      </p>
+    </div>
+
+    <button
+      onclick="addGrowthEntry()"
+      class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+    >
+      ➕ Log Measurement (+25 XP)
+    </button>
+
+  </div>
+
+
+  <div class="grid md:grid-cols-3 gap-4">
+
+    <div class="md:col-span-2 bg-white border-2 border-black rounded-2xl p-5 pixel-shadow-sm">
+
+      <div class="flex items-end gap-3 h-52 border-b-2 border-l-2 border-black p-4">
+
+        <div class="flex-1 h-[25%] flex items-end">
+          <div class="w-full bg-emerald-300 border-2 border-black rounded-t-lg h-full"></div>
+        </div>
+
+        <div class="flex-1 h-[40%] flex items-end">
+          <div class="w-full bg-emerald-300 border-2 border-black rounded-t-lg h-full"></div>
+        </div>
+
+        <div class="flex-1 h-[55%] flex items-end">
+          <div class="w-full bg-emerald-400 border-2 border-black rounded-t-lg h-full"></div>
+        </div>
+
+        <div class="flex-1 h-[70%] flex items-end">
+          <div class="w-full bg-emerald-400 border-2 border-black rounded-t-lg h-full"></div>
+        </div>
+
+        <div class="flex-1 h-[85%] flex items-end">
+          <div class="w-full bg-emerald-500 border-2 border-black rounded-t-lg h-full"></div>
+        </div>
+
+        <div class="flex-1 h-full flex items-end">
+          <div class="w-full bg-emerald-600 border-2 border-black rounded-t-lg h-full"></div>
+        </div>
+
+      </div>
+
+      <div class="grid grid-cols-6 text-[9px] font-bold text-center mt-2">
+        <span>M3</span>
+        <span>M6</span>
+        <span>M9</span>
+        <span>M12</span>
+        <span>M15</span>
+        <span>NOW</span>
+      </div>
+    </div>
+    <div class="bg-white border-2 border-black rounded-2xl p-5 pixel-shadow-sm">
+      <p class="text-[10px] uppercase font-bold text-slate-500">
+        Current Length
+      </p>
+      <p
+        id="growth-current"
+        class="text-4xl font-black text-green-900 mt-1"
+      >
+        12.5"
+      </p>
+      
+      <div class="mt-5">
+        <div class="flex justify-between text-[10px] font-bold mb-1">
+          <span>Progress to goal</span>
+          <span>75%</span>
+        </div>
+        <div class="h-4 bg-slate-100 border-2 border-black rounded-full overflow-hidden">
+          <div class="h-full bg-green-500 w-3/4"></div>
+        </div>
+      </div>
+      <div class="mt-5 text-xs space-y-2">
+        <p>
+          📈 <strong>+0.7"</strong> since last check
+        </p>
+        <p>
+          🎯 Goal: <strong>Mid-back length</strong>
+        </p>
+        <p>
+          🌱 Keep growing!
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="growth-log"
+    class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4"
+  ></div>
+
+</section>
+
+
+<!-- =========================================================
+     LOC GALLERY
+========================================================== -->
+<section class="bg-fuchsia-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+
+    <div>
+      <h2 class="text-2xl font-black text-fuchsia-950">
+        📸 My Loc Gallery & Evolution
+      </h2>
+
+      <p class="text-xs text-fuchsia-900">
+        A visual timeline of the crown.
+      </p>
+    </div>
+
+    <button
+      onclick="openGalleryModal()"
+      class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+    >
+      ➕ Add Gallery Photo (+15 XP)
+    </button>
+
+  </div>
+
+
+  <div
+    id="loc-gallery-grid"
+    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+  ></div>
+
+</section>
+
+
+<!-- =========================================================
+     MILESTONES
+========================================================== -->
+<section class="bg-indigo-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+
+    <div>
+      <h2 class="text-2xl font-black text-indigo-950">
+        🌱 Loc Journey Milestones
+      </h2>
+
+      <p class="text-xs text-indigo-900">
+        Track key length checks, budding phases, and maturity stages.
+      </p>
+    </div>
+
+    <button
+      onclick="addMilestone()"
+      class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition"
+    >
+      ➕ Log Milestone (+25 XP)
+    </button>
+
+  </div>
+
+
+  <div
+    id="milestones-grid"
+    class="grid grid-cols-1 sm:grid-cols-3 gap-3"
+  >
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
+        MONTH 6
+      </span>
+
+      <h4 class="font-bold text-sm text-slate-900 mt-2">
+        Budding Phase Started
+      </h4>
+
+      <p class="text-xs text-slate-600 mt-1">
+        Locs starting to tangle and lock up internally at the roots.
+      </p>
+
+    </div>
+
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
+        MONTH 12
+      </span>
+
+      <h4 class="font-bold text-sm text-slate-900 mt-2">
+        Shoulder Length Drop
+      </h4>
+
+      <p class="text-xs text-slate-600 mt-1">
+        Gravity taking over, locs starting to hang downward nicely.
+      </p>
+
+    </div>
+
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
+        GOAL
+      </span>
+
+      <h4 class="font-bold text-sm text-slate-900 mt-2">
+        Mid-Back Length Maturity
+      </h4>
+
+      <p class="text-xs text-slate-600 mt-1">
+        Ultimate long-term loc growth target.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     CARE CALENDAR
+========================================================== -->
+<section class="bg-violet-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+
+    <div>
+      <h2 class="text-2xl font-black text-violet-950">
+        📅 Loc Care Calendar
+      </h2>
+
+      <p class="text-xs text-violet-900">
+        Keep your wash days, retwists, and progress checks organized.
+      </p>
+    </div>
+
+    <button
+      onclick="addCalendarEvent()"
+      class="bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+    >
+      ➕ Add Care Event
+    </button>
+
+  </div>
+
+
+  <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+    <div class="flex items-center justify-between mb-4">
+
+      <button
+        onclick="changeMonth(-1)"
+        class="bg-violet-200 border-2 border-black rounded-lg px-3 py-1 font-bold"
+      >
+        ◀
+      </button>
+
+      <h3 id="calendar-title" class="font-black text-lg">
+        September 2026
+      </h3>
+
+      <button
+        onclick="changeMonth(1)"
+        class="bg-violet-200 border-2 border-black rounded-lg px-3 py-1 font-bold"
+      >
+        ▶
+      </button>
+
+    </div>
+
+
+    <div class="grid grid-cols-7 gap-1 text-center mb-1">
+
+      <span class="text-[9px] font-black">SUN</span>
+      <span class="text-[9px] font-black">MON</span>
+      <span class="text-[9px] font-black">TUE</span>
+      <span class="text-[9px] font-black">WED</span>
+      <span class="text-[9px] font-black">THU</span>
+      <span class="text-[9px] font-black">FRI</span>
+      <span class="text-[9px] font-black">SAT</span>
+
+    </div>
+
+
+    <div
+      id="calendar-grid"
+      class="grid grid-cols-7 gap-1"
+    ></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     WASH DAY
+========================================================== -->
+<section class="bg-sky-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+
+    <div>
+      <h2 class="text-2xl font-black text-sky-950">
+        🚿 Wash Hair Day Protocol
+      </h2>
+
+      <p class="text-xs text-sky-800">
+        Step-by-step checklist to keep your scalp clean and locs thriving.
+      </p>
+    </div>
+
+    <button
+      onclick="completeWashDay()"
+      class="bg-sky-400 hover:bg-sky-500 text-black font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition"
+    >
+      ✅ Complete Wash Day (+15 XP)
+    </button>
+
+  </div>
+
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
+        STEP 1
+      </span>
+
+      <h4 class="font-bold text-sm mt-2">
+        Scalp Massage & Clarify
+      </h4>
+
+      <p class="text-[11px] text-slate-600 mt-1">
+        Use residue-free clarifying shampoo to lift buildup from roots.
+      </p>
+
+      <span class="text-2xl block mt-3 text-right">
+        💆🏾‍♀️
+      </span>
+
+    </div>
+
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
+        STEP 2
+      </span>
+
+      <h4 class="font-bold text-sm mt-2">
+        ACV Rinse
+      </h4>
+
+      <p class="text-[11px] text-slate-600 mt-1">
+        Optional rinse for buildup and mineral residue.
+      </p>
+
+      <span class="text-2xl block mt-3 text-right">
+        🌿
+      </span>
+
+    </div>
+
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
+        STEP 3
+      </span>
+
+      <h4 class="font-bold text-sm mt-2">
+        Hydration Mist
+      </h4>
+
+      <p class="text-[11px] text-slate-600 mt-1">
+        Lightly hydrate locs while damp.
+      </p>
+
+      <span class="text-2xl block mt-3 text-right">
+        💧
+      </span>
+
+    </div>
+
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">
+        STEP 4
+      </span>
+
+      <h4 class="font-bold text-sm mt-2">
+        Seal & Dry
+      </h4>
+
+      <p class="text-[11px] text-slate-600 mt-1">
+        Dry thoroughly and use lightweight products as desired.
+      </p>
+
+      <span class="text-2xl block mt-3 text-right">
+        ☀️
+      </span>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     PRODUCTS
+========================================================== -->
+<section class="bg-emerald-100 section-card p-6 md:p-8">
+
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
+
+    <div>
+      <h2 class="text-2xl font-black text-emerald-950">
+        🧪 Products Used Vault
+      </h2>
+
+      <p class="text-xs text-emerald-800">
+        Your holy grail products for retwists, moisture, and scalp care.
+      </p>
+    </div>
+
+    <button
+      onclick="addProduct()"
+      class="bg-white hover:bg-emerald-50 text-emerald-950 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+    >
+      ➕ Add Product
+    </button>
+
+  </div>
+
+
+  <div
+    id="product-grid"
+    class="grid grid-cols-1 sm:grid-cols-3 gap-4"
+  >
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <div class="flex items-center gap-3 mb-2">
+
+        <span class="text-2xl">🌱</span>
+
         <div>
-          <h2 class="text-2xl font-black text-amber-900">📋 All Loc Styles Directory</h2>
-          <p class="text-xs text-slate-600">Select difficulty filter or click any card to jump to it in the carousel.</p>
+
+          <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
+            SCALP CARE
+          </span>
+
+          <h4 class="font-bold text-sm">
+            Rosewater & Aloe Mist
+          </h4>
+
         </div>
-        
-        <!-- Difficulty Filter Buttons -->
-        <div class="flex flex-wrap gap-1.5" id="filter-container">
-          <button onclick="filterStyles('All')" id="filter-All" class="bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition">All</button>
-          <button onclick="filterStyles('Easy')" id="filter-Easy" class="bg-emerald-200 text-emerald-950 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition">Easy</button>
-          <button onclick="filterStyles('Medium')" id="filter-Medium" class="bg-amber-200 text-amber-950 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition">Medium</button>
-          <button onclick="filterStyles('Hard')" id="filter-Hard" class="bg-rose-200 text-rose-950 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition">Hard</button>
-        </div>
+
       </div>
 
-      <div id="styles-directory-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-        <!-- Injected via JS -->
-      </div>
+      <p class="text-xs text-slate-600">
+        Lightweight hydration mist.
+      </p>
+
     </div>
 
-    <!-- LOC GALLERY (THINGS I HAVE DONE) -->
-    <div class="bg-fuchsia-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <div class="flex items-center gap-3 mb-2">
+
+        <span class="text-2xl">🍯</span>
+
         <div>
-          <h2 class="text-2xl font-black text-fuchsia-950">📸 My Loc Gallery & Completed Looks</h2>
-          <p class="text-xs text-fuchsia-900">Pictures of you doing your own hairstyles and completed milestones!</p>
+
+          <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-bold border border-black">
+            RETWIST GEL
+          </span>
+
+          <h4 class="font-bold text-sm">
+            Aloe Vera / Flaxseed Gel
+          </h4>
+
         </div>
-        <button onclick="openGalleryModal()" class="bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition">
-          ➕ Add Gallery Photo (+15 XP)
-        </button>
+
       </div>
 
-      <div id="loc-gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <!-- Injected via JS -->
-      </div>
+      <p class="text-xs text-slate-600">
+        Light holding gel for styling.
+      </p>
+
     </div>
 
-    <!-- LOC MILESTONES & GROWTH TRACKER (NEW SECTION) -->
-    <div class="bg-indigo-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+
+    <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
+
+      <div class="flex items-center gap-3 mb-2">
+
+        <span class="text-2xl">💧</span>
+
         <div>
-          <h2 class="text-2xl font-black text-indigo-950">🌱 Loc Journey Milestones</h2>
-          <p class="text-xs text-indigo-900">Track key length checks, budding phases, and loc maturity stages.</p>
+
+          <span class="text-[9px] bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded font-bold border border-black">
+            SEALANT OIL
+          </span>
+
+          <h4 class="font-bold text-sm">
+            Jojoba & Peppermint Oil
+          </h4>
+
         </div>
-        <button onclick="addMilestone()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">
-          + Log Milestone (+25 XP)
-        </button>
+
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="milestones-grid">
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">MONTH 6</span>
-          <h4 class="font-bold text-sm text-slate-900 mt-2">Budding Phase Started</h4>
-          <p class="text-xs text-slate-600 mt-1">Locs starting to tangle and lock up internally at the roots.</p>
-        </div>
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">MONTH 12</span>
-          <h4 class="font-bold text-sm text-slate-900 mt-2">Shoulder Length Drop</h4>
-          <p class="text-xs text-slate-600 mt-1">Gravity taking over, locs starting to hang downward nicely.</p>
-        </div>
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">GOAL</span>
-          <h4 class="font-bold text-sm text-slate-900 mt-2">Mid-Back Length Maturity</h4>
-          <p class="text-xs text-slate-600 mt-1">Ultimate long-term loc growth target.</p>
-        </div>
-      </div>
+      <p class="text-xs text-slate-600">
+        Lightweight oil for sealing moisture.
+      </p>
+
     </div>
 
-    <!-- WASH HAIR DAY PROTOCOL -->
-    <div class="bg-sky-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+  </div>
+
+</section>
+
+
+<!-- =========================================================
+     WEEKLY BOUNTIES
+========================================================== -->
+<section class="bg-yellow-100 section-card p-6 md:p-8">
+  <div class="flex items-center justify-between gap-4 mb-5">
+    <div>
+      <h2 class="text-2xl font-black text-yellow-950">
+        👑 Weekly Loc Bounties
+      </h2>
+      <p class="text-xs text-yellow-900">
+        Complete care missions to level up your crown.
+      </p>
+    </div>
+    <span class="text-2xl">
+      🏆
+    </span>
+  </div>
+
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    <button
+      onclick="completeBounty(this, 15)"
+      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
+    >
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">
+          🚿
+        </span>
         <div>
-          <h2 class="text-2xl font-black text-sky-900">🚿 Wash Hair Day Protocol</h2>
-          <p class="text-xs text-sky-800">Step-by-step checklist to keep your scalp clean and locs thriving.</p>
-        </div>
-        <button onclick="gainXP(15); alert('🧼 Wash Day Completed! +15 XP');" class="bg-sky-400 hover:bg-sky-500 text-black font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition">
-          ✅ Complete Wash Day (+15 XP)
-        </button>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mt-4">
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 1</span>
-            <h4 class="font-bold text-sm mt-2 text-slate-900">Scalp Massage & Clarify</h4>
-            <p class="text-[11px] text-slate-600 mt-1">Use residue-free clarifying shampoo to lift buildup from roots.</p>
-          </div>
-          <span class="text-2xl mt-3 text-right">💆🏾‍♀️</span>
-        </div>
-
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 2</span>
-            <h4 class="font-bold text-sm mt-2 text-slate-900">ACV Rinse (Optional)</h4>
-            <p class="text-[11px] text-slate-600 mt-1">Apple cider vinegar rinse to dissolve deep lint and hard water minerals.</p>
-          </div>
-          <span class="text-2xl mt-3 text-right">🌿</span>
-        </div>
-
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 3</span>
-            <h4 class="font-bold text-sm mt-2 text-slate-900">Hydration Mist</h4>
-            <p class="text-[11px] text-slate-600 mt-1">Saturate locs with rosewater or herbal tea infusion while damp.</p>
-          </div>
-          <span class="text-2xl mt-3 text-right">💧</span>
-        </div>
-
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm flex flex-col justify-between">
-          <div>
-            <span class="text-xs font-bold bg-sky-200 text-sky-900 px-2 py-0.5 rounded border border-black">STEP 4</span>
-            <h4 class="font-bold text-sm mt-2 text-slate-900">Seal & Dry</h4>
-            <p class="text-[11px] text-slate-600 mt-1">Lock in moisture with lightweight oil blend and sit under dryer.</p>
-          </div>
-          <span class="text-2xl mt-3 text-right">☀️</span>
+          <h4 class="font-bold text-sm">
+            Complete Wash Day
+          </h4>
+          <p class="text-[10px] text-slate-500">
+            Keep the scalp clean.
+          </p>
         </div>
       </div>
-    </div>
-
-    <!-- PRODUCTS USED VAULT -->
-    <div class="bg-emerald-100 border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="mb-6">
-        <h2 class="text-2xl font-black text-emerald-900">🧪 Products Used Vault</h2>
-        <p class="text-xs text-emerald-800">Your holy grail products for retwists, moisture, and scalp care.</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="flex items-center gap-3 mb-2">
-            <span class="text-2xl">🌱</span>
-            <div>
-              <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">SCALP CARE</span>
-              <h4 class="font-bold text-sm text-slate-900">Rosewater & Aloe Mist</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-600">Daily hydration spray to keep locs smelling fresh and feeling soft without heavy buildup.</p>
-        </div>
-
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="flex items-center gap-3 mb-2">
-            <span class="text-2xl">🍯</span>
-            <div>
-              <span class="text-[9px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-bold border border-black">RETWIST GEL</span>
-              <h4 class="font-bold text-sm text-slate-900">Aloe Vera / Flaxseed Gel</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-600">Natural plant-based holding gel that provides a clean hold without flaking or stiffness.</p>
-        </div>
-
-        <div class="bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="flex items-center gap-3 mb-2">
-            <span class="text-2xl">💧</span>
-            <div>
-              <span class="text-[9px] bg-yellow-200 text-yellow-900 px-2 py-0.5 rounded font-bold border border-black">SEALANT OIL</span>
-              <h4 class="font-bold text-sm text-slate-900">Jojoba & Peppermint Oil</h4>
-            </div>
-          </div>
-          <p class="text-xs text-slate-600">Lightweight oil blend mimicking natural scalp sebum to seal moisture and stimulate growth.</p>
+      <span class="font-black text-amber-600">
+        +15 XP
+      </span>
+    </button>
+    
+    <button
+      onclick="completeBounty(this, 15)"
+      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
+    >
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">
+          📸
+        </span>
+        <div>
+          <h4 class="font-bold text-sm">
+            Upload Progress Photo
+          </h4>
+          <p class="text-[10px] text-slate-500">
+            Document the crown.
+          </p>
         </div>
       </div>
-    </div>
+
+      <span class="font-black text-amber-600">
+        +15 XP
+      </span>
+
+    </button>
+
+
+    <button
+      onclick="completeBounty(this, 25)"
+      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
+    >
+
+      <div class="flex items-center gap-3">
+
+        <span class="text-2xl">
+          📏
+        </span>
+
+        <div>
+          <h4 class="font-bold text-sm">
+            Log Length Measurement
+          </h4>
+
+          <p class="text-[10px] text-slate-500">
+            Track your growth.
+          </p>
+        </div>
+
+      </div>
+
+      <span class="font-black text-amber-600">
+        +25 XP
+      </span>
+
+    </button>
+
+
+    <button
+      onclick="completeBounty(this, 25)"
+      class="bounty bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm text-left flex items-center justify-between hover:bg-yellow-50 transition"
+    >
+
+      <div class="flex items-center gap-3">
+
+        <span class="text-2xl">
+          🔄
+        </span>
+
+        <div>
+          <h4 class="font-bold text-sm">
+            Complete Retwist
+          </h4>
+
+          <p class="text-[10px] text-slate-500">
+            Refresh the style.
+          </p>
+        </div>
+
+      </div>
+
+      <span class="font-black text-amber-600">
+        +25 XP
+      </span>
+
+    </button>
+
+  </div>
+
+</section>
+```
 
   </main>
 
-  <!-- ADD STYLE MODAL -->
-  <div id="style-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
-      <button onclick="closeStyleModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
-      <h3 class="text-xl font-black text-amber-900 mb-1">✨ Add New Loc Style Inspo</h3>
-      <p class="text-xs text-slate-600 mb-4">Add a hairstyle, reference photo, and tutorial link.</p>
-      
-      <form onsubmit="handleSaveNewStyle(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Style Name</label>
-          <input type="text" id="new-style-title" required placeholder="e.g., Butterfly Locs" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Difficulty Level</label>
-          <select id="new-style-difficulty" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none">
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Category Tag</label>
-          <input type="text" id="new-style-tag" required placeholder="e.g., Protective Style" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Description</label>
-          <textarea id="new-style-desc" required placeholder="Brief breakdown of the style..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none h-20"></textarea>
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Reference Photo URL</label>
-          <input type="url" id="new-style-img" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Reference / Tutorial Link (Optional)</label>
-          <input type="url" id="new-style-link" placeholder="https://youtube.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button type="button" onclick="closeStyleModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black transition">Cancel</button>
-          <button type="submit" class="w-2/3 bg-amber-500 hover:bg-amber-600 text-black font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">Save Style (+20 XP)</button>
-        </div>
-      </form>
+  <!-- =========================================================
+       STYLE MODAL
+  ========================================================== -->
+
+  <div
+    id="style-modal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  >
+
+```
+<div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
+
+  <button
+    onclick="closeStyleModal()"
+    class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl"
+  >
+    ✕
+  </button>
+
+  <h3 class="text-xl font-black text-amber-900 mb-1">
+    ✨ Add New Loc Style Inspo
+  </h3>
+
+  <p class="text-xs text-slate-600 mb-4">
+    Add a hairstyle, reference photo, and tutorial link.
+  </p>
+
+
+  <form onsubmit="handleSaveNewStyle(event)" class="space-y-3">
+
+    <input
+      type="text"
+      id="new-style-title"
+      required
+      placeholder="Style Name"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <select
+      id="new-style-difficulty"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+      <option value="Easy">Easy</option>
+      <option value="Medium">Medium</option>
+      <option value="Hard">Hard</option>
+    </select>
+
+    <input
+      type="text"
+      id="new-style-tag"
+      required
+      placeholder="Category / Tag"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <textarea
+      id="new-style-desc"
+      required
+      placeholder="Description"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black h-20"
+    ></textarea>
+
+    <input
+      type="url"
+      id="new-style-img"
+      required
+      placeholder="Image URL"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <input
+      type="url"
+      id="new-style-link"
+      placeholder="Tutorial Link (Optional)"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <div class="flex gap-2 pt-2">
+
+      <button
+        type="button"
+        onclick="closeStyleModal()"
+        class="w-1/3 bg-slate-200 text-slate-800 font-bold py-2 text-xs rounded-xl border-2 border-black"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="w-2/3 bg-amber-500 text-black font-bold py-2 text-xs rounded-xl border-2 border-black pixel-shadow-sm"
+      >
+        Save Style (+20 XP)
+      </button>
+
     </div>
+
+  </form>
+
+</div>
+```
+
   </div>
 
-  <!-- ADD GALLERY PHOTO MODAL -->
-  <div id="gallery-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
-      <button onclick="closeGalleryModal()" class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl">✕</button>
-      <h3 class="text-xl font-black text-fuchsia-950 mb-1">📸 Add Completed Gallery Photo</h3>
-      <p class="text-xs text-slate-600 mb-4">Showcase a picture of you doing or wearing the hairstyle!</p>
-      
-      <form onsubmit="handleSaveGalleryPhoto(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Look Title / Date</label>
-          <input type="text" id="new-gallery-title" required placeholder="e.g., Fresh Retwist - June 2026" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Photo URL (Picture of you)</label>
-          <input type="url" id="new-gallery-img" required placeholder="https://images.unsplash.com/..." class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Notes / Products Used</label>
-          <input type="text" id="new-gallery-notes" placeholder="e.g., Used aloe gel and rosewater mist" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none" />
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button type="button" onclick="closeGalleryModal()" class="w-1/3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold py-2 px-3 text-xs rounded-xl border-2 border-black transition">Cancel</button>
-          <button type="submit" class="w-2/3 bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-2 px-3 text-xs rounded-xl border-2 border-black pixel-shadow-sm transition">Post Photo (+15 XP)</button>
-        </div>
-      </form>
+  <!-- =========================================================
+       GALLERY MODAL
+  ========================================================== -->
+
+  <div
+    id="gallery-modal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  >
+
+```
+<div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
+
+  <button
+    onclick="closeGalleryModal()"
+    class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl"
+  >
+    ✕
+  </button>
+
+  <h3 class="text-xl font-black text-fuchsia-950 mb-1">
+    📸 Add Completed Gallery Photo
+  </h3>
+
+  <p class="text-xs text-slate-600 mb-4">
+    Showcase a completed hairstyle or loc milestone.
+  </p>
+
+
+  <form onsubmit="handleSaveGalleryPhoto(event)" class="space-y-3">
+
+    <input
+      type="text"
+      id="new-gallery-title"
+      required
+      placeholder="Look Title / Date"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <input
+      type="url"
+      id="new-gallery-img"
+      required
+      placeholder="Photo URL"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <input
+      type="text"
+      id="new-gallery-notes"
+      placeholder="Notes / Products Used"
+      class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black"
+    >
+
+    <div class="flex gap-2 pt-2">
+
+      <button
+        type="button"
+        onclick="closeGalleryModal()"
+        class="w-1/3 bg-slate-200 font-bold py-2 text-xs rounded-xl border-2 border-black"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="w-2/3 bg-fuchsia-500 text-white font-bold py-2 text-xs rounded-xl border-2 border-black pixel-shadow-sm"
+      >
+        Post Photo (+15 XP)
+      </button>
+
     </div>
+
+  </form>
+
+</div>
+```
+
   </div>
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
 
   <script>
-    // --- HUD XP SYSTEM ---
+
+    /* =========================================================
+       XP SYSTEM
+    ========================================================== */
+
     function gainXP(amount) {
-      let xp = (parseInt(localStorage.getItem('playerXP')) || 0) + amount;
-      let lvl = parseInt(localStorage.getItem('playerLvl')) || 1;
-      if (xp >= 100) { xp -= 100; lvl += 1; alert('🎉 LEVEL UP!'); }
-      localStorage.setItem('playerXP', xp);
-      localStorage.setItem('playerLvl', lvl);
-      document.getElementById('player-lvl').innerText = lvl;
+
+      let xp =
+        (parseInt(localStorage.getItem('locXP')) || 0) + amount;
+
+      let lvl =
+        parseInt(localStorage.getItem('locLvl')) || 1;
+
+      while (xp >= 100) {
+        xp -= 100;
+        lvl++;
+        alert('🎉 LEVEL UP! Welcome to Level ' + lvl + '!');
+      }
+
+      localStorage.setItem('locXP', xp);
+      localStorage.setItem('locLvl', lvl);
+
+      updateXPDisplay();
     }
-    document.getElementById('player-lvl').innerText = localStorage.getItem('playerLvl') || 1;
 
-    // --- DEFAULT DATA & LOCALSTORAGE ---
+
+    function updateXPDisplay() {
+
+      const xp =
+        parseInt(localStorage.getItem('locXP')) || 0;
+
+      const lvl =
+        parseInt(localStorage.getItem('locLvl')) || 1;
+
+      document.getElementById('player-lvl').innerText = lvl;
+      document.getElementById('hud-xp').innerText = xp;
+      document.getElementById('xp-label').innerText =
+        xp + ' / 100 XP';
+
+      document.getElementById('xp-bar').style.width =
+        xp + '%';
+
+
+      let title = 'Budding 🌱';
+
+      if (lvl >= 5) {
+        title = 'Loc Legend ✨';
+      } else if (lvl >= 4) {
+        title = 'Crowned 👑';
+      } else if (lvl >= 3) {
+        title = 'Flourishing 🌳';
+      } else if (lvl >= 2) {
+        title = 'Rooted 🌿';
+      }
+
+      document.getElementById('level-title').innerText = title;
+    }
+
+
+    /* =========================================================
+       LOC STATS
+    ========================================================== */
+
+    const defaultStats = {
+      age: '18 Months',
+      length: '12.5"',
+      retwist: '3 weeks',
+      wash: '5 days ago',
+      goal: 'Mid-Back'
+    };
+
+
+    let locStats =
+      JSON.parse(localStorage.getItem('locStats')) ||
+      defaultStats;
+
+
+    function renderStats() {
+
+      document.getElementById('stat-age').innerText =
+        locStats.age;
+
+      document.getElementById('stat-length').innerText =
+        locStats.length;
+
+      document.getElementById('stat-retwist').innerText =
+        locStats.retwist;
+
+      document.getElementById('stat-wash').innerText =
+        locStats.wash;
+
+      document.getElementById('stat-goal').innerText =
+        locStats.goal;
+
+      document.getElementById('growth-current').innerText =
+        locStats.length;
+    }
+
+
+    function editLocStats() {
+
+      const age = prompt(
+        'Loc age:',
+        locStats.age
+      );
+
+      if (age === null) return;
+
+      const length = prompt(
+        'Current length:',
+        locStats.length
+      );
+
+      if (length === null) return;
+
+      const retwist = prompt(
+        'Last retwist:',
+        locStats.retwist
+      );
+
+      if (retwist === null) return;
+
+      const wash = prompt(
+        'Last wash:',
+        locStats.wash
+      );
+      if (wash === null) return;
+      const goal = prompt(
+        'Growth goal:',
+        locStats.goal
+      );
+
+      if (goal === null) return;
+
+
+      locStats = {
+        age,
+        length,
+        retwist,
+        wash,
+        goal
+      };
+
+      localStorage.setItem(
+        'locStats',
+        JSON.stringify(locStats)
+      );
+
+      renderStats();
+
+      gainXP(5);
+
+      alert('👑 Loc stats updated! +5 XP');
+    }
+
+
+    /* =========================================================
+       DEFAULT STYLES
+    ========================================================== */
+
     const defaultStyles = [
+
       {
-        title: "Two-Strand Twists",
-        difficulty: "Easy",
-        tag: "Low Tension Style",
-        desc: "Classic and low-tension style. Great for letting down or putting into a high ponytail. Lasts for weeks with proper misting.",
-        img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60",
-        link: "https://www.youtube.com"
+        title: 'Two-Strand Twists',
+        difficulty: 'Easy',
+        tag: 'Low Tension Style',
+        desc: 'Classic and low-tension style. Great for letting down or putting into a high ponytail.',
+        img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=700&auto=format&fit=crop&q=60',
+        link: 'https://www.youtube.com'
       },
+
       {
-        title: "Barrel Twists & Curls",
-        difficulty: "Medium",
-        tag: "Retwist Style",
-        desc: "Clean retwist braided into twin cornrow barrels across the scalp with bouncy curly ends. Perfect for events!",
-        img: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&auto=format&fit=crop&q=60",
-        link: ""
+        title: 'Barrel Twists & Curls',
+        difficulty: 'Medium',
+        tag: 'Retwist Style',
+        desc: 'Clean retwist braided into twin barrel sections with curly ends.',
+        img: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=700&auto=format&fit=crop&q=60',
+        link: ''
       },
+
       {
-        title: "Loc Petals / Knots",
-        difficulty: "Medium",
-        tag: "Updo Style",
-        desc: "Sculptural looped petals pinned securely around the crown. Gives an elegant, crown-like regal silhouette.",
-        img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700&auto=format&fit=crop&q=60",
-        link: ""
+        title: 'Loc Petals / Knots',
+        difficulty: 'Medium',
+        tag: 'Updo Style',
+        desc: 'Sculptural looped petals pinned around the crown for an elegant silhouette.',
+        img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=700&auto=format&fit=crop&q=60',
+        link: ''
       },
+
       {
-        title: "Intricate Interlocked Updo",
-        difficulty: "Hard",
-        tag: "Advanced Styling",
-        desc: "Complex basket-weave interlocking pattern pinning all locs into a high structural crown. Takes patience but holds for weeks.",
-        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=60",
-        link: ""
+        title: 'Intricate Interlocked Updo',
+        difficulty: 'Hard',
+        tag: 'Advanced Styling',
+        desc: 'Complex interlocking pattern that creates a high structural crown.',
+        img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=700&auto=format&fit=crop&q=60',
+        link: ''
       }
+
     ];
 
-    const defaultGallery = [
-      {
-        title: "Fresh Retwist & Two-Strands",
-        img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700&auto=format&fit=crop&q=60",
-        notes: "Self-retwist day! Used flaxseed gel."
-      },
-      {
-        title: "Barrel Braids Half Up",
-        img: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=700&auto=format&fit=crop&q=60",
-        notes: "Did this style for a weekend trip."
-      }
-    ];
 
-    let locStyles = JSON.parse(localStorage.getItem('locStudioStyles')) || defaultStyles;
-    let locGallery = JSON.parse(localStorage.getItem('locStudioGallery')) || defaultGallery;
+    let locStyles =
+      JSON.parse(localStorage.getItem('locStudioStyles')) ||
+      defaultStyles;
+
     let currentStyleIndex = 0;
     let activeFilter = 'All';
 
-    // --- CAROUSEL LOGIC ---
+
+    /* =========================================================
+       CAROUSEL
+    ========================================================== */
+
     function updateCarousel() {
-      if (locStyles.length === 0) return;
-      if (currentStyleIndex >= locStyles.length) currentStyleIndex = 0;
-      if (currentStyleIndex < 0) currentStyleIndex = locStyles.length - 1;
 
-      const style = locStyles[currentStyleIndex];
-      document.getElementById('carousel-counter').innerText = `STYLE ${currentStyleIndex + 1} / ${locStyles.length}`;
-      document.getElementById('carousel-title').innerText = style.title;
-      document.getElementById('carousel-desc').innerText = style.desc;
-      document.getElementById('carousel-tag').innerText = style.tag;
-      document.getElementById('carousel-img').src = style.img;
-      
-      const badge = document.getElementById('carousel-badge');
-      badge.innerText = style.difficulty;
-      
-      if (style.difficulty === 'Easy') badge.className = 'text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
-      else if (style.difficulty === 'Medium') badge.className = 'text-[10px] bg-amber-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
-      else badge.className = 'text-[10px] bg-rose-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+      if (!locStyles.length) return;
 
-      const linkContainer = document.getElementById('carousel-link-container');
-      if (style.link && style.link.trim() !== '') {
-        linkContainer.innerHTML = `<a href="${style.link}" target="_blank" class="inline-flex items-center gap-1 bg-sky-300 hover:bg-sky-400 text-slate-900 font-bold px-3 py-1 rounded-xl border border-black text-xs pixel-shadow-sm">🔗 Reference Link / Tutorial</a>`;
+      if (currentStyleIndex >= locStyles.length)
+        currentStyleIndex = 0;
+
+      if (currentStyleIndex < 0)
+        currentStyleIndex = locStyles.length - 1;
+
+
+      const style =
+        locStyles[currentStyleIndex];
+
+
+      document.getElementById(
+        'carousel-counter'
+      ).innerText =
+        `STYLE ${currentStyleIndex + 1} / ${locStyles.length}`;
+
+
+      document.getElementById(
+        'carousel-title'
+      ).innerText =
+        style.title;
+
+
+      document.getElementById(
+        'carousel-desc'
+      ).innerText =
+        style.desc;
+
+
+      document.getElementById(
+        'carousel-tag'
+      ).innerText =
+        style.tag;
+
+
+      document.getElementById(
+        'carousel-img'
+      ).src =
+        style.img;
+
+
+      const badge =
+        document.getElementById(
+          'carousel-badge'
+        );
+
+
+      badge.innerText =
+        style.difficulty;
+
+
+      if (style.difficulty === 'Easy') {
+
+        badge.className =
+          'text-[10px] bg-emerald-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+
+      } else if (style.difficulty === 'Medium') {
+
+        badge.className =
+          'text-[10px] bg-amber-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+
       } else {
-        linkContainer.innerHTML = '';
+
+        badge.className =
+          'text-[10px] bg-rose-300 text-black px-2.5 py-0.5 rounded-full border border-black font-bold uppercase tracking-wider';
+
       }
+
+
+      const linkContainer =
+        document.getElementById(
+          'carousel-link-container'
+        );
+
+
+      if (
+        style.link &&
+        style.link.trim() !== ''
+      ) {
+
+        linkContainer.innerHTML = `
+          <a
+            href="${style.link}"
+            target="_blank"
+            class="inline-flex items-center gap-1 bg-sky-300 hover:bg-sky-400 text-slate-900 font-bold px-3 py-1 rounded-xl border border-black text-xs pixel-shadow-sm"
+          >
+            🔗 Reference Link / Tutorial
+          </a>
+        `;
+
+      } else {
+
+        linkContainer.innerHTML = '';
+
+      }
+
     }
+
 
     function nextStyle() {
-      currentStyleIndex = (currentStyleIndex + 1) % locStyles.length;
+
+      currentStyleIndex =
+        (currentStyleIndex + 1) %
+        locStyles.length;
+
       updateCarousel();
+
     }
+
 
     function prevStyle() {
-      currentStyleIndex = (currentStyleIndex - 1 + locStyles.length) % locStyles.length;
+
+      currentStyleIndex =
+        (currentStyleIndex - 1 + locStyles.length) %
+        locStyles.length;
+
       updateCarousel();
+
     }
+
 
     function jumpToStyle(index) {
-      currentStyleIndex = index;
-      updateCarousel();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
 
-    // --- FILTER & RENDER DIRECTORY LIST ---
-    function filterStyles(difficulty) {
-      activeFilter = difficulty;
-      
-      // Update filter buttons styling
-      ['All', 'Easy', 'Medium', 'Hard'].forEach(cat => {
-        const btn = document.getElementById(`filter-${cat}`);
-        if (cat === difficulty) {
-          btn.className = "bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition";
-        } else {
-          btn.className = "bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm hover:bg-amber-100 transition";
-        }
+      currentStyleIndex = index;
+
+      updateCarousel();
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
       });
 
-      renderStylesDirectory();
     }
 
-    function renderStylesDirectory() {
-      const grid = document.getElementById('styles-directory-grid');
-      const filteredStyles = activeFilter === 'All' 
-        ? locStyles 
-        : locStyles.filter(s => s.difficulty === activeFilter);
 
-      if (filteredStyles.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-6 text-xs text-slate-500">No styles found for difficulty: ${activeFilter}</div>`;
+    /* =========================================================
+       STYLE DIRECTORY
+    ========================================================== */
+
+    function filterStyles(difficulty) {
+
+      activeFilter = difficulty;
+
+
+      ['All', 'Easy', 'Medium', 'Hard']
+        .forEach(cat => {
+
+          const btn =
+            document.getElementById(
+              `filter-${cat}`
+            );
+
+
+          if (cat === difficulty) {
+
+            btn.className =
+              'bg-amber-900 text-white px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition';
+
+          } else {
+
+            btn.className =
+              'bg-white text-slate-800 px-3 py-1 rounded-xl text-xs font-bold border-2 border-black pixel-shadow-sm transition';
+
+          }
+
+        });
+
+
+      renderStylesDirectory();
+
+    }
+
+
+    function renderStylesDirectory() {
+
+      const grid =
+        document.getElementById(
+          'styles-directory-grid'
+        );
+
+
+      const search =
+        document.getElementById(
+          'style-search'
+        ).value
+          .toLowerCase()
+          .trim();
+
+
+      let filteredStyles =
+        activeFilter === 'All'
+          ? locStyles
+          : locStyles.filter(
+              s => s.difficulty === activeFilter
+            );
+
+
+      if (search) {
+
+        filteredStyles =
+          filteredStyles.filter(style =>
+            `${style.title} ${style.tag} ${style.difficulty}`
+              .toLowerCase()
+              .includes(search)
+          );
+
+      }
+
+
+      if (!filteredStyles.length) {
+
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-8 text-xs text-slate-500">
+            No styles found.
+          </div>
+        `;
+
+        return;
+
+      }
+
+
+      grid.innerHTML =
+        filteredStyles.map(style => {
+
+          const originalIndex =
+            locStyles.findIndex(
+              s => s.title === style.title
+            );
+
+
+          let diffColor =
+            style.difficulty === 'Easy'
+              ? 'bg-emerald-200 text-emerald-900'
+              : style.difficulty === 'Medium'
+                ? 'bg-amber-200 text-amber-900'
+                : 'bg-rose-200 text-rose-900';
+          return `
+            <div
+              onclick="jumpToStyle(${originalIndex})"
+              class="bg-white border-2 border-black rounded-2xl p-3 cursor-pointer hover:bg-emerald-50 transition pixel-shadow-sm flex gap-3 items-center"
+            >
+              <img
+                src="${style.img}"
+                class="w-14 h-14 rounded-xl border border-black object-cover shrink-0"
+              >
+              <div class="overflow-hidden flex-1">
+                <div class="flex items-center gap-2 mb-1">
+                  <span
+                    class="text-[9px] px-2 py-0.5 rounded font-bold border border-black ${diffColor}"
+                  >
+                    ${style.difficulty}
+                  </span>
+                  <span class="text-[9px] text-slate-500 truncate">
+                    ${style.tag}
+                  </span>
+                </div>
+                <h4 class="font-bold text-xs truncate text-slate-900">
+                  ${style.title}
+                </h4>
+              </div>
+            </div>
+          `;
+        }).join('');
+    }
+    /* =========================================================
+       GALLERY
+    ========================================================== */
+
+    const defaultGallery = [
+      {
+        title: 'Fresh Retwist & Two-Strands',
+        img: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=700&auto=format&fit=crop&q=60',
+        notes: 'Self-retwist day! Used flaxseed gel.'
+      },
+      {
+        title: 'Barrel Braids Half Up',
+        img: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=700&auto=format&fit=crop&q=60',
+        notes: 'Did this style for a weekend trip.'
+      }
+    ];
+    let locGallery =
+      JSON.parse(localStorage.getItem('locStudioGallery')) ||
+      defaultGallery;
+
+
+    function renderGallery() {
+      const grid =
+        document.getElementById(
+          'loc-gallery-grid'
+        );
+
+
+      grid.innerHTML =
+        locGallery.map(item => `
+          <div class="bg-white border-2 border-black rounded-2xl p-3 pixel-shadow-sm">
+            <div class="h-48 rounded-xl border-2 border-black overflow-hidden mb-3">
+              <img
+                src="${item.img}"
+                alt="${item.title}"
+                class="w-full h-full object-cover"
+              >
+            </div>
+            <h4 class="font-bold text-sm text-slate-900">
+              ${item.title}
+            </h4>
+            <p class="text-xs text-slate-600 mt-1">
+              📝 ${item.notes || 'Completed hairstyle'}
+            </p>
+          </div>
+        `).join('');
+
+    }
+    function openGalleryModal() {
+      document
+        .getElementById('gallery-modal')
+        .classList.remove('hidden');
+
+    }
+
+
+    function closeGalleryModal() {
+      document
+        .getElementById('gallery-modal')
+        .classList.add('hidden');
+
+    }
+    function handleSaveGalleryPhoto(e) {
+      e.preventDefault();
+
+
+      const newPhoto = {
+
+        title:
+          document.getElementById(
+            'new-gallery-title'
+          ).value.trim(),
+
+        img:
+          document.getElementById(
+            'new-gallery-img'
+          ).value.trim(),
+
+        notes:
+          document.getElementById(
+            'new-gallery-notes'
+          ).value.trim()
+
+      };
+
+
+      locGallery.push(newPhoto);
+
+
+      localStorage.setItem(
+        'locStudioGallery',
+        JSON.stringify(locGallery)
+      );
+
+
+      closeGalleryModal();
+
+      renderGallery();
+
+      gainXP(15);
+
+      alert(
+        '📸 Gallery photo posted! +15 XP'
+      );
+
+    }
+
+
+    /* =========================================================
+       GROWTH LOG
+    ========================================================== */
+
+    function addGrowthEntry() {
+
+      const month =
+        prompt(
+          'Month / Date of measurement:'
+        );
+
+      if (!month) return;
+
+
+      const length =
+        prompt(
+          'Length at this check:',
+          locStats.length
+        );
+
+      if (!length) return;
+
+
+      const container =
+        document.getElementById(
+          'growth-log'
+        );
+
+
+      const card =
+        document.createElement('div');
+
+
+      card.className =
+        'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
+
+
+      card.innerHTML = `
+
+        <span class="text-[9px] bg-green-200 text-green-900 px-2 py-0.5 rounded font-bold border border-black">
+          ${month}
+        </span>
+
+        <p class="text-2xl font-black text-green-950 mt-2">
+          ${length}
+        </p>
+
+        <p class="text-[10px] text-slate-500">
+          Growth measurement logged.
+        </p>
+
+      `;
+
+
+      container.prepend(card);
+
+      gainXP(25);
+
+      alert(
+        '📏 Growth measurement logged! +25 XP'
+      );
+
+    }
+
+
+    /* =========================================================
+       MILESTONES
+    ========================================================== */
+
+    function addMilestone() {
+
+      const name =
+        prompt(
+          'Enter new loc milestone:'
+        );
+
+      if (!name) return;
+
+
+      const desc =
+        prompt(
+          'Brief notes on this milestone:'
+        );
+
+
+      const grid =
+        document.getElementById(
+          'milestones-grid'
+        );
+
+
+      const div =
+        document.createElement('div');
+
+
+      div.className =
+        'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
+
+
+      div.innerHTML = `
+
+        <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">
+          ACHIEVED
+        </span>
+
+        <h4 class="font-bold text-sm text-slate-900 mt-2">
+          ${name}
+        </h4>
+
+        <p class="text-xs text-slate-600 mt-1">
+          ${desc || 'Milestone logged successfully.'}
+        </p>
+
+      `;
+
+
+      grid.prepend(div);
+
+      gainXP(25);
+
+      alert(
+        '🌱 Milestone logged! +25 XP'
+      );
+
+    }
+
+
+    /* =========================================================
+       CALENDAR
+    ========================================================== */
+
+    let calendarDate =
+      new Date();
+
+
+    let calendarEvents =
+      JSON.parse(
+        localStorage.getItem(
+          'locCalendarEvents'
+        )
+      ) || {};
+
+
+    function renderCalendar() {
+
+      const year =
+        calendarDate.getFullYear();
+
+      const month =
+        calendarDate.getMonth();
+
+
+      const title =
+        calendarDate.toLocaleString(
+          'default',
+          {
+            month: 'long',
+            year: 'numeric'
+          }
+        );
+
+
+      document.getElementById(
+        'calendar-title'
+      ).innerText = title;
+      const grid =
+        document.getElementById(
+          'calendar-grid'
+        );
+      grid.innerHTML = '';
+      const firstDay =
+        new Date(
+          year,
+          month,
+          1
+        ).getDay();
+      const daysInMonth =
+        new Date(
+          year,
+          month + 1,
+          0
+        ).getDate();
+      for (
+        let i = 0;
+        i < firstDay;
+        i++
+      ) {
+        grid.innerHTML +=
+          '<div></div>';
+
+      }
+      for (
+        let day = 1;
+        day <= daysInMonth;
+        day++
+      ) {
+        const key =
+          `${year}-${month + 1}-${day}`;
+        const event =
+          calendarEvents[key] || '';
+        grid.innerHTML += `
+          <button
+            onclick="addEventToDay('${key}')"
+            class="calendar-day bg-violet-50 hover:bg-violet-200 border border-black rounded-lg p-1 text-left transition"
+          >
+
+            <span class="text-[10px] font-black">
+              ${day}
+            </span>
+
+            ${
+              event
+                ? `
+                  <div class="text-[9px] font-bold mt-1">
+                    ${event}
+                  </div>
+                `
+                : ''
+            }
+
+          </button>
+
+        `;
+
+      }
+
+    }
+
+
+    function changeMonth(direction) {
+
+      calendarDate.setMonth(
+        calendarDate.getMonth() + direction
+      );
+
+      renderCalendar();
+
+    }
+
+
+    function addCalendarEvent() {
+
+      const date =
+        prompt(
+          'Enter date (YYYY-M-D):'
+        );
+
+      if (!date) return;
+
+
+      const event =
+        prompt(
+          'Care event:',
+          '🚿 Wash Day'
+        );
+
+      if (!event) return;
+
+
+      calendarEvents[date] =
+        event;
+
+
+      localStorage.setItem(
+        'locCalendarEvents',
+        JSON.stringify(calendarEvents)
+      );
+
+
+      renderCalendar();
+
+      gainXP(5);
+
+      alert(
+        '📅 Care event added! +5 XP'
+      );
+
+    }
+
+
+    function addEventToDay(key) {
+
+      const event =
+        prompt(
+          'What is happening on this day?',
+          '🚿 Wash Day'
+        );
+
+
+      if (!event) return;
+
+
+      calendarEvents[key] =
+        event;
+
+
+      localStorage.setItem(
+        'locCalendarEvents',
+        JSON.stringify(calendarEvents)
+      );
+
+
+      renderCalendar();
+
+    }
+
+
+    /* =========================================================
+       WASH DAY
+    ========================================================== */
+
+    function completeWashDay() {
+
+      gainXP(15);
+
+      locStats.wash =
+        'Today';
+
+
+      localStorage.setItem(
+        'locStats',
+        JSON.stringify(locStats)
+      );
+
+
+      renderStats();
+
+
+      alert(
+        '🧼 Wash Day Completed! +15 XP'
+      );
+
+    }
+
+
+    /* =========================================================
+       PRODUCTS
+    ========================================================== */
+
+    function addProduct() {
+
+      const name =
+        prompt(
+          'Product name:'
+        );
+
+      if (!name) return;
+
+
+      const category =
+        prompt(
+          'Category:',
+          'HAIR CARE'
+        );
+
+
+      const notes =
+        prompt(
+          'Notes:'
+        );
+
+
+      const grid =
+        document.getElementById(
+          'product-grid'
+        );
+
+
+      const div =
+        document.createElement(
+          'div'
+        );
+
+
+      div.className =
+        'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
+
+
+      div.innerHTML = `
+
+        <div class="flex items-center gap-3 mb-2">
+
+          <span class="text-2xl">
+            🧴
+          </span>
+
+          <div>
+
+            <span class="text-[9px] bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded font-bold border border-black">
+              ${category || 'HAIR CARE'}
+            </span>
+
+            <h4 class="font-bold text-sm">
+              ${name}
+            </h4>
+
+          </div>
+
+        </div>
+
+        <p class="text-xs text-slate-600">
+          ${notes || 'New product added to the vault.'}
+        </p>
+
+      `;
+
+
+      grid.appendChild(div);
+
+      gainXP(10);
+
+      alert(
+        '🧪 Product added! +10 XP'
+      );
+
+    }
+
+
+    /* =========================================================
+       BOUNTIES
+    ========================================================== */
+
+    function completeBounty(button, amount) {
+
+      if (
+        button.dataset.completed === 'true'
+      ) {
         return;
       }
 
-      grid.innerHTML = filteredStyles.map((style) => {
-        // Find true index in original array for carousel jumping
-        const originalIndex = locStyles.findIndex(s => s.title === style.title);
-        let diffColor = style.difficulty === 'Easy' ? 'bg-emerald-200 text-emerald-900' : (style.difficulty === 'Medium' ? 'bg-amber-200 text-amber-900' : 'bg-rose-200 text-rose-900');
-        
-        return `
-          <div onclick="jumpToStyle(${originalIndex})" class="bg-white border-2 border-black rounded-2xl p-3 cursor-pointer hover:bg-amber-100 transition pixel-shadow-sm flex gap-3 items-center">
-            <img src="${style.img}" class="w-14 h-14 rounded-xl border border-black object-cover shrink-0" />
-            <div class="overflow-hidden flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="text-[9px] px-2 py-0.5 rounded font-bold border border-black ${diffColor}">${style.difficulty}</span>
-                <span class="text-[9px] text-slate-500 truncate">${style.tag}</span>
-              </div>
-              <h4 class="font-bold text-xs truncate text-slate-900">${style.title}</h4>
-            </div>
-          </div>
-        `;
-      }).join('');
+
+      button.dataset.completed =
+        'true';
+
+
+      button.classList.add(
+        'completed'
+      );
+      button.insertAdjacentHTML(
+        'beforeend',
+        '<span class="text-xl">✅</span>'
+      );
+      gainXP(amount);
+
+      alert(
+        '🏆 Bounty complete! +' +
+        amount +
+        ' XP'
+      );
+
     }
 
-    // --- RENDER GALLERY ---
-    function renderGallery() {
-      const grid = document.getElementById('loc-gallery-grid');
-      grid.innerHTML = locGallery.map(item => `
-        <div class="bg-white border-2 border-black rounded-2xl p-3 pixel-shadow-sm flex flex-col justify-between">
-          <div class="h-48 rounded-xl border-2 border-black overflow-hidden mb-3">
-            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover">
-          </div>
-          <div>
-            <h4 class="font-bold text-sm text-slate-900">${item.title}</h4>
-            <p class="text-xs text-slate-600 mt-1">📝 ${item.notes || 'Completed hairstyle'}</p>
-          </div>
-        </div>
-      `).join('');
+
+    /* =========================================================
+       STYLE MODAL
+    ========================================================== */
+
+    function openStyleModal() {
+      document
+        .getElementById('style-modal')
+        .classList.remove('hidden');
     }
-
-    // --- MILESTONES ---
-    function addMilestone() {
-      const milestoneName = prompt("Enter new loc milestone (e.g., 2-Year Loc Anniversary):");
-      if (!milestoneName) return;
-      const desc = prompt("Brief notes on this milestone:");
-      
-      const grid = document.getElementById('milestones-grid');
-      const div = document.createElement('div');
-      div.className = "bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm";
-      div.innerHTML = `
-        <span class="text-[9px] bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded font-bold border border-black">ACHIEVED</span>
-        <h4 class="font-bold text-sm text-slate-900 mt-2">${milestoneName}</h4>
-        <p class="text-xs text-slate-600 mt-1">${desc || 'Milestone logged successfully.'}</p>
-      `;
-      grid.prepend(div);
-      gainXP(25);
-      alert('🌱 Milestone logged! +25 XP');
+    function closeStyleModal() {
+      document
+        .getElementById('style-modal')
+        .classList.add('hidden');
     }
-
-    // --- MODAL CONTROLS ---
-    function openStyleModal() { document.getElementById('style-modal').classList.remove('hidden'); }
-    function closeStyleModal() { document.getElementById('style-modal').classList.add('hidden'); }
-
-    function openGalleryModal() { document.getElementById('gallery-modal').classList.remove('hidden'); }
-    function closeGalleryModal() { document.getElementById('gallery-modal').classList.add('hidden'); }
-
     function handleSaveNewStyle(e) {
       e.preventDefault();
       const newStyle = {
-        title: document.getElementById('new-style-title').value.trim(),
-        difficulty: document.getElementById('new-style-difficulty').value,
-        tag: document.getElementById('new-style-tag').value.trim(),
-        desc: document.getElementById('new-style-desc').value.trim(),
-        img: document.getElementById('new-style-img').value.trim(),
-        link: document.getElementById('new-style-link').value.trim()
+        title:
+          document.getElementById(
+            'new-style-title'
+          ).value.trim(),
+        difficulty:
+          document.getElementById(
+            'new-style-difficulty'
+          ).value,
+        tag:
+          document.getElementById(
+            'new-style-tag'
+          ).value.trim(),
+        desc:
+          document.getElementById(
+            'new-style-desc'
+          ).value.trim(),
+        img:
+          document.getElementById(
+            'new-style-img'
+          ).value.trim(),
+        link:
+          document.getElementById(
+            'new-style-link'
+          ).value.trim()
       };
-      locStyles.push(newStyle);
-      localStorage.setItem('locStudioStyles', JSON.stringify(locStyles));
+      locStyles.push(
+        newStyle
+      );
+      localStorage.setItem(
+        'locStudioStyles',
+        JSON.stringify(locStyles)
+      );
+      
       closeStyleModal();
       renderStylesDirectory();
-      currentStyleIndex = locStyles.length - 1;
+      currentStyleIndex =
+        locStyles.length - 1;
       updateCarousel();
       gainXP(20);
-      alert('✨ New style added to vault! +20 XP');
+      alert(
+        '✨ New style added to vault! +20 XP'
+      );
+
     }
 
-    function handleSaveGalleryPhoto(e) {
-      e.preventDefault();
-      const newPhoto = {
-        title: document.getElementById('new-gallery-title').value.trim(),
-        img: document.getElementById('new-gallery-img').value.trim(),
-        notes: document.getElementById('new-gallery-notes').value.trim()
-      };
-      locGallery.push(newPhoto);
-      localStorage.setItem('locStudioGallery', JSON.stringify(locGallery));
-      closeGalleryModal();
-      renderGallery();
-      gainXP(15);
-      alert('📸 Gallery photo posted! +15 XP');
-    }
+    /* =========================================================
+       INITIALIZE
+    ========================================================== */
 
-    // Initial render
+    renderStats();
+    updateXPDisplay();
     updateCarousel();
     renderStylesDirectory();
     renderGallery();
+    renderCalendar();
   </script>
 </body>
 </html>
