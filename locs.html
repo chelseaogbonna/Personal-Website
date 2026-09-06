@@ -83,118 +83,6 @@
   <main class="max-w-6xl mx-auto px-4 mt-8 space-y-8">
 ```
 <!-- =========================================================
-     LOC DASHBOARD
-========================================================== -->
-<section class="bg-emerald-200 section-card p-5 md:p-6">
-  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-5">
-    <div>
-      <h2 class="text-2xl font-black text-emerald-950">
-        👑 My Loc Dashboard
-      </h2>
-      <p class="text-xs text-emerald-900">
-        The current state of the crown. Keep it healthy, hydrated, and thriving.
-      </p>
-    </div>
-    <button
-      onclick="editLocStats()"
-      class="bg-white hover:bg-emerald-50 text-emerald-950 font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-    >
-      ✏️ Edit Stats
-    </button>
-
-  </div>
-
-
-  <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
-
-    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-2xl">🌱</span>
-      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
-        Loc Age
-      </p>
-      <p id="stat-age" class="text-lg font-black">
-        18 Months
-      </p>
-    </div>
-
-    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-2xl">📏</span>
-      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
-        Length
-      </p>
-      <p id="stat-length" class="text-lg font-black">
-        12.5"
-      </p>
-    </div>
-
-    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-2xl">🔄</span>
-      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
-        Last Retwist
-      </p>
-      <p id="stat-retwist" class="text-lg font-black">
-        3 weeks
-      </p>
-    </div>
-
-    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-2xl">💧</span>
-      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
-        Last Wash
-      </p>
-      <p id="stat-wash" class="text-lg font-black">
-        5 days ago
-      </p>
-    </div>
-
-    <div class="stat-card bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-      <span class="text-2xl">🎯</span>
-      <p class="text-[10px] uppercase font-bold text-slate-500 mt-2">
-        Goal
-      </p>
-      <p id="stat-goal" class="text-lg font-black">
-        Mid-Back
-      </p>
-    </div>
-
-  </div>
-
-
-  <!-- XP BAR -->
-  <div class="mt-5 bg-white border-2 border-black rounded-2xl p-4">
-
-    <div class="flex items-center justify-between mb-2">
-
-      <div>
-        <p class="text-xs font-black text-emerald-950">
-          👑 Crown Progress
-        </p>
-
-        <p id="level-title" class="text-[10px] text-slate-500 font-bold">
-          Budding 🌱
-        </p>
-      </div>
-
-      <span id="xp-label" class="text-xs font-black">
-        0 / 100 XP
-      </span>
-
-    </div>
-
-    <div class="h-4 bg-slate-100 border-2 border-black rounded-full overflow-hidden">
-      <div
-        id="xp-bar"
-        class="xp-bar h-full bg-amber-400"
-        style="width: 0%"
-      ></div>
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- =========================================================
      STYLE CAROUSEL
 ========================================================== -->
 <section class="bg-amber-50 section-card p-6 md:p-8">
@@ -397,120 +285,6 @@
   <div
     id="styles-directory-grid"
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3"
-  ></div>
-
-</section>
-
-
-<!-- =========================================================
-     GROWTH JOURNAL
-========================================================== -->
-<section class="bg-green-100 section-card p-6 md:p-8">
-
-  <div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-
-    <div>
-      <h2 class="text-2xl font-black text-green-950">
-        📈 Loc Growth Journal
-      </h2>
-
-      <p class="text-xs text-green-900">
-        Track length changes and celebrate the growth.
-      </p>
-    </div>
-
-    <button
-      onclick="addGrowthEntry()"
-      class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
-    >
-      ➕ Log Measurement (+25 XP)
-    </button>
-
-  </div>
-
-
-  <div class="grid md:grid-cols-3 gap-4">
-
-    <div class="md:col-span-2 bg-white border-2 border-black rounded-2xl p-5 pixel-shadow-sm">
-
-      <div class="flex items-end gap-3 h-52 border-b-2 border-l-2 border-black p-4">
-
-        <div class="flex-1 h-[25%] flex items-end">
-          <div class="w-full bg-emerald-300 border-2 border-black rounded-t-lg h-full"></div>
-        </div>
-
-        <div class="flex-1 h-[40%] flex items-end">
-          <div class="w-full bg-emerald-300 border-2 border-black rounded-t-lg h-full"></div>
-        </div>
-
-        <div class="flex-1 h-[55%] flex items-end">
-          <div class="w-full bg-emerald-400 border-2 border-black rounded-t-lg h-full"></div>
-        </div>
-
-        <div class="flex-1 h-[70%] flex items-end">
-          <div class="w-full bg-emerald-400 border-2 border-black rounded-t-lg h-full"></div>
-        </div>
-
-        <div class="flex-1 h-[85%] flex items-end">
-          <div class="w-full bg-emerald-500 border-2 border-black rounded-t-lg h-full"></div>
-        </div>
-
-        <div class="flex-1 h-full flex items-end">
-          <div class="w-full bg-emerald-600 border-2 border-black rounded-t-lg h-full"></div>
-        </div>
-
-      </div>
-
-      <div class="grid grid-cols-6 text-[9px] font-bold text-center mt-2">
-        <span>M3</span>
-        <span>M6</span>
-        <span>M9</span>
-        <span>M12</span>
-        <span>M15</span>
-        <span>NOW</span>
-      </div>
-    </div>
-    <div class="bg-white border-2 border-black rounded-2xl p-5 pixel-shadow-sm">
-      <p class="text-[10px] uppercase font-bold text-slate-500">
-        Current Length
-      </p>
-      <p
-        id="growth-current"
-        class="text-4xl font-black text-green-900 mt-1"
-      >
-        12.5"
-      </p>
-      
-      <div class="mt-5">
-        <div class="flex justify-between text-[10px] font-bold mb-1">
-          <span>Progress to goal</span>
-          <span>75%</span>
-        </div>
-        <div class="h-4 bg-slate-100 border-2 border-black rounded-full overflow-hidden">
-          <div class="h-full bg-green-500 w-3/4"></div>
-        </div>
-      </div>
-      <div class="mt-5 text-xs space-y-2">
-        <p>
-          📈 <strong>+0.7"</strong> since last check
-        </p>
-        <p>
-          🎯 Goal: <strong>Mid-back length</strong>
-        </p>
-        <p>
-          🌱 Keep growing!
-        </p>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div
-    id="growth-log"
-    class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4"
   ></div>
 
 </section>
@@ -1263,6 +1037,45 @@
   </div>
 
   <!-- =========================================================
+       DAY DETAIL MODAL
+  ========================================================== -->
+
+  <div
+    id="day-detail-modal"
+    class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  >
+
+    <div class="bg-white border-4 border-black rounded-3xl p-6 pixel-shadow-lg w-full max-w-md relative">
+
+      <button
+        onclick="closeDayDetail()"
+        class="absolute top-4 right-4 text-gray-500 hover:text-black font-bold text-xl"
+      >
+        ✕
+      </button>
+
+      <h3 id="day-detail-title" class="text-xl font-black text-violet-950 mb-1">
+        Day
+      </h3>
+
+      <p class="text-xs text-slate-600 mb-4">
+        Everything logged for this day.
+      </p>
+
+      <div id="day-detail-list" class="space-y-2 max-h-72 overflow-y-auto"></div>
+
+      <button
+        onclick="addNoteToActiveDay()"
+        class="w-full mt-4 bg-violet-500 hover:bg-violet-600 text-white font-bold py-2 rounded-xl border-2 border-black pixel-shadow-sm text-xs transition"
+      >
+        ➕ Add Note to This Day
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =========================================================
        JAVASCRIPT
   ========================================================== -->
 
@@ -1301,13 +1114,17 @@
       const lvl =
         parseInt(localStorage.getItem('locLvl')) || 1;
 
-      document.getElementById('player-lvl').innerText = lvl;
-      document.getElementById('hud-xp').innerText = xp;
-      document.getElementById('xp-label').innerText =
-        xp + ' / 100 XP';
+      const lvlEl = document.getElementById('player-lvl');
+      if (lvlEl) lvlEl.innerText = lvl;
 
-      document.getElementById('xp-bar').style.width =
-        xp + '%';
+      const xpEl = document.getElementById('hud-xp');
+      if (xpEl) xpEl.innerText = xp;
+
+      const xpLabelEl = document.getElementById('xp-label');
+      if (xpLabelEl) xpLabelEl.innerText = xp + ' / 100 XP';
+
+      const xpBarEl = document.getElementById('xp-bar');
+      if (xpBarEl) xpBarEl.style.width = xp + '%';
 
 
       let title = 'Budding 🌱';
@@ -1322,104 +1139,8 @@
         title = 'Rooted 🌿';
       }
 
-      document.getElementById('level-title').innerText = title;
-    }
-
-
-    /* =========================================================
-       LOC STATS
-    ========================================================== */
-
-    const defaultStats = {
-      age: '18 Months',
-      length: '12.5"',
-      retwist: '3 weeks',
-      wash: '5 days ago',
-      goal: 'Mid-Back'
-    };
-
-
-    let locStats =
-      JSON.parse(localStorage.getItem('locStats')) ||
-      defaultStats;
-
-
-    function renderStats() {
-
-      document.getElementById('stat-age').innerText =
-        locStats.age;
-
-      document.getElementById('stat-length').innerText =
-        locStats.length;
-
-      document.getElementById('stat-retwist').innerText =
-        locStats.retwist;
-
-      document.getElementById('stat-wash').innerText =
-        locStats.wash;
-
-      document.getElementById('stat-goal').innerText =
-        locStats.goal;
-
-      document.getElementById('growth-current').innerText =
-        locStats.length;
-    }
-
-
-    function editLocStats() {
-
-      const age = prompt(
-        'Loc age:',
-        locStats.age
-      );
-
-      if (age === null) return;
-
-      const length = prompt(
-        'Current length:',
-        locStats.length
-      );
-
-      if (length === null) return;
-
-      const retwist = prompt(
-        'Last retwist:',
-        locStats.retwist
-      );
-
-      if (retwist === null) return;
-
-      const wash = prompt(
-        'Last wash:',
-        locStats.wash
-      );
-      if (wash === null) return;
-      const goal = prompt(
-        'Growth goal:',
-        locStats.goal
-      );
-
-      if (goal === null) return;
-
-
-      locStats = {
-        age,
-        length,
-        retwist,
-        wash,
-        goal
-      };
-
-      localStorage.setItem(
-        'locStats',
-        JSON.stringify(locStats)
-      );
-
-      renderStats();
-
-      gainXP(5);
-
-      alert('👑 Loc stats updated! +5 XP');
+      const levelTitleEl = document.getElementById('level-title');
+      if (levelTitleEl) levelTitleEl.innerText = title;
     }
 
 
@@ -1844,6 +1565,15 @@
       );
 
 
+      logCalendarEvent(todayKey(), {
+        type: 'photo',
+        icon: '📸',
+        label: newPhoto.title,
+        img: newPhoto.img,
+        notes: newPhoto.notes
+      });
+
+
       closeGalleryModal();
 
       renderGallery();
@@ -1852,71 +1582,6 @@
 
       alert(
         '📸 Gallery photo posted! +15 XP'
-      );
-
-    }
-
-
-    /* =========================================================
-       GROWTH LOG
-    ========================================================== */
-
-    function addGrowthEntry() {
-
-      const month =
-        prompt(
-          'Month / Date of measurement:'
-        );
-
-      if (!month) return;
-
-
-      const length =
-        prompt(
-          'Length at this check:',
-          locStats.length
-        );
-
-      if (!length) return;
-
-
-      const container =
-        document.getElementById(
-          'growth-log'
-        );
-
-
-      const card =
-        document.createElement('div');
-
-
-      card.className =
-        'bg-white border-2 border-black rounded-2xl p-4 pixel-shadow-sm';
-
-
-      card.innerHTML = `
-
-        <span class="text-[9px] bg-green-200 text-green-900 px-2 py-0.5 rounded font-bold border border-black">
-          ${month}
-        </span>
-
-        <p class="text-2xl font-black text-green-950 mt-2">
-          ${length}
-        </p>
-
-        <p class="text-[10px] text-slate-500">
-          Growth measurement logged.
-        </p>
-
-      `;
-
-
-      container.prepend(card);
-
-      gainXP(25);
-
-      alert(
-        '📏 Growth measurement logged! +25 XP'
       );
 
     }
@@ -1999,6 +1664,46 @@
         )
       ) || {};
 
+    // Migrate any old-format entries (a single plain string per day)
+    // into the new format: an array of entry objects per day.
+    Object.keys(calendarEvents).forEach(key => {
+      if (typeof calendarEvents[key] === 'string') {
+        calendarEvents[key] = [
+          { type: 'note', icon: '📝', label: calendarEvents[key] }
+        ];
+      }
+    });
+
+
+    function todayKey() {
+      const now = new Date();
+      return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    }
+
+
+    // Central place any feature (wash day, gallery photo, manual note, etc.)
+    // uses to make something show up on the calendar.
+    // entry: { type, icon, label, img (optional), notes (optional) }
+    function logCalendarEvent(key, entry) {
+
+      if (!calendarEvents[key]) {
+        calendarEvents[key] = [];
+      }
+
+      calendarEvents[key].push({
+        ...entry,
+        time: new Date().toISOString()
+      });
+
+      localStorage.setItem(
+        'locCalendarEvents',
+        JSON.stringify(calendarEvents)
+      );
+
+      renderCalendar();
+
+    }
+
 
     function renderCalendar() {
 
@@ -2055,11 +1760,11 @@
       ) {
         const key =
           `${year}-${month + 1}-${day}`;
-        const event =
-          calendarEvents[key] || '';
+        const entries =
+          calendarEvents[key] || [];
         grid.innerHTML += `
           <button
-            onclick="addEventToDay('${key}')"
+            onclick="viewDayDetail('${key}')"
             class="calendar-day bg-violet-50 hover:bg-violet-200 border border-black rounded-lg p-1 text-left transition"
           >
 
@@ -2068,10 +1773,11 @@
             </span>
 
             ${
-              event
+              entries.length
                 ? `
-                  <div class="text-[9px] font-bold mt-1">
-                    ${event}
+                  <div class="flex flex-wrap gap-0.5 mt-1">
+                    ${entries.slice(0, 3).map(e => `<span class="text-[10px]">${e.icon || '📝'}</span>`).join('')}
+                    ${entries.length > 3 ? `<span class="text-[9px] font-bold">+${entries.length - 3}</span>` : ''}
                   </div>
                 `
                 : ''
@@ -2116,17 +1822,11 @@
       if (!event) return;
 
 
-      calendarEvents[date] =
-        event;
-
-
-      localStorage.setItem(
-        'locCalendarEvents',
-        JSON.stringify(calendarEvents)
-      );
-
-
-      renderCalendar();
+      logCalendarEvent(date, {
+        type: 'note',
+        icon: '📝',
+        label: event
+      });
 
       gainXP(5);
 
@@ -2137,7 +1837,54 @@
     }
 
 
-    function addEventToDay(key) {
+    let activeDayKey = null;
+
+    function viewDayDetail(key) {
+
+      activeDayKey = key;
+
+      const entries = calendarEvents[key] || [];
+      const list = document.getElementById('day-detail-list');
+
+      document.getElementById('day-detail-title').innerText =
+        'Day ' + key.split('-')[2] + ' — ' + calendarDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      list.innerHTML = entries.length
+        ? entries.map((e, i) => `
+            <div class="bg-violet-50 border-2 border-black rounded-xl p-3 flex gap-3 items-start">
+              ${
+                e.type === 'photo' && e.img
+                  ? `
+                    <a href="${e.img}" target="_blank" rel="noopener" class="shrink-0">
+                      <img src="${e.img}" alt="${e.label}" class="w-14 h-14 object-cover rounded-lg border-2 border-black">
+                    </a>
+                  `
+                  : `<span class="text-2xl">${e.icon || '📝'}</span>`
+              }
+              <div class="min-w-0">
+                <p class="font-bold text-sm break-words">${e.label}</p>
+                ${e.notes ? `<p class="text-xs text-slate-600 mt-0.5 break-words">${e.notes}</p>` : ''}
+                ${e.type === 'photo' && e.img ? `<a href="${e.img}" target="_blank" rel="noopener" class="text-[10px] text-violet-700 underline font-bold">Open photo ↗</a>` : ''}
+              </div>
+            </div>
+          `).join('')
+        : `<p class="text-xs text-slate-500">Nothing logged on this day yet.</p>`;
+
+      document
+        .getElementById('day-detail-modal')
+        .classList.remove('hidden');
+
+    }
+
+
+    function closeDayDetail() {
+      document
+        .getElementById('day-detail-modal')
+        .classList.add('hidden');
+    }
+
+
+    function addNoteToActiveDay() {
 
       const event =
         prompt(
@@ -2145,21 +1892,15 @@
           '🚿 Wash Day'
         );
 
-
       if (!event) return;
 
+      logCalendarEvent(activeDayKey, {
+        type: 'note',
+        icon: '📝',
+        label: event
+      });
 
-      calendarEvents[key] =
-        event;
-
-
-      localStorage.setItem(
-        'locCalendarEvents',
-        JSON.stringify(calendarEvents)
-      );
-
-
-      renderCalendar();
+      viewDayDetail(activeDayKey);
 
     }
 
@@ -2172,18 +1913,11 @@
 
       gainXP(15);
 
-      locStats.wash =
-        'Today';
-
-
-      localStorage.setItem(
-        'locStats',
-        JSON.stringify(locStats)
-      );
-
-
-      renderStats();
-
+      logCalendarEvent(todayKey(), {
+        type: 'wash',
+        icon: '🚿',
+        label: 'Wash Day Completed'
+      });
 
       alert(
         '🧼 Wash Day Completed! +15 XP'
@@ -2376,7 +2110,6 @@
        INITIALIZE
     ========================================================== */
 
-    renderStats();
     updateXPDisplay();
     updateCarousel();
     renderStylesDirectory();
