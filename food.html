@@ -526,7 +526,7 @@
       icon: '🍌',
       img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-_3wRz-02qD54rh4qEt3A6_8bQvY_zdtt739sVWwKKQ&s=10',
       mealTypes: ['snacks'],
-      category: 'all',
+      category: 'snacks',
       ingredients: ['Bananas', 'Peanuts'],
       drinkPairing: 'Water',
       accompanimentType: 'side',
@@ -930,8 +930,9 @@
   // --- RECIPE MODAL HANDLING (ADD / EDIT) ---
   function populateCategoryDropdown(selectedCat = '') {
     const select = document.getElementById('modal-category-select');
-    const allCategories = [...new Set(foodDatabase.map(i => i.category))];
-    if (!allCategories.includes('all')) allCategories.unshift('all');
+    // Extract unique categories, but filter out 'all' so it never populates as a selectable modal option
+    const allCategories = [...new Set(foodDatabase.map(i => i.category))].filter(cat => cat !== 'all');
+    
     if (!allCategories.includes('sandwiches')) allCategories.push('sandwiches');
     if (!allCategories.includes('wraps')) allCategories.push('wraps');
 
@@ -948,7 +949,7 @@
     document.getElementById('modal-recipe-id').value = '';
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-category-custom').classList.add('hidden');
-    populateCategoryDropdown('all');
+    populateCategoryDropdown('');
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
@@ -997,7 +998,7 @@
     
     let category = document.getElementById('modal-category-select').value;
     if (category === 'custom') {
-      category = document.getElementById('modal-category-custom').value.trim().toLowerCase() || 'all';
+      category = document.getElementById('modal-category-custom').value.trim().toLowerCase() || 'sandwiches';
     }
 
     const ingredientsRaw = document.getElementById('modal-ingredients').value;
