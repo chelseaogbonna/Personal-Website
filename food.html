@@ -686,9 +686,11 @@
     if (!subBar) return;
 
     const currentMealItems = foodDatabase.filter(i => i.mealTypes.includes(currentMealUnit));
-    const categories = ['all', ...new Set(currentMealItems.map(i => i.category))];
+    // Filter out any existing 'all' strings from the raw category list to avoid duplicates
+    const rawCategories = [...new Set(currentMealItems.map(i => i.category))].filter(c => c !== 'all');
+    const categories = ['all', ...rawCategories];
 
-    subBar.innerHTML = categories.map(cat => {
+    subBar.innerHTML = categories.link ? '' : categories.map(cat => {
       const isSelected = currentSubcategory === cat;
       const bgStyle = isSelected ? 'bg-purple-600 text-white' : 'bg-white hover:bg-pink-100 text-slate-700';
       return `<button onclick="setSubcategory('${cat}')" class="px-3 py-1 text-xs font-bold rounded-xl border border-black transition-all ${bgStyle}">
@@ -696,6 +698,7 @@
       </button>`;
     }).join('');
   }
+
 
   function setSubcategory(cat) {
     currentSubcategory = cat;
