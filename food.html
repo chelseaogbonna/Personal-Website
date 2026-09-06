@@ -102,27 +102,28 @@
 
       <!-- Meal Unit Selection (Medium Sized Grid) + Search & Add Button -->
       <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-        <!-- Medium Sized Meal Units Grid (Compact padding and text) -->
-        <div class="grid grid-cols-2 sm:flex flex-wrap gap-2 flex-1">
-          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn bg-pink-500 text-white font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+        <!-- Meal Unit Selection (Fixed 3x3 or Grid Container) -->
+        <div class="grid grid-cols-3 items-center gap-2 flex-1">
+          <button onclick="selectMealUnit('breakfast')" id="tab-breakfast" class="meal-unit-btn w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍳 Breakfast
           </button>
-          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('lunch')" id="tab-lunch" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-3 px-4 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🥗 Lunch
           </button>
-          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('dinner')" id="tab-dinner" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-3 px-4 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍜 Dinner
           </button>
-          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('dessert')" id="tab-dessert" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-3 px-4 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍰 Dessert
           </button>
-          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('drinks')" id="tab-drinks" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-3 px-4 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🧋 Drinks
           </button>
-          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn bg-white hover:bg-pink-100 font-bold py-2 px-3 rounded-xl border-2 border-black pixel-shadow text-center text-xs hover:scale-105 transition-all">
+          <button onclick="selectMealUnit('snacks')" id="tab-snacks" class="meal-unit-btn w-full bg-white hover:bg-pink-100 text-slate-800 font-bold py-3 px-4 rounded-xl border-2 border-black pixel-shadow text-center text-xs flex items-center justify-center hover:scale-105 transition-all">
             🍿 Snacks
           </button>
         </div>
+
 
         <!-- Search Input & Add New Recipe Button underneath -->
         <div class="flex flex-col gap-2 w-full sm:w-64 shrink-0">
