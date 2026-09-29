@@ -152,35 +152,6 @@
         </div>
       </div>
 
-      <!-- WEEKLY MEAL PLANNER + SHOPPING LIST -->
-      <div class="grid md:grid-cols-2 gap-4 mb-6">
-        <div class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow">
-          <h3 class="text-sm font-bold text-pink-900 mb-3">📅 Weekly Meal Plan</h3>
-          <div id="weekly-meal-grid" class="space-y-2">
-            <!-- Dynamic day rows -->
-          </div>
-        </div>
-
-        <div class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow">
-          <h3 class="text-sm font-bold text-pink-900 mb-3">🛒 Shopping List</h3>
-          <div class="flex gap-2 mb-3">
-            <input
-              type="text"
-              id="shopping-item-input"
-              placeholder="Add an item..."
-              onkeydown="if(event.key==='Enter'){addShoppingItem();}"
-              class="flex-1 bg-white px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
-            />
-            <button onclick="addShoppingItem()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-3 py-1.5 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
-              ➕
-            </button>
-          </div>
-          <div id="shopping-list" class="space-y-1.5 max-h-56 overflow-y-auto">
-            <!-- Dynamic shopping list items -->
-          </div>
-        </div>
-      </div>
-
       <!-- Sub-Category Filter -->
       <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
         <!-- Dynamic Subcategory Pills -->
@@ -315,6 +286,61 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- WEEKLY MEAL PLAN + SHOPPING LIST -->
+    <section class="grid md:grid-cols-2 gap-6">
+
+      <!-- WEEKLY MEAL PLAN -->
+      <div class="bg-gradient-to-br from-fuchsia-100 to-pink-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-2xl">📅</span>
+          <div>
+            <h2 class="text-xl font-bold text-fuchsia-900">Weekly Meal Plan</h2>
+            <p class="text-[11px] text-fuchsia-700">Plan your breakfast, lunch & dinner for every day!</p>
+          </div>
+        </div>
+        <div id="weekly-meal-grid" class="space-y-3">
+          <!-- Dynamic day cards -->
+        </div>
+      </div>
+
+      <!-- SHOPPING LIST -->
+      <div class="bg-gradient-to-br from-sky-100 to-emerald-100 border-4 border-black rounded-3xl p-6 pixel-shadow-lg">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="text-2xl">🛒</span>
+          <div>
+            <h2 class="text-xl font-bold text-sky-900">Shopping List</h2>
+            <p class="text-[11px] text-sky-700">Organized by aisle so you don't forget a thing!</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2 mb-4">
+          <input
+            type="text"
+            id="shopping-item-input"
+            placeholder="Add an item..."
+            onkeydown="if(event.key==='Enter'){addShoppingItem();}"
+            class="flex-1 bg-white px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-sky-500 placeholder-slate-400"
+          />
+          <select id="shopping-item-category" class="bg-white px-2 py-1.5 text-xs font-bold rounded-xl border-2 border-black focus:outline-none">
+            <option value="produce">🥬 Produce</option>
+            <option value="meat">🥩 Meat & Protein</option>
+            <option value="dairy">🥛 Dairy</option>
+            <option value="pantry">🥫 Pantry</option>
+            <option value="frozen">🧊 Frozen</option>
+            <option value="other">🧴 Household / Other</option>
+          </select>
+          <button onclick="addShoppingItem()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-3 py-1.5 text-xs rounded-xl border-2 border-black pixel-shadow transition-all shrink-0">
+            ➕ Add
+          </button>
+        </div>
+
+        <div id="shopping-list" class="space-y-3 max-h-96 overflow-y-auto pr-1">
+          <!-- Dynamic categorized shopping list -->
+        </div>
+      </div>
+
     </section>
   </main>
 
@@ -964,48 +990,102 @@
 
   // --- WEEKLY MEAL PLANNER ---
   const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const mealSlots = [
+    { key: 'breakfast', icon: '🍳', label: 'Breakfast', color: 'bg-amber-50 focus:ring-amber-500' },
+    { key: 'lunch', icon: '🥗', label: 'Lunch', color: 'bg-emerald-50 focus:ring-emerald-500' },
+    { key: 'dinner', icon: '🍜', label: 'Dinner', color: 'bg-indigo-50 focus:ring-indigo-500' }
+  ];
 
   let weeklyMealPlan = JSON.parse(localStorage.getItem('weeklyMealPlan')) || {};
 
+  // Migrate old format (a single string per day) into the new {breakfast, lunch, dinner} shape
+  weekDays.forEach(day => {
+    if (typeof weeklyMealPlan[day] === 'string') {
+      weeklyMealPlan[day] = { dinner: weeklyMealPlan[day] };
+    }
+  });
+
   function renderWeeklyMealPlan() {
     const grid = document.getElementById('weekly-meal-grid');
-    grid.innerHTML = weekDays.map(day => `
-      <div class="flex items-center gap-2">
-        <span class="w-20 shrink-0 text-[11px] font-bold text-slate-600">${day.slice(0, 3)}</span>
-        <input
-          type="text"
-          value="${(weeklyMealPlan[day] || '').replace(/"/g, '&quot;')}"
-          placeholder="What's cooking?"
-          oninput="saveWeeklyMeal('${day}', this.value)"
-          class="flex-1 bg-pink-50 px-2 py-1 text-xs rounded-lg border-2 border-black focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
-        />
-      </div>
-    `).join('');
+    grid.innerHTML = weekDays.map(day => {
+      const dayPlan = weeklyMealPlan[day] || {};
+      return `
+        <div class="bg-white border-2 border-black rounded-2xl p-3 pixel-shadow-sm">
+          <p class="text-xs font-black text-fuchsia-900 mb-2">${day}</p>
+          <div class="space-y-1.5">
+            ${mealSlots.map(slot => `
+              <div class="flex items-center gap-2">
+                <span class="w-6 shrink-0 text-center">${slot.icon}</span>
+                <input
+                  type="text"
+                  value="${(dayPlan[slot.key] || '').replace(/"/g, '&quot;')}"
+                  placeholder="${slot.label}..."
+                  oninput="saveWeeklyMeal('${day}', '${slot.key}', this.value)"
+                  class="flex-1 ${slot.color} px-2 py-1 text-xs rounded-lg border-2 border-black focus:outline-none focus:ring-2 placeholder-slate-400"
+                />
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
-  function saveWeeklyMeal(day, value) {
-    weeklyMealPlan[day] = value;
+  function saveWeeklyMeal(day, mealType, value) {
+    if (!weeklyMealPlan[day]) weeklyMealPlan[day] = {};
+    weeklyMealPlan[day][mealType] = value;
     localStorage.setItem('weeklyMealPlan', JSON.stringify(weeklyMealPlan));
   }
 
   // --- SHOPPING LIST ---
+  const shoppingCategories = [
+    { key: 'produce', icon: '🥬', label: 'Produce', color: 'bg-emerald-100 text-emerald-900', accent: 'accent-emerald-500' },
+    { key: 'meat', icon: '🥩', label: 'Meat & Protein', color: 'bg-rose-100 text-rose-900', accent: 'accent-rose-500' },
+    { key: 'dairy', icon: '🥛', label: 'Dairy', color: 'bg-sky-100 text-sky-900', accent: 'accent-sky-500' },
+    { key: 'pantry', icon: '🥫', label: 'Pantry', color: 'bg-amber-100 text-amber-900', accent: 'accent-amber-500' },
+    { key: 'frozen', icon: '🧊', label: 'Frozen', color: 'bg-cyan-100 text-cyan-900', accent: 'accent-cyan-500' },
+    { key: 'other', icon: '🧴', label: 'Household / Other', color: 'bg-slate-200 text-slate-800', accent: 'accent-slate-500' }
+  ];
+
   let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
+
+  // Migrate any items that don't yet have a category
+  shoppingList.forEach(item => {
+    if (!item.category) item.category = 'other';
+  });
 
   function renderShoppingList() {
     const list = document.getElementById('shopping-list');
-    list.innerHTML = shoppingList.length
-      ? shoppingList.map(item => `
-          <div class="flex items-center gap-2 bg-pink-50 border-2 border-black rounded-lg px-2 py-1.5">
-            <input
-              type="checkbox"
-              ${item.checked ? 'checked' : ''}
-              onchange="toggleShoppingItem(${item.id})"
-              class="shrink-0 accent-pink-500"
-            />
-            <span class="flex-1 text-xs font-bold ${item.checked ? 'line-through text-slate-400' : 'text-slate-800'} break-words">
-              ${item.text}
-            </span>
-            <button onclick="deleteShoppingItem(${item.id})" class="shrink-0 text-xs hover:bg-red-100 rounded px-1">🗑️</button>
+
+    const groups = shoppingCategories.map(cat => ({
+      ...cat,
+      items: shoppingList.filter(i => i.category === cat.key)
+    })).filter(g => g.items.length > 0);
+
+    list.innerHTML = groups.length
+      ? groups.map(group => `
+          <div>
+            <div class="flex items-center gap-1.5 mb-1.5">
+              <span class="text-[10px] font-black px-2 py-0.5 rounded-full border border-black ${group.color}">
+                ${group.icon} ${group.label} (${group.items.length})
+              </span>
+            </div>
+            <div class="space-y-1.5">
+              ${group.items.map(item => `
+                <div class="flex items-center gap-2 bg-white border-2 border-black rounded-lg px-2 py-1.5">
+                  <input
+                    type="checkbox"
+                    ${item.checked ? 'checked' : ''}
+                    onchange="toggleShoppingItem(${item.id})"
+                    class="shrink-0 ${group.accent}"
+                  />
+                  <span class="flex-1 text-xs font-bold ${item.checked ? 'line-through text-slate-400' : 'text-slate-800'} break-words">
+                    ${item.text}
+                  </span>
+                  <button onclick="deleteShoppingItem(${item.id})" class="shrink-0 text-xs hover:bg-red-100 rounded px-1">🗑️</button>
+                </div>
+              `).join('')}
+            </div>
           </div>
         `).join('')
       : `<p class="text-xs text-slate-400">Your list is empty.</p>`;
@@ -1013,9 +1093,10 @@
 
   function addShoppingItem() {
     const input = document.getElementById('shopping-item-input');
+    const categorySelect = document.getElementById('shopping-item-category');
     const text = input.value.trim();
     if (!text) return;
-    shoppingList.push({ id: Date.now(), text, checked: false });
+    shoppingList.push({ id: Date.now(), text, category: categorySelect.value, checked: false });
     localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
     input.value = '';
     renderShoppingList();
