@@ -151,7 +151,36 @@
           </button>
         </div>
       </div>
-      
+
+      <!-- WEEKLY MEAL PLANNER + SHOPPING LIST -->
+      <div class="grid md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow">
+          <h3 class="text-sm font-bold text-pink-900 mb-3">📅 Weekly Meal Plan</h3>
+          <div id="weekly-meal-grid" class="space-y-2">
+            <!-- Dynamic day rows -->
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border-2 border-black pixel-shadow">
+          <h3 class="text-sm font-bold text-pink-900 mb-3">🛒 Shopping List</h3>
+          <div class="flex gap-2 mb-3">
+            <input
+              type="text"
+              id="shopping-item-input"
+              placeholder="Add an item..."
+              onkeydown="if(event.key==='Enter'){addShoppingItem();}"
+              class="flex-1 bg-white px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-black focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
+            />
+            <button onclick="addShoppingItem()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold px-3 py-1.5 text-xs rounded-xl border-2 border-black pixel-shadow transition-all">
+              ➕
+            </button>
+          </div>
+          <div id="shopping-list" class="space-y-1.5 max-h-56 overflow-y-auto">
+            <!-- Dynamic shopping list items -->
+          </div>
+        </div>
+      </div>
+
       <!-- Sub-Category Filter -->
       <div id="subcategory-bar" class="flex flex-wrap gap-2 mb-6 bg-white/60 p-3 rounded-2xl border-2 border-black">
         <!-- Dynamic Subcategory Pills -->
@@ -577,6 +606,8 @@
     renderPantryCheckboxes();
     renderSubcategories();
     renderFoodGrid();
+    renderWeeklyMealPlan();
+    renderShoppingList();
     updateCharacterSelectView();
     // Default select first item if available
     const initialList = getActiveCategoryList();
@@ -914,7 +945,8 @@
     }
 
     const randomItem = eligiblePool[Math.floor(Math.random() * eligiblePool.length)];
-    selectMealUnit(randomItem.mealTypes[0]);
+    const matchingMealType = randomItem.mealTypes.find(m => activeSpinFilters.includes(m)) || randomItem.mealTypes[0];
+    selectMealUnit(matchingMealType);
     currentSubcategory = 'all';
     renderSubcategories();
     renderFoodGrid();
@@ -928,6 +960,78 @@
     selectFoodItem(randomItem.id);
     gainXP(10);
     alert(`🎰 Slot Machine landed on: ${randomItem.icon} ${randomItem.name}! (+10 XP)`);
+  }
+
+  // --- WEEKLY MEAL PLANNER ---
+  const weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+  let weeklyMealPlan = JSON.parse(localStorage.getItem('weeklyMealPlan')) || {};
+
+  function renderWeeklyMealPlan() {
+    const grid = document.getElementById('weekly-meal-grid');
+    grid.innerHTML = weekDays.map(day => `
+      <div class="flex items-center gap-2">
+        <span class="w-20 shrink-0 text-[11px] font-bold text-slate-600">${day.slice(0, 3)}</span>
+        <input
+          type="text"
+          value="${(weeklyMealPlan[day] || '').replace(/"/g, '&quot;')}"
+          placeholder="What's cooking?"
+          oninput="saveWeeklyMeal('${day}', this.value)"
+          class="flex-1 bg-pink-50 px-2 py-1 text-xs rounded-lg border-2 border-black focus:outline-none focus:ring-2 focus:ring-pink-500 placeholder-slate-400"
+        />
+      </div>
+    `).join('');
+  }
+
+  function saveWeeklyMeal(day, value) {
+    weeklyMealPlan[day] = value;
+    localStorage.setItem('weeklyMealPlan', JSON.stringify(weeklyMealPlan));
+  }
+
+  // --- SHOPPING LIST ---
+  let shoppingList = JSON.parse(localStorage.getItem('shoppingList')) || [];
+
+  function renderShoppingList() {
+    const list = document.getElementById('shopping-list');
+    list.innerHTML = shoppingList.length
+      ? shoppingList.map(item => `
+          <div class="flex items-center gap-2 bg-pink-50 border-2 border-black rounded-lg px-2 py-1.5">
+            <input
+              type="checkbox"
+              ${item.checked ? 'checked' : ''}
+              onchange="toggleShoppingItem(${item.id})"
+              class="shrink-0 accent-pink-500"
+            />
+            <span class="flex-1 text-xs font-bold ${item.checked ? 'line-through text-slate-400' : 'text-slate-800'} break-words">
+              ${item.text}
+            </span>
+            <button onclick="deleteShoppingItem(${item.id})" class="shrink-0 text-xs hover:bg-red-100 rounded px-1">🗑️</button>
+          </div>
+        `).join('')
+      : `<p class="text-xs text-slate-400">Your list is empty.</p>`;
+  }
+
+  function addShoppingItem() {
+    const input = document.getElementById('shopping-item-input');
+    const text = input.value.trim();
+    if (!text) return;
+    shoppingList.push({ id: Date.now(), text, checked: false });
+    localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+    input.value = '';
+    renderShoppingList();
+  }
+
+  function toggleShoppingItem(id) {
+    const item = shoppingList.find(i => i.id === id);
+    if (item) item.checked = !item.checked;
+    localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+    renderShoppingList();
+  }
+
+  function deleteShoppingItem(id) {
+    shoppingList = shoppingList.filter(i => i.id !== id);
+    localStorage.setItem('shoppingList', JSON.stringify(shoppingList));
+    renderShoppingList();
   }
 
   // --- RECIPE MODAL HANDLING (ADD / EDIT) ---
