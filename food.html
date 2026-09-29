@@ -104,6 +104,12 @@
             <button onclick="toggleSpinFilter('dessert')" id="spin-btn-dessert" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
               🍰 Dessert
             </button>
+            <button onclick="toggleSpinFilter('drinks')" id="spin-btn-drinks" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🧋 Drinks
+            </button>
+            <button onclick="toggleSpinFilter('snacks')" id="spin-btn-snacks" class="spin-toggle-btn px-2.5 py-1 text-xs font-bold rounded-xl border border-black bg-pink-500 text-white transition-all">
+              🍿 Snacks
+            </button>
           </div>
           <button onclick="spinRandomMeal()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 text-xs rounded-xl border-2 border-black pixel-shadow hover:scale-105 transition-all">
             Spin Meal (+10 XP)
@@ -407,7 +413,7 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Meal Type</label>
-          <select id="modal-meal-type" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white">
+          <select id="modal-meal-type" onchange="handleMealTypeDropdownChange(this.value)" class="w-full bg-slate-50 px-3 py-2 text-xs rounded-xl border-2 border-black focus:outline-none focus:bg-white">
             <option value="breakfast">Breakfast</option>
             <option value="lunch">Lunch</option>
             <option value="dinner">Dinner</option>
@@ -903,10 +909,39 @@
   }
 
   // --- CONSUME FOOD ITEM (+XP) ---
+  const standardMealSlotDefaults = {
+    breakfast: { icon: '🍳', label: 'Breakfast', color: 'bg-amber-50 focus:ring-amber-500' },
+    lunch: { icon: '🥗', label: 'Lunch', color: 'bg-emerald-50 focus:ring-emerald-500' },
+    dinner: { icon: '🍜', label: 'Dinner', color: 'bg-indigo-50 focus:ring-indigo-500' },
+    dessert: { icon: '🍰', label: 'Dessert', color: 'bg-rose-50 focus:ring-rose-500' },
+    drinks: { icon: '🧋', label: 'Drinks', color: 'bg-cyan-50 focus:ring-cyan-500' },
+    snacks: { icon: '🍿', label: 'Snacks', color: 'bg-violet-50 focus:ring-violet-500' }
+  };
+
   function consumeSelectedFood() {
     if (!activeSelectedItem) return;
     gainXP(15);
-    alert(`😋 You enjoyed ${activeSelectedItem.icon} ${activeSelectedItem.name}! +15 XP`);
+
+    // Log this meal into today's Weekly Meal Plan slot automatically
+    const slotKey = activeSelectedItem.mealTypes[0];
+    const todayName = weekDays[(new Date().getDay() + 6) % 7]; // getDay(): Sun=0 -> map to weekDays (Mon-first)
+
+    if (!mealSlots.some(s => s.key === slotKey)) {
+      const preset = standardMealSlotDefaults[slotKey] || { icon: '🍽️', label: slotKey, color: 'bg-lime-50 focus:ring-lime-500' };
+      mealSlots.push({ key: slotKey, icon: preset.icon, label: preset.label, color: preset.color, custom: true });
+      saveMealSlots();
+    }
+
+    if (!weeklyMealPlan[todayName]) weeklyMealPlan[todayName] = {};
+    weeklyMealPlan[todayName][slotKey] = `${activeSelectedItem.icon} ${activeSelectedItem.name}`;
+    localStorage.setItem('weeklyMealPlan', JSON.stringify(weeklyMealPlan));
+
+    // If today's day is currently showing in the planner, refresh it live
+    if (weekDays[currentDayIndex] === todayName) {
+      renderWeeklyMealPlan();
+    }
+
+    alert(`😋 You enjoyed ${activeSelectedItem.icon} ${activeSelectedItem.name}! +15 XP\n📅 Logged to today's meal plan!`);
   }
 
   // --- CHARACTER SELECT CAROUSEL ---
@@ -1211,15 +1246,18 @@
   }
 
   // --- RECIPE MODAL HANDLING (ADD / EDIT) ---
-  function populateCategoryDropdown(selectedCat = '') {
+  function populateCategoryDropdown(selectedCat = '', mealType = null) {
     const select = document.getElementById('modal-category-select');
-    
-    // Get unique categories, explicitly filtering out empty values and keeping 'all' at the very beginning
-    const rawCategories = [...new Set(foodDatabase.map(i => i.category))].filter(c => c && c.trim() !== '');
+    const activeMealType = mealType || document.getElementById('modal-meal-type').value;
+
+    // Only pull categories that are actually used within this meal type,
+    // so the dropdown doesn't show every category from every other meal type too.
+    const rawCategories = [...new Set(
+      foodDatabase
+        .filter(i => i.mealTypes.includes(activeMealType))
+        .map(i => i.category)
+    )].filter(c => c && c.trim() !== '');
     const allCategories = ['all', ...rawCategories.filter(c => c !== 'all')];
-    
-    if (!allCategories.includes('sandwiches')) allCategories.push('sandwiches');
-    if (!allCategories.includes('wraps')) allCategories.push('wraps');
 
     select.innerHTML = `
       ${allCategories.map(cat => `
@@ -1229,12 +1267,17 @@
     `;
   }
 
+  function handleMealTypeDropdownChange(val) {
+    document.getElementById('modal-category-custom').classList.add('hidden');
+    populateCategoryDropdown('all', val);
+  }
+
   function openRecipeModal() {
     document.getElementById('modal-title').innerText = '✨ Add New Recipe';
     document.getElementById('modal-recipe-id').value = '';
     document.getElementById('recipe-modal-form').reset();
     document.getElementById('modal-category-custom').classList.add('hidden');
-    populateCategoryDropdown('all');
+    populateCategoryDropdown('all', document.getElementById('modal-meal-type').value);
     document.getElementById('recipe-modal').classList.remove('hidden');
   }
 
@@ -1246,7 +1289,7 @@
     document.getElementById('modal-icon').value = activeSelectedItem.icon;
     document.getElementById('modal-meal-type').value = activeSelectedItem.mealTypes[0] || 'breakfast';
     
-    populateCategoryDropdown(activeSelectedItem.category);
+    populateCategoryDropdown(activeSelectedItem.category, activeSelectedItem.mealTypes[0]);
     document.getElementById('modal-category-custom').classList.add('hidden');
 
     document.getElementById('modal-ingredients').value = activeSelectedItem.ingredients.join(', ');
