@@ -14,6 +14,10 @@
     .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
     .day-pill { transition: all 0.15s ease; }
     .day-pill.active { transform: scale(1.15); font-weight: bold; border-width: 3px; }
+    .foundation-tab { background: white; color: #1e293b; }
+    .foundation-tab.active { background: #e11d48; color: white; }
+    .foundation-panel { display: none; }
+    .foundation-panel.active { display: block; }
   </style>
 </head>
 <body class="bg-rose-100 text-slate-800 min-h-screen pb-12">
@@ -229,13 +233,25 @@
     <section class="bg-rose-600 text-white border-4 border-black rounded-3xl p-5 pixel-shadow-lg text-center">
       <h2 class="text-2xl font-bold">📚 Health Foundations — Every Day, Every Phase</h2>
       <p class="text-xs text-rose-100 mt-1 max-w-2xl mx-auto">
-        A healthy woman in her 20s doesn't need a totally different plan for every week of her cycle. These basics — consistent nutrition, adequate energy, strength + cardio, sleep, and preventive care — do more for your health than any phase-specific tweak. General guidance only, not a personalized medical prescription.
+        These basics matter more than any phase-specific tweak. Tap a topic below.
       </p>
     </section>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Foundations Tab Bar -->
+    <div class="grid grid-cols-3 sm:grid-cols-7 gap-1.5" id="foundation-tabs">
+      <button onclick="selectFoundationTab('nutrients')" data-tab="nutrients" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">🍽️ Nutrients</button>
+      <button onclick="selectFoundationTab('exercise')" data-tab="exercise" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">🏋️ Exercise</button>
+      <button onclick="selectFoundationTab('eating')" data-tab="eating" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">🥗 Eating</button>
+      <button onclick="selectFoundationTab('sleep')" data-tab="sleep" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">😴 Sleep</button>
+      <button onclick="selectFoundationTab('supplements')" data-tab="supplements" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">💊 Supplements</button>
+      <button onclick="selectFoundationTab('preventive')" data-tab="preventive" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">🩺 Preventive</button>
+      <button onclick="selectFoundationTab('redflags')" data-tab="redflags" class="foundation-tab p-2 rounded-xl border-2 border-black font-bold text-[10px] sm:text-xs text-center">🚨 Red Flags</button>
+    </div>
+
+    <div class="grid grid-cols-1" id="foundation-panels">
 
       <!-- DAILY NUTRIENT TARGETS -->
+      <div id="foundation-panel-nutrients" class="foundation-panel">
       <section class="bg-indigo-50 border-4 border-black rounded-3xl p-5 pixel-shadow-lg space-y-3">
         <h3 class="text-lg font-bold text-indigo-900 flex items-center gap-2 border-b-2 border-indigo-200 pb-2">
           <span>🍽️</span> Daily Nutrient Targets
@@ -276,8 +292,10 @@
         </div>
         <p class="text-[10px] text-indigo-900/70 italic">Sources: NIH Office of Dietary Supplements, ACOG, U.S. Dietary Guidelines.</p>
       </section>
+      </div>
 
       <!-- EXERCISE FOUNDATIONS -->
+      <div id="foundation-panel-exercise" class="foundation-panel">
       <section class="bg-sky-50 border-4 border-black rounded-3xl p-5 pixel-shadow-lg space-y-3">
         <h3 class="text-lg font-bold text-sky-900 flex items-center gap-2 border-b-2 border-sky-200 pb-2">
           <span>🏋️</span> Exercise Foundations
@@ -297,8 +315,10 @@
         </div>
         <p class="text-[10px] text-sky-900/70 italic">Source: CDC Physical Activity Guidelines for Adults.</p>
       </section>
+      </div>
 
       <!-- DAILY EATING TEMPLATE -->
+      <div id="foundation-panel-eating" class="foundation-panel">
       <section class="bg-emerald-50 border-4 border-black rounded-3xl p-5 pixel-shadow-lg space-y-3">
         <h3 class="text-lg font-bold text-emerald-900 flex items-center gap-2 border-b-2 border-emerald-200 pb-2">
           <span>🥗</span> A Normal Day of Eating
@@ -322,8 +342,10 @@
         </div>
         <p class="text-[10px] text-emerald-900/70 italic">A craving isn't a moral failure — eat the chocolate.</p>
       </section>
+      </div>
 
       <!-- SLEEP & MENTAL HEALTH -->
+      <div id="foundation-panel-sleep" class="foundation-panel">
       <section class="bg-purple-50 border-4 border-black rounded-3xl p-5 pixel-shadow-lg space-y-3">
         <h3 class="text-lg font-bold text-purple-900 flex items-center gap-2 border-b-2 border-purple-200 pb-2">
           <span>😴</span> Sleep & Mental Health
@@ -338,8 +360,10 @@
         </div>
         <p class="text-[10px] text-purple-900/70 italic">ACOG notes relaxation strategies and regular sleep can help ease PMS symptoms.</p>
       </section>
+      </div>
 
       <!-- SUPPLEMENTS -->
+      <div id="foundation-panel-supplements" class="foundation-panel">
       <section class="bg-amber-50 border-4 border-black rounded-3xl p-5 pixel-shadow-lg space-y-3">
         <h3 class="text-lg font-bold text-amber-900 flex items-center gap-2 border-b-2 border-amber-200 pb-2">
           <span>💊</span> Supplements: Food First
@@ -350,8 +374,10 @@
           <p class="font-bold text-rose-700">⚠️ Don't self-prescribe high-dose iron. Too much iron can be harmful — if you suspect deficiency, ask for a CBC/ferritin test first.</p>
         </div>
       </section>
+      </div>
 
       <!-- PREVENTIVE CARE CHECKLIST -->
+      <div id="foundation-panel-preventive" class="foundation-panel">
       <section class="bg-teal-50 border-4 border-black rounded-3xl p-5 pixel-shadow-lg space-y-3">
         <h3 class="text-lg font-bold text-teal-900 flex items-center gap-2 border-b-2 border-teal-200 pb-2">
           <span>🩺</span> Preventive Care Checklist
@@ -360,32 +386,35 @@
           <!-- Dynamically populated -->
         </div>
       </section>
+      </div>
+
+      <!-- WHEN TO SEE A DOCTOR -->
+      <div id="foundation-panel-redflags" class="foundation-panel">
+      <section class="bg-rose-50 border-4 border-rose-700 rounded-3xl p-5 pixel-shadow-lg space-y-3">
+        <h3 class="text-lg font-bold text-rose-900 flex items-center gap-2 border-b-2 border-rose-200 pb-2">
+          <span>🚨</span> Not Normal "Girl Problems" — See A Doctor
+        </h3>
+        <p class="text-xs text-rose-800">ACOG identifies these as reasons to seek medical evaluation rather than chalking it up to the cycle:</p>
+        <div class="grid sm:grid-cols-2 gap-1.5 text-xs">
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Periods &lt;21 days apart</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Periods &gt;45 days apart</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Periods lasting &gt;7 days</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Suddenly irregular after being regular</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 No period for ~3 months</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Very heavy bleeding</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Severe pain that interferes with life</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Fainting/dizziness with periods</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Persistent fatigue</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Repeated stress fractures</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Major unexplained weight loss</span>
+          <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Persistent pelvic pain</span>
+        </div>
+        <p class="text-[10px] text-rose-800/80 italic">A healthy cycle is a health signal, not an inconvenience — losing it is a sign to check in with a clinician, not a sign your routine is "working."</p>
+        <p class="text-[10px] text-rose-900 font-bold mt-2">This page is general educational information, not a personalized medical diagnosis or treatment plan.</p>
+      </section>
+      </div>
 
     </div>
-
-    <!-- WHEN TO SEE A DOCTOR -->
-    <section class="bg-rose-50 border-4 border-rose-700 rounded-3xl p-5 pixel-shadow-lg space-y-3">
-      <h3 class="text-lg font-bold text-rose-900 flex items-center gap-2 border-b-2 border-rose-200 pb-2">
-        <span>🚨</span> Not Normal "Girl Problems" — See A Doctor
-      </h3>
-      <p class="text-xs text-rose-800">ACOG identifies these as reasons to seek medical evaluation rather than chalking it up to the cycle:</p>
-      <div class="grid sm:grid-cols-2 gap-1.5 text-xs">
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Periods &lt;21 days apart</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Periods &gt;45 days apart</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Periods lasting &gt;7 days</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Suddenly irregular after being regular</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 No period for ~3 months</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Very heavy bleeding</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Severe pain that interferes with life</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Fainting/dizziness with periods</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Persistent fatigue</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Repeated stress fractures</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Major unexplained weight loss</span>
-        <span class="bg-white p-2 rounded-xl border-2 border-black">🔴 Persistent pelvic pain</span>
-      </div>
-      <p class="text-[10px] text-rose-800/80 italic">A healthy cycle is a health signal, not an inconvenience — losing it (e.g. from under-eating + over-exercising) is a sign to check in with a clinician, not a sign your routine is "working."</p>
-      <p class="text-[10px] text-rose-900 font-bold mt-2">This page is general educational information, not a personalized medical diagnosis or treatment plan. If something feels wrong, talk to a healthcare provider.</p>
-    </section>
 
   </main>
 
@@ -586,11 +615,22 @@
       renderPreventiveChecklist();
     }
 
+    // --- FOUNDATION TABS ---
+    function selectFoundationTab(key) {
+      document.querySelectorAll('.foundation-tab').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === key);
+      });
+      document.querySelectorAll('.foundation-panel').forEach(panel => {
+        panel.classList.toggle('active', panel.id === 'foundation-panel-' + key);
+      });
+    }
+
     // Init
     window.addEventListener('DOMContentLoaded', () => {
       document.getElementById('water-count').innerText = `${waterCount} / 10 🥛`;
       selectDay(1);
       renderPreventiveChecklist();
+      selectFoundationTab('nutrients');
     });
   </script>
 </body>
