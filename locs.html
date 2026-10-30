@@ -1,185 +1,1323 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Loc Studio 👑</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#fef3c7;--card:#fffbeb;--ink:#1c1917;--mut:#6b5f55;--ln:#000;--sh:#000;--ac:#b45309;--onac:#fff;--soft:#fde68a;--ok:#86efac;--wn:#fcd34d;--bd:#fda4af;--v:#6d28d9;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17110d;--card:#261c15;--ink:#fdf3dc;--mut:#bfa98a;--ln:#f3d9a4;--ac:#f59e0b;--onac:#1c1917;--soft:#4a3516;--ok:#166534;--wn:#854d0e;--bd:#9f1239}}
-:root[data-theme="dark"]{--bg:#17110d;--card:#261c15;--ink:#fdf3dc;--mut:#bfa98a;--ln:#f3d9a4;--ac:#f59e0b;--onac:#1c1917;--soft:#4a3516;--ok:#166534;--wn:#854d0e;--bd:#9f1239}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fredoka',system-ui,sans-serif;background-color:var(--bg)}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ac);z-index:60}
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--ac);color:var(--onac);border-bottom:4px solid var(--ln);padding:10px 16px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-header h1{margin:0;font-size:22px;letter-spacing:1px}
-.hud{display:flex;align-items:center;gap:8px;font-weight:700;font-size:12px}
-.bar{width:90px;height:12px;border:2px solid var(--ln);border-radius:9px;background:var(--card);overflow:hidden}.bar i{display:block;height:100%;background:var(--v);transition:width .4s}
-main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
-.c{background:var(--card);border:4px solid var(--ln);border-radius:24px;box-shadow:6px 6px 0 var(--sh);padding:20px;margin-bottom:24px}
-.c h2{margin:0;font-size:22px}.c>.hd{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}.hd p{margin:2px 0 0;font-size:13px;color:var(--mut)}
-.b{font:inherit;font-weight:700;font-size:13px;border:3px solid var(--ln);border-radius:12px;padding:7px 12px;background:var(--soft);color:var(--ink);box-shadow:3px 3px 0 var(--sh);cursor:pointer}
-.b:active{transform:translate(2px,2px);box-shadow:none}.b.p{background:var(--ac);color:var(--onac)}.b.s{padding:4px 8px;font-size:12px;box-shadow:2px 2px 0 var(--sh)}
-.g{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
-.st{border:3px solid var(--ln);border-radius:16px;padding:12px;background:var(--soft);box-shadow:3px 3px 0 var(--sh);display:flex;flex-direction:column;gap:2px}
-.st h3{margin:0;font-size:20px}.st small,.st a{font-size:12px;color:var(--ink)}.st b{font-size:12px;letter-spacing:.5px}
-.ok{background:var(--ok)}.wn{background:var(--wn)}.bd{background:var(--bd)}
-.chip{font:inherit;font-size:12px;font-weight:600;border:2px solid var(--ln);border-radius:99px;padding:3px 10px;background:var(--card);color:var(--ink);cursor:pointer;margin:2px}
-.chip.on{background:var(--v);color:#fff}
-.gr{display:flex;flex-wrap:wrap;align-items:center;gap:2px;margin-bottom:6px}.gr small{font-weight:700;color:var(--mut);width:78px}
-.sc{border:3px solid var(--ln);border-radius:16px;overflow:hidden;background:var(--card);display:flex;flex-direction:column;box-shadow:3px 3px 0 var(--sh)}
-.ph{height:150px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:56px;border-bottom:3px solid var(--ln)}.ph img{width:100%;height:100%;object-fit:cover}
-.pd{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}.pd h4{margin:0;font-size:17px}.pd p{margin:0;font-size:12px;color:var(--mut)}
-.tag{display:inline-block;font-size:10px;font-weight:700;border:1.5px solid var(--ln);border-radius:99px;padding:1px 7px;margin:1px;background:var(--soft)}
-.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
-input,select,textarea{width:100%;font:inherit;font-size:14px;padding:8px;border:2px solid var(--ln);border-radius:10px;background:var(--bg);color:var(--ink);margin:3px 0 10px}
-label{font-size:12px;font-weight:700}
-.mb{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:16px;z-index:99}
-.mc{background:var(--card);border:4px solid var(--ln);border-radius:20px;padding:20px;width:min(480px,100%);max-height:88vh;overflow:auto}.mc h3{margin:0 0 10px}
-.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.dh{text-align:center;font-size:11px}
-.cd{font:inherit;color:var(--ink);min-height:62px;border:2px solid var(--ln);border-radius:10px;background:var(--bg);padding:3px;text-align:left;cursor:pointer;display:flex;flex-direction:column;font-size:12px}.cd.td{background:var(--wn)}.cd em{font-style:normal;font-size:13px}.pj{opacity:.7}
-.step{display:flex;gap:8px;align-items:flex-start;border:2px solid var(--ln);border-radius:12px;padding:8px;background:var(--bg);cursor:pointer;font-size:13px}.step input{width:auto;margin:2px}.step.d{opacity:.55;text-decoration:line-through}
-.li{display:flex;justify-content:space-between;gap:8px;align-items:center;border:2px solid var(--ln);border-radius:12px;padding:8px 10px;margin-bottom:6px;background:var(--bg);font-size:13px}
-.gi img{width:100%;height:170px;object-fit:cover;border-bottom:3px solid var(--ln)}
-#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:99px;font-weight:700;font-size:13px;z-index:120;display:none}
-.wrap{overflow-x:auto}
-</style>
-</head>
-<body>
-<header>
-  <h1>LOC STUDIO 👑</h1>
-  <div class="hud"><span id="ttl"></span><span>LVL <span id="lvl">1</span></span><div class="bar"><i id="xpb"></i></div><span id="xpt"></span>
-  <button class="b s" onclick="theme()" aria-label="Toggle theme">🌓</button></div>
-</header>
-<main>
-<section class="c"><div class="g" id="hero"></div></section>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Loc Studio 👑</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #fef3c7;
+        --card: #fffbeb;
+        --ink: #1c1917;
+        --mut: #6b5f55;
+        --ln: #000;
+        --sh: #000;
+        --ac: #b45309;
+        --onac: #fff;
+        --soft: #fde68a;
+        --ok: #86efac;
+        --wn: #fcd34d;
+        --bd: #fda4af;
+        --v: #6d28d9;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #17110d;
+          --card: #261c15;
+          --ink: #fdf3dc;
+          --mut: #bfa98a;
+          --ln: #f3d9a4;
+          --ac: #f59e0b;
+          --onac: #1c1917;
+          --soft: #4a3516;
+          --ok: #166534;
+          --wn: #854d0e;
+          --bd: #9f1239;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #17110d;
+        --card: #261c15;
+        --ink: #fdf3dc;
+        --mut: #bfa98a;
+        --ln: #f3d9a4;
+        --ac: #f59e0b;
+        --onac: #1c1917;
+        --soft: #4a3516;
+        --ok: #166534;
+        --wn: #854d0e;
+        --bd: #9f1239;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Fredoka", system-ui, sans-serif;
+        background-color: var(--bg);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0 0 auto;
+        height: env(safe-area-inset-top, 0px);
+        background: var(--ac);
+        z-index: 60;
+      }
+      header {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 50;
+        background: var(--ac);
+        color: var(--onac);
+        border-bottom: 4px solid var(--ln);
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+      .hud {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .bar {
+        width: 90px;
+        height: 12px;
+        border: 2px solid var(--ln);
+        border-radius: 9px;
+        background: var(--card);
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--v);
+        transition: width 0.4s;
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px 16px 60px;
+      }
+      .c {
+        background: var(--card);
+        border: 4px solid var(--ln);
+        border-radius: 24px;
+        box-shadow: 6px 6px 0 var(--sh);
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+      .c h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .c > .hd {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .hd p {
+        margin: 2px 0 0;
+        font-size: 13px;
+        color: var(--mut);
+      }
+      .b {
+        font: inherit;
+        font-weight: 700;
+        font-size: 13px;
+        border: 3px solid var(--ln);
+        border-radius: 12px;
+        padding: 7px 12px;
+        background: var(--soft);
+        color: var(--ink);
+        box-shadow: 3px 3px 0 var(--sh);
+        cursor: pointer;
+      }
+      .b:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+      .b.p {
+        background: var(--ac);
+        color: var(--onac);
+      }
+      .b.s {
+        padding: 4px 8px;
+        font-size: 12px;
+        box-shadow: 2px 2px 0 var(--sh);
+      }
+      .g {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      }
+      .st {
+        border: 3px solid var(--ln);
+        border-radius: 16px;
+        padding: 12px;
+        background: var(--soft);
+        box-shadow: 3px 3px 0 var(--sh);
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .st h3 {
+        margin: 0;
+        font-size: 20px;
+      }
+      .st small,
+      .st a {
+        font-size: 12px;
+        color: var(--ink);
+      }
+      .st b {
+        font-size: 12px;
+        letter-spacing: 0.5px;
+      }
+      .ok {
+        background: var(--ok);
+      }
+      .wn {
+        background: var(--wn);
+      }
+      .bd {
+        background: var(--bd);
+      }
+      .chip {
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        border: 2px solid var(--ln);
+        border-radius: 99px;
+        padding: 3px 10px;
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+        margin: 2px;
+      }
+      .chip.on {
+        background: var(--v);
+        color: #fff;
+      }
+      .gr {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 2px;
+        margin-bottom: 6px;
+      }
+      .gr small {
+        font-weight: 700;
+        color: var(--mut);
+        width: 78px;
+      }
+      .sc {
+        border: 3px solid var(--ln);
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--card);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 3px 3px 0 var(--sh);
+      }
+      .ph {
+        height: 150px;
+        background: var(--soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 56px;
+        border-bottom: 3px solid var(--ln);
+      }
+      .ph img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .pd {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+      }
+      .pd h4 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .pd p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        border: 1.5px solid var(--ln);
+        border-radius: 99px;
+        padding: 1px 7px;
+        margin: 1px;
+        background: var(--soft);
+      }
+      .row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: auto;
+        padding-top: 6px;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        font: inherit;
+        font-size: 14px;
+        padding: 8px;
+        border: 2px solid var(--ln);
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--ink);
+        margin: 3px 0 10px;
+      }
+      label {
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .mb {
+        position: fixed;
+        inset: 0;
+        background: #000a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        z-index: 99;
+      }
+      .mc {
+        background: var(--card);
+        border: 4px solid var(--ln);
+        border-radius: 20px;
+        padding: 20px;
+        width: min(480px, 100%);
+        max-height: 88vh;
+        overflow: auto;
+      }
+      .mc h3 {
+        margin: 0 0 10px;
+      }
+      .cal {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+      }
+      .dh {
+        text-align: center;
+        font-size: 11px;
+      }
+      .cd {
+        font: inherit;
+        color: var(--ink);
+        min-height: 62px;
+        border: 2px solid var(--ln);
+        border-radius: 10px;
+        background: var(--bg);
+        padding: 3px;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+      }
+      .cd.td {
+        background: var(--wn);
+      }
+      .cd em {
+        font-style: normal;
+        font-size: 13px;
+      }
+      .pj {
+        opacity: 0.7;
+      }
+      .step {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        border: 2px solid var(--ln);
+        border-radius: 12px;
+        padding: 8px;
+        background: var(--bg);
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .step input {
+        width: auto;
+        margin: 2px;
+      }
+      .step.d {
+        opacity: 0.55;
+        text-decoration: line-through;
+      }
+      .li {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        border: 2px solid var(--ln);
+        border-radius: 12px;
+        padding: 8px 10px;
+        margin-bottom: 6px;
+        background: var(--bg);
+        font-size: 13px;
+      }
+      .gi img {
+        width: 100%;
+        height: 170px;
+        object-fit: cover;
+        border-bottom: 3px solid var(--ln);
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        background: var(--ink);
+        color: var(--bg);
+        padding: 10px 16px;
+        border-radius: 99px;
+        font-weight: 700;
+        font-size: 13px;
+        z-index: 120;
+        display: none;
+      }
+      .wrap {
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>LOC STUDIO 👑</h1>
+      <div class="hud">
+        <span id="ttl"></span><span>LVL <span id="lvl">1</span></span>
+        <div class="bar"><i id="xpb"></i></div>
+        <span id="xpt"></span>
+        <button class="b s" onclick="theme()" aria-label="Toggle theme">🌓</button>
+      </div>
+    </header>
+    <main>
+      <section class="c"><div class="g" id="hero"></div></section>
 
-<section class="c"><div class="hd"><div><h2>✨ Style Library</h2><p>Tag a style with as many categories as it fits. Filter by work, dinner, beaded, non-beaded and more.</p></div>
-<div class="row"><button class="b" onclick="surprise()">🎲 Surprise me</button><button class="b p" onclick="styleForm(-1)">➕ Add style</button></div></div>
-<input id="q" placeholder="🔍 Search styles or tags…" oninput="styles()">
-<div id="chips"></div><div class="row"><button class="b s" onclick="F.tags.clear();chips();styles()">Clear filters</button><small id="cnt" style="align-self:center;color:var(--mut)"></small></div>
-<div class="g" id="sg" style="margin-top:12px"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>✨ Style Library</h2>
+            <p>
+              Tag a style with as many categories as it fits. Filter by work, dinner, beaded,
+              non-beaded and more.
+            </p>
+          </div>
+          <div class="row">
+            <button class="b" onclick="surprise()">🎲 Surprise me</button
+            ><button class="b p" onclick="styleForm(-1)">➕ Add style</button>
+          </div>
+        </div>
+        <input id="q" placeholder="🔍 Search styles or tags…" oninput="styles()" />
+        <div id="chips"></div>
+        <div class="row">
+          <button
+            class="b s"
+            onclick="
+              F.tags.clear();
+              chips();
+              styles();
+            "
+          >
+            Clear filters</button
+          ><small id="cnt" style="align-self: center; color: var(--mut)"></small>
+        </div>
+        <div class="g" id="sg" style="margin-top: 12px"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>🚿 Wash Day</h2><p>Log it, and the next one is scheduled for you. You’ll get a pop-up when it’s due.</p></div>
-<div class="row"><button class="b p" onclick="logCare('wash',TODAY())">✅ Washed today (+15 XP)</button><button class="b" onclick="careForm()">➕ Log other care</button></div></div>
-<div class="g" style="margin-bottom:12px"><div><label>Wash every (days)</label><input type="number" min="1" id="iw" onchange="S.cfg.wash=Math.max(1,+this.value||7);save();render()"></div>
-<div><label>Retwist every (days)</label><input type="number" min="1" id="it" onchange="S.cfg.twist=Math.max(1,+this.value||35);save();render()"></div>
-<div><label>Alerts</label><button class="b" style="width:100%" onclick="enableN()">🔔 Enable browser alerts</button></div></div>
-<p style="font-size:12px;color:var(--mut);margin:0 0 12px">Browser alerts only fire while this page is open. For alerts on your phone when it’s closed, use the “📱 Add to phone calendar” links up top.</p>
-<div class="g" id="steps" style="margin-bottom:14px"></div>
-<h3 style="margin:0 0 8px">History</h3><div id="hist"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>🚿 Wash Day</h2>
+            <p>Log it, and the next one is scheduled for you. You’ll get a pop-up when it’s due.</p>
+          </div>
+          <div class="row">
+            <button class="b p" onclick="logCare('wash', TODAY())">✅ Washed today (+15 XP)</button
+            ><button class="b" onclick="careForm()">➕ Log other care</button>
+          </div>
+        </div>
+        <div class="g" style="margin-bottom: 12px">
+          <div>
+            <label>Wash every (days)</label
+            ><input
+              type="number"
+              min="1"
+              id="iw"
+              onchange="
+                S.cfg.wash = Math.max(1, +this.value || 7);
+                save();
+                render();
+              "
+            />
+          </div>
+          <div>
+            <label>Retwist every (days)</label
+            ><input
+              type="number"
+              min="1"
+              id="it"
+              onchange="
+                S.cfg.twist = Math.max(1, +this.value || 35);
+                save();
+                render();
+              "
+            />
+          </div>
+          <div>
+            <label>Alerts</label
+            ><button class="b" style="width: 100%" onclick="enableN()">
+              🔔 Enable browser alerts
+            </button>
+          </div>
+        </div>
+        <p style="font-size: 12px; color: var(--mut); margin: 0 0 12px">
+          Browser alerts only fire while this page is open. For alerts on your phone when it’s
+          closed, use the “📱 Add to phone calendar” links up top.
+        </p>
+        <div class="g" id="steps" style="margin-bottom: 14px"></div>
+        <h3 style="margin: 0 0 8px">History</h3>
+        <div id="hist"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>📅 Care Calendar</h2><p>🔔 marks your next scheduled wash or retwist. Tap a day to log or review.</p></div>
-<div class="row"><button class="b" onclick="mon(-1)">◀</button><b id="ct" style="align-self:center"></b><button class="b" onclick="mon(1)">▶</button></div></div><div class="cal" id="cal"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>📅 Care Calendar</h2>
+            <p>🔔 marks your next scheduled wash or retwist. Tap a day to log or review.</p>
+          </div>
+          <div class="row">
+            <button class="b" onclick="mon(-1)">◀</button><b id="ct" style="align-self: center"></b
+            ><button class="b" onclick="mon(1)">▶</button>
+          </div>
+        </div>
+        <div class="cal" id="cal"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>📏 Length &amp; Growth</h2><p id="lp"></p></div><button class="b p" onclick="measForm()">➕ Log length (+25 XP)</button></div><div id="meas"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>📏 Length &amp; Growth</h2>
+            <p id="lp"></p>
+          </div>
+          <button class="b p" onclick="measForm()">➕ Log length (+25 XP)</button>
+        </div>
+        <div id="meas"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>📸 Gallery</h2><p>Your loc evolution, photo by photo.</p></div><button class="b p" onclick="photoForm()">➕ Add photo (+15 XP)</button></div><div class="g" id="gal"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>📸 Gallery</h2>
+            <p>Your loc evolution, photo by photo.</p>
+          </div>
+          <button class="b p" onclick="photoForm()">➕ Add photo (+15 XP)</button>
+        </div>
+        <div class="g" id="gal"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>🌱 Journey Milestones</h2><p>Budding, teen phase, first trim, anniversaries.</p></div><button class="b p" onclick="mileForm()">➕ Log milestone (+25 XP)</button></div><div id="mil"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>🌱 Journey Milestones</h2>
+            <p>Budding, teen phase, first trim, anniversaries.</p>
+          </div>
+          <button class="b p" onclick="mileForm()">➕ Log milestone (+25 XP)</button>
+        </div>
+        <div id="mil"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>🧪 Product Vault</h2><p>Flag what’s running low and it lands on your restock list.</p></div><button class="b p" onclick="prodForm(-1)">➕ Add product</button></div><div id="rs"></div><div class="g" id="pg"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>🧪 Product Vault</h2>
+            <p>Flag what’s running low and it lands on your restock list.</p>
+          </div>
+          <button class="b p" onclick="prodForm(-1)">➕ Add product</button>
+        </div>
+        <div id="rs"></div>
+        <div class="g" id="pg"></div>
+      </section>
 
-<section class="c"><div class="hd"><div><h2>🏆 Weekly Bounties</h2><p>These tick themselves off when you log the activity.</p></div></div><div class="g" id="bn"></div></section>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>🏆 Weekly Bounties</h2>
+            <p>These tick themselves off when you log the activity.</p>
+          </div>
+        </div>
+        <div class="g" id="bn"></div>
+      </section>
 
-<section class="c" id="set"><div class="hd"><div><h2>⚙️ Settings &amp; Backup</h2><p>Everything is saved in this browser only. Back up now and then.</p></div></div>
-<label>Date your locs started</label><input type="date" id="sd" onchange="S.cfg.start=this.value;save();render()">
-<textarea id="bk" rows="3" placeholder="Backup text appears here. Paste a backup here to restore."></textarea>
-<div class="row"><button class="b" onclick="bk.value=JSON.stringify(S);bk.select()">📤 Show backup</button><button class="b" onclick="restore()">📥 Restore from text</button><button class="b" onclick="ask(`Erase everything?`,()=>{S=fresh();save();render()})">🗑️ Reset all</button></div></section>
-</main>
-<div id="mod"></div><div id="toast"></div>
+      <section class="c" id="set">
+        <div class="hd">
+          <div>
+            <h2>⚙️ Settings &amp; Backup</h2>
+            <p>Everything is saved in this browser only. Back up now and then.</p>
+          </div>
+        </div>
+        <label>Date your locs started</label
+        ><input
+          type="date"
+          id="sd"
+          onchange="
+            S.cfg.start = this.value;
+            save();
+            render();
+          "
+        />
+        <textarea
+          id="bk"
+          rows="3"
+          placeholder="Backup text appears here. Paste a backup here to restore."
+        ></textarea>
+        <div class="row">
+          <button
+            class="b"
+            onclick="
+              bk.value = JSON.stringify(S);
+              bk.select();
+            "
+          >
+            📤 Show backup</button
+          ><button class="b" onclick="restore()">📥 Restore from text</button
+          ><button
+            class="b"
+            onclick="
+              ask(`Erase everything?`, () => {
+                S = fresh();
+                save();
+                render();
+              })
+            "
+          >
+            🗑️ Reset all
+          </button>
+        </div>
+      </section>
+    </main>
+    <div id="mod"></div>
+    <div id="toast"></div>
 
-<script>
-const K='locStudio2',$=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0');
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,pd=s=>{const[a,b,c]=s.split('-');return new Date(a,b-1,c)};
-const addD=(s,n)=>{const d=pd(s);d.setDate(d.getDate()+n);return ymd(d)},diff=(a,b)=>Math.round((pd(a)-pd(b))/864e5);
-const TODAY=()=>ymd(new Date()),fmt=s=>pd(s).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,5);
-const G={Occasion:['💼 Work','🍽️ Dinner','💃 Night out','☕ Casual','🏋️ Gym','💍 Formal','✈️ Travel','😴 Sleep'],Look:['📿 Beaded','🚫 Non-beaded','🎀 Accessorized','🧵 Braided','🌀 Twisted','🌊 Curled','⬆️ Updo','↕️ Half-up','⬇️ Down'],Effort:['Easy','Medium','Hard'],Wear:['🔒 Low tension','⏳ Long-lasting','⚡ Quick']};
-const TYPES={wash:['🚿','Wash day',15],twist:['🔄','Retwist',25],deep:['💧','Deep condition',10],scalp:['🌿','Scalp treatment',5],acv:['🍎','ACV rinse',5]};
-const STEPS=[['💆🏾‍♀️','Scalp massage & clarify','Residue-free shampoo on the scalp, rinse through the locs.'],['🍎','ACV rinse (optional)','For buildup and minerals. Rinse well.'],['💧','Condition or hydrate','Light mist while damp.'],['🧊','Cool rinse','Helps seal the cuticle.'],['🧻','Squeeze dry','Squeeze, don’t rub, with a microfiber towel.'],['☀️','Seal & dry fully','Fully dry to avoid mildew smell.']];
-const CATS=['Shampoo','Conditioner','Oil','Gel','Mist','Tools','Accessories','Other'];
-const mk=(title,icon,desc,tags)=>({id:uid(),title,icon,desc,tags,img:'',link:'',worn:0});
-const fresh=()=>({xp:0,cfg:{wash:7,twist:35,start:''},log:[],gallery:[],miles:[],meas:[],wear:null,snooze:'',
-styles:[mk('Two-Strand Twists','🌀','Classic, low tension. Wear down or go high ponytail.',['Easy','🌀 Twisted','⬇️ Down','☕ Casual','💼 Work','🚫 Non-beaded','🔒 Low tension']),
-mk('Beaded Half-Up','📿','Half-up with beads on the ends.',['Easy','📿 Beaded','↕️ Half-up','💃 Night out','☕ Casual','🎀 Accessorized']),
-mk('Barrel Twists & Curls','🌊','Barrel sections with curly ends.',['Medium','🌊 Curled','🌀 Twisted','🍽️ Dinner','💼 Work','🚫 Non-beaded']),
-mk('Loc Petals','🌸','Looped petals pinned around the crown.',['Medium','⬆️ Updo','🍽️ Dinner','💍 Formal','🚫 Non-beaded']),
-mk('Interlocked Updo','👑','Interlocking pattern, high structured crown.',['Hard','⬆️ Updo','💍 Formal','🍽️ Dinner','🎀 Accessorized','⏳ Long-lasting']),
-mk('Top Knot','🍥','Quick bun for the gym or a lazy day.',['Easy','⚡ Quick','⬆️ Updo','🏋️ Gym','✈️ Travel','😴 Sleep','🚫 Non-beaded'])],
-prods:[{id:uid(),name:'Rosewater & Aloe Mist',cat:'Mist',notes:'Lightweight hydration.',low:false},{id:uid(),name:'Jojoba & Peppermint Oil',cat:'Oil',notes:'Seal and scalp.',low:false}]});
-let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
-S=Object.assign(fresh(),S||{});S.cfg=Object.assign({wash:7,twist:35,start:''},S.cfg);
-const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){toast('Storage full. Remove a few photos.')}};
-const F={tags:new Set()},C={y:new Date().getFullYear(),m:new Date().getMonth()};let W=new Set(),pend='';
-function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(()=>e.style.display='none',2600)}
-function gain(n){const o=Math.floor(S.xp/100);S.xp+=n;if(Math.floor(S.xp/100)>o)toast(`🎉 Level up! LVL ${Math.floor(S.xp/100)+1}`);else toast(`+${n} XP`);}
-const modal=h=>{$('#mod').innerHTML=`<div class="mb" onclick="if(event.target===this)closeM()"><div class="mc">${h}</div></div>`},closeM=()=>$('#mod').innerHTML='';
-function ask(msg,fn){window._y=()=>{closeM();fn()};modal(`<h3>${msg}</h3><div class="row"><button class="b p" onclick="_y()">Yes</button><button class="b" onclick="closeM()">Cancel</button></div>`)}
-const lastOf=t=>S.log.filter(l=>l.t===t).map(l=>l.d).sort().pop(),nextOf=t=>{const l=lastOf(t);return l?addD(l,S.cfg[t]):null};
-const gcal=(t,n)=>`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(TYPES[t][0]+' '+TYPES[t][1])}&dates=${n.replace(/-/g,'')}/${addD(n,1).replace(/-/g,'')}&recur=${encodeURIComponent('RRULE:FREQ=DAILY;INTERVAL='+S.cfg[t])}`;
-function rem(t){const n=nextOf(t),[ic,nm]=TYPES[t];let d='Not scheduled',cls='',sub=`Log a ${nm.toLowerCase()} to start`,lk='';
-if(n){const x=diff(n,TODAY());d=x<0?`${-x} day${x<-1?'s':''} overdue`:x===0?'Today!':`In ${x} day${x>1?'s':''}`;cls=x<=0?(x<0?'bd':'wn'):x===1?'wn':'ok';sub=pd(n).toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});lk=`<a href="${gcal(t,n)}" target="_blank" rel="noopener">📱 Add to phone calendar</a>`}
-return `<div class="st ${cls}"><b>${ic} NEXT ${nm.toUpperCase()}</b><h3>${d}</h3><small>${sub}</small>${lk}</div>`}
-function hero(){const w=S.wear&&S.styles.find(s=>s.id===S.wear.id),a=S.cfg.start?diff(TODAY(),S.cfg.start):null;
-$('#hero').innerHTML=rem('wash')+rem('twist')+`<div class="st"><b>👑 WEARING NOW</b><h3>${w?esc(w.title):'Nothing set'}</h3><small>${w?`Day ${diff(TODAY(),S.wear.d)+1}`:'Tap “Wear” on a style'}</small></div><div class="st" onclick="$('#set').scrollIntoView({behavior:'smooth'})"><b>🌱 LOC AGE</b><h3>${a!=null&&a>=0?a+' days':'Set start date'}</h3><small>${a!=null&&a>=0?Math.floor(a/30.4)+' months':'Tap to add'}</small></div>`}
-function hud(){const l=Math.floor(S.xp/100)+1,t=['Budding 🌱','Rooted 🌿','Flourishing 🌳','Crowned 👑','Loc Legend ✨'][Math.min(l-1,4)];$('#lvl').textContent=l;$('#ttl').textContent=t;$('#xpb').style.width=S.xp%100+'%';$('#xpt').textContent=S.xp%100+'/100'}
-function groups(){const k=new Set(Object.values(G).flat()),cu=[...new Set(S.styles.flatMap(s=>s.tags))].filter(t=>!k.has(t));return cu.length?{...G,Custom:cu}:G}
-function chips(){$('#chips').innerHTML=Object.entries(groups()).map(([g,ts])=>`<div class="gr"><small>${g}</small>${ts.map(t=>`<button class="chip ${F.tags.has(t)?'on':''}" data-t="${esc(t)}" onclick="tg(this.dataset.t)">${esc(t)}</button>`).join('')}</div>`).join('')}
-function tg(t){F.tags.has(t)?F.tags.delete(t):F.tags.add(t);chips();styles()}
-function match(s){const q=$('#q').value.toLowerCase().trim();if(q&&!(s.title+' '+s.desc+' '+s.tags.join(' ')).toLowerCase().includes(q))return false;
-for(const[g,ts]of Object.entries(groups())){const sel=ts.filter(t=>F.tags.has(t));if(sel.length&&!sel.some(t=>s.tags.includes(t)))return false}return true}
-function styles(){const l=S.styles.filter(match);$('#cnt').textContent=`${l.length} of ${S.styles.length} styles`;
-$('#sg').innerHTML=l.map(s=>{const i=S.styles.indexOf(s);return `<div class="sc"><div class="ph">${s.img?`<img src="${s.img}" alt="${esc(s.title)}">`:esc(s.icon)}</div><div class="pd"><h4>${esc(s.title)}</h4><p>${esc(s.desc)}</p><div>${s.tags.map(t=>`<span class="tag ${{Easy:'ok',Medium:'wn',Hard:'bd'}[t]||''}">${esc(t)}</span>`).join('')}</div><small style="color:var(--mut)">Worn ${s.worn||0}×</small><div class="row"><button class="b p s" onclick="wear(${i})">👑 Wear</button><button class="b s" onclick="styleForm(${i})">✏️</button><button class="b s" onclick="ask('Delete this style?',()=>{S.styles.splice(${i},1);save();render()})">🗑️</button>${s.link?`<a class="b s" href="${esc(s.link)}" target="_blank" rel="noopener" style="text-decoration:none">🔗</a>`:''}</div></div></div>`}).join('')||'<p>No styles match. Clear a filter or add one.</p>'}
-function wear(i){const s=S.styles[i];s.worn=(s.worn||0)+1;S.wear={id:s.id,d:TODAY()};gain(5);save();render()}
-function surprise(){const l=S.styles.filter(match);if(!l.length)return toast('No styles match your filters');const s=l[Math.floor(Math.random()*l.length)],i=S.styles.indexOf(s);
-modal(`<h3>Try this one ✨</h3><div class="ph" style="border:3px solid var(--ln);border-radius:12px;overflow:hidden">${s.img?`<img src="${s.img}" alt="">`:esc(s.icon)}</div><h3 style="margin-top:10px">${esc(s.title)}</h3><p style="font-size:13px">${esc(s.desc)}</p><div class="row"><button class="b p" onclick="wear(${i});closeM()">👑 Wear it</button><button class="b" onclick="surprise()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`)}
-function readImg(f,cb){const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.7))};im.src=r.result};r.readAsDataURL(f)}
-function pick(inp){if(inp.files[0])readImg(inp.files[0],d=>{pend=d;$('#pv').textContent='✅ Photo ready'})}
-function styleForm(i){const s=i>=0?S.styles[i]:{title:'',icon:'💇🏾',desc:'',tags:[],link:''};pend='';const k=new Set(Object.values(G).flat());
-modal(`<h3>${i>=0?'Edit':'New'} style</h3><form onsubmit="saveStyle(event,${i})"><label>Name</label><input name="t" required value="${esc(s.title)}"><label>Emoji icon (shown when no photo)</label><input name="icon" value="${esc(s.icon)}"><label>Notes</label><textarea name="desc" rows="2">${esc(s.desc)}</textarea>
-<label>Categories (pick every one that applies)</label>${Object.entries(G).map(([g,ts])=>`<div class="gr"><small>${g}</small>${ts.map(t=>`<button type="button" class="chip ${s.tags.includes(t)?'on':''}" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join('')}</div>`).join('')}
-<label>Your own tags (comma separated)</label><input name="custom" value="${esc(s.tags.filter(t=>!k.has(t)).join(', '))}"><label>Photo</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv"></small><label>Tutorial link (optional)</label><input name="link" value="${esc(s.link)}">
-<div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`)}
-function saveStyle(e,i){e.preventDefault();const d=Object.fromEntries(new FormData(e.target)),tags=[...e.target.querySelectorAll('.chip.on')].map(c=>c.dataset.t).concat(d.custom.split(',').map(x=>x.trim()).filter(Boolean));
-const o={id:i>=0?S.styles[i].id:uid(),title:d.t.trim(),icon:d.icon||'💇🏾',desc:d.desc.trim(),tags:[...new Set(tags)],img:pend||(i>=0?S.styles[i].img:''),link:d.link.trim(),worn:i>=0?S.styles[i].worn:0};
-if(i>=0)S.styles[i]=o;else{S.styles.push(o);gain(20)}save();closeM();render()}
-function logCare(t,d,note=''){S.log.push({t,d,n:note});gain(TYPES[t][2]);if(t==='wash'||t==='twist'){S.snooze=''}if(t==='wash')W.clear();save();closeM();render()}
-function careForm(d=TODAY()){modal(`<h3>Log care</h3><form onsubmit="event.preventDefault();const f=new FormData(event.target);logCare(f.get('t'),f.get('d'),f.get('n'))"><label>Type</label><select name="t">${Object.entries(TYPES).map(([k,v])=>`<option value="${k}">${v[0]} ${v[1]}</option>`).join('')}</select><label>Date</label><input type="date" name="d" value="${d}" required><label>Notes (products used, how it felt)</label><input name="n"><div class="row"><button class="b p">Log it</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`)}
-function steps(){$('#iw').value=S.cfg.wash;$('#it').value=S.cfg.twist;$('#steps').innerHTML=STEPS.map((s,i)=>`<label class="step ${W.has(i)?'d':''}"><input type="checkbox" ${W.has(i)?'checked':''} onchange="W.has(${i})?W.delete(${i}):W.add(${i});steps()"><span>${s[0]} <b>${s[1]}</b><br><small>${s[2]}</small></span></label>`).join('');
-const l=S.log.map((x,i)=>({...x,i})).sort((a,b)=>b.d.localeCompare(a.d)).slice(0,8);$('#hist').innerHTML=l.map(x=>`<div class="li"><span>${TYPES[x.t][0]} <b>${TYPES[x.t][1]}</b> · ${fmt(x.d)}${x.n?` · ${esc(x.n)}`:''}</span><button class="b s" onclick="S.log.splice(${x.i},1);save();render()">✕</button></div>`).join('')||'<p style="font-size:13px;color:var(--mut)">No care logged yet. Tap “Washed today” to start your schedule.</p>'}
-function mon(n){C.m+=n;if(C.m>11){C.m=0;C.y++}if(C.m<0){C.m=11;C.y--}cal()}
-function cal(){const{y,m}=C,f=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate();$('#ct').textContent=new Date(y,m,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});
-let h='SMTWTFS'.split('').map(d=>`<b class="dh">${d}</b>`).join('')+'<i></i>'.repeat(f);
-for(let d=1;d<=n;d++){const k=`${y}-${pad(m+1)}-${pad(d)}`,ev=S.log.filter(l=>l.d===k).map(l=>TYPES[l.t][0]).join(''),pr=['wash','twist'].filter(t=>nextOf(t)===k).length;h+=`<button class="cd ${k===TODAY()?'td':''}" onclick="dayM('${k}')"><span>${d}</span><em>${ev}</em>${pr?'<em class="pj">🔔</em>':''}</button>`}$('#cal').innerHTML=h}
-function dayM(k){const l=S.log.map((x,i)=>({...x,i})).filter(x=>x.d===k);modal(`<h3>${fmt(k)}</h3>${l.map(x=>`<div class="li"><span>${TYPES[x.t][0]} ${TYPES[x.t][1]}${x.n?` · ${esc(x.n)}`:''}</span><button class="b s" onclick="S.log.splice(${x.i},1);save();closeM();render()">✕</button></div>`).join('')||'<p style="font-size:13px">Nothing logged.</p>'}<div class="row">${Object.entries(TYPES).map(([t,v])=>`<button class="b s" onclick="logCare('${t}','${k}')">${v[0]} ${v[1]}</button>`).join('')}</div>`)}
-function measForm(){modal(`<h3>Log length</h3><form onsubmit="event.preventDefault();const f=new FormData(event.target);S.meas.push({d:f.get('d'),v:+f.get('v')});gain(25);save();closeM();render()"><label>Length (inches)</label><input type="number" step="0.25" min="0" name="v" required><label>Date</label><input type="date" name="d" value="${TODAY()}"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`)}
-function meas(){const m=[...S.meas].sort((a,b)=>a.d.localeCompare(b.d));if(!m.length){$('#lp').textContent='No measurements yet.';$('#meas').innerHTML='';return}
-const l=m[m.length-1];$('#lp').textContent=`Latest: ${l.v}" · ${m.length>1?`${(l.v-m[0].v>=0?'+':'')+(l.v-m[0].v).toFixed(2)}" since ${fmt(m[0].d)}`:'log another to see growth'}`;
-const mx=Math.max(...m.map(x=>x.v)),mn=Math.min(...m.map(x=>x.v)),pt=m.map((x,i)=>`${m.length>1?10+i*580/(m.length-1):300},${110-(mx===mn?40:(x.v-mn)/(mx-mn)*90)}`).join(' ');
-$('#meas').innerHTML=`<div class="wrap"><svg viewBox="0 0 600 125" style="width:100%;min-width:320px"><polyline points="${pt}" fill="none" stroke="var(--ac)" stroke-width="4" stroke-linejoin="round"/>${pt.split(' ').map(p=>`<circle cx="${p.split(',')[0]}" cy="${p.split(',')[1]}" r="5" fill="var(--v)"/>`).join('')}</svg></div>`+m.slice(-4).reverse().map(x=>`<div class="li"><span>${fmt(x.d)} · <b>${x.v}"</b></span><button class="b s" onclick="S.meas.splice(S.meas.indexOf(S.meas.find(z=>z.d==='${x.d}'&&z.v===${x.v})),1);save();render()">✕</button></div>`).join('')}
-function photoForm(){pend='';modal(`<h3>Add photo</h3><form onsubmit="savePhoto(event)"><label>Photo</label><input type="file" accept="image/*" onchange="pick(this)" required><small id="pv"></small><label>Caption</label><input name="c"><label>Date</label><input type="date" name="d" value="${TODAY()}"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`)}
-function savePhoto(e){e.preventDefault();if(!pend)return toast('Wait for the photo to load');const f=new FormData(e.target);S.gallery.push({img:pend,c:f.get('c'),d:f.get('d')});gain(15);save();closeM();render()}
-function gal(){$('#gal').innerHTML=[...S.gallery].map((g,i)=>({...g,i})).sort((a,b)=>b.d.localeCompare(a.d)).map(g=>`<div class="sc gi"><img src="${g.img}" alt="${esc(g.c)}"><div class="pd"><b>${esc(g.c)||'Loc photo'}</b><small style="color:var(--mut)">${fmt(g.d)}</small><div class="row"><button class="b s" onclick="ask('Delete photo?',()=>{S.gallery.splice(${g.i},1);save();render()})">🗑️</button></div></div></div>`).join('')||'<p style="font-size:13px">No photos yet.</p>'}
-function mileForm(){modal(`<h3>Log milestone</h3><form onsubmit="event.preventDefault();const f=new FormData(event.target);S.miles.push({t:f.get('t'),d:f.get('d'),n:f.get('n')});gain(25);save();closeM();render()"><label>Milestone</label><input name="t" list="ml" required><datalist id="ml"><option>🌱 Budding phase</option><option>🌿 Teen phase</option><option>🌳 Mature locs</option><option>✂️ First trim</option><option>🎂 Loc-iversary</option></datalist><label>Date</label><input type="date" name="d" value="${TODAY()}"><label>Note</label><input name="n"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`)}
-function mil(){$('#mil').innerHTML=[...S.miles].map((x,i)=>({...x,i})).sort((a,b)=>b.d.localeCompare(a.d)).map(x=>`<div class="li"><span><b>${esc(x.t)}</b> · ${fmt(x.d)}${x.n?` · ${esc(x.n)}`:''}</span><button class="b s" onclick="S.miles.splice(${x.i},1);save();render()">✕</button></div>`).join('')||'<p style="font-size:13px">No milestones yet.</p>'}
-function prodForm(i){const p=i>=0?S.prods[i]:{name:'',cat:'Other',notes:'',low:false};modal(`<h3>${i>=0?'Edit':'New'} product</h3><form onsubmit="saveProd(event,${i})"><label>Name</label><input name="n" required value="${esc(p.name)}"><label>Category</label><select name="c">${CATS.map(c=>`<option ${c===p.cat?'selected':''}>${c}</option>`).join('')}</select><label>Notes</label><input name="o" value="${esc(p.notes)}"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`)}
-function saveProd(e,i){e.preventDefault();const f=new FormData(e.target),o={id:i>=0?S.prods[i].id:uid(),name:f.get('n').trim(),cat:f.get('c'),notes:f.get('o'),low:i>=0?S.prods[i].low:false};if(i>=0)S.prods[i]=o;else{S.prods.push(o);gain(10)}save();closeM();render()}
-function prods(){const lo=S.prods.filter(p=>p.low);$('#rs').innerHTML=lo.length?`<div class="st wn" style="margin-bottom:12px"><b>🛒 RESTOCK LIST</b><small>${lo.map(p=>esc(p.name)).join(' · ')}</small></div>`:'';
-$('#pg').innerHTML=S.prods.map((p,i)=>`<div class="sc"><div class="pd"><span class="tag">${esc(p.cat)}</span><h4>${esc(p.name)}</h4><p>${esc(p.notes)}</p><div class="row"><button class="b s ${p.low?'bd':''}" onclick="S.prods[${i}].low=!S.prods[${i}].low;save();render()">${p.low?'🛒 Low':'Mark low'}</button><button class="b s" onclick="prodForm(${i})">✏️</button><button class="b s" onclick="ask('Delete product?',()=>{S.prods.splice(${i},1);save();render()})">🗑️</button></div></div></div>`).join('')}
-function bounties(){const wk=d=>{const x=diff(TODAY(),d);return x>=0&&x<7},B=[['🚿','Wash day','+15',S.log.some(l=>l.t==='wash'&&wk(l.d))],['🔄','Retwist','+25',S.log.some(l=>l.t==='twist'&&wk(l.d))],['📸','Add a photo','+15',S.gallery.some(g=>wk(g.d))],['📏','Log length','+25',S.meas.some(m=>wk(m.d))],['👑','Wear a style','+5',!!S.wear&&wk(S.wear.d)]];
-$('#bn').innerHTML=B.map(b=>`<div class="st ${b[3]?'ok':''}"><b>${b[0]} ${b[1]} · ${b[2]} XP</b><h3>${b[3]?'✅ Done this week':'Not yet'}</h3></div>`).join('')}
-function enableN(){try{Notification.requestPermission().then(p=>toast(p==='granted'?'Browser alerts on 🔔':'Blocked. Use the calendar links instead.'))}catch(e){toast('Not supported here. Use the calendar links.')}}
-function checkDue(){const due=['wash','twist'].filter(t=>{const n=nextOf(t);return n&&n<=TODAY()});if(!due.length)return;document.title='🚿 Due! · Loc Studio';
-const msg=due.map(t=>TYPES[t][0]+' '+TYPES[t][1]).join(' and ')+(due.length>1?' are':' is')+' due.';try{if(Notification.permission==='granted')new Notification('Loc Studio 👑',{body:msg})}catch(e){}
-if(S.snooze===TODAY())return;modal(`<h3>👑 ${msg}</h3><p style="font-size:14px">Log it when it’s done, or snooze until tomorrow.</p><div class="row">${due.map(t=>`<button class="b p" onclick="logCare('${t}',TODAY())">${TYPES[t][0]} Done today</button>`).join('')}<button class="b" onclick="S.snooze=TODAY();save();closeM()">⏰ Snooze</button></div>`)}
-function restore(){try{const o=JSON.parse($('#bk').value);if(!o.styles)throw 0;S=Object.assign(fresh(),o);save();render();toast('Restored ✅')}catch(e){toast('That backup text isn’t valid')}}
-function theme(){const r=document.documentElement,d=r.dataset.theme==='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark'}
-function render(){hud();hero();chips();styles();steps();cal();meas();gal();mil();prods();bounties();$('#sd').value=S.cfg.start||''}
-render();checkDue();
-</script>
-</body>
+    <script>
+      const K = "locStudio2",
+        $ = (s) => document.querySelector(s),
+        pad = (n) => String(n).padStart(2, "0");
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+        );
+      const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+        pd = (s) => {
+          const [a, b, c] = s.split("-");
+          return new Date(a, b - 1, c);
+        };
+      const addD = (s, n) => {
+          const d = pd(s);
+          d.setDate(d.getDate() + n);
+          return ymd(d);
+        },
+        diff = (a, b) => Math.round((pd(a) - pd(b)) / 864e5);
+      const TODAY = () => ymd(new Date()),
+        fmt = (s) =>
+          pd(s).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
+      const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+      const G = {
+        Occasion: [
+          "💼 Work",
+          "🍽️ Dinner",
+          "💃 Night out",
+          "☕ Casual",
+          "🏋️ Gym",
+          "💍 Formal",
+          "✈️ Travel",
+          "😴 Sleep",
+        ],
+        Look: [
+          "📿 Beaded",
+          "🚫 Non-beaded",
+          "🎀 Accessorized",
+          "🧵 Braided",
+          "🌀 Twisted",
+          "🌊 Curled",
+          "⬆️ Updo",
+          "↕️ Half-up",
+          "⬇️ Down",
+        ],
+        Effort: ["Easy", "Medium", "Hard"],
+        Wear: ["🔒 Low tension", "⏳ Long-lasting", "⚡ Quick"],
+      };
+      const TYPES = {
+        wash: ["🚿", "Wash day", 15],
+        twist: ["🔄", "Retwist", 25],
+        deep: ["💧", "Deep condition", 10],
+        scalp: ["🌿", "Scalp treatment", 5],
+        acv: ["🍎", "ACV rinse", 5],
+      };
+      const STEPS = [
+        [
+          "💆🏾‍♀️",
+          "Scalp massage & clarify",
+          "Residue-free shampoo on the scalp, rinse through the locs.",
+        ],
+        ["🍎", "ACV rinse (optional)", "For buildup and minerals. Rinse well."],
+        ["💧", "Condition or hydrate", "Light mist while damp."],
+        ["🧊", "Cool rinse", "Helps seal the cuticle."],
+        ["🧻", "Squeeze dry", "Squeeze, don’t rub, with a microfiber towel."],
+        ["☀️", "Seal & dry fully", "Fully dry to avoid mildew smell."],
+      ];
+      const CATS = [
+        "Shampoo",
+        "Conditioner",
+        "Oil",
+        "Gel",
+        "Mist",
+        "Tools",
+        "Accessories",
+        "Other",
+      ];
+      const mk = (title, icon, desc, tags) => ({
+        id: uid(),
+        title,
+        icon,
+        desc,
+        tags,
+        img: "",
+        link: "",
+        worn: 0,
+      });
+      const fresh = () => ({
+        xp: 0,
+        cfg: { wash: 7, twist: 35, start: "" },
+        log: [],
+        gallery: [],
+        miles: [],
+        meas: [],
+        wear: null,
+        snooze: "",
+        styles: [
+          mk("Two-Strand Twists", "🌀", "Classic, low tension. Wear down or go high ponytail.", [
+            "Easy",
+            "🌀 Twisted",
+            "⬇️ Down",
+            "☕ Casual",
+            "💼 Work",
+            "🚫 Non-beaded",
+            "🔒 Low tension",
+          ]),
+          mk("Beaded Half-Up", "📿", "Half-up with beads on the ends.", [
+            "Easy",
+            "📿 Beaded",
+            "↕️ Half-up",
+            "💃 Night out",
+            "☕ Casual",
+            "🎀 Accessorized",
+          ]),
+          mk("Barrel Twists & Curls", "🌊", "Barrel sections with curly ends.", [
+            "Medium",
+            "🌊 Curled",
+            "🌀 Twisted",
+            "🍽️ Dinner",
+            "💼 Work",
+            "🚫 Non-beaded",
+          ]),
+          mk("Loc Petals", "🌸", "Looped petals pinned around the crown.", [
+            "Medium",
+            "⬆️ Updo",
+            "🍽️ Dinner",
+            "💍 Formal",
+            "🚫 Non-beaded",
+          ]),
+          mk("Interlocked Updo", "👑", "Interlocking pattern, high structured crown.", [
+            "Hard",
+            "⬆️ Updo",
+            "💍 Formal",
+            "🍽️ Dinner",
+            "🎀 Accessorized",
+            "⏳ Long-lasting",
+          ]),
+          mk("Top Knot", "🍥", "Quick bun for the gym or a lazy day.", [
+            "Easy",
+            "⚡ Quick",
+            "⬆️ Updo",
+            "🏋️ Gym",
+            "✈️ Travel",
+            "😴 Sleep",
+            "🚫 Non-beaded",
+          ]),
+        ],
+        prods: [
+          {
+            id: uid(),
+            name: "Rosewater & Aloe Mist",
+            cat: "Mist",
+            notes: "Lightweight hydration.",
+            low: false,
+          },
+          {
+            id: uid(),
+            name: "Jojoba & Peppermint Oil",
+            cat: "Oil",
+            notes: "Seal and scalp.",
+            low: false,
+          },
+        ],
+      });
+      let S;
+      try {
+        S = JSON.parse(localStorage.getItem(K));
+      } catch (e) {}
+      S = Object.assign(fresh(), S || {});
+      S.cfg = Object.assign({ wash: 7, twist: 35, start: "" }, S.cfg);
+      const save = () => {
+        try {
+          localStorage.setItem(K, JSON.stringify(S));
+        } catch (e) {
+          toast("Storage full. Remove a few photos.");
+        }
+      };
+      const F = { tags: new Set() },
+        C = { y: new Date().getFullYear(), m: new Date().getMonth() };
+      let W = new Set(),
+        pend = "";
+      function toast(t) {
+        const e = $("#toast");
+        e.textContent = t;
+        e.style.display = "block";
+        clearTimeout(e._t);
+        e._t = setTimeout(() => (e.style.display = "none"), 2600);
+      }
+      function gain(n) {
+        const o = Math.floor(S.xp / 100);
+        S.xp += n;
+        if (Math.floor(S.xp / 100) > o) toast(`🎉 Level up! LVL ${Math.floor(S.xp / 100) + 1}`);
+        else toast(`+${n} XP`);
+      }
+      const modal = (h) => {
+          $("#mod").innerHTML =
+            `<div class="mb" onclick="if(event.target===this)closeM()"><div class="mc">${h}</div></div>`;
+        },
+        closeM = () => ($("#mod").innerHTML = "");
+      function ask(msg, fn) {
+        window._y = () => {
+          closeM();
+          fn();
+        };
+        modal(
+          `<h3>${msg}</h3><div class="row"><button class="b p" onclick="_y()">Yes</button><button class="b" onclick="closeM()">Cancel</button></div>`,
+        );
+      }
+      const lastOf = (t) =>
+          S.log
+            .filter((l) => l.t === t)
+            .map((l) => l.d)
+            .sort()
+            .pop(),
+        nextOf = (t) => {
+          const l = lastOf(t);
+          return l ? addD(l, S.cfg[t]) : null;
+        };
+      const gcal = (t, n) =>
+        `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(TYPES[t][0] + " " + TYPES[t][1])}&dates=${n.replace(/-/g, "")}/${addD(n, 1).replace(/-/g, "")}&recur=${encodeURIComponent("RRULE:FREQ=DAILY;INTERVAL=" + S.cfg[t])}`;
+      function rem(t) {
+        const n = nextOf(t),
+          [ic, nm] = TYPES[t];
+        let d = "Not scheduled",
+          cls = "",
+          sub = `Log a ${nm.toLowerCase()} to start`,
+          lk = "";
+        if (n) {
+          const x = diff(n, TODAY());
+          d =
+            x < 0
+              ? `${-x} day${x < -1 ? "s" : ""} overdue`
+              : x === 0
+                ? "Today!"
+                : `In ${x} day${x > 1 ? "s" : ""}`;
+          cls = x <= 0 ? (x < 0 ? "bd" : "wn") : x === 1 ? "wn" : "ok";
+          sub = pd(n).toLocaleDateString(undefined, {
+            weekday: "long",
+            month: "short",
+            day: "numeric",
+          });
+          lk = `<a href="${gcal(t, n)}" target="_blank" rel="noopener">📱 Add to phone calendar</a>`;
+        }
+        return `<div class="st ${cls}"><b>${ic} NEXT ${nm.toUpperCase()}</b><h3>${d}</h3><small>${sub}</small>${lk}</div>`;
+      }
+      function hero() {
+        const w = S.wear && S.styles.find((s) => s.id === S.wear.id),
+          a = S.cfg.start ? diff(TODAY(), S.cfg.start) : null;
+        $("#hero").innerHTML =
+          rem("wash") +
+          rem("twist") +
+          `<div class="st"><b>👑 WEARING NOW</b><h3>${w ? esc(w.title) : "Nothing set"}</h3><small>${w ? `Day ${diff(TODAY(), S.wear.d) + 1}` : "Tap “Wear” on a style"}</small></div><div class="st" onclick="$('#set').scrollIntoView({behavior:'smooth'})"><b>🌱 LOC AGE</b><h3>${a != null && a >= 0 ? a + " days" : "Set start date"}</h3><small>${a != null && a >= 0 ? Math.floor(a / 30.4) + " months" : "Tap to add"}</small></div>`;
+      }
+      function hud() {
+        const l = Math.floor(S.xp / 100) + 1,
+          t = ["Budding 🌱", "Rooted 🌿", "Flourishing 🌳", "Crowned 👑", "Loc Legend ✨"][
+            Math.min(l - 1, 4)
+          ];
+        $("#lvl").textContent = l;
+        $("#ttl").textContent = t;
+        $("#xpb").style.width = (S.xp % 100) + "%";
+        $("#xpt").textContent = (S.xp % 100) + "/100";
+      }
+      function groups() {
+        const k = new Set(Object.values(G).flat()),
+          cu = [...new Set(S.styles.flatMap((s) => s.tags))].filter((t) => !k.has(t));
+        return cu.length ? { ...G, Custom: cu } : G;
+      }
+      function chips() {
+        $("#chips").innerHTML = Object.entries(groups())
+          .map(
+            ([g, ts]) =>
+              `<div class="gr"><small>${g}</small>${ts.map((t) => `<button class="chip ${F.tags.has(t) ? "on" : ""}" data-t="${esc(t)}" onclick="tg(this.dataset.t)">${esc(t)}</button>`).join("")}</div>`,
+          )
+          .join("");
+      }
+      function tg(t) {
+        F.tags.has(t) ? F.tags.delete(t) : F.tags.add(t);
+        chips();
+        styles();
+      }
+      function match(s) {
+        const q = $("#q").value.toLowerCase().trim();
+        if (q && !(s.title + " " + s.desc + " " + s.tags.join(" ")).toLowerCase().includes(q))
+          return false;
+        for (const [g, ts] of Object.entries(groups())) {
+          const sel = ts.filter((t) => F.tags.has(t));
+          if (sel.length && !sel.some((t) => s.tags.includes(t))) return false;
+        }
+        return true;
+      }
+      function styles() {
+        const l = S.styles.filter(match);
+        $("#cnt").textContent = `${l.length} of ${S.styles.length} styles`;
+        $("#sg").innerHTML =
+          l
+            .map((s) => {
+              const i = S.styles.indexOf(s);
+              return `<div class="sc"><div class="ph">${s.img ? `<img src="${s.img}" alt="${esc(s.title)}">` : esc(s.icon)}</div><div class="pd"><h4>${esc(s.title)}</h4><p>${esc(s.desc)}</p><div>${s.tags.map((t) => `<span class="tag ${{ Easy: "ok", Medium: "wn", Hard: "bd" }[t] || ""}">${esc(t)}</span>`).join("")}</div><small style="color:var(--mut)">Worn ${s.worn || 0}×</small><div class="row"><button class="b p s" onclick="wear(${i})">👑 Wear</button><button class="b s" onclick="styleForm(${i})">✏️</button><button class="b s" onclick="ask('Delete this style?',()=>{S.styles.splice(${i},1);save();render()})">🗑️</button>${s.link ? `<a class="b s" href="${esc(s.link)}" target="_blank" rel="noopener" style="text-decoration:none">🔗</a>` : ""}</div></div></div>`;
+            })
+            .join("") || "<p>No styles match. Clear a filter or add one.</p>";
+      }
+      function wear(i) {
+        const s = S.styles[i];
+        s.worn = (s.worn || 0) + 1;
+        S.wear = { id: s.id, d: TODAY() };
+        gain(5);
+        save();
+        render();
+      }
+      function surprise() {
+        const l = S.styles.filter(match);
+        if (!l.length) return toast("No styles match your filters");
+        const s = l[Math.floor(Math.random() * l.length)],
+          i = S.styles.indexOf(s);
+        modal(
+          `<h3>Try this one ✨</h3><div class="ph" style="border:3px solid var(--ln);border-radius:12px;overflow:hidden">${s.img ? `<img src="${s.img}" alt="">` : esc(s.icon)}</div><h3 style="margin-top:10px">${esc(s.title)}</h3><p style="font-size:13px">${esc(s.desc)}</p><div class="row"><button class="b p" onclick="wear(${i});closeM()">👑 Wear it</button><button class="b" onclick="surprise()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`,
+        );
+      }
+      function readImg(f, cb) {
+        const r = new FileReader();
+        r.onload = () => {
+          const im = new Image();
+          im.onload = () => {
+            const k = Math.min(1, 640 / Math.max(im.width, im.height)),
+              c = document.createElement("canvas");
+            c.width = im.width * k;
+            c.height = im.height * k;
+            c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+            cb(c.toDataURL("image/jpeg", 0.7));
+          };
+          im.src = r.result;
+        };
+        r.readAsDataURL(f);
+      }
+      function pick(inp) {
+        if (inp.files[0])
+          readImg(inp.files[0], (d) => {
+            pend = d;
+            $("#pv").textContent = "✅ Photo ready";
+          });
+      }
+      function styleForm(i) {
+        const s = i >= 0 ? S.styles[i] : { title: "", icon: "💇🏾", desc: "", tags: [], link: "" };
+        pend = "";
+        const k = new Set(Object.values(G).flat());
+        modal(`<h3>${i >= 0 ? "Edit" : "New"} style</h3><form onsubmit="saveStyle(event,${i})"><label>Name</label><input name="t" required value="${esc(s.title)}"><label>Emoji icon (shown when no photo)</label><input name="icon" value="${esc(s.icon)}"><label>Notes</label><textarea name="desc" rows="2">${esc(s.desc)}</textarea>
+<label>Categories (pick every one that applies)</label>${Object.entries(G)
+          .map(
+            ([g, ts]) =>
+              `<div class="gr"><small>${g}</small>${ts.map((t) => `<button type="button" class="chip ${s.tags.includes(t) ? "on" : ""}" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join("")}</div>`,
+          )
+          .join("")}
+<label>Your own tags (comma separated)</label><input name="custom" value="${esc(s.tags.filter((t) => !k.has(t)).join(", "))}"><label>Photo</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv"></small><label>Tutorial link (optional)</label><input name="link" value="${esc(s.link)}">
+<div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`);
+      }
+      function saveStyle(e, i) {
+        e.preventDefault();
+        const d = Object.fromEntries(new FormData(e.target)),
+          tags = [...e.target.querySelectorAll(".chip.on")]
+            .map((c) => c.dataset.t)
+            .concat(
+              d.custom
+                .split(",")
+                .map((x) => x.trim())
+                .filter(Boolean),
+            );
+        const o = {
+          id: i >= 0 ? S.styles[i].id : uid(),
+          title: d.t.trim(),
+          icon: d.icon || "💇🏾",
+          desc: d.desc.trim(),
+          tags: [...new Set(tags)],
+          img: pend || (i >= 0 ? S.styles[i].img : ""),
+          link: d.link.trim(),
+          worn: i >= 0 ? S.styles[i].worn : 0,
+        };
+        if (i >= 0) S.styles[i] = o;
+        else {
+          S.styles.push(o);
+          gain(20);
+        }
+        save();
+        closeM();
+        render();
+      }
+      function logCare(t, d, note = "") {
+        S.log.push({ t, d, n: note });
+        gain(TYPES[t][2]);
+        if (t === "wash" || t === "twist") {
+          S.snooze = "";
+        }
+        if (t === "wash") W.clear();
+        save();
+        closeM();
+        render();
+      }
+      function careForm(d = TODAY()) {
+        modal(
+          `<h3>Log care</h3><form onsubmit="event.preventDefault();const f=new FormData(event.target);logCare(f.get('t'),f.get('d'),f.get('n'))"><label>Type</label><select name="t">${Object.entries(
+            TYPES,
+          )
+            .map(([k, v]) => `<option value="${k}">${v[0]} ${v[1]}</option>`)
+            .join(
+              "",
+            )}</select><label>Date</label><input type="date" name="d" value="${d}" required><label>Notes (products used, how it felt)</label><input name="n"><div class="row"><button class="b p">Log it</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
+      function steps() {
+        $("#iw").value = S.cfg.wash;
+        $("#it").value = S.cfg.twist;
+        $("#steps").innerHTML = STEPS.map(
+          (s, i) =>
+            `<label class="step ${W.has(i) ? "d" : ""}"><input type="checkbox" ${W.has(i) ? "checked" : ""} onchange="W.has(${i})?W.delete(${i}):W.add(${i});steps()"><span>${s[0]} <b>${s[1]}</b><br><small>${s[2]}</small></span></label>`,
+        ).join("");
+        const l = S.log
+          .map((x, i) => ({ ...x, i }))
+          .sort((a, b) => b.d.localeCompare(a.d))
+          .slice(0, 8);
+        $("#hist").innerHTML =
+          l
+            .map(
+              (x) =>
+                `<div class="li"><span>${TYPES[x.t][0]} <b>${TYPES[x.t][1]}</b> · ${fmt(x.d)}${x.n ? ` · ${esc(x.n)}` : ""}</span><button class="b s" onclick="S.log.splice(${x.i},1);save();render()">✕</button></div>`,
+            )
+            .join("") ||
+          '<p style="font-size:13px;color:var(--mut)">No care logged yet. Tap “Washed today” to start your schedule.</p>';
+      }
+      function mon(n) {
+        C.m += n;
+        if (C.m > 11) {
+          C.m = 0;
+          C.y++;
+        }
+        if (C.m < 0) {
+          C.m = 11;
+          C.y--;
+        }
+        cal();
+      }
+      function cal() {
+        const { y, m } = C,
+          f = new Date(y, m, 1).getDay(),
+          n = new Date(y, m + 1, 0).getDate();
+        $("#ct").textContent = new Date(y, m, 1).toLocaleDateString(undefined, {
+          month: "long",
+          year: "numeric",
+        });
+        let h =
+          "SMTWTFS"
+            .split("")
+            .map((d) => `<b class="dh">${d}</b>`)
+            .join("") + "<i></i>".repeat(f);
+        for (let d = 1; d <= n; d++) {
+          const k = `${y}-${pad(m + 1)}-${pad(d)}`,
+            ev = S.log
+              .filter((l) => l.d === k)
+              .map((l) => TYPES[l.t][0])
+              .join(""),
+            pr = ["wash", "twist"].filter((t) => nextOf(t) === k).length;
+          h += `<button class="cd ${k === TODAY() ? "td" : ""}" onclick="dayM('${k}')"><span>${d}</span><em>${ev}</em>${pr ? '<em class="pj">🔔</em>' : ""}</button>`;
+        }
+        $("#cal").innerHTML = h;
+      }
+      function dayM(k) {
+        const l = S.log.map((x, i) => ({ ...x, i })).filter((x) => x.d === k);
+        modal(
+          `<h3>${fmt(k)}</h3>${l.map((x) => `<div class="li"><span>${TYPES[x.t][0]} ${TYPES[x.t][1]}${x.n ? ` · ${esc(x.n)}` : ""}</span><button class="b s" onclick="S.log.splice(${x.i},1);save();closeM();render()">✕</button></div>`).join("") || '<p style="font-size:13px">Nothing logged.</p>'}<div class="row">${Object.entries(
+            TYPES,
+          )
+            .map(
+              ([t, v]) =>
+                `<button class="b s" onclick="logCare('${t}','${k}')">${v[0]} ${v[1]}</button>`,
+            )
+            .join("")}</div>`,
+        );
+      }
+      function measForm() {
+        modal(
+          `<h3>Log length</h3><form onsubmit="event.preventDefault();const f=new FormData(event.target);S.meas.push({d:f.get('d'),v:+f.get('v')});gain(25);save();closeM();render()"><label>Length (inches)</label><input type="number" step="0.25" min="0" name="v" required><label>Date</label><input type="date" name="d" value="${TODAY()}"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
+      function meas() {
+        const m = [...S.meas].sort((a, b) => a.d.localeCompare(b.d));
+        if (!m.length) {
+          $("#lp").textContent = "No measurements yet.";
+          $("#meas").innerHTML = "";
+          return;
+        }
+        const l = m[m.length - 1];
+        $("#lp").textContent =
+          `Latest: ${l.v}" · ${m.length > 1 ? `${(l.v - m[0].v >= 0 ? "+" : "") + (l.v - m[0].v).toFixed(2)}" since ${fmt(m[0].d)}` : "log another to see growth"}`;
+        const mx = Math.max(...m.map((x) => x.v)),
+          mn = Math.min(...m.map((x) => x.v)),
+          pt = m
+            .map(
+              (x, i) =>
+                `${m.length > 1 ? 10 + (i * 580) / (m.length - 1) : 300},${110 - (mx === mn ? 40 : ((x.v - mn) / (mx - mn)) * 90)}`,
+            )
+            .join(" ");
+        $("#meas").innerHTML =
+          `<div class="wrap"><svg viewBox="0 0 600 125" style="width:100%;min-width:320px"><polyline points="${pt}" fill="none" stroke="var(--ac)" stroke-width="4" stroke-linejoin="round"/>${pt
+            .split(" ")
+            .map(
+              (p) =>
+                `<circle cx="${p.split(",")[0]}" cy="${p.split(",")[1]}" r="5" fill="var(--v)"/>`,
+            )
+            .join("")}</svg></div>` +
+          m
+            .slice(-4)
+            .reverse()
+            .map(
+              (x) =>
+                `<div class="li"><span>${fmt(x.d)} · <b>${x.v}"</b></span><button class="b s" onclick="S.meas.splice(S.meas.indexOf(S.meas.find(z=>z.d==='${x.d}'&&z.v===${x.v})),1);save();render()">✕</button></div>`,
+            )
+            .join("");
+      }
+      function photoForm() {
+        pend = "";
+        modal(
+          `<h3>Add photo</h3><form onsubmit="savePhoto(event)"><label>Photo</label><input type="file" accept="image/*" onchange="pick(this)" required><small id="pv"></small><label>Caption</label><input name="c"><label>Date</label><input type="date" name="d" value="${TODAY()}"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
+      function savePhoto(e) {
+        e.preventDefault();
+        if (!pend) return toast("Wait for the photo to load");
+        const f = new FormData(e.target);
+        S.gallery.push({ img: pend, c: f.get("c"), d: f.get("d") });
+        gain(15);
+        save();
+        closeM();
+        render();
+      }
+      function gal() {
+        $("#gal").innerHTML =
+          [...S.gallery]
+            .map((g, i) => ({ ...g, i }))
+            .sort((a, b) => b.d.localeCompare(a.d))
+            .map(
+              (g) =>
+                `<div class="sc gi"><img src="${g.img}" alt="${esc(g.c)}"><div class="pd"><b>${esc(g.c) || "Loc photo"}</b><small style="color:var(--mut)">${fmt(g.d)}</small><div class="row"><button class="b s" onclick="ask('Delete photo?',()=>{S.gallery.splice(${g.i},1);save();render()})">🗑️</button></div></div></div>`,
+            )
+            .join("") || '<p style="font-size:13px">No photos yet.</p>';
+      }
+      function mileForm() {
+        modal(
+          `<h3>Log milestone</h3><form onsubmit="event.preventDefault();const f=new FormData(event.target);S.miles.push({t:f.get('t'),d:f.get('d'),n:f.get('n')});gain(25);save();closeM();render()"><label>Milestone</label><input name="t" list="ml" required><datalist id="ml"><option>🌱 Budding phase</option><option>🌿 Teen phase</option><option>🌳 Mature locs</option><option>✂️ First trim</option><option>🎂 Loc-iversary</option></datalist><label>Date</label><input type="date" name="d" value="${TODAY()}"><label>Note</label><input name="n"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
+      function mil() {
+        $("#mil").innerHTML =
+          [...S.miles]
+            .map((x, i) => ({ ...x, i }))
+            .sort((a, b) => b.d.localeCompare(a.d))
+            .map(
+              (x) =>
+                `<div class="li"><span><b>${esc(x.t)}</b> · ${fmt(x.d)}${x.n ? ` · ${esc(x.n)}` : ""}</span><button class="b s" onclick="S.miles.splice(${x.i},1);save();render()">✕</button></div>`,
+            )
+            .join("") || '<p style="font-size:13px">No milestones yet.</p>';
+      }
+      function prodForm(i) {
+        const p = i >= 0 ? S.prods[i] : { name: "", cat: "Other", notes: "", low: false };
+        modal(
+          `<h3>${i >= 0 ? "Edit" : "New"} product</h3><form onsubmit="saveProd(event,${i})"><label>Name</label><input name="n" required value="${esc(p.name)}"><label>Category</label><select name="c">${CATS.map((c) => `<option ${c === p.cat ? "selected" : ""}>${c}</option>`).join("")}</select><label>Notes</label><input name="o" value="${esc(p.notes)}"><div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
+      function saveProd(e, i) {
+        e.preventDefault();
+        const f = new FormData(e.target),
+          o = {
+            id: i >= 0 ? S.prods[i].id : uid(),
+            name: f.get("n").trim(),
+            cat: f.get("c"),
+            notes: f.get("o"),
+            low: i >= 0 ? S.prods[i].low : false,
+          };
+        if (i >= 0) S.prods[i] = o;
+        else {
+          S.prods.push(o);
+          gain(10);
+        }
+        save();
+        closeM();
+        render();
+      }
+      function prods() {
+        const lo = S.prods.filter((p) => p.low);
+        $("#rs").innerHTML = lo.length
+          ? `<div class="st wn" style="margin-bottom:12px"><b>🛒 RESTOCK LIST</b><small>${lo.map((p) => esc(p.name)).join(" · ")}</small></div>`
+          : "";
+        $("#pg").innerHTML = S.prods
+          .map(
+            (p, i) =>
+              `<div class="sc"><div class="pd"><span class="tag">${esc(p.cat)}</span><h4>${esc(p.name)}</h4><p>${esc(p.notes)}</p><div class="row"><button class="b s ${p.low ? "bd" : ""}" onclick="S.prods[${i}].low=!S.prods[${i}].low;save();render()">${p.low ? "🛒 Low" : "Mark low"}</button><button class="b s" onclick="prodForm(${i})">✏️</button><button class="b s" onclick="ask('Delete product?',()=>{S.prods.splice(${i},1);save();render()})">🗑️</button></div></div></div>`,
+          )
+          .join("");
+      }
+      function bounties() {
+        const wk = (d) => {
+            const x = diff(TODAY(), d);
+            return x >= 0 && x < 7;
+          },
+          B = [
+            ["🚿", "Wash day", "+15", S.log.some((l) => l.t === "wash" && wk(l.d))],
+            ["🔄", "Retwist", "+25", S.log.some((l) => l.t === "twist" && wk(l.d))],
+            ["📸", "Add a photo", "+15", S.gallery.some((g) => wk(g.d))],
+            ["📏", "Log length", "+25", S.meas.some((m) => wk(m.d))],
+            ["👑", "Wear a style", "+5", !!S.wear && wk(S.wear.d)],
+          ];
+        $("#bn").innerHTML = B.map(
+          (b) =>
+            `<div class="st ${b[3] ? "ok" : ""}"><b>${b[0]} ${b[1]} · ${b[2]} XP</b><h3>${b[3] ? "✅ Done this week" : "Not yet"}</h3></div>`,
+        ).join("");
+      }
+      function enableN() {
+        try {
+          Notification.requestPermission().then((p) =>
+            toast(
+              p === "granted" ? "Browser alerts on 🔔" : "Blocked. Use the calendar links instead.",
+            ),
+          );
+        } catch (e) {
+          toast("Not supported here. Use the calendar links.");
+        }
+      }
+      function checkDue() {
+        const due = ["wash", "twist"].filter((t) => {
+          const n = nextOf(t);
+          return n && n <= TODAY();
+        });
+        if (!due.length) return;
+        document.title = "🚿 Due! · Loc Studio";
+        const msg =
+          due.map((t) => TYPES[t][0] + " " + TYPES[t][1]).join(" and ") +
+          (due.length > 1 ? " are" : " is") +
+          " due.";
+        try {
+          if (Notification.permission === "granted")
+            new Notification("Loc Studio 👑", { body: msg });
+        } catch (e) {}
+        if (S.snooze === TODAY()) return;
+        modal(
+          `<h3>👑 ${msg}</h3><p style="font-size:14px">Log it when it’s done, or snooze until tomorrow.</p><div class="row">${due.map((t) => `<button class="b p" onclick="logCare('${t}',TODAY())">${TYPES[t][0]} Done today</button>`).join("")}<button class="b" onclick="S.snooze=TODAY();save();closeM()">⏰ Snooze</button></div>`,
+        );
+      }
+      function restore() {
+        try {
+          const o = JSON.parse($("#bk").value);
+          if (!o.styles) throw 0;
+          S = Object.assign(fresh(), o);
+          save();
+          render();
+          toast("Restored ✅");
+        } catch (e) {
+          toast("That backup text isn’t valid");
+        }
+      }
+      function theme() {
+        const r = document.documentElement,
+          d =
+            r.dataset.theme === "dark" ||
+            (!r.dataset.theme && matchMedia("(prefers-color-scheme:dark)").matches);
+        r.dataset.theme = d ? "light" : "dark";
+      }
+      function render() {
+        hud();
+        hero();
+        chips();
+        styles();
+        steps();
+        cal();
+        meas();
+        gal();
+        mil();
+        prods();
+        bounties();
+        $("#sd").value = S.cfg.start || "";
+      }
+      render();
+      checkDue();
+    </script>
+  </body>
 </html>
