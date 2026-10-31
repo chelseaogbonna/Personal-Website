@@ -936,7 +936,7 @@
           l
             .map((s) => {
               const i = S.styles.indexOf(s);
-              return `<div class="sc"><div class="ph">${s.img ? `<img src="${s.img}" alt="${esc(s.title)}">` : esc(s.icon)}</div><div class="pd"><h4>${esc(s.title)}</h4><p>${esc(s.desc)}</p><div>${s.tags.map((t) => `<span class="tag ${{ Easy: "ok", Medium: "wn", Hard: "bd" }[t] || ""}">${esc(t)}</span>`).join("")}</div><small style="color:var(--mut)">Worn ${s.worn || 0}×</small><div class="row"><button class="b p s" onclick="wear(${i})">👑 Wear</button><button class="b s" onclick="styleForm(${i})">✏️</button><button class="b s" onclick="ask('Delete this style?',()=>{S.styles.splice(${i},1);save();render()})">🗑️</button>${s.link ? `<a class="b s" href="${esc(s.link)}" target="_blank" rel="noopener" style="text-decoration:none">🔗</a>` : ""}</div></div></div>`;
+              return `<div class="sc"><div class="ph">${s.img ? `<img src="${esc(s.img)}" alt="${esc(s.title)}" data-e="${esc(s.icon)}" onerror="this.parentNode.textContent=this.dataset.e">` : esc(s.icon)}</div><div class="pd"><h4>${esc(s.title)}</h4><p>${esc(s.desc)}</p><div>${s.tags.map((t) => `<span class="tag ${{ Easy: "ok", Medium: "wn", Hard: "bd" }[t] || ""}">${esc(t)}</span>`).join("")}</div><small style="color:var(--mut)">Worn ${s.worn || 0}×</small><div class="row"><button class="b p s" onclick="wear(${i})">👑 Wear</button><button class="b s" onclick="styleForm(${i})">✏️</button><button class="b s" onclick="ask('Delete this style?',()=>{S.styles.splice(${i},1);save();render()})">🗑️</button>${s.link ? `<a class="b s" href="${esc(s.link)}" target="_blank" rel="noopener" style="text-decoration:none">🔗</a>` : ""}</div></div></div>`;
             })
             .join("") || "<p>No styles match. Clear a filter or add one.</p>";
       }
@@ -954,7 +954,7 @@
         const s = l[Math.floor(Math.random() * l.length)],
           i = S.styles.indexOf(s);
         modal(
-          `<h3>Try this one ✨</h3><div class="ph" style="border:3px solid var(--ln);border-radius:12px;overflow:hidden">${s.img ? `<img src="${s.img}" alt="">` : esc(s.icon)}</div><h3 style="margin-top:10px">${esc(s.title)}</h3><p style="font-size:13px">${esc(s.desc)}</p><div class="row"><button class="b p" onclick="wear(${i});closeM()">👑 Wear it</button><button class="b" onclick="surprise()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`,
+          `<h3>Try this one ✨</h3><div class="ph" style="border:3px solid var(--ln);border-radius:12px;overflow:hidden">${s.img ? `<img src="${esc(s.img)}" alt="" data-e="${esc(s.icon)}" onerror="this.parentNode.textContent=this.dataset.e">` : esc(s.icon)}</div><h3 style="margin-top:10px">${esc(s.title)}</h3><p style="font-size:13px">${esc(s.desc)}</p><div class="row"><button class="b p" onclick="wear(${i});closeM()">👑 Wear it</button><button class="b" onclick="surprise()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`,
         );
       }
       function readImg(f, cb) {
@@ -991,7 +991,7 @@
               `<div class="gr"><small>${g}</small>${ts.map((t) => `<button type="button" class="chip ${s.tags.includes(t) ? "on" : ""}" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join("")}</div>`,
           )
           .join("")}
-<label>Your own tags (comma separated)</label><input name="custom" value="${esc(s.tags.filter((t) => !k.has(t)).join(", "))}"><label>Photo</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv"></small><label>Tutorial link (optional)</label><input name="link" value="${esc(s.link)}">
+<label>Your own tags (comma separated)</label><input name="custom" value="${esc(s.tags.filter((t) => !k.has(t)).join(", "))}"><label>Photo: choose a file or paste a link</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv"></small><input name="imgurl" placeholder="…or paste an image link (https://…)" value="${esc(s.img && !s.img.startsWith("data:") ? s.img : "")}"><label>Tutorial link (optional)</label><input name="link" value="${esc(s.link)}">
 <div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`);
       }
       function saveStyle(e, i) {
@@ -1011,7 +1011,10 @@
           icon: d.icon || "💇🏾",
           desc: d.desc.trim(),
           tags: [...new Set(tags)],
-          img: pend || (i >= 0 ? S.styles[i].img : ""),
+          img:
+            pend ||
+            d.imgurl.trim() ||
+            (i >= 0 && S.styles[i].img.startsWith("data:") ? S.styles[i].img : ""),
           link: d.link.trim(),
           worn: i >= 0 ? S.styles[i].worn : 0,
         };
