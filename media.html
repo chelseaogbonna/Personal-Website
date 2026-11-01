@@ -1,66 +1,1136 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Media Den 🎧</title>
-  <link rel="icon" type="image/png" href="Favicon.png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Fredoka', cursive, sans-serif; }
-    .pixel-shadow { box-shadow: 4px 4px 0px #000; }
-    .pixel-shadow-sm { box-shadow: 2px 2px 0px #000; }
-  </style>
-</head>
-<body class="bg-violet-100 text-slate-800 min-h-screen pb-12">
-
-  <!-- HUD TOP BAR -->
-  <header class="bg-violet-600 text-white p-4 border-b-4 border-black sticky top-0 z-50">
-    <div class="max-w-5xl mx-auto flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-2 bg-violet-700 px-3 py-1.5 rounded-xl border-2 border-black pixel-shadow-sm text-sm font-bold hover:bg-violet-800 transition">
-        ⬅️ Main Lair
-      </a>
-      <h1 class="text-xl md:text-2xl font-bold tracking-wider">MEDIA DEN 🎧</h1>
-      <div class="text-xs font-bold bg-violet-800 px-3 py-1.5 rounded-xl border-2 border-black text-yellow-300">
-        LVL <span id="player-lvl">1</span>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Media Den 🎧</title>
+    <link rel="icon" type="image/png" href="Favicon.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #ede9fe;
+        --card: #f5f3ff;
+        --ink: #1e1b2e;
+        --mut: #5b5472;
+        --ln: #000;
+        --sh: #000;
+        --ac: #6d28d9;
+        --onac: #fff;
+        --soft: #ddd6fe;
+        --ok: #86efac;
+        --wn: #fcd34d;
+        --bd: #fda4af;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #14101f;
+          --card: #201a33;
+          --ink: #f1ecff;
+          --mut: #b3a8d4;
+          --ln: #cfc2ff;
+          --ac: #a78bfa;
+          --onac: #1e1b2e;
+          --soft: #3b2f66;
+          --ok: #166534;
+          --wn: #854d0e;
+          --bd: #9f1239;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #14101f;
+        --card: #201a33;
+        --ink: #f1ecff;
+        --mut: #b3a8d4;
+        --ln: #cfc2ff;
+        --ac: #a78bfa;
+        --onac: #1e1b2e;
+        --soft: #3b2f66;
+        --ok: #166534;
+        --wn: #854d0e;
+        --bd: #9f1239;
+      }
+      html {
+        scroll-padding-top: env(safe-area-inset-top, 0px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Fredoka", system-ui, sans-serif;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0 0 auto;
+        height: env(safe-area-inset-top, 0px);
+        background: var(--ac);
+        z-index: 60;
+      }
+      header {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 50;
+        background: var(--ac);
+        color: var(--onac);
+        border-bottom: 4px solid var(--ln);
+        padding: 10px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      header h1 {
+        margin: 0;
+        font-size: 22px;
+        letter-spacing: 1px;
+      }
+      .hud {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 700;
+        font-size: 12px;
+      }
+      .bar {
+        width: 90px;
+        height: 12px;
+        border: 2px solid var(--ln);
+        border-radius: 9px;
+        background: var(--card);
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--wn);
+        transition: width 0.4s;
+      }
+      .pb {
+        height: 10px;
+        border: 2px solid var(--ln);
+        border-radius: 9px;
+        background: var(--bg);
+        overflow: hidden;
+      }
+      .pb i {
+        display: block;
+        height: 100%;
+        background: var(--ac);
+      }
+      main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 20px 16px 60px;
+      }
+      .c {
+        background: var(--card);
+        border: 4px solid var(--ln);
+        border-radius: 24px;
+        box-shadow: 6px 6px 0 var(--sh);
+        padding: 20px;
+        margin-bottom: 24px;
+      }
+      .c h2 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .c > .hd {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .hd p {
+        margin: 2px 0 0;
+        font-size: 13px;
+        color: var(--mut);
+      }
+      .b {
+        font: inherit;
+        font-weight: 700;
+        font-size: 13px;
+        border: 3px solid var(--ln);
+        border-radius: 12px;
+        padding: 7px 12px;
+        background: var(--soft);
+        color: var(--ink);
+        box-shadow: 3px 3px 0 var(--sh);
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .b:active {
+        transform: translate(2px, 2px);
+        box-shadow: none;
+      }
+      .b.p {
+        background: var(--ac);
+        color: var(--onac);
+      }
+      .b.s {
+        padding: 4px 8px;
+        font-size: 12px;
+        box-shadow: 2px 2px 0 var(--sh);
+      }
+      .b.on {
+        background: var(--ac);
+        color: var(--onac);
+      }
+      .g {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      }
+      .st {
+        border: 3px solid var(--ln);
+        border-radius: 16px;
+        padding: 12px;
+        background: var(--soft);
+        box-shadow: 3px 3px 0 var(--sh);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .st h3 {
+        margin: 0;
+        font-size: 22px;
+      }
+      .st small,
+      .st b {
+        font-size: 12px;
+      }
+      .st input {
+        width: 80px;
+        margin: 0;
+        padding: 3px 6px;
+      }
+      .chip {
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        border: 2px solid var(--ln);
+        border-radius: 99px;
+        padding: 3px 10px;
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+        margin: 2px;
+      }
+      .chip.on {
+        background: var(--ac);
+        color: var(--onac);
+      }
+      .gr {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 2px;
+        margin-bottom: 6px;
+      }
+      .gr small {
+        font-weight: 700;
+        color: var(--mut);
+        width: 78px;
+      }
+      .sc {
+        border: 3px solid var(--ln);
+        border-radius: 16px;
+        overflow: hidden;
+        background: var(--card);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 3px 3px 0 var(--sh);
+      }
+      .ph {
+        height: 150px;
+        background: var(--soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 52px;
+        border-bottom: 3px solid var(--ln);
+      }
+      .ph img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .pd {
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        flex: 1;
+      }
+      .pd h4 {
+        margin: 0;
+        font-size: 17px;
+      }
+      .pd p {
+        margin: 0;
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .lab {
+        font-size: 11px;
+        letter-spacing: 0.5px;
+        color: var(--mut);
+      }
+      .old {
+        color: var(--ac);
+        font-weight: 700;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        border: 1.5px solid var(--ln);
+        border-radius: 99px;
+        padding: 1px 7px;
+        margin: 1px;
+        background: var(--soft);
+      }
+      .pill {
+        font: inherit;
+        font-size: 11px;
+        font-weight: 700;
+        border: 2px solid var(--ln);
+        border-radius: 99px;
+        padding: 2px 10px;
+        cursor: pointer;
+        color: var(--ink);
+        align-self: flex-start;
+      }
+      .s0 {
+        background: var(--soft);
+      }
+      .s1 {
+        background: var(--wn);
+      }
+      .s2 {
+        background: var(--ok);
+      }
+      .star {
+        background: none;
+        border: 0;
+        font-size: 18px;
+        cursor: pointer;
+        color: var(--mut);
+        padding: 0 1px;
+        opacity: 0.5;
+      }
+      .star.on {
+        color: #f59e0b;
+        opacity: 1;
+      }
+      .row {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-top: auto;
+        padding-top: 6px;
+      }
+      .sh {
+        margin: 18px 0 8px;
+        font-size: 18px;
+      }
+      .sh small {
+        color: var(--mut);
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        font: inherit;
+        font-size: 14px;
+        padding: 8px;
+        border: 2px solid var(--ln);
+        border-radius: 10px;
+        background: var(--bg);
+        color: var(--ink);
+        margin: 3px 0 10px;
+      }
+      label {
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .hint {
+        font-size: 11px;
+        color: var(--mut);
+        display: block;
+        margin: -6px 0 10px;
+      }
+      .mb {
+        position: fixed;
+        inset: 0;
+        background: #000a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        z-index: 99;
+      }
+      .mc {
+        background: var(--card);
+        border: 4px solid var(--ln);
+        border-radius: 20px;
+        padding: 20px;
+        width: min(520px, 100%);
+        max-height: 88vh;
+        overflow: auto;
+      }
+      .mc h3 {
+        margin: 0 0 10px;
+      }
+      .li {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 6px;
+      }
+      .li input {
+        margin: 0;
+        flex: 1;
+      }
+      .g2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      #toast {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        background: var(--ink);
+        color: var(--bg);
+        padding: 10px 16px;
+        border-radius: 99px;
+        font-weight: 700;
+        font-size: 13px;
+        z-index: 120;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="b s">⬅️ Main Lair</a>
+      <h1>MEDIA DEN 🎧</h1>
+      <div class="hud">
+        <span>LVL <span id="lvl">1</span></span>
+        <div class="bar"><i id="xpb"></i></div>
+        <span id="xpt"></span
+        ><button class="b s" onclick="theme()" aria-label="Toggle theme">🌓</button>
       </div>
-    </div>
-  </header>
+    </header>
+    <main>
+      <section class="c"><div class="g" id="stats"></div></section>
 
-  <main class="max-w-5xl mx-auto px-4 mt-8">
-    <div class="bg-white border-4 border-black rounded-3xl p-6 md:p-8 pixel-shadow">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
-        <div>
-          <h2 class="text-2xl font-black text-violet-900">Music, Games & Reads</h2>
-          <p class="text-xs text-slate-600">Track your favorite playlists, current games, and books.</p>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>🎬 Spotlights</h2>
+            <p>Your music, game and book of the day and of the week. Add a GIF to each one.</p>
+          </div>
         </div>
-        <button onclick="gainXP(10)" class="bg-violet-400 hover:bg-violet-500 text-white font-bold py-2 px-4 rounded-xl border-2 border-black pixel-shadow-sm text-sm transition">
-          + Add Media (+10 XP)
-        </button>
-      </div>
+        <div class="g" id="spot"></div>
+      </section>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div class="bg-violet-50 border-2 border-black rounded-2xl p-4 pixel-shadow-sm">
-          <div class="h-32 bg-violet-200 rounded-xl border-2 border-black mb-3 flex items-center justify-center text-3xl">🎮</div>
-          <span class="text-[10px] bg-violet-300 text-black px-2 py-0.5 rounded-full border border-black font-bold">PLAYING</span>
-          <h3 class="font-bold text-lg mt-1">Cozy Arcade Quest</h3>
-          <p class="text-xs text-slate-600">Chilling with retro simulators & design games.</p>
+      <section class="c">
+        <div class="hd">
+          <div>
+            <h2>📚 My Library</h2>
+            <p>
+              Books, music and games. Group them by ideology, region, genre, or your own categories.
+            </p>
+          </div>
+          <div class="row">
+            <button class="b" onclick="pickNext()">🎲 Pick my next</button
+            ><button class="b" onclick="catM()">🏷️ Categories</button
+            ><button class="b p" onclick="itemForm()">➕ Add (+10 XP)</button>
+          </div>
         </div>
-      </div>
-    </div>
-  </main>
+        <div class="row" id="tabs" style="margin: 0 0 10px"></div>
+        <input id="q" placeholder="🔍 Search title, author or notes…" oninput="body()" />
+        <div id="ctl"></div>
+        <div id="chips"></div>
+        <div id="body"></div>
+      </section>
 
-  <script>
-    function gainXP(amount) {
-      let xp = (parseInt(localStorage.getItem('playerXP')) || 0) + amount;
-      let lvl = parseInt(localStorage.getItem('playerLvl')) || 1;
-      if (xp >= 100) { xp -= 100; lvl += 1; alert('🎉 LEVEL UP!'); }
-      localStorage.setItem('playerXP', xp);
-      localStorage.setItem('playerLvl', lvl);
-      document.getElementById('player-lvl').innerText = lvl;
-    }
-    document.getElementById('player-lvl').innerText = localStorage.getItem('playerLvl') || 1;
-  </script>
-</body>
+      <section class="c" id="set">
+        <div class="hd">
+          <div>
+            <h2>⚙️ Backup</h2>
+            <p>Everything is saved in this browser only. Back up now and then.</p>
+          </div>
+        </div>
+        <textarea
+          id="bk"
+          rows="3"
+          placeholder="Backup text appears here. Paste a backup here to restore."
+        ></textarea>
+        <div class="row">
+          <button
+            class="b"
+            onclick="
+              bk.value = JSON.stringify(S);
+              bk.select();
+            "
+          >
+            📤 Show backup</button
+          ><button class="b" onclick="restore()">📥 Restore from text</button
+          ><button
+            class="b"
+            onclick="
+              ask(`Erase your whole library?`, () => {
+                S = fresh();
+                save();
+                setTab(`book`);
+              })
+            "
+          >
+            🗑️ Reset all
+          </button>
+        </div>
+      </section>
+    </main>
+    <div id="mod"></div>
+    <div id="toast"></div>
+
+    <script>
+      const K = "mediaDen2",
+        $ = (s) => document.querySelector(s),
+        pad = (n) => String(n).padStart(2, "0");
+      const esc = (s) =>
+        String(s ?? "").replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c],
+        );
+      const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+        pd = (s) => {
+          const [a, b, c] = s.split("-");
+          return new Date(a, b - 1, c);
+        };
+      const diff = (a, b) => Math.round((pd(a) - pd(b)) / 864e5),
+        TODAY = () => ymd(new Date()),
+        uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+      const TY = {
+        book: {
+          i: "📚",
+          n: "Books",
+          one: "Book",
+          by: "Author",
+          st: ["Want to read", "Reading", "Read"],
+        },
+        music: {
+          i: "🎵",
+          n: "Music",
+          one: "Music",
+          by: "Artist",
+          st: ["Want to hear", "On repeat", "Loved"],
+        },
+        game: {
+          i: "🎮",
+          n: "Games",
+          one: "Game",
+          by: "Studio",
+          st: ["Backlog", "Playing", "Finished"],
+        },
+      };
+      const mk = (type, title, by, st, tags, rate = 0) => ({
+        id: uid(),
+        type,
+        title,
+        by,
+        st,
+        rate,
+        prog: 0,
+        tags,
+        notes: "",
+        img: "",
+        added: TODAY(),
+        fin: st === 2 ? TODAY() : "",
+      });
+      const fresh = () => ({
+        cfg: { goal: 12 },
+        slots: {},
+        groups: {
+          book: {
+            Ideology: [
+              "Pan-Africanism",
+              "Black Radical Tradition",
+              "Decolonial",
+              "Marxism",
+              "Liberalism",
+              "Feminism",
+              "Anarchism",
+              "Stoicism",
+              "Existentialism",
+              "Spiritual / Religious",
+            ],
+            Region: [
+              "Africa",
+              "Caribbean",
+              "North America",
+              "South America",
+              "Europe",
+              "Middle East",
+              "Asia",
+              "Oceania",
+            ],
+            Genre: [
+              "Fiction",
+              "Non-fiction",
+              "Memoir",
+              "Poetry",
+              "Philosophy",
+              "History",
+              "Self-help",
+              "Sci-fi / Fantasy",
+            ],
+          },
+          music: {
+            Genre: [
+              "Afrobeats",
+              "Amapiano",
+              "Hip-Hop",
+              "R&B",
+              "Lo-fi",
+              "Jazz",
+              "Gospel",
+              "Rock",
+              "Pop",
+              "Classical",
+            ],
+            Mood: ["Chill", "Hype", "Focus", "Sad", "Workout", "Party"],
+            Region: ["Africa", "Caribbean", "Americas", "Europe", "Asia"],
+          },
+          game: {
+            Genre: ["RPG", "Cozy", "Puzzle", "Platformer", "Strategy", "Shooter", "Sim", "Indie"],
+            Platform: ["PC", "PlayStation", "Xbox", "Switch", "Mobile"],
+            Vibe: ["Relaxing", "Competitive", "Story-rich", "Co-op"],
+          },
+        },
+        items: [
+          mk("book", "Things Fall Apart", "Chinua Achebe", 0, ["Decolonial", "Africa", "Fiction"]),
+          mk("book", "The Wretched of the Earth", "Frantz Fanon", 0, [
+            "Decolonial",
+            "Black Radical Tradition",
+            "Caribbean",
+            "Non-fiction",
+            "Philosophy",
+          ]),
+          mk("book", "Meditations", "Marcus Aurelius", 2, ["Stoicism", "Europe", "Philosophy"], 5),
+          mk("book", "Sister Outsider", "Audre Lorde", 1, [
+            "Feminism",
+            "Black Radical Tradition",
+            "North America",
+            "Non-fiction",
+          ]),
+          mk("game", "Cozy Arcade Quest", "", 1, ["Cozy", "Indie", "Relaxing"]),
+        ],
+      });
+      let S;
+      try {
+        S = JSON.parse(localStorage.getItem(K));
+      } catch (e) {}
+      S = Object.assign(fresh(), S || {});
+      let TAB = "book",
+        ST = -1,
+        GB = "",
+        F = new Set(),
+        pend = "";
+      const save = () => {
+        try {
+          localStorage.setItem(K, JSON.stringify(S));
+        } catch (e) {
+          toast("Storage full. Use links instead of uploads for some images.");
+        }
+      };
+      const gr = () => S.groups[TAB],
+        allT = () => Object.values(gr()).flat();
+      function toast(t) {
+        const e = $("#toast");
+        e.textContent = t;
+        e.style.display = "block";
+        clearTimeout(e._t);
+        e._t = setTimeout(() => (e.style.display = "none"), 2800);
+      }
+      function hud() {
+        let x = 0,
+          l = 1;
+        try {
+          x = parseInt(localStorage.getItem("playerXP")) || 0;
+          l = parseInt(localStorage.getItem("playerLvl")) || 1;
+        } catch (e) {}
+        $("#lvl").textContent = l;
+        $("#xpb").style.width = x + "%";
+        $("#xpt").textContent = x + "/100";
+      }
+      function gain(n) {
+        try {
+          let x = (parseInt(localStorage.getItem("playerXP")) || 0) + n,
+            l = parseInt(localStorage.getItem("playerLvl")) || 1;
+          if (x >= 100) {
+            x -= 100;
+            l++;
+            toast("🎉 LEVEL UP!");
+          } else toast("+" + n + " XP");
+          localStorage.setItem("playerXP", x);
+          localStorage.setItem("playerLvl", l);
+        } catch (e) {}
+        hud();
+      }
+      const modal = (h) => {
+          $("#mod").innerHTML =
+            `<div class="mb" onclick="if(event.target===this)closeM()"><div class="mc">${h}</div></div>`;
+        },
+        closeM = () => ($("#mod").innerHTML = "");
+      function ask(msg, fn) {
+        window._y = () => {
+          closeM();
+          fn();
+        };
+        modal(
+          `<h3>${msg}</h3><div class="row"><button class="b p" onclick="_y()">Yes</button><button class="b" onclick="closeM()">Cancel</button></div>`,
+        );
+      }
+      function readImg(f, cb) {
+        if (f.type === "image/gif") {
+          if (f.size > 1.5e6) {
+            toast("That GIF is over 1.5 MB. Paste a link instead.");
+            return;
+          }
+          const r = new FileReader();
+          r.onload = () => cb(r.result);
+          r.readAsDataURL(f);
+          return;
+        }
+        const r = new FileReader();
+        r.onload = () => {
+          const im = new Image();
+          im.onload = () => {
+            const k = Math.min(1, 640 / Math.max(im.width, im.height)),
+              c = document.createElement("canvas");
+            c.width = im.width * k;
+            c.height = im.height * k;
+            c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+            cb(c.toDataURL("image/jpeg", 0.75));
+          };
+          im.src = r.result;
+        };
+        r.readAsDataURL(f);
+      }
+      function pick(inp) {
+        pend = "";
+        if (inp.files[0])
+          readImg(inp.files[0], (d) => {
+            pend = d;
+            $("#pv").textContent = "✅ File ready";
+          });
+        else $("#pv").textContent = "";
+      }
+      const imgF = (cur, lab) =>
+        `<label>${lab}</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv" class="hint"></small><input name="imgurl" placeholder="…or paste an image or GIF link (https://…)" value="${esc(cur && !cur.startsWith("data:") ? cur : "")}">`;
+      const imgOf = (d, old) =>
+        pend || d.imgurl.trim() || (old && old.startsWith("data:") ? old : "");
+      const pic = (img, e) =>
+        img
+          ? `<img src="${esc(img)}" alt="" data-e="${e}" onerror="this.parentNode.textContent=this.dataset.e">`
+          : e;
+
+      /* ---------- stats ---------- */
+      function stats() {
+        const y = String(new Date().getFullYear()),
+          read = S.items.filter(
+            (i) => i.type === "book" && i.st === 2 && (i.fin || "").startsWith(y),
+          ).length,
+          g = S.cfg.goal || 1,
+          rt = S.items.filter((i) => i.rate),
+          av = rt.length ? (rt.reduce((a, i) => a + i.rate, 0) / rt.length).toFixed(1) : "–";
+        $("#stats").innerHTML =
+          `<div class="st"><b>📚 BOOKS READ ${y}</b><h3>${read} / <input type="number" min="1" value="${S.cfg.goal}" onchange="S.cfg.goal=Math.max(1,+this.value||12);save();stats()" aria-label="Yearly goal"></h3><div class="pb"><i style="width:${Math.min(100, (read / g) * 100)}%"></i></div></div>
+<div class="st"><b>▶️ IN PROGRESS</b><h3>${S.items.filter((i) => i.st === 1).length}</h3><small>reading, on repeat or playing</small></div>
+<div class="st"><b>📝 WANT LIST</b><h3>${S.items.filter((i) => i.st === 0).length}</h3><small>books, music and games waiting</small></div>
+<div class="st"><b>⭐ AVG RATING</b><h3>${av}</h3><small>${rt.length} rated</small></div>`;
+      }
+
+      /* ---------- spotlights ---------- */
+      function spot() {
+        $("#spot").innerHTML = ["music", "game", "book"]
+          .map((t) =>
+            ["Day", "Week"]
+              .map((p) => {
+                const k = t + p,
+                  s = S.slots[k] || {},
+                  T = TY[t],
+                  age = s.d ? diff(TODAY(), s.d) : null,
+                  old = age != null && age >= (p === "Day" ? 1 : 7);
+                return `<div class="sc"><div class="ph">${pic(s.img, T.i)}</div><div class="pd"><b class="lab">${T.i} ${T.one.toUpperCase()} OF THE ${p.toUpperCase()}</b><h4>${s.t ? esc(s.t) : "Nothing picked yet"}</h4><p>${esc(s.n || "")}</p>${age != null ? `<small class="${old ? "old" : "lab"}">${old ? "⏰ Time for a fresh pick · " : ""}Set ${age === 0 ? "today" : age + "d ago"}</small>` : ""}
+<div class="row"><button class="b p s" onclick="spotForm('${t}','${p}')">✏️ Set</button><button class="b s" onclick="pull('${t}','${p}')">🎲 From library</button>${s.t ? `<button class="b s" onclick="S.slots['${k}']={};save();spot()">✕</button>` : ""}</div></div></div>`;
+              })
+              .join(""),
+          )
+          .join("");
+      }
+      function spotForm(t, p) {
+        const s = S.slots[t + p] || {},
+          T = TY[t];
+        pend = "";
+        modal(
+          `<h3>${T.i} ${T.one} of the ${p}</h3><form onsubmit="saveSpot(event,'${t}','${p}')"><label>Title</label><input name="t" required value="${esc(s.t || "")}"><label>${T.by} or a note</label><input name="n" value="${esc(s.n || "")}">${imgF(s.img, "GIF: choose a file or paste a link")}<span class="hint">Tip: on Giphy or Tenor, right-click the GIF and choose “Copy image address”.</span><div class="row"><button class="b p">Save (+5 XP)</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
+      function saveSpot(e, t, p) {
+        e.preventDefault();
+        const d = Object.fromEntries(new FormData(e.target)),
+          k = t + p,
+          o = S.slots[k] || {};
+        S.slots[k] = { t: d.t.trim(), n: d.n.trim(), img: imgOf(d, o.img), d: TODAY() };
+        gain(5);
+        save();
+        closeM();
+        spot();
+      }
+      function pull(t, p) {
+        let pool = S.items.filter((i) => i.type === t && i.st !== 2);
+        if (!pool.length) pool = S.items.filter((i) => i.type === t);
+        if (!pool.length) return toast(`Add some ${TY[t].n.toLowerCase()} to your library first`);
+        const i = pool[Math.floor(Math.random() * pool.length)],
+          k = t + p,
+          o = S.slots[k] || {};
+        S.slots[k] = { t: i.title, n: i.by, img: o.img || "", d: TODAY() };
+        save();
+        spot();
+        toast(`Picked “${i.title}”. Add a GIF to match ✨`);
+      }
+
+      /* ---------- library ---------- */
+      function setTab(t) {
+        TAB = t;
+        ST = -1;
+        F = new Set();
+        GB = Object.keys(gr())[0];
+        $("#q").value = "";
+        render();
+      }
+      function tabs() {
+        $("#tabs").innerHTML = Object.entries(TY)
+          .map(
+            ([k, v]) =>
+              `<button class="b ${k === TAB ? "on" : ""}" onclick="setTab('${k}')">${v.i} ${v.n}</button>`,
+          )
+          .join("");
+        const T = TY[TAB],
+          n = (s) => S.items.filter((i) => i.type === TAB && (s < 0 || i.st === s)).length;
+        $("#ctl").innerHTML =
+          `<div class="row" style="margin:0 0 8px">${[-1, 0, 1, 2].map((s) => `<button class="b s ${s === ST ? "on" : ""}" onclick="ST=${s};tabs();chips();body()">${s < 0 ? "All" : T.st[s]} · ${n(s)}</button>`).join("")}</div><label>Shelve by</label><select onchange="GB=this.value;body()"><option value="none">No grouping</option><option value="status" ${GB === "status" ? "selected" : ""}>Status</option>${Object.keys(
+            gr(),
+          )
+            .map(
+              (g) => `<option value="${esc(g)}" ${GB === g ? "selected" : ""}>${esc(g)}</option>`,
+            )
+            .join("")}</select>`;
+      }
+      function chips() {
+        $("#chips").innerHTML =
+          Object.entries(gr())
+            .map(
+              ([g, ts]) =>
+                `<div class="gr"><small>${esc(g)}</small>${ts.map((t) => `<button class="chip ${F.has(t) ? "on" : ""}" data-t="${esc(t)}" onclick="tg(this.dataset.t)">${esc(t)}</button>`).join("")}</div>`,
+            )
+            .join("") +
+          (F.size
+            ? `<button class="b s" onclick="F.clear();chips();body()">Clear filters</button>`
+            : "");
+      }
+      function tg(t) {
+        F.has(t) ? F.delete(t) : F.add(t);
+        chips();
+        body();
+      }
+      function match(i) {
+        const q = $("#q").value.toLowerCase().trim();
+        if (
+          q &&
+          !(i.title + " " + i.by + " " + i.notes + " " + i.tags.join(" ")).toLowerCase().includes(q)
+        )
+          return false;
+        if (ST >= 0 && i.st !== ST) return false;
+        for (const ts of Object.values(gr())) {
+          const sel = ts.filter((t) => F.has(t));
+          if (sel.length && !sel.some((t) => i.tags.includes(t))) return false;
+        }
+        return true;
+      }
+      function card(i) {
+        const T = TY[i.type],
+          id = i.id;
+        return `<div class="sc"><div class="ph">${pic(i.img, T.i)}</div><div class="pd"><h4>${esc(i.title)}</h4><p>${esc(i.by)}</p><button class="pill s${i.st}" onclick="cyc('${id}')">${T.st[i.st]} ↻</button>${i.st === 1 && i.prog ? `<div class="pb"><i style="width:${i.prog}%"></i></div>` : ""}
+<div>${[1, 2, 3, 4, 5].map((n) => `<button class="star ${n <= i.rate ? "on" : ""}" onclick="rate('${id}',${n})" aria-label="${n} stars">★</button>`).join("")}</div><div>${i.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>${i.notes ? `<p>📝 ${esc(i.notes)}</p>` : ""}
+<div class="row"><button class="b s" onclick="itemForm('${id}')">✏️ Edit</button><button class="b s" onclick="ask('Delete this?',()=>delItem('${id}'))">🗑️</button></div></div></div>`;
+      }
+      function body() {
+        const l = S.items.filter((i) => i.type === TAB && match(i));
+        const sec = (t, a) =>
+          a.length
+            ? `${t ? `<h3 class="sh">${t} <small>${a.length}</small></h3>` : ""}<div class="g">${a.map(card).join("")}</div>`
+            : "";
+        let h;
+        if (!l.length)
+          h =
+            '<p style="font-size:13px">Nothing here yet. Add something or clear your filters.</p>';
+        else if (GB === "status") {
+          h = TY[TAB].st
+            .map((s, k) =>
+              sec(
+                s,
+                l.filter((i) => i.st === k),
+              ),
+            )
+            .join("");
+        } else if (gr()[GB]) {
+          const ts = gr()[GB];
+          h =
+            ts
+              .map((t) =>
+                sec(
+                  esc(t),
+                  l.filter((i) => i.tags.includes(t)),
+                ),
+              )
+              .join("") +
+            sec(
+              "Uncategorized",
+              l.filter((i) => !i.tags.some((t) => ts.includes(t))),
+            );
+        } else h = sec("", l);
+        $("#body").innerHTML = h;
+      }
+      function cyc(id) {
+        const i = S.items.find((x) => x.id === id);
+        i.st = (i.st + 1) % 3;
+        i.fin = i.st === 2 ? TODAY() : "";
+        if (i.st === 2) gain(20);
+        save();
+        render();
+      }
+      function rate(id, n) {
+        const i = S.items.find((x) => x.id === id);
+        i.rate = i.rate === n ? 0 : n;
+        save();
+        stats();
+        body();
+      }
+      function delItem(id) {
+        S.items = S.items.filter((x) => x.id !== id);
+        save();
+        render();
+      }
+      function itemForm(id) {
+        const it = id
+            ? S.items.find((x) => x.id === id)
+            : { title: "", by: "", st: 0, prog: 0, tags: [], notes: "", img: "" },
+          T = TY[TAB];
+        pend = "";
+        modal(`<h3>${id ? "Edit" : "Add"} ${T.one.toLowerCase()}</h3><form onsubmit="saveItem(event,'${id || ""}')"><label>Title</label><input name="t" required value="${esc(it.title)}"><label>${T.by}</label><input name="by" value="${esc(it.by)}">
+<div class="g2"><div><label>Status</label><select name="st">${T.st.map((s, k) => `<option value="${k}" ${k === it.st ? "selected" : ""}>${s}</option>`).join("")}</select></div><div><label>Progress %</label><input type="number" name="prog" min="0" max="100" value="${it.prog || 0}"></div></div>
+<label>Categories (pick every one that applies)</label>${Object.entries(gr())
+          .map(
+            ([g, ts]) =>
+              `<div class="gr"><small>${esc(g)}</small>${ts.map((t) => `<button type="button" class="chip ${it.tags.includes(t) ? "on" : ""}" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join("")}</div>`,
+          )
+          .join("")}
+<span class="hint">Need a new category? Save, then tap 🏷️ Categories.</span><label>Notes</label><textarea name="n" rows="2">${esc(it.notes)}</textarea>${imgF(it.img, "Cover: choose a file or paste a link")}
+<div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`);
+      }
+      function saveItem(e, id) {
+        e.preventDefault();
+        const f = e.target,
+          d = Object.fromEntries(new FormData(f)),
+          old = id ? S.items.find((x) => x.id === id) : null,
+          st = +d.st;
+        const o = {
+          id: id || uid(),
+          type: old ? old.type : TAB,
+          title: d.t.trim(),
+          by: d.by.trim(),
+          st,
+          rate: old ? old.rate : 0,
+          prog: Math.min(100, Math.max(0, +d.prog || 0)),
+          tags: [...f.querySelectorAll(".chip.on")].map((c) => c.dataset.t),
+          notes: d.n.trim(),
+          img: imgOf(d, old && old.img),
+          added: old ? old.added : TODAY(),
+          fin: st === 2 ? (old && old.fin) || TODAY() : "",
+        };
+        if (old) S.items[S.items.indexOf(old)] = o;
+        else S.items.push(o);
+        if (!old) gain(10);
+        else if (st === 2 && old.st !== 2) gain(20);
+        save();
+        closeM();
+        render();
+      }
+      function pickNext() {
+        const l = S.items.filter((i) => i.type === TAB && i.st === 0 && match(i));
+        if (!l.length) return toast("Nothing on your want list matches");
+        const i = l[Math.floor(Math.random() * l.length)];
+        modal(
+          `<h3>Up next ✨</h3>${card(i).replace(/<div class="row">.*<\/div><\/div><\/div>$/, "</div></div>")}<div class="row"><button class="b p" onclick="start('${i.id}')">▶️ Start it</button><button class="b" onclick="pickNext()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`,
+        );
+      }
+      function start(id) {
+        S.items.find((x) => x.id === id).st = 1;
+        save();
+        closeM();
+        render();
+      }
+
+      /* ---------- category manager ---------- */
+      function catH() {
+        const g = gr();
+        return (
+          `<h3>🏷️ ${TY[TAB].n} categories</h3><p class="hint" style="margin:0 0 12px">Rename a category by editing it. Deleting one removes it from every item.</p>` +
+          Object.entries(g)
+            .map(
+              ([
+                n,
+                ts,
+              ]) => `<div style="border:2px solid var(--ln);border-radius:14px;padding:10px;margin-bottom:12px"><div class="li"><input data-g="${esc(n)}" value="${esc(n)}" style="font-weight:700" onchange="renGroup(this.dataset.g,this.value)"><button class="b s" data-g="${esc(n)}" onclick="delGroup(this.dataset.g)">🗑️ Group</button></div>
+${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" value="${esc(t)}" onchange="renTag(this.dataset.g,this.dataset.t,this.value)"><button class="b s" data-g="${esc(n)}" data-t="${esc(t)}" onclick="delTag(this.dataset.g,this.dataset.t)">✕</button></div>`).join("")}
+<form class="li" data-g="${esc(n)}" onsubmit="event.preventDefault();addTag(this.dataset.g,this.elements.v.value)"><input name="v" placeholder="Add a category to ${esc(n)}…"><button class="b s">➕</button></form></div>`,
+            )
+            .join("") +
+          `<form class="li" onsubmit="event.preventDefault();addGroup(this.elements.v.value)"><input name="v" placeholder="New group (e.g. Era, Language, Format)…"><button class="b p s">➕ Group</button></form><div class="row"><button class="b" onclick="closeM()">Done</button></div>`
+        );
+      }
+      function catM() {
+        modal(catH());
+      }
+      function catR() {
+        save();
+        render();
+        $(".mc").innerHTML = catH();
+      }
+      function addTag(g, v) {
+        v = v.trim();
+        if (!v) return;
+        if (allT().includes(v)) {
+          toast("That name is already used here");
+          return;
+        }
+        gr()[g].push(v);
+        catR();
+      }
+      function renTag(g, o, v) {
+        v = v.trim();
+        if (!v || v === o) return catR();
+        if (allT().includes(v)) {
+          toast("That name is already used here");
+          return catR();
+        }
+        const a = gr()[g];
+        a[a.indexOf(o)] = v;
+        S.items.forEach((i) => {
+          if (i.type === TAB) i.tags = i.tags.map((t) => (t === o ? v : t));
+        });
+        if (F.has(o)) {
+          F.delete(o);
+          F.add(v);
+        }
+        catR();
+      }
+      function delTag(g, t) {
+        const a = gr()[g];
+        a.splice(a.indexOf(t), 1);
+        S.items.forEach((i) => {
+          if (i.type === TAB) i.tags = i.tags.filter((x) => x !== t);
+        });
+        F.delete(t);
+        catR();
+      }
+      function addGroup(v) {
+        v = v.trim();
+        if (!v) return;
+        if (gr()[v]) {
+          toast("That group already exists");
+          return;
+        }
+        gr()[v] = [];
+        catR();
+      }
+      function renGroup(o, v) {
+        v = v.trim();
+        if (!v || v === o) return catR();
+        if (gr()[v]) {
+          toast("That group already exists");
+          return catR();
+        }
+        S.groups[TAB] = Object.fromEntries(
+          Object.entries(gr()).map(([k, a]) => [k === o ? v : k, a]),
+        );
+        if (GB === o) GB = v;
+        catR();
+      }
+      function delGroup(g) {
+        ask(`Delete the “${esc(g)}” group?`, () => {
+          gr()[g].forEach((t) => {
+            S.items.forEach((i) => {
+              if (i.type === TAB) i.tags = i.tags.filter((x) => x !== t);
+            });
+            F.delete(t);
+          });
+          delete gr()[g];
+          if (GB === g) GB = "none";
+          save();
+          render();
+          catM();
+        });
+      }
+      function restore() {
+        try {
+          const o = JSON.parse($("#bk").value);
+          if (!o.items || !o.groups) throw 0;
+          S = Object.assign(fresh(), o);
+          save();
+          setTab("book");
+          toast("Restored ✅");
+        } catch (e) {
+          toast("That backup text isn’t valid");
+        }
+      }
+      function theme() {
+        const r = document.documentElement,
+          d =
+            r.dataset.theme === "dark" ||
+            (!r.dataset.theme && matchMedia("(prefers-color-scheme:dark)").matches);
+        r.dataset.theme = d ? "light" : "dark";
+      }
+      function render() {
+        hud();
+        stats();
+        spot();
+        tabs();
+        chips();
+        body();
+      }
+      GB = Object.keys(gr())[0];
+      render();
+    </script>
+  </body>
 </html>
