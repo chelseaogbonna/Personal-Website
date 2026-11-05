@@ -76,7 +76,10 @@
         font-family: "Fredoka", system-ui, sans-serif;
       }
       body.dk {
-        padding-bottom: 190px;
+        padding-bottom: 110px;
+      }
+      body.dk.big {
+        padding-bottom: 400px;
       }
       body::before {
         content: "";
@@ -687,14 +690,26 @@
       }
       .dock {
         position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 0;
         z-index: 70;
         background: var(--ac);
         color: var(--onac);
-        border-top: 4px solid var(--ln);
-        padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+        border: 3px solid var(--ln);
+        box-shadow: 4px 4px 0 var(--sh);
+        padding: 6px 8px 8px;
+        right: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+        width: min(340px, calc(100% - 24px));
+        border-radius: 16px;
+      }
+      .dock.big {
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        border-radius: 20px 20px 0 0;
+        border-width: 4px 0 0;
+        box-shadow: none;
+        padding: 10px 12px calc(12px + env(safe-area-inset-bottom, 0px));
       }
       .dock[hidden] {
         display: none;
@@ -714,11 +729,13 @@
       .dock iframe {
         display: block;
         width: 100%;
-        max-width: 760px;
         margin: 0 auto;
-        height: 152px;
+        height: 80px;
         border: 0;
         border-radius: 12px;
+      }
+      .dock.big iframe {
+        max-width: 760px;
       }
       #toast {
         position: fixed;
@@ -818,7 +835,8 @@
       <div class="dh">
         <b>🎧 Now playing</b
         ><span
-          ><a id="dk-open" target="_blank" rel="noopener">Open in Spotify ↗</a>
+          ><a id="dk-open" target="_blank" rel="noopener">Open ↗</a>
+          <button class="b s" id="dk-t" onclick="bigP()" aria-label="Expand player">⤢</button>
           <button class="b s" onclick="stopP()" aria-label="Close player">✕</button></span
         >
       </div>
@@ -859,12 +877,12 @@
           by: "Artist",
           st: ["Want to hear", "On repeat", "Loved"],
         },
-        game: {
-          i: "🎮",
-          n: "Games",
-          one: "Game",
-          by: "Studio",
-          st: ["Backlog", "Playing", "Finished"],
+        show: {
+          i: "🎬",
+          n: "Movies & TV",
+          one: "Movie/TV",
+          by: "Director / Network",
+          st: ["Want to watch", "Watching", "Watched"],
         },
       };
       const mk = (type, title, by, st, tags, rate = 0) => ({
@@ -879,6 +897,7 @@
         notes: "",
         img: "",
         sp: "",
+        link: "",
         added: TODAY(),
         fin: st === 2 ? TODAY() : "",
       });
@@ -936,10 +955,36 @@
             Mood: ["Chill", "Hype", "Focus", "Sad", "Workout", "Party"],
             Region: ["Africa", "Caribbean", "Americas", "Europe", "Asia"],
           },
-          game: {
-            Genre: ["RPG", "Cozy", "Puzzle", "Platformer", "Strategy", "Shooter", "Sim", "Indie"],
-            Platform: ["PC", "PlayStation", "Xbox", "Switch", "Mobile"],
-            Vibe: ["Relaxing", "Competitive", "Story-rich", "Co-op"],
+          show: {
+            Genre: [
+              "Drama",
+              "Comedy",
+              "Action",
+              "Thriller",
+              "Sci-fi",
+              "Horror",
+              "Romance",
+              "Documentary",
+              "Animation",
+              "Anime",
+              "Crime",
+              "Reality",
+            ],
+            Country: [
+              "Nigeria",
+              "Ghana",
+              "Kenya",
+              "South Africa",
+              "USA",
+              "UK",
+              "South Korea",
+              "Japan",
+              "India",
+              "France",
+              "Spain",
+              "Brazil",
+            ],
+            Format: ["Movie", "TV Series", "Mini-series", "Short"],
           },
         },
         items: [
@@ -958,7 +1003,13 @@
             "North America",
             "Non-fiction",
           ]),
-          mk("game", "Cozy Arcade Quest", "", 1, ["Cozy", "Indie", "Relaxing"]),
+          mk("show", "Squid Game", "Hwang Dong-hyuk", 0, [
+            "Thriller",
+            "Drama",
+            "South Korea",
+            "TV Series",
+          ]),
+          mk("show", "Black Panther", "Ryan Coogler", 2, ["Action", "Sci-fi", "USA", "Movie"]),
         ],
       });
       let S;
@@ -966,14 +1017,16 @@
         S = JSON.parse(localStorage.getItem(K));
       } catch (e) {}
       S = Object.assign(fresh(), S || {});
-      let TAB = "book",
+      migrate();
+      let PO = false,
+        TAB = "book",
         ST = -1,
         GB = "",
         F = new Set(),
         pend = "",
         LPT,
         LPD = false;
-      const PER = { music: "Day", game: "Day", book: "Day" };
+      const PER = { music: "Day", show: "Day", book: "Day" };
       const save = () => {
         try {
           localStorage.setItem(K, JSON.stringify(S));
@@ -1092,6 +1145,36 @@
         img
           ? `<span class="im"><img src="${esc(img)}" alt="" data-e="${e}" onerror="this.parentNode.textContent=this.dataset.e"></span>`
           : e;
+      const ytId = (u) => {
+        const m = (u || "").match(
+          /(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/|v\/))([A-Za-z0-9_-]{11})/,
+        );
+        return m ? m[1] : "";
+      };
+      const thumb = (o) =>
+        o.img || (ytId(o.link) ? `https://i.ytimg.com/vi/${ytId(o.link)}/hqdefault.jpg` : "");
+      const fixUrl = (u) => {
+        u = (u || "").trim();
+        return !u ? "" : /^https?:\/\//i.test(u) ? u : "https://" + u;
+      };
+      const linkF = (v, t) =>
+        `<label>Link (optional)</label><input name="link" placeholder="${t === "show" ? "YouTube trailer, streaming page…" : "Link to a page or store…"}" value="${esc(v || "")}"><span class="hint">${t === "show" ? "A YouTube link also gives you its thumbnail as the cover. Add your own photo below to use that instead." : "Opens from the 🔗 button."}</span>`;
+      function migrate() {
+        delete S.groups.game;
+        if (!S.groups.show) S.groups.show = fresh().groups.show;
+        S.items.forEach((i) => {
+          if (i.type === "game") {
+            i.type = "show";
+            i.tags = [];
+          }
+        });
+        ["Day", "Week"].forEach((p) => {
+          if (S.slots["game" + p]) {
+            S.slots["show" + p] = S.slots["game" + p];
+            delete S.slots["game" + p];
+          }
+        });
+      }
 
       /* ---------- Spotify ---------- */
       function spOf(u) {
@@ -1100,19 +1183,44 @@
         );
         return m ? { t: m[1], id: m[2] } : null;
       }
+      let CUR = null,
+        BIG = false;
+      const dkH = () => (BIG ? (CUR.t === "track" ? 152 : 352) : 80);
       function play(u) {
         const s = spOf(u);
         if (!s) return toast("That doesn’t look like a Spotify link");
-        $("#dk-f").innerHTML =
-          `<iframe src="https://open.spotify.com/embed/${s.t}/${s.id}?utm_source=generator" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify player"></iframe>`;
+        CUR = s;
+        dock(1);
+      }
+      function dock(fresh) {
+        const s = CUR;
+        if (!s) return;
+        if (fresh)
+          $("#dk-f").innerHTML =
+            `<iframe src="https://open.spotify.com/embed/${s.t}/${s.id}?utm_source=generator" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify player" style="height:${dkH()}px"></iframe>`;
+        else {
+          const f = $("#dk-f iframe");
+          if (f) f.style.height = dkH() + "px";
+        }
         $("#dk-open").href = `https://open.spotify.com/${s.t}/${s.id}`;
+        $("#dk-t").textContent = BIG ? "⤡" : "⤢";
+        $("#dk-t").setAttribute("aria-label", BIG ? "Shrink player" : "Expand player");
         $("#dock").hidden = false;
+        $("#dock").classList.toggle("big", BIG);
         document.body.classList.add("dk");
+        document.body.classList.toggle("big", BIG);
+      }
+      function bigP() {
+        BIG = !BIG;
+        dock(0);
       }
       function stopP() {
+        CUR = null;
+        BIG = false;
         $("#dk-f").innerHTML = "";
         $("#dock").hidden = true;
-        document.body.classList.remove("dk");
+        $("#dock").classList.remove("big");
+        document.body.classList.remove("dk", "big");
       }
       const spF = (v) =>
         `<label>Spotify link (optional)</label><input name="sp" placeholder="Paste a track, album or playlist link" value="${esc(v || "")}"><span class="hint">In Spotify: Share, then Copy link. A ▶ button will play it right here.</span>`;
@@ -1120,7 +1228,7 @@
       /* ---------- ticker, stats ---------- */
       function tick() {
         const a = S.items.filter((i) => i.st === 1).map((i) => `${TY[i.type].i} ${i.title}`);
-        ["music", "game", "book"].forEach((t) => {
+        ["music", "show", "book"].forEach((t) => {
           const s = S.slots[t + "Day"];
           if (s && s.t) a.push(`${TY[t].i} ${TY[t].one} of the day: ${s.t}`);
         });
@@ -1147,18 +1255,19 @@
 
       /* ---------- spotlight tiles ---------- */
       function spot() {
-        $("#spot").innerHTML = ["music", "game", "book"]
+        $("#spot").innerHTML = ["music", "show", "book"]
           .map((t) => {
             const p = PER[t],
               k = t + p,
               s = S.slots[k] || {},
               T = TY[t],
+              im = thumb(s),
               age = s.d ? diff(TODAY(), s.d) : null,
               old = age != null && age >= (p === "Day" ? 1 : 7);
-            return `<div class="tile ${t}"><div class="bg">${s.img ? pic(s.img, T.i) : t === "music" ? '<i class="vinyl"></i>' : T.i}</div><div class="ov"></div>
+            return `<div class="tile ${t}"><div class="bg">${im ? pic(im, T.i) : t === "music" ? '<i class="vinyl"></i>' : T.i}</div><div class="ov"></div>
 <div class="tp"><span class="stk">${T.i} ${T.one} of the ${p}</span><div class="seg"><button class="${p === "Day" ? "on" : ""}" onclick="PER['${t}']='Day';spot()">Day</button><button class="${p === "Week" ? "on" : ""}" onclick="PER['${t}']='Week';spot()">Week</button></div></div>
 <div class="tb"><h3>${s.t ? esc(s.t) : "Nothing picked yet"}</h3><p>${esc(s.n || "Tap Set to choose one")}</p>${age != null ? `<small>${old ? "⏰ Time for a fresh pick · " : ""}Set ${age === 0 ? "today" : age + "d ago"}</small>` : ""}
-<div class="row">${s.sp ? `<button class="b p s" onclick="play('${esc(s.sp)}')">▶ Play</button>` : ""}<button class="b s" onclick="spotForm('${t}','${p}')">✏️ Set</button><button class="b s" onclick="pull('${t}','${p}')" aria-label="Pull from library">🎲</button>${s.t ? `<button class="b s" onclick="S.slots['${k}']={};save();render()" aria-label="Clear">✕</button>` : ""}</div></div></div>`;
+<div class="row">${s.sp ? `<button class="b p s" onclick="play('${esc(s.sp)}')">▶ Play</button>` : ""}${s.link ? `<a class="b s" href="${esc(s.link)}" target="_blank" rel="noopener">🔗 Open</a>` : ""}<button class="b s" onclick="spotForm('${t}','${p}')">✏️ Set</button><button class="b s" onclick="pull('${t}','${p}')" aria-label="Pull from library">🎲</button>${s.t ? `<button class="b s" onclick="S.slots['${k}']={};save();render()" aria-label="Clear">✕</button>` : ""}</div></div></div>`;
           })
           .join("");
       }
@@ -1167,7 +1276,7 @@
           T = TY[t];
         pend = "";
         modal(
-          `<h3>${T.i} ${T.one} of the ${p}</h3><form onsubmit="saveSpot(event,'${t}','${p}')"><label>Title</label><input name="t" required value="${esc(s.t || "")}"><label>${T.by} or a note</label><input name="n" value="${esc(s.n || "")}">${t === "music" ? spF(s.sp) : ""}${imgF(s.img, "GIF: choose a file or paste a link")}<div class="row"><button class="b p">Save (+5 XP)</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+          `<h3>${T.i} ${T.one} of the ${p}</h3><form onsubmit="saveSpot(event,'${t}','${p}')"><label>Title</label><input name="t" required value="${esc(s.t || "")}"><label>${T.by} or a note</label><input name="n" value="${esc(s.n || "")}">${t === "music" ? spF(s.sp) : linkF(s.link, t)}${imgF(s.img, "GIF or your own picture: choose a file or paste a link")}<div class="row"><button class="b p">Save (+5 XP)</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
         );
       }
       function saveSpot(e, t, p) {
@@ -1179,6 +1288,7 @@
           t: d.t.trim(),
           n: d.n.trim(),
           sp: (d.sp || "").trim(),
+          link: fixUrl(d.link),
           img: imgOf(d, o.img),
           d: TODAY(),
         };
@@ -1194,7 +1304,14 @@
         const i = pool[Math.floor(Math.random() * pool.length)],
           k = t + p,
           o = S.slots[k] || {};
-        S.slots[k] = { t: i.title, n: i.by, sp: i.sp || "", img: o.img || "", d: TODAY() };
+        S.slots[k] = {
+          t: i.title,
+          n: i.by,
+          sp: i.sp || "",
+          link: i.link || "",
+          img: o.img || "",
+          d: TODAY(),
+        };
         save();
         render();
         toast(`Picked “${i.title}”. Add a GIF to match ✨`);
@@ -1213,14 +1330,14 @@
         $("#tabs").innerHTML = Object.entries(TY)
           .map(
             ([k, v]) =>
-              `<button class="b t ${k === TAB ? "on" : ""}" style="--cc:var(--c${["book", "music", "game"].indexOf(k) + 1})" onclick="setTab('${k}')">${v.i} ${v.n}</button>`,
+              `<button class="b t ${k === TAB ? "on" : ""}" style="--cc:var(--c${["book", "music", "show"].indexOf(k) + 1})" onclick="setTab('${k}')">${v.i} ${v.n}</button>`,
           )
           .join("");
         const T = TY[TAB],
           n = (s) => S.items.filter((i) => i.type === TAB && (s < 0 || i.st === s)).length;
         $("#ctl").innerHTML =
           (TAB === "music"
-            ? `<form class="li" onsubmit="event.preventDefault();play(this.elements.v.value)"><input name="v" placeholder="🎧 Paste a Spotify link to play it on this page…"><button class="b p s">▶ Play</button></form>`
+            ? `<form class="li" onsubmit="event.preventDefault();play(this.elements.v.value)"><input name="v" placeholder="🎧 Paste a Spotify link to play it now…"><button class="b p s">▶ Play</button></form><div class="row" style="margin:0 0 8px"><button class="b p s" onclick="plForm()">➕ Add Spotify playlists</button><button class="b s ${PO ? "on" : ""}" onclick="PO=!PO;tabs();body()">▶ Playable only</button></div>`
             : "") +
           `<div class="row" style="margin:0 0 8px">${[-1, 0, 1, 2].map((s) => `<button class="b s ${s === ST ? "on" : ""}" onclick="ST=${s};tabs();chips();body()">${s < 0 ? "All" : T.st[s]} · ${n(s)}</button>`).join("")}</div><label>Shelve by</label><select onchange="GB=this.value;body()"><option value="none">No grouping</option><option value="status" ${GB === "status" ? "selected" : ""}>Status</option>${Object.keys(
             gr(),
@@ -1267,6 +1384,7 @@
         )
           return false;
         if (ST >= 0 && i.st !== ST) return false;
+        if (PO && TAB === "music" && !i.sp) return false;
         for (const ts of Object.values(gr())) {
           const sel = ts.filter((t) => F.has(t));
           if (sel.length && !sel.some((t) => i.tags.includes(t))) return false;
@@ -1281,10 +1399,11 @@
       function card(i) {
         const T = TY[i.type],
           id = i.id,
-          h = hue(i.title);
-        return `<div class="pc" title="${esc(i.notes)}"><div class="cv" style="${i.img ? "" : `background:linear-gradient(145deg,hsl(${h} 65% 48%),hsl(${(h + 50) % 360} 65% 30%))`}">${i.img ? pic(i.img, T.i) : `<span>${esc(i.title)}</span>`}<button class="pill s${i.st}" onclick="cyc('${id}')">${T.st[i.st]}</button>${i.sp ? `<button class="pl" onclick="play('${esc(i.sp)}')" aria-label="Play">▶</button>` : ""}</div>
+          h = hue(i.title),
+          im = thumb(i);
+        return `<div class="pc" title="${esc(i.notes)}"><div class="cv" style="${im ? "" : `background:linear-gradient(145deg,hsl(${h} 65% 48%),hsl(${(h + 50) % 360} 65% 30%))`}">${im ? pic(im, T.i) : `<span>${esc(i.title)}</span>`}<button class="pill s${i.st}" onclick="cyc('${id}')">${T.st[i.st]}</button>${i.sp ? `<button class="pl" onclick="play('${esc(i.sp)}')" aria-label="Play">▶</button>` : ""}</div>
 <div class="pi"><h4>${esc(i.title)}</h4><p>${esc(i.by)}</p>${i.st === 1 && i.prog ? `<div class="pb"><i style="width:${i.prog}%"></i></div>` : ""}<div>${[1, 2, 3, 4, 5].map((n) => `<button class="star ${n <= i.rate ? "on" : ""}" onclick="rate('${id}',${n})" aria-label="${n} stars">★</button>`).join("")}</div><div>${i.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
-<div class="row"><button class="b s" onclick="itemForm('${id}')" aria-label="Edit">✏️</button><button class="b s" onclick="ask('Delete this?',()=>delItem('${id}'))" aria-label="Delete">🗑️</button></div></div></div>`;
+<div class="row"><button class="b s" onclick="itemForm('${id}')" aria-label="Edit">✏️</button>${i.link ? `<a class="b s" href="${esc(i.link)}" target="_blank" rel="noopener" aria-label="Open link">🔗</a>` : ""}<button class="b s" onclick="ask('Delete this?',()=>delItem('${id}'))" aria-label="Delete">🗑️</button></div></div></div>`;
       }
       function body() {
         const l = S.items.filter((i) => i.type === TAB && match(i));
@@ -1346,7 +1465,7 @@
       function itemForm(id) {
         const it = id
             ? S.items.find((x) => x.id === id)
-            : { title: "", by: "", st: 0, prog: 0, tags: [], notes: "", img: "", sp: "" },
+            : { title: "", by: "", st: 0, prog: 0, tags: [], notes: "", img: "", sp: "", link: "" },
           T = TY[TAB];
         pend = "";
         modal(`<h3>${id ? "Edit" : "Add"} ${T.one.toLowerCase()}</h3><form onsubmit="saveItem(event,'${id || ""}')"><label>Title</label><input name="t" required value="${esc(it.title)}"><label>${T.by}</label><input name="by" value="${esc(it.by)}">
@@ -1357,7 +1476,7 @@
               `<div class="gr"><small>${esc(g)}</small>${ts.map((t) => `<button type="button" class="chip ${it.tags.includes(t) ? "on" : ""}" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join("")}</div>`,
           )
           .join("")}
-<span class="hint">Need a new category? Tap the faint ⋯ beside a group name after saving.</span>${TAB === "music" ? spF(it.sp) : ""}<label>Notes</label><textarea name="n" rows="2">${esc(it.notes)}</textarea>${imgF(it.img, "Cover: choose a file or paste a link")}
+<span class="hint">Need a new category? Tap the faint ⋯ beside a group name after saving.</span>${TAB === "music" ? spF(it.sp) : linkF(it.link, TAB)}<label>Notes</label><textarea name="n" rows="2">${esc(it.notes)}</textarea>${imgF(it.img, TAB === "show" ? "Your own thumbnail (optional): choose a file or paste a link" : "Cover: choose a file or paste a link")}
 <div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`);
       }
       function saveItem(e, id) {
@@ -1377,6 +1496,7 @@
           tags: [...f.querySelectorAll(".chip.on")].map((c) => c.dataset.t),
           notes: d.n.trim(),
           sp: (d.sp || "").trim(),
+          link: fixUrl(d.link),
           img: imgOf(d, old && old.img),
           added: old ? old.added : TODAY(),
           fin: st === 2 ? (old && old.fin) || TODAY() : "",
@@ -1402,6 +1522,63 @@
         save();
         closeM();
         render();
+      }
+
+      /* ---------- Spotify playlist importer ---------- */
+      function plForm() {
+        modal(`<h3>🎧 Add Spotify playlists</h3><form onsubmit="savePl(event)"><label>Playlist links (one per line)</label><textarea name="links" rows="5" required placeholder="https://open.spotify.com/playlist/…&#10;My Chill Mix | https://open.spotify.com/playlist/…"></textarea><span class="hint">In Spotify: open a playlist, tap ⋯, Share, Copy link. Want your own name? Write it as “Name | link”.</span>
+<label>File them under (pick genres or moods)</label>${Object.entries(gr())
+          .map(
+            ([g, ts]) =>
+              `<div class="gr"><small>${esc(g)}</small>${ts.map((t) => `<button type="button" class="chip" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join("")}</div>`,
+          )
+          .join("")}
+<span class="hint">They’re all tagged the same, so add playlists in batches by genre. You can retag any of them later with ✏️.</span><div class="row"><button class="b p">Add them</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`);
+      }
+      async function savePl(e) {
+        e.preventDefault();
+        const f = e.target,
+          tags = [...f.querySelectorAll(".chip.on")].map((c) => c.dataset.t),
+          lines = f.elements.links.value
+            .split("\n")
+            .map((x) => x.trim())
+            .filter(Boolean);
+        closeM();
+        toast("Adding playlists…");
+        let n = 0;
+        for (const ln of lines) {
+          const p = ln.split("|"),
+            url = p.pop().trim(),
+            name = p.join("|").trim(),
+            sp = spOf(url);
+          if (!sp || S.items.some((x) => x.sp && (spOf(x.sp) || {}).id === sp.id)) continue;
+          let t = name,
+            img = "";
+          try {
+            const r = await Promise.race([
+              fetch("https://open.spotify.com/oembed?url=" + encodeURIComponent(url)),
+              new Promise((_, j) => setTimeout(j, 5000)),
+            ]);
+            const j = await r.json();
+            t = t || j.title;
+            img = j.thumbnail_url || "";
+          } catch (x) {}
+          const it = mk(
+            "music",
+            t || "Spotify " + sp.t + " (rename me)",
+            "Spotify " + sp.t,
+            2,
+            tags,
+          );
+          it.sp = url;
+          it.img = img;
+          S.items.push(it);
+          n++;
+        }
+        save();
+        render();
+        toast(n ? `Added ${n} playlist${n > 1 ? "s" : ""} 🎧` : "No new Spotify links found");
+        if (n) setTimeout(() => gain(10), 3300);
       }
 
       /* ---------- category editing (kept low-key) ---------- */
@@ -1515,6 +1692,7 @@ ${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" va
           const o = JSON.parse($("#bk").value);
           if (!o.items || !o.groups) throw 0;
           S = Object.assign(fresh(), o);
+          migrate();
           save();
           setTab("book");
           toast("Restored ✅");
