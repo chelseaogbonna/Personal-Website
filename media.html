@@ -23,6 +23,10 @@
         --ok: #86efac;
         --wn: #fcd34d;
         --bd: #fda4af;
+        --dot: #c4b5fd;
+        --c1: #fbbf24;
+        --c2: #f472b6;
+        --c3: #2dd4bf;
         box-sizing: border-box;
         padding-top: env(safe-area-inset-top, 0px);
         padding-bottom: env(safe-area-inset-bottom, 0px);
@@ -40,6 +44,7 @@
           --ok: #166534;
           --wn: #854d0e;
           --bd: #9f1239;
+          --dot: #2a2144;
         }
       }
       :root[data-theme="dark"] {
@@ -54,6 +59,7 @@
         --ok: #166534;
         --wn: #854d0e;
         --bd: #9f1239;
+        --dot: #2a2144;
       }
       html {
         scroll-padding-top: env(safe-area-inset-top, 0px);
@@ -64,8 +70,13 @@
       body {
         margin: 0;
         background: var(--bg);
+        background-image: radial-gradient(var(--dot) 1.5px, transparent 1.5px);
+        background-size: 22px 22px;
         color: var(--ink);
         font-family: "Fredoka", system-ui, sans-serif;
+      }
+      body.dk {
+        padding-bottom: 190px;
       }
       body::before {
         content: "";
@@ -127,8 +138,41 @@
         height: 100%;
         background: var(--ac);
       }
+      .tickw {
+        overflow: hidden;
+        background: var(--ink);
+        color: var(--bg);
+        font-weight: 700;
+        font-size: 12px;
+        border-bottom: 4px solid var(--ln);
+        white-space: nowrap;
+      }
+      .mq {
+        display: inline-flex;
+        animation: mq 30s linear infinite;
+      }
+      .mq span {
+        padding: 6px 0;
+        white-space: pre;
+      }
+      @keyframes mq {
+        to {
+          transform: translateX(-50%);
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .mq,
+        .vinyl {
+          animation: none;
+        }
+      }
       main {
-        max-width: 1100px;
+        max-width: 1150px;
         margin: 0 auto;
         padding: 20px 16px 60px;
       }
@@ -138,11 +182,11 @@
         border-radius: 24px;
         box-shadow: 6px 6px 0 var(--sh);
         padding: 20px;
-        margin-bottom: 24px;
+        margin-bottom: 28px;
       }
       .c h2 {
         margin: 0;
-        font-size: 22px;
+        font-size: 24px;
       }
       .c > .hd {
         display: flex;
@@ -188,20 +232,31 @@
         background: var(--ac);
         color: var(--onac);
       }
-      .g {
+      .b.t.on {
+        background: var(--cc);
+        color: #1e1b2e;
+      }
+      .sts {
         display: grid;
         gap: 12px;
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        margin-bottom: 24px;
       }
       .st {
         border: 3px solid var(--ln);
         border-radius: 16px;
-        padding: 12px;
+        padding: 10px 12px;
         background: var(--soft);
         box-shadow: 3px 3px 0 var(--sh);
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 3px;
+      }
+      .st:nth-child(odd) {
+        transform: rotate(-0.7deg);
+      }
+      .st:nth-child(even) {
+        transform: rotate(0.7deg);
       }
       .st h3 {
         margin: 0;
@@ -212,9 +267,148 @@
         font-size: 12px;
       }
       .st input {
-        width: 80px;
+        width: 70px;
         margin: 0;
-        padding: 3px 6px;
+        padding: 2px 6px;
+        display: inline-block;
+      }
+      .bento {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: repeat(3, 1fr);
+        margin-bottom: 28px;
+      }
+      @media (max-width: 820px) {
+        .bento {
+          grid-template-columns: 1fr;
+        }
+      }
+      .tile {
+        position: relative;
+        min-height: 330px;
+        border: 4px solid var(--ln);
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 6px 6px 0 var(--sh);
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        isolation: isolate;
+      }
+      .tile.music {
+        --cc: var(--c2);
+      }
+      .tile.game {
+        --cc: var(--c3);
+      }
+      .tile.book {
+        --cc: var(--c1);
+      }
+      .tile .bg {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 80px;
+        background: linear-gradient(135deg, var(--cc), #7c3aed);
+      }
+      .tile .ov {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(to top, #000e 0, #0007 55%, transparent);
+      }
+      .tp {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 12px;
+      }
+      .tb {
+        padding: 14px;
+      }
+      .tb h3 {
+        margin: 0 0 2px;
+        font-size: 26px;
+        line-height: 1.1;
+        text-shadow: 2px 2px 0 #000;
+      }
+      .tb p {
+        margin: 0 0 4px;
+        font-size: 13px;
+        opacity: 0.95;
+      }
+      .tb small {
+        display: block;
+        font-size: 11px;
+        opacity: 0.85;
+        margin-bottom: 4px;
+      }
+      .stk {
+        background: var(--cc, var(--c1));
+        color: #1e1b2e;
+        border: 2px solid #000;
+        border-radius: 8px;
+        padding: 3px 8px;
+        font-size: 11px;
+        font-weight: 700;
+        transform: rotate(-2deg);
+        display: inline-block;
+      }
+      .seg {
+        display: flex;
+        border: 2px solid #000;
+        border-radius: 99px;
+        overflow: hidden;
+        background: #fffe;
+      }
+      .seg button {
+        font: inherit;
+        font-size: 11px;
+        font-weight: 700;
+        border: 0;
+        padding: 3px 11px;
+        background: none;
+        color: #1e1b2e;
+        cursor: pointer;
+      }
+      .seg .on {
+        background: #1e1b2e;
+        color: #fff;
+      }
+      .vinyl {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        border: 3px solid #000;
+        display: block;
+        background: radial-gradient(
+          circle,
+          var(--c2) 0 13%,
+          #000 14% 16%,
+          #242424 17% 38%,
+          #000 39% 41%,
+          #242424 42% 62%,
+          #000 63%
+        );
+        animation: spin 6s linear infinite;
+      }
+      .im {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 52px;
+      }
+      .im img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
       .chip {
         font: inherit;
@@ -227,6 +421,8 @@
         color: var(--ink);
         cursor: pointer;
         margin: 2px;
+        user-select: none;
+        -webkit-user-select: none;
       }
       .chip.on {
         background: var(--ac);
@@ -242,55 +438,127 @@
       .gr small {
         font-weight: 700;
         color: var(--mut);
-        width: 78px;
+        min-width: 78px;
       }
-      .sc {
+      .ghost {
+        font: inherit;
+        background: none;
+        border: 0;
+        color: var(--mut);
+        opacity: 0.25;
+        cursor: pointer;
+        font-size: 14px;
+        padding: 0 4px;
+      }
+      .ghost:hover,
+      .ghost:focus {
+        opacity: 1;
+      }
+      .sh {
+        margin: 18px 0 8px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sh::after {
+        content: "";
+        flex: 1;
+        height: 3px;
+        background: var(--ln);
+        opacity: 0.25;
+        border-radius: 3px;
+      }
+      .sh small {
+        color: var(--mut);
+      }
+      .rail {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        padding: 6px 4px 16px;
+      }
+      .rail.wrapg {
+        flex-wrap: wrap;
+        overflow: visible;
+      }
+      .pc {
+        flex: 0 0 160px;
+        scroll-snap-align: start;
         border: 3px solid var(--ln);
         border-radius: 16px;
         overflow: hidden;
         background: var(--card);
+        box-shadow: 3px 3px 0 var(--sh);
+        transition: transform 0.15s;
         display: flex;
         flex-direction: column;
-        box-shadow: 3px 3px 0 var(--sh);
       }
-      .ph {
-        height: 150px;
-        background: var(--soft);
+      .pc:hover {
+        transform: translateY(-6px) rotate(-1deg);
+      }
+      .cv {
+        position: relative;
+        height: 210px;
+        border-bottom: 3px solid var(--ln);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 52px;
-        border-bottom: 3px solid var(--ln);
+        padding: 14px;
+        text-align: center;
+        font-weight: 700;
+        color: #fff;
+        font-size: 15px;
+        line-height: 1.2;
+        overflow: hidden;
+        text-shadow: 1px 1px 0 #0006;
       }
-      .ph img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+      .cv .pill {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 2;
+        text-shadow: none;
       }
-      .pd {
-        padding: 12px;
+      .pl {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        z-index: 2;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 3px solid #000;
+        background: var(--c2);
+        color: #1e1b2e;
+        font-size: 14px;
+        cursor: pointer;
+        box-shadow: 2px 2px 0 #000;
+      }
+      .pi {
+        padding: 8px;
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 3px;
         flex: 1;
       }
-      .pd h4 {
+      .pi h4 {
         margin: 0;
-        font-size: 17px;
+        font-size: 14px;
+        line-height: 1.2;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
-      .pd p {
+      .pi p {
         margin: 0;
-        font-size: 12px;
-        color: var(--mut);
-      }
-      .lab {
         font-size: 11px;
-        letter-spacing: 0.5px;
         color: var(--mut);
       }
-      .old {
-        color: var(--ac);
-        font-weight: 700;
+      .pi .star {
+        font-size: 15px;
       }
       .tag {
         display: inline-block;
@@ -310,17 +578,16 @@
         border-radius: 99px;
         padding: 2px 10px;
         cursor: pointer;
-        color: var(--ink);
-        align-self: flex-start;
+        color: #1e1b2e;
       }
       .s0 {
-        background: var(--soft);
+        background: #ddd6fe;
       }
       .s1 {
-        background: var(--wn);
+        background: #fcd34d;
       }
       .s2 {
-        background: var(--ok);
+        background: #86efac;
       }
       .star {
         background: none;
@@ -341,13 +608,6 @@
         flex-wrap: wrap;
         margin-top: auto;
         padding-top: 6px;
-      }
-      .sh {
-        margin: 18px 0 8px;
-        font-size: 18px;
-      }
-      .sh small {
-        color: var(--mut);
       }
       input,
       select,
@@ -371,6 +631,21 @@
         color: var(--mut);
         display: block;
         margin: -6px 0 10px;
+      }
+      .gp img {
+        max-width: 100%;
+        max-height: 150px;
+        border: 2px solid var(--ln);
+        border-radius: 10px;
+        margin-bottom: 8px;
+      }
+      .how {
+        font-size: 12px;
+        margin-bottom: 10px;
+      }
+      .how ol {
+        padding-left: 18px;
+        margin: 6px 0;
       }
       .mb {
         position: fixed;
@@ -410,11 +685,46 @@
         grid-template-columns: 1fr 1fr;
         gap: 10px;
       }
+      .dock {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 70;
+        background: var(--ac);
+        color: var(--onac);
+        border-top: 4px solid var(--ln);
+        padding: 8px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+      }
+      .dock[hidden] {
+        display: none;
+      }
+      .dh {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .dh a {
+        color: inherit;
+      }
+      .dock iframe {
+        display: block;
+        width: 100%;
+        max-width: 760px;
+        margin: 0 auto;
+        height: 152px;
+        border: 0;
+        border-radius: 12px;
+      }
       #toast {
         position: fixed;
         left: 50%;
         transform: translateX(-50%);
-        bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        top: calc(70px + env(safe-area-inset-top, 0px));
         background: var(--ink);
         color: var(--bg);
         padding: 10px 16px;
@@ -423,6 +733,8 @@
         font-size: 13px;
         z-index: 120;
         display: none;
+        max-width: 92vw;
+        text-align: center;
       }
     </style>
   </head>
@@ -437,30 +749,21 @@
         ><button class="b s" onclick="theme()" aria-label="Toggle theme">🌓</button>
       </div>
     </header>
+    <div class="tickw" id="tick"></div>
     <main>
-      <section class="c"><div class="g" id="stats"></div></section>
-
-      <section class="c">
-        <div class="hd">
-          <div>
-            <h2>🎬 Spotlights</h2>
-            <p>Your music, game and book of the day and of the week. Add a GIF to each one.</p>
-          </div>
-        </div>
-        <div class="g" id="spot"></div>
-      </section>
+      <div class="bento" id="spot"></div>
+      <div class="sts" id="stats"></div>
 
       <section class="c">
         <div class="hd">
           <div>
             <h2>📚 My Library</h2>
             <p>
-              Books, music and games. Group them by ideology, region, genre, or your own categories.
+              Books, music and games. Shelve them by ideology, region, genre or your own categories.
             </p>
           </div>
           <div class="row">
             <button class="b" onclick="pickNext()">🎲 Pick my next</button
-            ><button class="b" onclick="catM()">🏷️ Categories</button
             ><button class="b p" onclick="itemForm()">➕ Add (+10 XP)</button>
           </div>
         </div>
@@ -475,7 +778,10 @@
         <div class="hd">
           <div>
             <h2>⚙️ Backup</h2>
-            <p>Everything is saved in this browser only. Back up now and then.</p>
+            <p>
+              Everything is saved in this browser only. Back up now and then. Tip: double-click (or
+              long-press) any category chip to rename or delete it.
+            </p>
           </div>
         </div>
         <textarea
@@ -508,6 +814,16 @@
         </div>
       </section>
     </main>
+    <div class="dock" id="dock" hidden>
+      <div class="dh">
+        <b>🎧 Now playing</b
+        ><span
+          ><a id="dk-open" target="_blank" rel="noopener">Open in Spotify ↗</a>
+          <button class="b s" onclick="stopP()" aria-label="Close player">✕</button></span
+        >
+      </div>
+      <div id="dk-f"></div>
+    </div>
     <div id="mod"></div>
     <div id="toast"></div>
 
@@ -562,6 +878,7 @@
         tags,
         notes: "",
         img: "",
+        sp: "",
         added: TODAY(),
         fin: st === 2 ? TODAY() : "",
       });
@@ -653,7 +970,10 @@
         ST = -1,
         GB = "",
         F = new Set(),
-        pend = "";
+        pend = "",
+        LPT,
+        LPD = false;
+      const PER = { music: "Day", game: "Day", book: "Day" };
       const save = () => {
         try {
           localStorage.setItem(K, JSON.stringify(S));
@@ -668,7 +988,7 @@
         e.textContent = t;
         e.style.display = "block";
         clearTimeout(e._t);
-        e._t = setTimeout(() => (e.style.display = "none"), 2800);
+        e._t = setTimeout(() => (e.style.display = "none"), 3200);
       }
       function hud() {
         let x = 0,
@@ -709,6 +1029,15 @@
           `<h3>${msg}</h3><div class="row"><button class="b p" onclick="_y()">Yes</button><button class="b" onclick="closeM()">Cancel</button></div>`,
         );
       }
+
+      /* ---------- images, GIFs ---------- */
+      function normGif(u) {
+        u = (u || "").trim();
+        const m = u.match(
+          /giphy\.com\/(?:gifs|stickers|embed)\/(?:[^\/?#]*-)?([A-Za-z0-9]+)(?:[\/?#]|$)/,
+        );
+        return m ? `https://media.giphy.com/media/${m[1]}/giphy.gif` : u;
+      }
       function readImg(f, cb) {
         if (f.type === "image/gif") {
           if (f.size > 1.5e6) {
@@ -741,19 +1070,66 @@
           readImg(inp.files[0], (d) => {
             pend = d;
             $("#pv").textContent = "✅ File ready";
+            $("#gp").innerHTML = `<img src="${d}" alt="">`;
           });
         else $("#pv").textContent = "";
       }
-      const imgF = (cur, lab) =>
-        `<label>${lab}</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv" class="hint"></small><input name="imgurl" placeholder="…or paste an image or GIF link (https://…)" value="${esc(cur && !cur.startsWith("data:") ? cur : "")}">`;
+      function prev(u) {
+        const g = $("#gp");
+        u = normGif(u);
+        g.innerHTML = u
+          ? `<img src="${esc(u)}" alt="" onerror="this.outerHTML='<small class=hint>Can’t load that link. Check it is a GIF link or a Giphy page link. (Links are blocked in the Claude preview but work on your own site.)</small>'">`
+          : "";
+      }
+      const imgF = (
+        cur,
+        lab,
+      ) => `<label>${lab}</label><input type="file" accept="image/*" onchange="pick(this)"><small id="pv" class="hint"></small><input name="imgurl" placeholder="…or paste a link (GIF link or Giphy page link)" oninput="prev(this.value)" value="${esc(cur && !cur.startsWith("data:") ? cur : "")}"><div id="gp" class="gp">${cur ? `<img src="${esc(cur)}" alt="">` : ""}</div>
+<details class="how"><summary>How do I get an image or GIF link?</summary><ol><li><b>Giphy:</b> open the GIF, copy the page address from your browser bar and paste it above. I convert it for you.</li><li><b>Tenor or any site:</b> right-click the GIF (long-press on a phone), choose “Copy image address”, and paste it above. It should end in .gif.</li><li><b>Or</b> save the GIF to your device and use “Choose file” (up to 1.5 MB).</li><li>Once saved, a GIF plays by itself on the page.</li></ol></details>`;
       const imgOf = (d, old) =>
-        pend || d.imgurl.trim() || (old && old.startsWith("data:") ? old : "");
+        pend || normGif(d.imgurl) || (old && old.startsWith("data:") ? old : "");
       const pic = (img, e) =>
         img
-          ? `<img src="${esc(img)}" alt="" data-e="${e}" onerror="this.parentNode.textContent=this.dataset.e">`
+          ? `<span class="im"><img src="${esc(img)}" alt="" data-e="${e}" onerror="this.parentNode.textContent=this.dataset.e"></span>`
           : e;
 
-      /* ---------- stats ---------- */
+      /* ---------- Spotify ---------- */
+      function spOf(u) {
+        const m = (u || "").match(
+          /(?:open\.spotify\.com\/(?:intl-[a-z-]+\/)?|spotify:)(track|album|playlist|artist|episode|show)[\/:]([A-Za-z0-9]+)/,
+        );
+        return m ? { t: m[1], id: m[2] } : null;
+      }
+      function play(u) {
+        const s = spOf(u);
+        if (!s) return toast("That doesn’t look like a Spotify link");
+        $("#dk-f").innerHTML =
+          `<iframe src="https://open.spotify.com/embed/${s.t}/${s.id}?utm_source=generator" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify player"></iframe>`;
+        $("#dk-open").href = `https://open.spotify.com/${s.t}/${s.id}`;
+        $("#dock").hidden = false;
+        document.body.classList.add("dk");
+      }
+      function stopP() {
+        $("#dk-f").innerHTML = "";
+        $("#dock").hidden = true;
+        document.body.classList.remove("dk");
+      }
+      const spF = (v) =>
+        `<label>Spotify link (optional)</label><input name="sp" placeholder="Paste a track, album or playlist link" value="${esc(v || "")}"><span class="hint">In Spotify: Share, then Copy link. A ▶ button will play it right here.</span>`;
+
+      /* ---------- ticker, stats ---------- */
+      function tick() {
+        const a = S.items.filter((i) => i.st === 1).map((i) => `${TY[i.type].i} ${i.title}`);
+        ["music", "game", "book"].forEach((t) => {
+          const s = S.slots[t + "Day"];
+          if (s && s.t) a.push(`${TY[t].i} ${TY[t].one} of the day: ${s.t}`);
+        });
+        const h =
+          (a.length ? a : ["🎧 Welcome to the Den", "✨ Add something to your library"]).join(
+            "   ✦   ",
+          ) + "   ✦   ";
+        $("#tick").innerHTML = `<div class="mq"><span>${esc(h)}</span><span>${esc(h)}</span></div>`;
+      }
       function stats() {
         const y = String(new Date().getFullYear()),
           read = S.items.filter(
@@ -765,26 +1141,25 @@
         $("#stats").innerHTML =
           `<div class="st"><b>📚 BOOKS READ ${y}</b><h3>${read} / <input type="number" min="1" value="${S.cfg.goal}" onchange="S.cfg.goal=Math.max(1,+this.value||12);save();stats()" aria-label="Yearly goal"></h3><div class="pb"><i style="width:${Math.min(100, (read / g) * 100)}%"></i></div></div>
 <div class="st"><b>▶️ IN PROGRESS</b><h3>${S.items.filter((i) => i.st === 1).length}</h3><small>reading, on repeat or playing</small></div>
-<div class="st"><b>📝 WANT LIST</b><h3>${S.items.filter((i) => i.st === 0).length}</h3><small>books, music and games waiting</small></div>
+<div class="st"><b>📝 WANT LIST</b><h3>${S.items.filter((i) => i.st === 0).length}</h3><small>waiting for you</small></div>
 <div class="st"><b>⭐ AVG RATING</b><h3>${av}</h3><small>${rt.length} rated</small></div>`;
       }
 
-      /* ---------- spotlights ---------- */
+      /* ---------- spotlight tiles ---------- */
       function spot() {
         $("#spot").innerHTML = ["music", "game", "book"]
-          .map((t) =>
-            ["Day", "Week"]
-              .map((p) => {
-                const k = t + p,
-                  s = S.slots[k] || {},
-                  T = TY[t],
-                  age = s.d ? diff(TODAY(), s.d) : null,
-                  old = age != null && age >= (p === "Day" ? 1 : 7);
-                return `<div class="sc"><div class="ph">${pic(s.img, T.i)}</div><div class="pd"><b class="lab">${T.i} ${T.one.toUpperCase()} OF THE ${p.toUpperCase()}</b><h4>${s.t ? esc(s.t) : "Nothing picked yet"}</h4><p>${esc(s.n || "")}</p>${age != null ? `<small class="${old ? "old" : "lab"}">${old ? "⏰ Time for a fresh pick · " : ""}Set ${age === 0 ? "today" : age + "d ago"}</small>` : ""}
-<div class="row"><button class="b p s" onclick="spotForm('${t}','${p}')">✏️ Set</button><button class="b s" onclick="pull('${t}','${p}')">🎲 From library</button>${s.t ? `<button class="b s" onclick="S.slots['${k}']={};save();spot()">✕</button>` : ""}</div></div></div>`;
-              })
-              .join(""),
-          )
+          .map((t) => {
+            const p = PER[t],
+              k = t + p,
+              s = S.slots[k] || {},
+              T = TY[t],
+              age = s.d ? diff(TODAY(), s.d) : null,
+              old = age != null && age >= (p === "Day" ? 1 : 7);
+            return `<div class="tile ${t}"><div class="bg">${s.img ? pic(s.img, T.i) : t === "music" ? '<i class="vinyl"></i>' : T.i}</div><div class="ov"></div>
+<div class="tp"><span class="stk">${T.i} ${T.one} of the ${p}</span><div class="seg"><button class="${p === "Day" ? "on" : ""}" onclick="PER['${t}']='Day';spot()">Day</button><button class="${p === "Week" ? "on" : ""}" onclick="PER['${t}']='Week';spot()">Week</button></div></div>
+<div class="tb"><h3>${s.t ? esc(s.t) : "Nothing picked yet"}</h3><p>${esc(s.n || "Tap Set to choose one")}</p>${age != null ? `<small>${old ? "⏰ Time for a fresh pick · " : ""}Set ${age === 0 ? "today" : age + "d ago"}</small>` : ""}
+<div class="row">${s.sp ? `<button class="b p s" onclick="play('${esc(s.sp)}')">▶ Play</button>` : ""}<button class="b s" onclick="spotForm('${t}','${p}')">✏️ Set</button><button class="b s" onclick="pull('${t}','${p}')" aria-label="Pull from library">🎲</button>${s.t ? `<button class="b s" onclick="S.slots['${k}']={};save();render()" aria-label="Clear">✕</button>` : ""}</div></div></div>`;
+          })
           .join("");
       }
       function spotForm(t, p) {
@@ -792,7 +1167,7 @@
           T = TY[t];
         pend = "";
         modal(
-          `<h3>${T.i} ${T.one} of the ${p}</h3><form onsubmit="saveSpot(event,'${t}','${p}')"><label>Title</label><input name="t" required value="${esc(s.t || "")}"><label>${T.by} or a note</label><input name="n" value="${esc(s.n || "")}">${imgF(s.img, "GIF: choose a file or paste a link")}<span class="hint">Tip: on Giphy or Tenor, right-click the GIF and choose “Copy image address”.</span><div class="row"><button class="b p">Save (+5 XP)</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+          `<h3>${T.i} ${T.one} of the ${p}</h3><form onsubmit="saveSpot(event,'${t}','${p}')"><label>Title</label><input name="t" required value="${esc(s.t || "")}"><label>${T.by} or a note</label><input name="n" value="${esc(s.n || "")}">${t === "music" ? spF(s.sp) : ""}${imgF(s.img, "GIF: choose a file or paste a link")}<div class="row"><button class="b p">Save (+5 XP)</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
         );
       }
       function saveSpot(e, t, p) {
@@ -800,11 +1175,17 @@
         const d = Object.fromEntries(new FormData(e.target)),
           k = t + p,
           o = S.slots[k] || {};
-        S.slots[k] = { t: d.t.trim(), n: d.n.trim(), img: imgOf(d, o.img), d: TODAY() };
+        S.slots[k] = {
+          t: d.t.trim(),
+          n: d.n.trim(),
+          sp: (d.sp || "").trim(),
+          img: imgOf(d, o.img),
+          d: TODAY(),
+        };
         gain(5);
         save();
         closeM();
-        spot();
+        render();
       }
       function pull(t, p) {
         let pool = S.items.filter((i) => i.type === t && i.st !== 2);
@@ -813,9 +1194,9 @@
         const i = pool[Math.floor(Math.random() * pool.length)],
           k = t + p,
           o = S.slots[k] || {};
-        S.slots[k] = { t: i.title, n: i.by, img: o.img || "", d: TODAY() };
+        S.slots[k] = { t: i.title, n: i.by, sp: i.sp || "", img: o.img || "", d: TODAY() };
         save();
-        spot();
+        render();
         toast(`Picked “${i.title}”. Add a GIF to match ✨`);
       }
 
@@ -832,12 +1213,15 @@
         $("#tabs").innerHTML = Object.entries(TY)
           .map(
             ([k, v]) =>
-              `<button class="b ${k === TAB ? "on" : ""}" onclick="setTab('${k}')">${v.i} ${v.n}</button>`,
+              `<button class="b t ${k === TAB ? "on" : ""}" style="--cc:var(--c${["book", "music", "game"].indexOf(k) + 1})" onclick="setTab('${k}')">${v.i} ${v.n}</button>`,
           )
           .join("");
         const T = TY[TAB],
           n = (s) => S.items.filter((i) => i.type === TAB && (s < 0 || i.st === s)).length;
         $("#ctl").innerHTML =
+          (TAB === "music"
+            ? `<form class="li" onsubmit="event.preventDefault();play(this.elements.v.value)"><input name="v" placeholder="🎧 Paste a Spotify link to play it on this page…"><button class="b p s">▶ Play</button></form>`
+            : "") +
           `<div class="row" style="margin:0 0 8px">${[-1, 0, 1, 2].map((s) => `<button class="b s ${s === ST ? "on" : ""}" onclick="ST=${s};tabs();chips();body()">${s < 0 ? "All" : T.st[s]} · ${n(s)}</button>`).join("")}</div><label>Shelve by</label><select onchange="GB=this.value;body()"><option value="none">No grouping</option><option value="status" ${GB === "status" ? "selected" : ""}>Status</option>${Object.keys(
             gr(),
           )
@@ -851,14 +1235,26 @@
           Object.entries(gr())
             .map(
               ([g, ts]) =>
-                `<div class="gr"><small>${esc(g)}</small>${ts.map((t) => `<button class="chip ${F.has(t) ? "on" : ""}" data-t="${esc(t)}" onclick="tg(this.dataset.t)">${esc(t)}</button>`).join("")}</div>`,
+                `<div class="gr"><small>${esc(g)}<button class="ghost" onclick="catM()" aria-label="Edit categories">⋯</button></small>${ts.map((t) => `<button class="chip ${F.has(t) ? "on" : ""}" data-g="${esc(g)}" data-t="${esc(t)}" onclick="tg(this.dataset.t)" ondblclick="chipEdit(this.dataset.g,this.dataset.t)" oncontextmenu="event.preventDefault();chipEdit(this.dataset.g,this.dataset.t)" ontouchstart="lp(this)" ontouchend="clearTimeout(LPT)" ontouchmove="clearTimeout(LPT)">${esc(t)}</button>`).join("")}</div>`,
             )
             .join("") +
           (F.size
             ? `<button class="b s" onclick="F.clear();chips();body()">Clear filters</button>`
             : "");
       }
+      function lp(el) {
+        LPD = false;
+        clearTimeout(LPT);
+        LPT = setTimeout(() => {
+          LPD = true;
+          chipEdit(el.dataset.g, el.dataset.t);
+        }, 600);
+      }
       function tg(t) {
+        if (LPD) {
+          LPD = false;
+          return;
+        }
         F.has(t) ? F.delete(t) : F.add(t);
         chips();
         body();
@@ -877,18 +1273,24 @@
         }
         return true;
       }
+      const hue = (s) => {
+        let h = 0;
+        for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360;
+        return h;
+      };
       function card(i) {
         const T = TY[i.type],
-          id = i.id;
-        return `<div class="sc"><div class="ph">${pic(i.img, T.i)}</div><div class="pd"><h4>${esc(i.title)}</h4><p>${esc(i.by)}</p><button class="pill s${i.st}" onclick="cyc('${id}')">${T.st[i.st]} ↻</button>${i.st === 1 && i.prog ? `<div class="pb"><i style="width:${i.prog}%"></i></div>` : ""}
-<div>${[1, 2, 3, 4, 5].map((n) => `<button class="star ${n <= i.rate ? "on" : ""}" onclick="rate('${id}',${n})" aria-label="${n} stars">★</button>`).join("")}</div><div>${i.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>${i.notes ? `<p>📝 ${esc(i.notes)}</p>` : ""}
-<div class="row"><button class="b s" onclick="itemForm('${id}')">✏️ Edit</button><button class="b s" onclick="ask('Delete this?',()=>delItem('${id}'))">🗑️</button></div></div></div>`;
+          id = i.id,
+          h = hue(i.title);
+        return `<div class="pc" title="${esc(i.notes)}"><div class="cv" style="${i.img ? "" : `background:linear-gradient(145deg,hsl(${h} 65% 48%),hsl(${(h + 50) % 360} 65% 30%))`}">${i.img ? pic(i.img, T.i) : `<span>${esc(i.title)}</span>`}<button class="pill s${i.st}" onclick="cyc('${id}')">${T.st[i.st]}</button>${i.sp ? `<button class="pl" onclick="play('${esc(i.sp)}')" aria-label="Play">▶</button>` : ""}</div>
+<div class="pi"><h4>${esc(i.title)}</h4><p>${esc(i.by)}</p>${i.st === 1 && i.prog ? `<div class="pb"><i style="width:${i.prog}%"></i></div>` : ""}<div>${[1, 2, 3, 4, 5].map((n) => `<button class="star ${n <= i.rate ? "on" : ""}" onclick="rate('${id}',${n})" aria-label="${n} stars">★</button>`).join("")}</div><div>${i.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+<div class="row"><button class="b s" onclick="itemForm('${id}')" aria-label="Edit">✏️</button><button class="b s" onclick="ask('Delete this?',()=>delItem('${id}'))" aria-label="Delete">🗑️</button></div></div></div>`;
       }
       function body() {
         const l = S.items.filter((i) => i.type === TAB && match(i));
-        const sec = (t, a) =>
+        const sec = (t, a, w) =>
           a.length
-            ? `${t ? `<h3 class="sh">${t} <small>${a.length}</small></h3>` : ""}<div class="g">${a.map(card).join("")}</div>`
+            ? `${t ? `<h3 class="sh">${t} <small>${a.length}</small></h3>` : ""}<div class="rail ${w ? "wrapg" : ""}">${a.map(card).join("")}</div>`
             : "";
         let h;
         if (!l.length)
@@ -918,7 +1320,7 @@
               "Uncategorized",
               l.filter((i) => !i.tags.some((t) => ts.includes(t))),
             );
-        } else h = sec("", l);
+        } else h = sec("", l, 1);
         $("#body").innerHTML = h;
       }
       function cyc(id) {
@@ -944,7 +1346,7 @@
       function itemForm(id) {
         const it = id
             ? S.items.find((x) => x.id === id)
-            : { title: "", by: "", st: 0, prog: 0, tags: [], notes: "", img: "" },
+            : { title: "", by: "", st: 0, prog: 0, tags: [], notes: "", img: "", sp: "" },
           T = TY[TAB];
         pend = "";
         modal(`<h3>${id ? "Edit" : "Add"} ${T.one.toLowerCase()}</h3><form onsubmit="saveItem(event,'${id || ""}')"><label>Title</label><input name="t" required value="${esc(it.title)}"><label>${T.by}</label><input name="by" value="${esc(it.by)}">
@@ -955,7 +1357,7 @@
               `<div class="gr"><small>${esc(g)}</small>${ts.map((t) => `<button type="button" class="chip ${it.tags.includes(t) ? "on" : ""}" data-t="${esc(t)}" onclick="this.classList.toggle('on')">${esc(t)}</button>`).join("")}</div>`,
           )
           .join("")}
-<span class="hint">Need a new category? Save, then tap 🏷️ Categories.</span><label>Notes</label><textarea name="n" rows="2">${esc(it.notes)}</textarea>${imgF(it.img, "Cover: choose a file or paste a link")}
+<span class="hint">Need a new category? Tap the faint ⋯ beside a group name after saving.</span>${TAB === "music" ? spF(it.sp) : ""}<label>Notes</label><textarea name="n" rows="2">${esc(it.notes)}</textarea>${imgF(it.img, "Cover: choose a file or paste a link")}
 <div class="row"><button class="b p">Save</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`);
       }
       function saveItem(e, id) {
@@ -974,6 +1376,7 @@
           prog: Math.min(100, Math.max(0, +d.prog || 0)),
           tags: [...f.querySelectorAll(".chip.on")].map((c) => c.dataset.t),
           notes: d.n.trim(),
+          sp: (d.sp || "").trim(),
           img: imgOf(d, old && old.img),
           added: old ? old.added : TODAY(),
           fin: st === 2 ? (old && old.fin) || TODAY() : "",
@@ -991,7 +1394,7 @@
         if (!l.length) return toast("Nothing on your want list matches");
         const i = l[Math.floor(Math.random() * l.length)];
         modal(
-          `<h3>Up next ✨</h3>${card(i).replace(/<div class="row">.*<\/div><\/div><\/div>$/, "</div></div>")}<div class="row"><button class="b p" onclick="start('${i.id}')">▶️ Start it</button><button class="b" onclick="pickNext()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`,
+          `<h3>Up next ✨</h3><div class="rail wrapg" style="justify-content:center;overflow:visible">${card(i)}</div><div class="row"><button class="b p" onclick="start('${i.id}')">▶️ Start it</button><button class="b" onclick="pickNext()">🎲 Another</button><button class="b" onclick="closeM()">Close</button></div>`,
         );
       }
       function start(id) {
@@ -1001,19 +1404,23 @@
         render();
       }
 
-      /* ---------- category manager ---------- */
+      /* ---------- category editing (kept low-key) ---------- */
+      function chipEdit(g, t) {
+        modal(
+          `<h3>Edit “${esc(t)}”</h3><form data-g="${esc(g)}" data-t="${esc(t)}" onsubmit="event.preventDefault();renTag(this.dataset.g,this.dataset.t,this.elements.v.value,1)"><input name="v" value="${esc(t)}"><div class="row"><button class="b p">Rename</button><button type="button" class="b" data-g="${esc(g)}" data-t="${esc(t)}" onclick="delTag(this.dataset.g,this.dataset.t,1)">🗑️ Delete</button><button type="button" class="b" onclick="closeM()">Cancel</button></div></form>`,
+        );
+      }
       function catH() {
-        const g = gr();
         return (
-          `<h3>🏷️ ${TY[TAB].n} categories</h3><p class="hint" style="margin:0 0 12px">Rename a category by editing it. Deleting one removes it from every item.</p>` +
-          Object.entries(g)
+          `<h3>${TY[TAB].i} ${TY[TAB].n} categories</h3><p class="hint" style="margin:0 0 12px">Rename by editing. Deleting a category removes it from every item.</p>` +
+          Object.entries(gr())
             .map(
               ([
                 n,
                 ts,
               ]) => `<div style="border:2px solid var(--ln);border-radius:14px;padding:10px;margin-bottom:12px"><div class="li"><input data-g="${esc(n)}" value="${esc(n)}" style="font-weight:700" onchange="renGroup(this.dataset.g,this.value)"><button class="b s" data-g="${esc(n)}" onclick="delGroup(this.dataset.g)">🗑️ Group</button></div>
 ${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" value="${esc(t)}" onchange="renTag(this.dataset.g,this.dataset.t,this.value)"><button class="b s" data-g="${esc(n)}" data-t="${esc(t)}" onclick="delTag(this.dataset.g,this.dataset.t)">✕</button></div>`).join("")}
-<form class="li" data-g="${esc(n)}" onsubmit="event.preventDefault();addTag(this.dataset.g,this.elements.v.value)"><input name="v" placeholder="Add a category to ${esc(n)}…"><button class="b s">➕</button></form></div>`,
+<form class="li" data-g="${esc(n)}" onsubmit="event.preventDefault();addTag(this.dataset.g,this.elements.v.value)"><input name="v" placeholder="Add to ${esc(n)}…"><button class="b s">➕</button></form></div>`,
             )
             .join("") +
           `<form class="li" onsubmit="event.preventDefault();addGroup(this.elements.v.value)"><input name="v" placeholder="New group (e.g. Era, Language, Format)…"><button class="b p s">➕ Group</button></form><div class="row"><button class="b" onclick="closeM()">Done</button></div>`
@@ -1022,10 +1429,11 @@ ${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" va
       function catM() {
         modal(catH());
       }
-      function catR() {
+      function catR(m) {
         save();
         render();
-        $(".mc").innerHTML = catH();
+        if (m) closeM();
+        else $(".mc").innerHTML = catH();
       }
       function addTag(g, v) {
         v = v.trim();
@@ -1037,12 +1445,12 @@ ${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" va
         gr()[g].push(v);
         catR();
       }
-      function renTag(g, o, v) {
+      function renTag(g, o, v, m) {
         v = v.trim();
-        if (!v || v === o) return catR();
+        if (!v || v === o) return catR(m);
         if (allT().includes(v)) {
           toast("That name is already used here");
-          return catR();
+          return catR(m);
         }
         const a = gr()[g];
         a[a.indexOf(o)] = v;
@@ -1053,16 +1461,16 @@ ${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" va
           F.delete(o);
           F.add(v);
         }
-        catR();
+        catR(m);
       }
-      function delTag(g, t) {
+      function delTag(g, t, m) {
         const a = gr()[g];
         a.splice(a.indexOf(t), 1);
         S.items.forEach((i) => {
           if (i.type === TAB) i.tags = i.tags.filter((x) => x !== t);
         });
         F.delete(t);
-        catR();
+        catR(m);
       }
       function addGroup(v) {
         v = v.trim();
@@ -1123,6 +1531,7 @@ ${ts.map((t) => `<div class="li"><input data-g="${esc(n)}" data-t="${esc(t)}" va
       }
       function render() {
         hud();
+        tick();
         stats();
         spot();
         tabs();
